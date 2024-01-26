@@ -1,17 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"migration-cli/cmd"
 	"os"
 )
 
 func main() {
-	fmt.Println("migration-cli")
 	arg := os.Args[1:]
-	if len(arg) > 2 {
-		fmt.Println("length de arg est superieur à 2")
+	if len(arg) > 2 || len(arg) == 1 {
+		log.Println("length of arg not correct")
+		return
 	}
 	if len(arg) == 2 {
 		if arg[1] == "up" {
@@ -23,6 +22,5 @@ func main() {
 		}
 		return
 	}
-	fmt.Println(arg)
 
 }

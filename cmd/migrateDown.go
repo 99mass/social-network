@@ -25,7 +25,7 @@ func MigrateDown() {
 		log.Printf("opening file error: %v \n", err)
 	}
 
-	m, err := migrate.NewWithInstance("file", fileSource, "myDB", dbDriver)
+	m, err := migrate.NewWithInstance("file", fileSource, "database.db", dbDriver)
 	if err != nil {
 		log.Printf("migrate error: %v \n", err)
 	}
