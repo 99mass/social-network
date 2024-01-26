@@ -1,18 +1,10 @@
-# migration-cli
+# About
 
-This is a very simple sql migration cli written for an [article](https://dev.to/lucasnevespereira/sql-migrations-with-cobra-golang-migrate-3f75)
+* this is a simple program doing migration up and down 
+* by using the package golang-migrate
 
-### Usage
-
-```
-go build -o mcli
-```
-
-```
-./mcli <command>
-```
 
 ##### Commands
 
-- `migrate up`
-- `migrate down`
+- `go run . migrate up`
+- `go run . migrate down`
