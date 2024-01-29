@@ -1,2 +1,0 @@
-DROP TABLE IF EXISTS schools;
-DROP TABLE IF EXISTS students;
