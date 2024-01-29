@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS Comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER,
+    user_id INTEGER,
+    content TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES Posts(id),
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
