@@ -1,26 +1,11 @@
 package main
 
 import (
-	"log"
 	"main/pkg/db/sqlite"
-	"os"
 )
 
 func main() {
-	arg := os.Args[1:]
-	if len(arg) > 2 || len(arg) == 1 {
-		log.Println("length of arg not correct")
-		return
-	}
-	if len(arg) == 2 {
-		if arg[1] == "up" {
-			sqlite.MigrateUp()
-		} else if arg[1] == "down" {
-			sqlite.MigrateDown()
-		} else {
-			log.Println("Error : this command is not available")
-		}
-		return
-	}
+	sqlite.MigrateUp()
+	sqlite.MigrateDown()
 
 }
