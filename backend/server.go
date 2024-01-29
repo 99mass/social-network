@@ -7,5 +7,4 @@ import (
 func main() {
 	sqlite.MigrateUp()
 	sqlite.MigrateDown()
-
 }

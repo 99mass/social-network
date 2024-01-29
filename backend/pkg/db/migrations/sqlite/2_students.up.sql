@@ -1,4 +1,4 @@
-CREATE TABLE students (
+CREATE TABLE IF NOT EXISTS students (
   ID INT(13) NOT NULL,
   name VARCHAR(40),
   age INT,

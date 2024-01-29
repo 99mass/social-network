@@ -1,4 +1,4 @@
-CREATE TABLE schools (
+CREATE TABLE IF NOT EXISTS schools  (
   ID INT AUTO_INCREMENT NOT NULL,
   name VARCHAR(40),
   total_students Int,
