@@ -11,7 +11,7 @@ import (
 )
 
 func Open() *sql.DB {
-	db, err := sql.Open("sqlite3", "database.db")
+	db, err := sql.Open("sqlite3", "pkg/db/database.db")
 
 	if err != nil {
 		log.Printf("Error Opening DB: %v \n", err)
