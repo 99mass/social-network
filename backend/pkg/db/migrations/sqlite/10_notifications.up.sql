@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Notifications (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
+    id varchar PRIMARY KEY AUTOINCREMENT,
+    user_id varchar,
     content TEXT NOT NULL,
     type TEXT CHECK(type IN ('follow_request', 'group_invite', 'group_join_request', 'group_event')),
     is_read BOOLEAN DEFAULT false,

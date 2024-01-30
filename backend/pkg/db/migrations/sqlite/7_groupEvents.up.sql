@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS GroupEvents (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    group_id INTEGER,
+    id varchar PRIMARY KEY AUTOINCREMENT,
+    group_id varchar,
     title TEXT NOT NULL,
     description TEXT,
     day_time DATETIME,
