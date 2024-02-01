@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"main/pkg/controller"
+	"main/pkg/helper"
 	"main/pkg/models"
 	"net/http"
 )
@@ -19,6 +20,7 @@ type RegisterRequest struct {
 	Nickname    string    `json:"nickname"`
 	AboutMe     string    `json:"aboutme"`
 }
+
 func RegisterHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
@@ -26,7 +28,11 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 			var registerReq RegisterRequest
 			err := json.NewDecoder(r.Body).Decode(&registerReq)
 			if err != nil {
-				// TODO : Send error response 
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "incorrect request",
+				}, http.StatusBadRequest)
+				return
 			}
 			user := models.User{
 				Email: registerReq.Email,
@@ -38,13 +44,39 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				Nickname: registerReq.Nickname,
 				AboutMe: registerReq.AboutMe,
 			}
-			_,err = controller.CreateUser(db,user)
+
+			// TODO : Verify if informations given by the user are correct 
+
+			userID,err := controller.CreateUser(db,user)
 			if err != nil {
 				log.Println("enable to create the user: ",err)
 			}
+			sessionID,err := helper.AddSession(userID,db)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "incorrect request",
+				}, http.StatusBadRequest)
+				return
+			}
+			session,err := controller.GetSessionByID(db,sessionID)
+			if err !=nil{
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "we got an issue",
+				}, http.StatusInternalServerError)
+				return
+			}
 			log.Println("user created succesfully")
+			helper.SendResponse(w,models.SessionToSend{
+				Value: session.ID,
+				Expiration: session.ExpiresAt,
+			},http.StatusOK)
 		default:
-			// TODO : send error response
+			helper.SendResponse(w, models.ErrorResponse{
+				Status:  "error",
+				Message: "Method not allowed",
+			}, http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")
 		}
 	}

@@ -1,5 +1,7 @@
 CREATE TABLE IF NOT EXISTS sessions (
     id VARCHAR PRIMARY KEY,
     user_id VARCHAR,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
