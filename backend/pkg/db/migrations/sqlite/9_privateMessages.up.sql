@@ -1,9 +1,9 @@
-CREATE TABLE IF NOT EXISTS PrivateMessages (
-    id varchar PRIMARY KEY AUTOINCREMENT,
-    sender_id varchar,
-    recipient_id varchar,
+CREATE TABLE IF NOT EXISTS private_messages (
+    id VARCHAR PRIMARY KEY ,
+    sender_id VARCHAR,
+    recipient_id VARCHAR,
     content TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (sender_id) REFERENCES Users(id),
-    FOREIGN KEY (recipient_id) REFERENCES Users(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES users(id),
+    FOREIGN KEY (recipient_id) REFERENCES users(id)
 );

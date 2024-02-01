@@ -1,8 +1,8 @@
-CREATE TABLE IF NOT EXISTS EventParticipants (
-    event_id varchar,
-    user_id varchar,
-    response TEXT CHECK(response IN ('going', 'not_going')),
+CREATE TABLE IF NOT EXISTS event_participants (
+    event_id VARCHAR,
+    user_id VARCHAR,
+    chosen_option INTEGER, -- 1 for option1, 2 for option2
     PRIMARY KEY (event_id, user_id),
-    FOREIGN KEY (event_id) REFERENCES GroupEvents(id),
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    FOREIGN KEY (event_id) REFERENCES group_events(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

@@ -1,9 +1,9 @@
-CREATE TABLE IF NOT EXISTS Notifications (
-    id varchar PRIMARY KEY AUTOINCREMENT,
-    user_id varchar,
-    content TEXT NOT NULL,
-    type TEXT CHECK(type IN ('follow_request', 'group_invite', 'group_join_request', 'group_event')),
+CREATE TABLE IF NOT EXISTS notifications (
+    id VARCHAR PRIMARY KEY ,
+    user_id VARCHAR,
+    type VARCHAR NOT NULL, -- e.g., 'follow_request', 'group_invitation'
+    source_id VARCHAR, -- ID of the user/group generating the notification
     is_read BOOLEAN DEFAULT false,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

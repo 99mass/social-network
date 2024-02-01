@@ -1,10 +1,9 @@
--- Table to store group chat messages
-CREATE TABLE IF NOT EXISTS GroupChat (
-    id VARCHAR PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE IF NOT EXISTS group_chat_messages (
+    id VARCHAR PRIMARY KEY ,
     group_id VARCHAR,
     user_id VARCHAR,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (group_id) REFERENCES Groups(id),
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    FOREIGN KEY (group_id) REFERENCES groups(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

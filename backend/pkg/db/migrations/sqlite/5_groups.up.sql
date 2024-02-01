@@ -1,9 +1,8 @@
-CREATE TABLE IF NOT EXISTS Groups (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
+CREATE TABLE IF NOT EXISTS groups (
+    id VARCHAR PRIMARY KEY,
+    title VARCHAR NOT NULL,
     description TEXT,
-    creator_id INTEGER,
-    is_public BOOLEAN DEFAULT true,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (creator_id) REFERENCES Users(id)
+    creator_id VARCHAR,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (creator_id) REFERENCES users(id)
 );

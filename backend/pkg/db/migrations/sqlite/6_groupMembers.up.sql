@@ -1,8 +1,8 @@
-CREATE TABLE IF NOT EXISTS GroupMembers (
-    group_id varchar,
-    user_id varchar,
-    status TEXT CHECK(status IN ('invited', 'joined', 'requested')),
+CREATE TABLE IF NOT EXISTS group_members (
+    group_id VARCHAR,
+    user_id VARCHAR,
+    is_creator BOOLEAN DEFAULT false,
     PRIMARY KEY (group_id, user_id),
-    FOREIGN KEY (group_id) REFERENCES Groups(id),
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    FOREIGN KEY (group_id) REFERENCES groups(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

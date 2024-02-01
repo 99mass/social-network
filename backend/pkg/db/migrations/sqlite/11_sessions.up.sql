@@ -1,6 +1,5 @@
--- Table to store user sessions
-CREATE TABLE IF NOT EXISTS Sessions (
-    id VARCHAR(36) PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS sessions (
+    id VARCHAR PRIMARY KEY,
     user_id VARCHAR,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
