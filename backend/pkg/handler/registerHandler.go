@@ -7,7 +7,6 @@ import (
 	"main/pkg/controller"
 	"main/pkg/models"
 	"net/http"
-	"time"
 )
 
 type RegisterRequest struct {
@@ -15,7 +14,7 @@ type RegisterRequest struct {
 	Password    string    `json:"-"`
 	FirstName   string    `json:"firstname"`
 	LastName    string    `json:"lastname"`
-	DateOfBirth time.Time `json:"dateofbirth"`
+	DateOfBirth string `json:"dateofbirth"`
 	AvatarPath  string    `json:"avatarpath"`
 	Nickname    string    `json:"nickname"`
 	AboutMe     string    `json:"aboutme"`
@@ -34,7 +33,7 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				Password: registerReq.Password,
 				FirstName: registerReq.FirstName,
 				LastName: registerReq.LastName,
-				//DateOfBirth: registerReq.DateOfBirth,
+				DateOfBirth: registerReq.DateOfBirth,
 				AvatarPath: registerReq.AvatarPath,
 				Nickname: registerReq.Nickname,
 				AboutMe: registerReq.AboutMe,
@@ -43,8 +42,10 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 			if err != nil {
 				log.Println("enable to create the user: ",err)
 			}
+			log.Println("user created succesfully")
 		default:
 			// TODO : send error response
+			log.Println("methods not allowed")
 		}
 	}
 }

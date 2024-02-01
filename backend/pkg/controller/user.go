@@ -17,7 +17,7 @@ func CreateUser(db *sql.DB, user models.User) (uuid.UUID, error) {
 	if err != nil {
 		return uuid.UUID{}, err
 	}
-	_, err = db.Exec(query, newUUID.String(), user.Email, user.Password, user.FirstName, user.LastName, user.DateOfBirth, user.AvatarPath, user.Nickname, user.AboutMe, false, time.Now())
+	_, err = db.Exec(query, newUUID.String(), user.Email, user.Password, user.FirstName, user.LastName, user.DateOfBirth, user.AvatarPath, user.Nickname, user.AboutMe, true, time.Now())
 	if err != nil {
 		return uuid.UUID{}, err
 	}

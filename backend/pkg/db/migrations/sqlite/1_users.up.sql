@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY ,
+    id TEXT PRIMARY KEY ,
     email VARCHAR NOT NULL UNIQUE,
     password VARCHAR NOT NULL,
     firstname VARCHAR NOT NULL,
     lastname VARCHAR NOT NULL,
-    dateofbirth DATE NOT NULL,
+    dateofbirth VARCHAR NOT NULL,
     avatarpath VARCHAR,
     nickname VARCHAR,
     aboutme TEXT,
