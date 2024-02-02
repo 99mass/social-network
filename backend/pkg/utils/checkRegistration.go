@@ -160,6 +160,10 @@ func CheckDateOfBirth(dob string) (bool, error) {
 	minDOB := now.AddDate(-10, 0, 0)
 	maxDOB := now.AddDate(-maxAge, 0, 0)
 	// Check if the parsed date of birth is after the minimum allowed date of birth
+	if parsedDOB.After(now) {
+		return false, errors.New("are you serious ? how ?? do you live in the future ??")
+	}
+
 	if parsedDOB.After(minDOB) {
 		return false, errors.New("date of birth is too recent")
 	}
