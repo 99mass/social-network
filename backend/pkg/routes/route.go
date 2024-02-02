@@ -9,4 +9,5 @@ import (
 
 func Route(db *sql.DB){
 	http.HandleFunc("/register", helper.Middleware(handler.RegisterHandler(db)))
+	http.HandleFunc("/login",helper.Middleware(handler.LoginHandler(db)))
 }

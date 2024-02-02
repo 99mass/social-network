@@ -25,6 +25,42 @@ func CreateUser(db *sql.DB, user models.User) (uuid.UUID, error) {
 	return newUUID, nil
 }
 
+func GetUserByNickName(db *sql.DB,nickname string)(uuid.UUID,error){
+	query := `
+		SELECT id
+		FROM users
+		WHERE nickname = ?
+	`
+	var id string
+	err := db.QueryRow(query,nickname).Scan(&id)
+	if err != nil {
+		return uuid.UUID{},errors.New("there's no user for this nickname")
+	}
+	userID,err := uuid.FromString(id)
+	if err != nil {
+		return uuid.UUID{},errors.New("incorrect uuid from database")
+	}
+	return userID,nil
+}
+
+func GetUserByEmail(db *sql.DB,email string)(uuid.UUID,error){
+	query := `
+		SELECT id
+		FROM users
+		WHERE email = ?
+	`
+	var id string
+	err := db.QueryRow(query,email).Scan(&id)
+	if err != nil {
+		return uuid.UUID{},errors.New("there's no user for this email")
+	}
+	userID,err := uuid.FromString(id)
+	if err != nil {
+		return uuid.UUID{},errors.New("incorrect uuid from database")
+	}
+	return userID,nil
+}
+
 func IsDuplicateEmail(db *sql.DB, email string) (bool, error) {
 	query := `
         SELECT COUNT(*)
