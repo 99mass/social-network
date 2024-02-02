@@ -38,7 +38,7 @@ func IsDuplicateEmail(db *sql.DB, email string) (bool, error) {
 		return false, errors.New("")
 	}
 	if count > 0 {
-		return true, errors.New("email already exists")
+		return true, errors.New("this email already exists")
 	}
 
 	return false, errors.New("")
@@ -57,7 +57,7 @@ func IsDuplicateNickname(db *sql.DB, nickname string) (bool, error) {
 		return false, errors.New("")
 	}
 	if count > 0 {
-		return true, errors.New("nickname already exists")
+		return true, errors.New("this nickname already exists choose another one")
 	}
 
 	return false, errors.New("")
