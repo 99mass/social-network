@@ -40,7 +40,7 @@ func CheckRegisterFormat(firstName, lastName, username, email, password, confirm
 		if email {
 			return false, errdup
 		}
-		username, err := controller.IsDuplicateUsername(db, username)
+		username, err := controller.IsDuplicateNickname(db, username)
 		if username {
 			return false, err
 		}

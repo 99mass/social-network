@@ -44,20 +44,20 @@ func IsDuplicateEmail(db *sql.DB, email string) (bool, error) {
 	return false, errors.New("")
 }
 
-func IsDuplicateUsername(db *sql.DB, username string) (bool, error) {
+func IsDuplicateNickname(db *sql.DB, nickname string) (bool, error) {
 	query := `
         SELECT COUNT(*)
         FROM users
-        WHERE username = ? ;
+        WHERE nickname = ? ;
     `
 
 	var count int
-	err := db.QueryRow(query, username).Scan(&count)
+	err := db.QueryRow(query, nickname).Scan(&count)
 	if err != nil {
 		return false, errors.New("")
 	}
 	if count > 0 {
-		return true, errors.New("username already exists")
+		return true, errors.New("nickname already exists")
 	}
 
 	return false, errors.New("")
