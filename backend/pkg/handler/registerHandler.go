@@ -7,18 +7,20 @@ import (
 	"main/pkg/controller"
 	"main/pkg/helper"
 	"main/pkg/models"
+	"main/pkg/utils"
 	"net/http"
 )
 
 type RegisterRequest struct {
-	Email       string    `json:"email"`
-	Password    string    `json:"-"`
-	FirstName   string    `json:"firstname"`
-	LastName    string    `json:"lastname"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	ConfirmPassword string `json:"confirmpassword"`
+	FirstName   string `json:"firstname"`
+	LastName    string `json:"lastname"`
 	DateOfBirth string `json:"dateofbirth"`
-	AvatarPath  string    `json:"avatarpath"`
-	Nickname    string    `json:"nickname"`
-	AboutMe     string    `json:"aboutme"`
+	AvatarPath  string `json:"avatarpath"`
+	Nickname    string `json:"nickname"`
+	AboutMe     string `json:"aboutme"`
 }
 
 func RegisterHandler(db *sql.DB) http.HandlerFunc {
@@ -34,24 +36,34 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+
+			checkRegister,err := utils.CheckRegisterFormat(registerReq.FirstName,registerReq.LastName,registerReq.Nickname,registerReq.Email,registerReq.Password,registerReq.ConfirmPassword,registerReq.DateOfBirth,db)
+
+			if !checkRegister{
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
 			user := models.User{
-				Email: registerReq.Email,
-				Password: registerReq.Password,
-				FirstName: registerReq.FirstName,
-				LastName: registerReq.LastName,
+				Email:       registerReq.Email,
+				Password:    registerReq.Password,
+				FirstName:   registerReq.FirstName,
+				LastName:    registerReq.LastName,
 				DateOfBirth: registerReq.DateOfBirth,
-				AvatarPath: registerReq.AvatarPath,
-				Nickname: registerReq.Nickname,
-				AboutMe: registerReq.AboutMe,
+				AvatarPath:  registerReq.AvatarPath,
+				Nickname:    registerReq.Nickname,
+				AboutMe:     registerReq.AboutMe,
 			}
 
-			// TODO : Verify if informations given by the user are correct 
+			// TODO : Verify if informations given by the user are correct
 
-			userID,err := controller.CreateUser(db,user)
+			userID, err := controller.CreateUser(db, user)
 			if err != nil {
-				log.Println("enable to create the user: ",err)
+				log.Println("enable to create the user: ", err)
 			}
-			sessionID,err := helper.AddSession(userID,db)
+			sessionID, err := helper.AddSession(userID, db)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
@@ -59,8 +71,8 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			session,err := controller.GetSessionByID(db,sessionID)
-			if err !=nil{
+			session, err := controller.GetSessionByID(db, sessionID)
+			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
 					Message: "we got an issue",
@@ -68,10 +80,10 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			log.Println("user created succesfully")
-			helper.SendResponse(w,models.SessionToSend{
-				Value: session.ID,
+			helper.SendResponse(w, models.SessionToSend{
+				Value:      session.ID,
 				Expiration: session.ExpiresAt,
-			},http.StatusOK)
+			}, http.StatusOK)
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
 				Status:  "error",
