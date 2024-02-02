@@ -25,6 +25,20 @@ func CreateUser(db *sql.DB, user models.User) (uuid.UUID, error) {
 	return newUUID, nil
 }
 
+func GetPassword(db *sql.DB,userID uuid.UUID)(string,error){
+	query := `
+		SELECT password
+		FROM users
+		WHERE id = ?
+	`
+	var password string
+	err := db.QueryRow(query,userID.String()).Scan(&password)
+	if err !=nil{
+		return "",errors.New("unable to get the password for this user"+err.Error())
+	}
+	return password,nil
+}
+
 func GetUserByNickName(db *sql.DB,nickname string)(uuid.UUID,error){
 	query := `
 		SELECT id

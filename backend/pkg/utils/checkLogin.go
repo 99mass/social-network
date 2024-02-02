@@ -2,6 +2,7 @@ package utils
 
 import (
 	"database/sql"
+	"errors"
 	"main/pkg/controller"
 
 	"github.com/gofrs/uuid"
@@ -18,12 +19,19 @@ func CheckLogin(email, password string, db *sql.DB) (bool, uuid.UUID, error) {
 		if err != nil {
 			return false, uuid.UUID{}, err
 		}
-		
+
 	} else {
 		userID, err = controller.GetUserByNickName(db, email)
 		if err != nil {
 			return false, uuid.UUID{}, err
 		}
+	}
+	pass, err := controller.GetPassword(db, userID)
+	if err != nil {
+		return false, uuid.UUID{}, err
+	}
+	if pass != password {
+		return false, uuid.UUID{}, errors.New("password or login incorrect")
 	}
 
 	return true, userID, nil
