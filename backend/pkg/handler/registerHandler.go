@@ -46,9 +46,19 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+
+			hashedPassword,err := helper.HashPassword(registerReq.Password)
+			if err != nil{
+				log.Println("enable to hash the password")
+				helper.SendResponse(w,models.ErrorResponse{
+					Status: "error",
+					Message: "we got an issue",
+				},http.StatusInternalServerError)
+				return
+			}
 			user := models.User{
 				Email:       registerReq.Email,
-				Password:    registerReq.Password,
+				Password:    hashedPassword,
 				FirstName:   registerReq.FirstName,
 				LastName:    registerReq.LastName,
 				DateOfBirth: registerReq.DateOfBirth,

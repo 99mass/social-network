@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"main/pkg/controller"
+	"main/pkg/helper"
 
 	"github.com/gofrs/uuid"
 )
@@ -30,7 +31,7 @@ func CheckLogin(email, password string, db *sql.DB) (bool, uuid.UUID, error) {
 	if err != nil {
 		return false, uuid.UUID{}, err
 	}
-	if pass != password {
+	if !helper.CheckPasswordHash(password,pass) {
 		return false, uuid.UUID{}, errors.New("password or login incorrect")
 	}
 
