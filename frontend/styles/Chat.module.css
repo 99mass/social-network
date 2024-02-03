@@ -1,0 +1,221 @@
+.middleBloc h1 {
+  margin-bottom: 20px;
+}
+
+.usersOnline {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.usersOnline .listUsers {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  gap: 15px;
+  overflow-x: scroll;
+  padding-bottom: 15px;
+}
+
+.usersOnline .listUsers::-webkit-scrollbar {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+}
+
+.usersOnline .listUsers div a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.usersOnline .listUsers div a img {
+  width: 60px;
+  height: 60px;
+  margin: 5px;
+  margin-bottom: 0px;
+  border-radius: 100%;
+  border: 1px solid white;
+}
+
+.usersOnline .listUsers div a i {
+  position: relative;
+  top: -30px;
+  right: -30px;
+  font-size: 12px;
+  color: var(--green55);
+}
+
+.user {
+  width: 100%;
+  height: fit-content;
+  margin-bottom: 30px;
+}
+
+.user a img {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border: 0.1px solid white;
+}
+
+.user a {
+  display: flex;
+}
+
+.user a div {
+  width: 88%;
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.user a div p {
+
+  text-transform: capitalize;
+  font-size: small;
+  /* text-wrap: nowrap; */
+}
+
+.user a div p:last-of-type {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: gray;
+
+}
+
+@media screen and (min-width: 768px) {
+
+  /* body {
+     overflow: hidden;
+   } */
+  .sectionChat {
+    width: 100%;
+    display: flex;
+  }
+
+  .middleBloc {
+    width: 50%;
+    height: 100vh;
+    padding-bottom: 10rem;
+    overflow: scroll;
+  }
+
+  .middleBloc::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: transparent;
+  }
+
+  .menuLeft {
+    display: block;
+    width: 30%;
+    padding-left: 30px;
+  }
+
+  .menuLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .menuLeft .userActual a {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+  }
+
+  .menuLeft .userActual a img {
+    width: 50px;
+    height: 50px;
+    border: 1px solid gray;
+    border-radius: 100%;
+  }
+
+  .menuLeft .userActual a span {
+    padding-left: 15px;
+    text-transform: capitalize;
+  }
+
+  .menuLeft a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 18px;
+  }
+
+  .menuLeft a i {
+    font-size: 35px;
+    padding: 8px;
+    color: var(--fds-blue-80);
+    border-radius: 100%;
+  }
+
+  .menuLeft a:hover {
+    width: 80%;
+
+    background: var(--secondary-bg);
+    border-radius: 10px;
+  }
+
+  .menuLeft hr {
+    width: 80%;
+    border-color: gray;
+  }
+
+  .menuLeft h4 {
+    color: gray;
+    text-transform: capitalize;
+  }
+
+  .menuLeft .newPostContent {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menuLeft .newPostContent a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0px;
+    padding-left: 10px;
+    font-size: 18px;
+    text-transform: capitalize;
+  }
+
+  .menuLeft .newPostContent a i {
+    padding: 8px;
+    font-size: 22px;
+    border-radius: 100%;
+    color: #fff;
+    background: var(--primary-bg);
+  }
+
+}
+
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .menuLeft {
+    display: block;
+    width: 50%;
+    padding-left: 30px;
+  }
+
+  .middleBloc {
+    width: 100%;
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+  .menuLeft {
+    display: none;
+  }
+
+  .middleBloc {
+    width: 100%;
+  }
+}

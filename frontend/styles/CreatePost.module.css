@@ -1,0 +1,212 @@
+/* body{
+  overflow: hidden;
+} */
+.contentFormPost {
+  width: 550px;
+  height: fit-content;
+  max-height: 70vh;
+  overflow: hidden;
+  overflow-y: scroll;
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  margin-top: 150px;
+  padding: 20px;
+  background: var(--primary-bg);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    z-index: 100;
+}
+.postHeader{
+  display: flex;
+  justify-content: space-between;
+
+}
+.postHeader h1 {
+  font-weight: initial;
+  text-transform: capitalize;
+  text-align: center;
+}
+.postHeader i{
+  font-size: 22px;
+  color: gray;
+  cursor: pointer;
+}
+.contentFormPost hr {
+  margin: 10px 0px;
+  border-color: gray;
+}
+.blocPrivacyPost {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.blocPrivacyPost p {
+  font-weight: initial;
+  margin-bottom: 10px;
+}
+
+.blocPrivacyPost div {
+  display: flex;
+  justify-content: space-between;
+}
+.blocPrivacyPost div div {
+  display: flex;
+}
+.blocPrivacyPost div div i {
+  font-size: 20px;
+  margin-right: 10px;
+  padding: 15px;
+  border-radius: 100%;
+  background: var(--secondary-bg);
+}
+.part1 {
+  display: flex;
+  flex-direction: column;
+}
+.blocPrivacyPost div input[type="radio"] {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  margin: 6px;
+  padding: 0;
+  border: 2px solid var(--radio-border-color);
+  border-radius: 50%;
+  appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+.blocPrivacyPost div input[type="radio"]:not(:disabled):checked {
+  border-color: var(--radio-checked-color);
+  background-color: var(--radio-checked-color);
+  background-clip: content-box;
+  padding: 2px;
+  background-image: radial-gradient(
+    circle,
+    var(--radio-checked-color) 0%,
+    var(--radio-checked-color) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+}
+.blocPrivacyPost div input[type="radio"]:disabled {
+  background-color: var(--radio-disabled-bg-color);
+}
+.blocPrivacyPost div input[type="radio"]:disabled:checked {
+  background-image: radial-gradient(
+    circle,
+    var(--radio-border-color) 0%,
+    var(--radio-border-color) 50%,
+    transparent 50%,
+    transparent 100%
+  );
+}
+
+.listFriend {
+  width: 92%;
+  height: fit-content;
+  margin-left: 8%;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: var(--secondary-bg);
+ 
+}
+.listFriend h3{
+ display: flex;
+ justify-content: space-between;
+}
+.listFriend h3 span:last-of-type,
+.listFriend h3 span i{
+  font-weight: initial;
+  color: gray;
+  margin-right: 5px;
+}
+.userBloc {
+  display: flex;
+  display: none;
+}
+.userBloc div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.userBloc div img {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+}
+.userBloc div span{
+  color: gray;
+}
+
+.userBloc input[type="checkbox"] {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  margin: 6px;
+  padding: 0;
+  border: 2px solid var(--radio-border-color);
+  appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+.userBloc input[type="checkbox"]:not(:disabled):checked {
+  border-color: var(--radio-checked-color);
+  background-color: var(--radio-checked-color);
+  background-clip: content-box;
+  padding: 2px;
+}
+
+
+.postContent textarea{
+  width: 98%;
+  height: 150px;
+  margin-top: 20px;
+  padding: 20px;
+  font-size: 18px;
+  background: transparent;
+  border: none;
+  border-left: 5px solid gray;
+  resize: none;
+  outline: none;
+}
+.contentAssets {
+  text-align: right;
+}
+.contentAssets i,
+.contentAssets span {
+  font-size: 20px;
+  cursor: pointer;
+}
+.contentAssets i {
+  margin-right: 10px;
+  color: var(--teal60);
+
+}
+
+.btnPost{
+   width: 100%;
+   margin: 20px 0px;
+   padding: 10px 0px;
+   font-size: 18px;
+   border: none;
+   border-radius: 5px;
+   color: gray;
+   background: var(--secondary-bg);
+   cursor: pointer;
+}
+
+
+@media screen and (max-width:767px) {
+  .contentFormPost {
+    width: 90%;
+  }
+}

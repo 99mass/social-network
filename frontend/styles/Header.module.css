@@ -1,0 +1,145 @@
+.top{
+    z-index: 999;
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: rgb(20, 20, 20);
+    border-bottom: solid .1rem rgb(20, 20, 20);
+    z-index: 999;
+
+}
+
+.mainHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--secondary-bg);
+    padding: 0 10px;
+}
+
+.topContent {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 19px;
+}
+.topContent  h3{
+    width: fit-content;
+    text-transform: capitalize;
+    font-size: 25px;
+}
+
+.topContentIcons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+}
+
+.topContentIcons i {
+    display: flex;
+    background-color: var(--primary-bg);
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.middleContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px;
+    margin-bottom: 15px;
+    padding: 0 10px;
+    padding-top: 10px;
+    padding-right: 20px;
+}
+
+.middleContent  i {
+    font-size: 18px;
+    color: gray;
+}
+
+.middleContent i:hover {
+    color: var(--second-blue);
+}
+
+
+.middleContent a i {
+    position: relative;
+}
+
+.middleContent a i span {
+    position: absolute;
+    background-color: #e90000;
+    font-size: 10px;
+    padding: 5px;
+    border-radius: 50%;
+    top: -5px;
+    right: -18px;
+    cursor: pointer;
+}
+
+
+.middleContent0 {
+    display: none;
+}
+
+
+@media screen and (min-width: 768px) {
+    .mainHeader .topContent {
+        width: 100%;
+        display: flex;
+    }
+    .topContent  h3{
+        font-size: 32px;
+        width: fit-content;
+    }
+ 
+    .topContenticons {
+        gap: 0px;
+     
+    }
+    .middleContent1 {
+        display: none;
+    }
+
+    .middleContent0 {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 11%;
+    }
+
+
+    .middleContent i {
+        margin-left: 50px;
+        font-size: 30px;
+    }
+
+    .middleContent i:first-of-type {
+        margin-left: 0px;
+    }
+}
+@media screen and (min-width: 768px) and (max-width:900px) {
+    .topContent h3{
+        width: fit-content;
+    }
+    .middleContent0 {
+      width: 100%;
+    }
+}

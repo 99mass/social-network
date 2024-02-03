@@ -1,0 +1,27 @@
+body {
+    overflow-y: hidden;
+}
+
+.section-chat-page {
+    display: flex;
+    margin-top: 120px;
+}
+
+.fa-arrow-left {
+    font-size: 30px;
+}
+
+.fa-check-double {
+    margin-left: 5px;
+    color: gold;
+}
+
+.fa-paper-plane {
+    font-size: 25px;
+}
+
+@media screen and (max-width: 767px) {
+    body {
+        overflow-y: scroll;
+    }
+}

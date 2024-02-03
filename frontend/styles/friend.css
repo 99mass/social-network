@@ -1,0 +1,16 @@
+body {
+    overflow-y: hidden;
+}
+
+.section-friend {
+    display: flex;
+    margin-top: 120px;
+    padding: 10px;
+    overflow-y: scroll;
+}
+
+@media screen and (max-width:768px) {
+    body {
+        overflow-y: scroll;
+    }
+}
