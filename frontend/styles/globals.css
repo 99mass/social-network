@@ -80,3 +80,6 @@ a {
 @import url("friend.css");
 @import url("chat.css");
 @import url("discussion.css");
+@import url("notification.css");
+@import url("comment.css");
+

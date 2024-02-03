@@ -36,7 +36,7 @@ export  function PostHeader({user,image,time}) {
         <div className="profile">
             <div className="left-side">
                 <div className="profile-pic">
-                    <Link href="./profile.html"><img src={"" + image}alt="" /></Link>
+                    <Link href="./profile"><img src={image}alt="" /></Link>
                 </div>
                 <span>
                     <h3>{user} .<span className="follow" title="follow">Follow</span></h3>
@@ -66,7 +66,7 @@ export function PostFooter() {
     return (
         <div className="liked">
             <div className="liked-icon"><i className="far fa-thumbs-up"></i> <span>15k</span></div>
-            <Link href="./comment.html">
+            <Link href="./comment">
                 <div className="liked-icon"><i className="far fa-comment"></i> <span>6k</span></div>
             </Link>
         </div>

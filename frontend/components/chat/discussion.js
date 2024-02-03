@@ -7,7 +7,7 @@ export default function DiscussionPage() {
             <div className={styles.receiver}>
                 <Link href="./chat"><i className="fa-solid fa-arrow-left"></i></Link>
                 <Link href="./profile">
-                    <img src="feed3.png" alt="" />
+                    <img src="https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=" alt="" />
                 </Link>
                 <p>breukh</p>
             </div>
@@ -31,7 +31,7 @@ export default function DiscussionPage() {
 export function ContentMessage() {
     const data = [
         {
-            image: 'feed3.png',
+            image: "https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=",
             text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
             time: "1days ago"
         },
@@ -46,7 +46,7 @@ export function ContentMessage() {
             time: "1days ago"
         },
         {
-            image: 'feed3.png',
+            image: "https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=",
             text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
             time: "1days ago"
         },
@@ -56,12 +56,12 @@ export function ContentMessage() {
             time: "1days ago"
         },
         {
-            image: 'feed3.png',
+            image: "https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=",
             text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
             time: "1days ago"
         },
         {
-            image: 'feed3.png',
+            image: "https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=",
             text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
             time: "1days ago"
         },
