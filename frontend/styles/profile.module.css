@@ -1,0 +1,274 @@
+.photoCovert {
+  position: relative;
+  width: 100%;
+  /* height: 250px; */
+  /* border-bottom: 1px solid white; */
+}
+
+.photoCovert img:first-of-type {
+  width: 100%;
+  height: 100%;
+}
+
+.photoCovert div {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  top: -30px;
+  margin-left: 10px;
+}
+
+.photoCovert div img:last-of-type {
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+  border: 1px solid white;
+}
+
+.photoCovert div p {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.photoCovert div p span {
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+.photoCovert div p a {
+  text-transform: lowercase;
+  color: gray;
+  cursor: pointer;
+}
+
+
+.menu {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.menu a:first-of-type {
+  background: var(--second-blue);
+}
+
+.menu a {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  padding: 5px 10px;
+  font-size: 18px;
+  border-radius: 10px;
+  background: var(--secondary-bg);
+}
+
+.menu a i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+.body1{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.bio{
+  height: fit-content;
+  padding: 15px;
+  border-radius: 10px;
+
+  background: var(--secondary-bg);
+}
+
+@media screen and (min-width:768px) {
+
+  .photoCovert {
+    width: 100%;
+    height: fit-content;
+    padding: 0px 20%;
+    border-bottom: 0px;
+    background: var(--nav-bar-background-gradient);
+  }
+
+  .photoCovert img:first-of-type {
+    width: 100%;
+    height: 400px;
+    margin-top: 0px;
+    border-radius: 0px 0px 10px 10px;
+  }
+ .body1{
+  padding: 20px 20%;
+ }
+  .body1 .bodymenu{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}
+
+@media screen and (max-width:500px) {
+  .body1{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+   flex-direction: column;
+  
+  }
+  .bodymenu{
+    order: 2;
+  }
+  .bio{
+    order: 1;
+  }
+}
+
+@media screen and (max-width:425px) {
+  .menu {
+    flex-wrap: nowrap;
+  }
+}
+
+
+
+/* bloc friend */
+
+.friendFololowingMe {
+  width: 100%;
+  margin: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.menus {
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 20px 0px;
+  margin-top: 0px;
+}
+
+.menus span:first-of-type {
+  background: var(--second-blue);
+}
+
+.menus span {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  padding: 8px;
+  font-size: 18px;
+  border-radius: 10px;
+  background: var(--secondary-bg);
+  cursor: pointer;
+}
+
+.menus span i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.contentListFriend {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 80%;
+  height: fit-content;
+  padding: 30px;
+  margin: 0px 20px;
+  border-radius: 20px;
+  background: var(--secondary-bg);
+}
+
+.contentListFriend .bloc {
+  width: 45%;
+  margin-bottom: 50px;
+  display: flex;
+  border-radius: 10px;
+
+}
+
+.contentListFriend .bloc img {
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 1px solid white;
+}
+
+.conteUnfollow {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.contentListFriend .bloc h4 {
+  margin-top: 10px;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.unfollowBtn {
+  background: var(--primary-bg);
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.follow {
+  background: var(--second-blue);
+}
+
+.unfollowBtn i {
+  margin-right: 5px;
+}
+
+@media screen and (max-width:525px) {
+  .contentListFriend {
+    width: 85%;
+    margin: 0px;
+  }
+
+  .contentListFriend .bloc {
+    width: 100%;
+
+  }
+}
+
+
+
+.friendiFololow {
+  width: 100%;
+  margin: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.friendiFololow .menus span:first-of-type {
+  background: var(--secondary-bg);
+}
+
+.friendiFololow .menus span:last-of-type {
+
+  background: var(--second-blue);
+}
+
+
+.friendFololowingMe,
+.friendiFololow {
+  display: none;
+}

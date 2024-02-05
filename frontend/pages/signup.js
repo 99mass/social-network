@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import Sign_in from '../components/auth/signin_page';
+import Sign_up from '../components/auth/signup_page';
 
 export default function SignIn() {
   return (
@@ -9,7 +9,7 @@ export default function SignIn() {
         <meta name="description" content="project social-network" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Sign_in />
+      <Sign_up />
     </>
   );
 }

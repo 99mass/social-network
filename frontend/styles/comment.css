@@ -1,20 +1,18 @@
-#section-comment{
-  /* padding-top: 130px; */
-  position: relative;
-  top: 130px;
-    display: flex;
-    padding: 10px 20px;
- }
- .middle  {
+.section-comment {
+  margin-top: 130px;
+  display: flex;
+  padding: 10px 20px;
+}
+
+.middle {
   border-top: solid 0.01rem #515151;
   border-radius: 10px;
   background-color: var(--secondary-bg);
 }
 
-.section-comment .middle  .profile {
+.section-comment .middle .profile {
   width: 100%;
-  padding: 10px;
-  background-color: var(--secondary-bg);
+  padding: 10px 0px;
   border-top: solid 0.01rem #515151;
   display: flex;
   align-items: center;

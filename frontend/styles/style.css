@@ -6,7 +6,7 @@
   display: none;
 }
 
-.post {
+.menu-middle .post {
   width: 100%;
   height: fit-content;
   display: flex;
@@ -18,14 +18,14 @@
   margin-bottom: 3px;
 }
 
-.post .profile {
+ .post .profileuser {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.post .profile .left-side,
-.profile .right-side {
+.post .profileuser .left-side,
+.profileuser .right-side {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -33,7 +33,7 @@
   gap: 5px;
 }
 
-.post .profile .left-side span p {
+.post .profileuser .left-side span p {
   font-weight: 100;
 }
 
@@ -49,7 +49,7 @@
   padding-top: 10px;
 }
 
-.post .profile .left-side img {
+.post .profileuser .left-side img {
   width: 100%;
 }
 

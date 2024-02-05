@@ -1,0 +1,228 @@
+/* edit profile form */
+.editProfileBloc {
+    width: 700px;
+    height: 75vh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    padding: 10px 20px;
+    border-radius: 10px;
+    overflow-y: auto;
+    background: var(--primary-bg);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+      rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+      rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  }
+  .editProfileBloc h1{
+    display: flex;
+    justify-content: space-between;
+  }
+  .editProfileBloc hr {
+    margin: 10px 0px;
+  }
+  .editProfileBloc h1 i{
+  cursor: pointer;
+  }
+  .editProfileBloc  .fa-arrow-left {
+    margin-right: 10px;
+  }
+  
+ .pictureActual {
+    width: 100%;
+    text-align: center;
+  }
+  .editProfileBloc h3 {
+    text-transform: capitalize;
+    width: 100%;
+    font-weight: initial;
+    text-align: center;
+  }
+  .editProfileBloc h3:last-of-type {
+    margin-bottom: 15px;
+  }
+  .pictureActual img {
+    width: 200px;
+    height: 200px;
+    border: 1px solid white;
+    border-radius: 100%;
+  }
+  
+  .custumFileUpload {
+    height: 80px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    gap: 2px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #e8e8e8;
+    background-color: #212121;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 48px 35px -48px #e8e8e8;
+  }
+  
+  .custumFileUpload .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .custumFileUpload .icon svg {
+    height: 40px;
+    fill: #e8e8e8;
+  }
+  
+  .custumFileUpload .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .custumFileUpload .text span {
+    font-weight: 400;
+    color: #e8e8e8;
+  }
+  
+  .custumFileUpload input {
+    display: none;
+  }
+  
+  .formGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 15px 0px;
+    font-size: 16px;
+  }
+
+  .profileType .contenRadio{
+    display: flex;
+    gap: 20px;
+    margin: 15px 0px;
+  }
+
+  .profileType .contenRadio div{
+     display: flex;
+     align-items: center;
+     gap: 5px;
+     
+  }
+  .profileType .contenRadio div i{
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 100%;
+    background: var(--secondary-bg);
+  }
+  .profileType .contenRadio div span{
+    font-size: 20px;
+   
+  }
+  .profileType .contenRadio div input{
+    height: fit-content;
+    width: fit-content;
+    padding: 0px;
+    margin: 0px;
+}
+
+ 
+  .formGroup span:first-of-type span:last-of-type {
+    color: #7f7f7f;
+    /* font-size: 18px; */
+  }
+  .identiti {
+    padding-right: 5px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  .formGroup .edit {
+    text-transform: capitalize;
+    color: var(--second-blue);
+    cursor: pointer;
+  }
+  
+  .basicInfos .input {
+    font-size: 0.9rem;
+    width: 95%;
+    height: 40px;
+    margin-left: 10px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: none;
+    outline: none;
+    border-left: 5px solid var(--secondary-bg);
+    color: #000000;
+    background: #cccccc;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+   
+  }
+
+  .basicInfos .inputAltTextarea {
+    width: 95%;
+    height: 80px;
+    resize: none;
+  }
+  .group textarea::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: transparent;
+  }
+  .submitUpdate {
+    width: 100%;
+    margin-top: 40px;
+    text-align: center;
+  }
+  
+  .editProfileBloc form button {
+    font-size: 1rem;
+    align-items: center;
+    height: 48px;
+    border-radius: 0.4rem;
+    font-weight: 600;
+    padding: 0 1.2rem;
+    color: #ddd;
+    border: none;
+    cursor: pointer;
+    text-transform: capitalize;
+    box-shadow: 0 0.5rem 1rem rgba(143, 142, 142, 0.15) !important;
+    background: #000000;
+  }
+  
+
+  @media screen and (max-width: 768px) {
+
+    .editProfileBloc {
+      width: 90%;
+    }
+  }
+  
+
+.profileType .contenRadio  input[type="radio"] {
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    margin: 6px;
+    padding: 0;
+    border: 2px solid var(--radio-border-color);
+    appearance: none;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .editProfileBloc   input[type="radio"]:not(:disabled):checked {
+    border-color: var(--second-blue);
+    background-color: var(--second-blue);
+    background-clip: content-box;
+    padding: 2px;
+  }
+
+  /* .editProfileBloc {
+    display: none;
+  } */

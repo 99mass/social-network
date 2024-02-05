@@ -19,7 +19,7 @@ export default function MidlleBloc() {
     return(
         <div className="menu-middle">
         { data.map((item,index)=>(
-                <div className="post post1" key={index}>
+                <div className="post" key={index}>
                     <PostHeader user={item.user} image={item.imageUrl} time={item.date}  />
                     <PostMiddle text={item.text}  image={item.imageUrl} />
                     <PostFooter />
@@ -33,10 +33,10 @@ export default function MidlleBloc() {
 
 export  function PostHeader({user,image,time}) {
     return (
-        <div className="profile">
+        <div className="profileuser">
             <div className="left-side">
                 <div className="profile-pic">
-                    <Link href="./profile"><img src={image}alt="" /></Link>
+                    <Link href="./profileuser"><img src={image}alt="" /></Link>
                 </div>
                 <span>
                     <h3>{user} .<span className="follow" title="follow">Follow</span></h3>

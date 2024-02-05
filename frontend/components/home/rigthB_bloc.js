@@ -19,7 +19,7 @@ export  function LastFrienRequest() {
                 <span><Link href="./friend" title="see all friend request">see all</Link></span>
             </div>
             <div className={styles.contentFriend}>
-                <Link href="./profile"><img src="https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=" alt="" /></Link>
+                <Link href="./profileuser"><img src="https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=" alt="" /></Link>
                 <div className={styles.detailsFriendRequest}>
                     <div className={styles.friendName}><span>ssambadi</span><span>19s</span></div>
                     <div className={styles.validateRequest}>

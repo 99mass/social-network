@@ -28,7 +28,7 @@ export default function LeftBloc() {
         <>
             <div className="menu-left">
                 <div className="user-actual">
-                    <Link href="./profile.html">
+                    <Link href="./profileuser">
                         <img src="https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=" alt="" />
                         <span>breukh doe</span>
                     </Link>

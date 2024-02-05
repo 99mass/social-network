@@ -1,4 +1,4 @@
-.top{
+.top {
     z-index: 999;
 }
 
@@ -30,7 +30,8 @@
     width: 100%;
     font-size: 19px;
 }
-.topContent  h3{
+
+.mainHeader  .topContent h2 {
     width: fit-content;
     text-transform: capitalize;
     font-size: 25px;
@@ -68,7 +69,7 @@
     padding-right: 20px;
 }
 
-.middleContent  i {
+.middleContent i {
     font-size: 18px;
     color: gray;
 }
@@ -98,21 +99,53 @@
     display: none;
 }
 
+/* menu deroulant */
+.topContent .dropdownMenu {
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    top: 80px;
+    right: 25px;
+    padding: 5px 0px;
+    border-radius: 8px;
+    border: 1px solid gray;
+    background: #202123;
+}
+.topContent .dropdownMenu ul  {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.topContent .dropdownMenu ul li {
+    padding: 10px;
+    list-style: none;
+    cursor: pointer;
+}
+.topContent .dropdownMenu ul li i {
+    margin-right: 10px; 
+}
+.topContent .dropdownMenu ul li:hover {
+   background: #40414f;;
+}
+
 
 @media screen and (min-width: 768px) {
     .mainHeader .topContent {
         width: 100%;
         display: flex;
     }
-    .topContent  h3{
+
+    .mainHeader .topContent h2 {
         font-size: 32px;
         width: fit-content;
     }
- 
+
     .topContenticons {
         gap: 0px;
-     
+
     }
+
     .middleContent1 {
         display: none;
     }
@@ -135,11 +168,13 @@
         margin-left: 0px;
     }
 }
+
 @media screen and (min-width: 768px) and (max-width:900px) {
-    .topContent h3{
+    .topContent h2 {
         width: fit-content;
     }
+
     .middleContent0 {
-      width: 100%;
+        width: 100%;
     }
 }

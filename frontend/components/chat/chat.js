@@ -37,7 +37,7 @@ export default function ListUser() {
     ];
 
     return (
-        <div class={styles.middleBloc}>
+        <div className={styles.middleBloc}>
             <h1>Messages</h1>
             <UserOnLine />
             {
@@ -79,15 +79,15 @@ export function UserOnLine() {
         }
     ];
     return (
-        <div class={styles.usersOnline}>
+        <div className={styles.usersOnline}>
             <h5>users online now</h5>
-            <div class={styles.listUsers}>
+            <div className={styles.listUsers}>
                 {
                     data.map((item, index) => (
                         <div key={index}>
                             <Link href="./chatpage">
                                 <img src={"" + item.image} alt="" /><i
-                                    class="fas fa-circle"
+                                    className="fas fa-circle"
                                 ></i>
                                 <p>{item.username}</p>
                             </Link>
@@ -104,7 +104,7 @@ export function UserOnLine() {
 export function LastChatWitheAutherUser({ image, username, text, index }) {
 
     return (
-        <div class={styles.user} key={index}>
+        <div className={styles.user} key={index}>
             <Link href="./chatpage">
                 <img src={"" + image} alt="" />
                 <div>

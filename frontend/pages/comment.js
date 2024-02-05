@@ -14,7 +14,7 @@ export default function Friend() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-                <section id='section-comment' >
+                <section className='section-comment' >
                 <LeftBloc />
                 <Comment/>
             </section>

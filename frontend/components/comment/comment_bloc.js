@@ -1,4 +1,5 @@
 
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import styles from '../../styles/Comment.module.css';
 
@@ -91,7 +92,7 @@ export function CommentPost({ data }) {
                 {data.map((item, index) => (
                     <div key={index} className={styles.contentMessage}>
                         <div>
-                            <Link href="./profile"><img src={item.commentUserUrl} alt="" /></Link>
+                            <Link href="./profileuser"><img src={item.commentUserUrl} alt="" /></Link>
                             <pre className={styles.message}>{item.textComment}</pre>
                         </div>
                         <p><span>by {item.user}</span>{item.time}</p>
@@ -105,11 +106,18 @@ export function CommentPost({ data }) {
 
 
 export function FormComment() {
+
+    // lier mon icon plu avec mon input de type file 
+    const fileInputRef = useRef(null);
+    const handleFileIconClick = () => {
+        fileInputRef.current.click();
+    };
+
     return (
         <div className={styles.messageBox}>
             <div className={styles.plusAndMessage}>
                 <div className={styles.fileUploadWrapper}>
-                    <label htmlFor="file">
+                    <label htmlFor="file"  onClick={handleFileIconClick}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 337 337">
                             <circle strokeWidth="20" stroke="#6c6c6c" fill="none" r="158.5" cy="168.5"
                                 cx="168.5"></circle>
@@ -120,7 +128,7 @@ export function FormComment() {
                         </svg>
                         <span className={styles.tooltip}>Add an image</span>
                     </label>
-                    <input type="file" id={styles.file} name="file" />
+                    <input type="file" id={styles.file} ref={fileInputRef} name="file" />
                 </div>
                 <input required="" placeholder="Write Comment here..." type="text" id={styles.messageInput} />
             </div>
