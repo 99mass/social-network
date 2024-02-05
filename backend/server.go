@@ -1,9 +1,9 @@
 package main
 
 import (
+	"backend/pkg/db/sqlite"
+	"backend/pkg/routes"
 	"fmt"
-	"main/pkg/db/sqlite"
-	"main/pkg/routes"
 	"net/http"
 )
 
@@ -17,6 +17,6 @@ func main() {
 
 	routes.Route(db)
 	fmt.Println("Listening in http://localhost" + PORT)
-	
+
 	http.ListenAndServe(PORT, nil)
 }

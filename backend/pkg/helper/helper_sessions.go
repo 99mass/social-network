@@ -2,8 +2,8 @@ package helper
 
 import (
 	"database/sql"
-	"main/pkg/controller"
-	"main/pkg/models"
+	"backend/pkg/controller"
+	"backend/pkg/models"
 	"time"
 
 	"github.com/gofrs/uuid"
