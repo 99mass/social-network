@@ -2,7 +2,7 @@ package controller
 
 import (
 	"database/sql"
-	"main/pkg/models"
+	"backend/pkg/models"
 	"time"
 
 	"github.com/gofrs/uuid"

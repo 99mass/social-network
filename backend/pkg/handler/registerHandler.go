@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"encoding/json"
 	"log"
-	"main/pkg/controller"
-	"main/pkg/helper"
-	"main/pkg/models"
-	"main/pkg/utils"
+	"backend/pkg/controller"
+	"backend/pkg/helper"
+	"backend/pkg/models"
+	"backend/pkg/utils"
 	"net/http"
 )
 

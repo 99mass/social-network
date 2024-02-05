@@ -3,8 +3,8 @@ package utils
 import (
 	"database/sql"
 	"errors"
-	"main/pkg/controller"
-	"main/pkg/helper"
+	"backend/pkg/controller"
+	"backend/pkg/helper"
 
 	"github.com/gofrs/uuid"
 )
