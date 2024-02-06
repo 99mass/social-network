@@ -48,7 +48,7 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			dir := "./pkg/static/avatarImage/"
-			userAvatar, err := helper.ReadAndSaveImage(registerReq.AvatarPath, dir)
+			userAvatar, err := utils.ReadAndSaveImage(registerReq.AvatarPath, dir)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
