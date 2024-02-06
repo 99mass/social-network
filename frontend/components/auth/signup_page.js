@@ -14,47 +14,52 @@ export default function Sign_up() {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-  
-  // Récupérer les valeurs des champs un par un
-  const firstName = formData.get("firstName");
-  const lastName = formData.get("lastName");
-  const nickname = formData.get("nickname");
-  const dateOfBirth = formData.get("dateOfBirth");
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const confirmPassword = formData.get("confirmPassword");
-  const avatarPath = formData.get("avatarPath");
-  const aboutMe = formData.get("aboutMe");
+    const jsonData = {};
 
-  console.log("First Name:", firstName);
-  console.log("Last Name:", lastName);
-  console.log("Nickname:", nickname);
-  console.log("Date of Birth:", dateOfBirth);
-  console.log("Email:", email);
-  console.log("Password:", password);
-  console.log("Confirm Password:", confirmPassword);
-  console.log("Avatar Path:", avatarPath);
-  console.log("About Me:", aboutMe);
+    formData.forEach((value, key) => {
+      jsonData[key] = value;
+    });
 
-    //     try {
-    //       const response = await fetch("http://localhost:8080/register", {
-    //         method: "POST",
-    //         body: formData,
-    //       });
+    const file = fileInputRef.current.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const base64File = reader.result;
+        jsonData.Avatarpath = base64File;
+        
+        sendData(jsonData);
+      };
 
-    //       if (response.ok) {
-    //         // Redirection après inscription réussie
-    //         window.location.href = "/home";
-    //       } else {
-    //         // Gestion des erreurs
-    //         const errorData = await response.json();
-    //         setErrorMessage(errorData.message);
-    //       }
-    //     } catch (error) {
-    //       console.error("Error:", error);
-    //       setErrorMessage("An error occurred while processing your request.");
-    //     }
+      reader.readAsDataURL(file);
+    } else {
+      sendData(jsonData);
+    }
   };
+
+
+  const sendData = async (data) => {
+    console.log(data.Email);
+    try {
+      const response = await fetch("http://localhost:8080/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: data,
+      });
+
+      if (response.ok) {
+        window.location.href = "/home";
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setErrorMessage("An error occurred while processing your request.");
+    }
+  };
+
 
   return (
     <div className={styles.container}>
@@ -79,7 +84,7 @@ export default function Sign_up() {
             <i className="fa-solid fa-star-of-life"></i>
             <span>Firstname</span>
             <input
-              name="firstName"
+              name="FirstName"
               className={styles.input}
               type="text"
               placeholder="Ex: Jone"
@@ -91,7 +96,7 @@ export default function Sign_up() {
             <i className="fa-solid fa-star-of-life"></i>
             <span>Lastname</span>
             <input
-              name="lastName"
+              name="LastName"
               className={styles.input}
               type="text"
               placeholder="Ex: Doe"
@@ -102,7 +107,7 @@ export default function Sign_up() {
         <label>
           <span>Nickname</span>
           <input
-            name="nickname"
+            name="Nickname"
             className={styles.input}
             type="text"
             placeholder="Ex: JDoe"
@@ -112,7 +117,7 @@ export default function Sign_up() {
           <i className="fa-solid fa-star-of-life"></i>
           <span>Date of Birth</span>
           <input
-            name="dateOfBirth"
+            name="DateOfBirth"
             className={styles.input}
             type="date"
             required=""
@@ -122,7 +127,7 @@ export default function Sign_up() {
           <i className="fa-solid fa-star-of-life"></i>
           <span>Email</span>
           <input
-            name="email"
+            name="Email"
             className={styles.input}
             type="email"
             placeholder="Ex: jonedoe@gmail.com"
@@ -134,7 +139,7 @@ export default function Sign_up() {
           <i className="fa-solid fa-star-of-life"></i>
           <span>Password</span>
           <input
-            name="password"
+            name="Password"
             className={styles.input}
             type="password"
             required=""
@@ -144,7 +149,7 @@ export default function Sign_up() {
           <i className="fa-solid fa-star-of-life"></i>
           <span>Confirm password</span>
           <input
-            name="confirmPassword"
+            name="ConfirmPassword"
             className={styles.input}
             type="password"
             required=""
@@ -183,7 +188,7 @@ export default function Sign_up() {
               <span>Click to upload image</span>
             </div>
             <input
-              name="avatarPath"
+            //   name="AvatarPath"
               id={styles.file}
               type="file"
               ref={fileInputRef}
@@ -193,7 +198,7 @@ export default function Sign_up() {
         <label>
           <span>About Me</span>
           <textarea
-            name="aboutMe"
+            name="AboutMe"
             className={styles.input}
             type="text"
             placeholder="Says something..."
