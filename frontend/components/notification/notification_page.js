@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '../../styles/Notification.module.css'
+import styles from '../../styles/modules/Notification.module.css'
 export default function Notification() {
     const data = [
         {

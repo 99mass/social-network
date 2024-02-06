@@ -1,5 +1,5 @@
 import { PostFooter, PostHeader, PostMiddle } from "../home/middle_bloc"
-import styles from '../../styles/profile.module.css'
+import styles from '../../styles/modules/profile.module.css'
 
 export default function Posts_user() {
     const data = [

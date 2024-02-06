@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import styles from '../../styles/edit-profil.module.css';
+import styles from '../../styles/modules/edit-profil.module.css';
 
 
 export default function EditProfile({ CloseEditForm }) {

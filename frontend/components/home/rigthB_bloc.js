@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from '../../styles/Friend.module.css'
+import styles from '../../styles/modules/Friend.module.css'
 
 export  default function RightBloc() {
     return(

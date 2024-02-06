@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import Link from 'next/link';
-import styles from '../../styles/auth.module.css';
+import styles from '../../styles/modules/auth.module.css';
 
 export default function Sign_up() {
 

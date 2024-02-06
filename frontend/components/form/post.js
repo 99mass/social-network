@@ -1,7 +1,13 @@
-import { useState } from "react";
-import styles from '../../styles/CreatePost.module.css'
+import { useState,useRef } from "react";
+import styles from '../../styles/modules/CreatePost.module.css'
 
 export default function Post({ PostForm }) {
+
+      // lier mon icon plu avec mon input de type file 
+      const fileInputRef = useRef(null);
+      const handleFileIconClick = () => {
+          fileInputRef.current.click();
+      };
 
   return (
     <div className={`${styles.contentFormPost} content-form-post`}>
@@ -14,7 +20,10 @@ export default function Post({ PostForm }) {
         <PrivacyBloc />
         <div className={styles.postContent}>
           <textarea name="" placeholder="What's on your mind, Breukh?" id="" ></textarea>
-          <div className={styles.contentAssets}><i className="fa-regular fa-file-image" title="Choose image"></i><span className="emoji" title="Choose emoji">😄</span></div>
+          <div className={styles.contentAssets}>
+            <i className="fa-regular fa-file-image" title="Choose image" onClick={handleFileIconClick}><input type="file"  className={styles.filesPost} ref={fileInputRef} />
+              </i><span className="emoji" title="Choose emoji">😄</span>
+              </div>
         </div>
         <button className={styles.btnPost}>Post</button>
       </form>

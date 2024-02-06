@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '../../styles/Chat.module.css'
+import styles from '../../styles/modules/Chat.module.css'
 
 export default function ListUser() {
 

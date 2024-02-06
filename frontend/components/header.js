@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from "next/link";
-import styles from "../styles/Header.module.css";
+import styles from "../styles/modules/Header.module.css";
 
 import Post from "./form/post";
 import Group from "./form/group";

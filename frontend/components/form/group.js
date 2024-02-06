@@ -1,4 +1,4 @@
-import styles from '../../styles/CreateGroup.module.css'
+import styles from '../../styles/modules/CreateGroup.module.css'
 
 export default function Group({ GroupForm }) {
 
