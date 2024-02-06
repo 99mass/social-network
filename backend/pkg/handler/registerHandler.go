@@ -1,26 +1,26 @@
 package handler
 
 import (
-	"database/sql"
-	"encoding/json"
-	"log"
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"backend/pkg/utils"
+	"database/sql"
+	"encoding/json"
+	"log"
 	"net/http"
 )
 
 type RegisterRequest struct {
-	Email       string `json:"email"`
-	Password    string `json:"password"`
+	Email           string `json:"email"`
+	Password        string `json:"password"`
 	ConfirmPassword string `json:"confirmpassword"`
-	FirstName   string `json:"firstname"`
-	LastName    string `json:"lastname"`
-	DateOfBirth string `json:"dateofbirth"`
-	AvatarPath  string `json:"avatarpath"`
-	Nickname    string `json:"nickname"`
-	AboutMe     string `json:"aboutme"`
+	FirstName       string `json:"firstname"`
+	LastName        string `json:"lastname"`
+	DateOfBirth     string `json:"dateofbirth"`
+	AvatarPath      string `json:"avatarpath"`
+	Nickname        string `json:"nickname"`
+	AboutMe         string `json:"aboutme"`
 }
 
 func RegisterHandler(db *sql.DB) http.HandlerFunc {
@@ -37,9 +37,9 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			checkRegister,err := utils.CheckRegisterFormat(registerReq.FirstName,registerReq.LastName,registerReq.Nickname,registerReq.Email,registerReq.Password,registerReq.ConfirmPassword,registerReq.DateOfBirth,db)
+			checkRegister, err := utils.CheckRegisterFormat(registerReq.FirstName, registerReq.LastName, registerReq.Nickname, registerReq.Email, registerReq.Password, registerReq.ConfirmPassword, registerReq.DateOfBirth, db)
 
-			if !checkRegister{
+			if !checkRegister {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
 					Message: err.Error(),
@@ -47,13 +47,23 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			hashedPassword,err := helper.HashPassword(registerReq.Password)
-			if err != nil{
+			dir := "./pkg/static/avatarImage/"
+			userAvatar, err := helper.ReadAndSaveImage(registerReq.AvatarPath, dir)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+
+			hashedPassword, err := helper.HashPassword(registerReq.Password)
+			if err != nil {
 				log.Println("enable to hash the password")
-				helper.SendResponse(w,models.ErrorResponse{
-					Status: "error",
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
 					Message: "we got an issue",
-				},http.StatusInternalServerError)
+				}, http.StatusInternalServerError)
 				return
 			}
 			user := models.User{
@@ -62,7 +72,7 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				FirstName:   registerReq.FirstName,
 				LastName:    registerReq.LastName,
 				DateOfBirth: registerReq.DateOfBirth,
-				AvatarPath:  registerReq.AvatarPath,
+				AvatarPath:  userAvatar,
 				Nickname:    registerReq.Nickname,
 				AboutMe:     registerReq.AboutMe,
 			}
