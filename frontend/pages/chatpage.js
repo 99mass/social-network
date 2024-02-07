@@ -3,8 +3,17 @@ import Header from '../components/header'
 import LeftBloc from '../components/home/left_bloc'
 import ListUser from '../components/chat/chat';
 import DiscussionPage from '../components/chat/discussion';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { isValideSession } from '../utils/cookies';
 
 export default function Chatpage() {
+
+    const router = useRouter();
+    useEffect(() => {
+      if(!isValideSession()) router.push("/")
+    }, []);
+
     return (
         <>
             <Head>

@@ -34,7 +34,7 @@ export default function LeftBloc() {
                     </Link>
                 </div>
                 <Link href="./friend" className="menu-left-a"> <i className="fas fa-user-friends"></i>Friends</Link>
-                <Link href="./group.html" className="menu-left-a"> <i className="fas fa-users"></i>Groups</Link>
+                <Link href="./group" className="menu-left-a"> <i className="fas fa-users"></i>Groups</Link>
                 <hr />
                 <h4>create</h4>
                 <div className="new-post-content">

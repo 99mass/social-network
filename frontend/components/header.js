@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from "next/link";
 import styles from "../styles/modules/Header.module.css";
 
@@ -6,6 +6,8 @@ import Post from "./form/post";
 import Group from "./form/group";
 
 export default function Header() {
+
+   
     return (
         <nav className={styles.top}>
             <div className={styles.fixed}>
@@ -24,6 +26,7 @@ export default function Header() {
 }
 
 export function MidlleNAvForBigScreen() {
+    
     return (
         <div className={`${styles.middleContent} ${styles.middleContent0}`}>
             <Link href="/home"><i className="active fas fa-home" title="Home"><span>25+</span></i></Link>

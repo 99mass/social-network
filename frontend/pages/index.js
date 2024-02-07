@@ -1,7 +1,16 @@
 import Head from 'next/head';
 import Sign_in from '../components/auth/signin_page';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { isValideSession } from '../utils/cookies';
 
 export default function SignIn() {
+
+  const router = useRouter();
+  useEffect(() => {
+    if(isValideSession()) router.push("/home")
+  }, []);
+
   return (
     <>
       <Head>

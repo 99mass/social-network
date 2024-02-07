@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"backend/pkg/controller"
 	"database/sql"
 	"errors"
-	"backend/pkg/controller"
 	"regexp"
 	"time"
 
@@ -109,6 +109,9 @@ func CheckPassword(password string) (bool, error) {
 }
 
 func CheckUserName(username string) (bool, error) {
+	// if username == "" {
+	// 	return true, nil
+	// }
 	// Cette expression exige que le pseudo ait entre 5 et 20 caractères alphanumériques.
 	usernameRegex := `^[a-zA-Z0-9]{3,20}$`
 

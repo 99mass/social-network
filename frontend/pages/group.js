@@ -1,14 +1,13 @@
 import Head from 'next/head'
 import Header from '../components/header'
-import LeftBloc from '../components/home/left_bloc'
-import Comment from '../components/comment/comment_bloc';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { isValideSession } from '../utils/cookies';
+import LeftBlocGroupPage from '../components/group/left_bloc';
 
 
 
-export default function Friend() {
+export default function Goup() {
 
     const router = useRouter();
     useEffect(() => {
@@ -18,14 +17,13 @@ export default function Friend() {
     return (
         <>
             <Head>
-                <title>Social-network/notification</title>
+                <title>Social-network/group</title>
                 <meta name="description" content="project social-network" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-                <section className='section-comment' >
-                <LeftBloc />
-                <Comment/>
+            <section className='section-group' >
+               <LeftBlocGroupPage/>
             </section>
         </>
     );

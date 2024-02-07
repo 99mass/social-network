@@ -1,8 +1,17 @@
 import Head from 'next/head';
 import Header from '../components/header'
 import Profile_user from '../components/user/profile';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { isValideSession } from '../utils/cookies';
 
 export default function SignIn() {
+
+  const router = useRouter();
+  useEffect(() => {
+    if(!isValideSession()) router.push("/")
+  }, []);
+
   return (
     <>
       <Head>
