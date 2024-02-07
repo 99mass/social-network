@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { convertAge } from "../../utils/convert_dates";
 import { api } from "../../utils/api";
-import { sendData } from "../../utils/handler";
+import { sendData } from "../../handler/auth";
 import styles from "../../styles/modules/auth.module.css";
 
 export default function Sign_up() {

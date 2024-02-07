@@ -71,13 +71,13 @@ export default function Friends() {
             onClick={handleSetFriend}
             className={friend ? styles.active : styles.default}
           >
-           <i class="fa-solid fa-person-arrow-down-to-line"></i>Follower
+           <i className="fa-solid fa-person-arrow-down-to-line"></i>Follower
           </span>
           <span
             onClick={handleSetFriend}
             className={!friend ? styles.active : styles.default}
           >
-            <i class="fa-solid fa-person-arrow-up-from-line"></i>Following
+            <i className="fa-solid fa-person-arrow-up-from-line"></i>Following
           </span>
         </div>
         {friend && <FollowerFriends data={data} />}

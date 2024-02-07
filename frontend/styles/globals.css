@@ -51,9 +51,10 @@ body {
   min-height: 100vh;
   background-color: rgb(20, 20, 20);
   overflow-x: hidden;
-  /* margin-top: 130px; */
   scroll-behavior: smooth;
 }
+
+
 
 ::-webkit-scrollbar {
   width: 12px;
@@ -83,5 +84,6 @@ a {
 @import url("notification.css");
 @import url("comment.css");
 @import url("profile.css");
+@import url("group.css");
 
 

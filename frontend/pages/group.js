@@ -3,7 +3,7 @@ import Header from '../components/header'
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { isValideSession } from '../utils/cookies';
-import LeftBlocGroupPage from '../components/group/left_bloc';
+import GroupPage from '../components/group/group_page';
 
 
 
@@ -23,7 +23,7 @@ export default function Goup() {
             </Head>
             <Header />
             <section className='section-group' >
-               <LeftBlocGroupPage/>
+              <GroupPage />
             </section>
         </>
     );

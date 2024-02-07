@@ -1,4 +1,4 @@
-import { createSessionCookie } from "./cookies";
+import { createSessionCookie } from "../utils/cookies";
 
 export const sendData = async (
   linkApi,
@@ -8,8 +8,6 @@ export const sendData = async (
   setErrorMessage,
   createCookie
 ) => {
-
-  
   try {
     const response = await fetch(linkApi, {
       method: "POST",
@@ -20,7 +18,10 @@ export const sendData = async (
     });
 
     if (response.ok && response.status) {
-      if (createCookie) createSessionCookie("https://learn.zone01dakar.sn");
+      const cookieDatas = await response.json();
+
+      if (createCookie)
+        createSessionCookie(cookieDatas.value, cookieDatas.expiration);
       router.push("/" + pageRedirect);
     } else {
       const errorData = await response.json();

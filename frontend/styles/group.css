@@ -1,8 +1,14 @@
-/* body {
-    overflow: hidden;
-} */
 
 .section-group {
+    margin-top: 120px;
     padding: 0px 20px;
     display: flex;
+
 }
+
+@media screen and(min-width:768px) {
+    body{
+        overflow-y: hidden;
+    }
+}
+

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import styles from "../../styles/modules/auth.module.css";
 import { api } from "../../utils/api";
-import { sendData } from "../../utils/handler";
+import { sendData } from "../../handler/auth";
 
 export default function Sign_in() {
   const router = useRouter();
