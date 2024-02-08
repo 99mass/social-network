@@ -1,10 +1,23 @@
 
-.section-group {
+#section-group {
     margin-top: 120px;
     padding: 0px 20px;
     display: flex;
-
 }
+
+
+  #section-group  ._middle ._contenPosts ._contenPost .post{
+   padding: 10px;
+   border-top:1px solid  #515151;
+  }
+  #section-group  ._middle ._contenPosts ._contenPost .left-side,
+  #section-group  ._middle ._contenPosts ._contenPost .right-side {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 12px;
+    gap: 5px;
+  }
 
 @media screen and(min-width:768px) {
     body{
@@ -12,3 +25,8 @@
     }
 }
 
+@media screen and(max-width:768px) {
+
+
+
+}

@@ -1,8 +1,3 @@
-/* body {
-    overflow: hidden;
-} */
-
-
 
 .menuLeft {
     width: 30%;
@@ -16,7 +11,7 @@
 }
 
 .menuLeft h4 {
-    width: 95%;
+    width: 80%;
     padding: 8px 5px;
     cursor: pointer;
 }
@@ -43,11 +38,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6px 0px;
+    padding: 10px 0px;
     border-radius: 10px;
+    font-size: 18px;
     text-align: center;
     text-transform: capitalize;
-    color: var(--hsl-color-1);
+    /* color: var(--hsl-color-1); */
     background: var(--fds-blue-80);
     cursor: pointer;
 }
@@ -55,13 +51,22 @@
 .menuLeft .btnNewGroup i {
     margin-right: 5px;
     font-size: 22px;
-    color: var(--hsl-color-1);
+    /* color: var(--hsl-color-1); */
 }
 
 .menuLeft hr {
     width: 90%;
     border-color: gray;
 }
+
+.default {
+    background: var(--secondary-bg);
+  }
+  
+  .active {
+    border-radius: 10px;
+    background: var(--fds-blue-80);
+  }
 
 .listGroupManaged {
     width: 90%;
@@ -111,6 +116,10 @@
 .yourGroups {
     padding: 0px 5%;
 }
+.yourGroups {
+    width: 100%;
+    background-color: aqua;
+}
 
 .menuMiddle {
     height: 100vh;
@@ -139,7 +148,7 @@
     border-top: none;
 }
 
-.menuMiddle .content-all-comments {
+.menuMiddle .contentAllComments {
     width: 100%;
     margin-top: 0px;
     margin-left: 0px;
@@ -150,7 +159,7 @@
     width: 100%;
     height: fit-content;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     flex-wrap: wrap;
     gap: 10px;
     padding-top: 20px;
@@ -181,12 +190,12 @@
 
 }
 
-.postSugess div .name-group-membres {
+.postSugess div .nameGroupMembres {
     padding: 0px;
     margin: 0px;
 }
 
-.postSugess div .name-group-membres a {
+.postSugess div .nameGroupMembres a {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -197,7 +206,7 @@
     text-transform: capitalize;
 }
 
-.postSugess div .name-group-membres span:last-of-type {
+.postSugess div .nameGroupMembres span:last-of-type {
     font-size: 12;
     font-weight: normal;
     color: gray;
@@ -213,19 +222,20 @@
     cursor: pointer;
 }
 
-.content-list-yourGroups {
+.contentListYourGroups {
     width: 100%;
     height: fit-content;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     flex-wrap: wrap;
     gap: 15px;
     padding-top: 20px;
     margin-bottom: 10rem;
+  
 
 }
 
-.element-group {
+.elementGroup {
     width: 48%;
     height: 200px;
     display: flex;
@@ -236,7 +246,7 @@
     background: var(--secondary-bg);
 }
 
-.element-group .top-element a {
+.elementGroup .topElement a {
     width: 100%;
     height: fit-content;
     display: flex;
@@ -244,18 +254,18 @@
     gap: 10px;
 }
 
-.element-group .top-element img {
+.elementGroup .topElement img {
     width: 100px;
     height: 100px;
     border-radius: 10px;
 
 }
 
-.element-group .top-element span {
+.elementGroup .topElement span {
     text-transform: capitalize;
 }
 
-.element-group .view {
+.elementGroup .view {
     width: 100%;
     padding: 10px 0px;
     border-radius: 10px;
@@ -271,24 +281,27 @@
         width: 70%;
         padding: 0px 5%;
     }
-
 }
 
 @media screen and (max-width: 768px) {
-
-
+    .sectionGroup{
+        display: flex;
+        flex-direction: column;
+    }
     .menuMiddle {
         width: 100%;
         height: fit-content;
         overflow: hidden;
         padding: 0px 0px;
         margin-top: 20px;
+        padding-bottom: 5rem;
     }
 
     .menuLeft {
         width: 100%;
         padding-left: 0px;
         height: fit-content;
+        
     }
 
     .menuLeft .blocNav {
@@ -321,7 +334,7 @@
     }
 
     .menuLeft  hr,
-    .menuLeft .h4-listGroupManaged,
+    .menuLeft .h4ListGroupManaged,
     .menuLeft .listGroupManaged {
         order: 2;
     }
@@ -384,7 +397,7 @@
         padding: 0px;
     
     }
-    .postSugess div .name-group-membres a {
+    .postSugess div .nameGroupMembres a {
         justify-content: start;
         height: fit-content;
         gap: 5px;
@@ -410,7 +423,7 @@
     .postSugess {
         width: 80%;
     }
-    .element-group {
+    .elementGroup {
         width: 90%;
     }
 }

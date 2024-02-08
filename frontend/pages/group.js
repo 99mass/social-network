@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { isValideSession } from '../utils/cookies';
 import GroupPage from '../components/group/group_page';
-
+import styles from "../styles/modules/group.module.css";
 
 
 export default function Goup() {
@@ -22,7 +22,7 @@ export default function Goup() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-            <section className='section-group' >
+            <section id='section-group' className={styles.sectionGroup} >
               <GroupPage />
             </section>
         </>

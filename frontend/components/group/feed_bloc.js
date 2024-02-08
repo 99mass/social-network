@@ -81,11 +81,11 @@ export function FeedBloc() {
   ];
 
   return (
-    <div className={styles.menuMiddle}>
-      <div className={styles.contenPosts}>
+    <div className={`${styles.menuMiddle} _middle`}>
+      <div className={`${styles.contenPosts} _contenPosts`}>
         {data.map((item, index) => (
-          <div key={index} className={styles.contenPost}>
-            <PostsFeed item={item} dataComment={dataComment} />
+          <div key={index} className={`${styles.contenPost} _contenPost`}>
+             <PostsFeed item={item} dataComment={dataComment} />
           </div>
         ))}
       </div>
@@ -95,12 +95,12 @@ export function FeedBloc() {
 
 export function PostsFeed({ item, dataComment }) {
   return (
-    <>
+    <div className="post">
       <PostHeader user={item.user} image={item.imageUrl} time={item.date} />
       <PostMiddle text={item.text} image={item.imageUrl} />
       <PostFooterComment like={item.like} comment={item.comment} />
       <CommentPost data={dataComment} />
       <FormComment />
-    </>
+    </div>
   );
 }
