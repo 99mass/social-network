@@ -11,14 +11,12 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-type logoutReq struct {
-	SessionID string
-}
+
 
 func LogOutHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		var lReq logoutReq
+		var lReq sessionReq
 		err := json.NewDecoder(r.Body).Decode(&lReq)
 		if err != nil {
 			helper.SendResponse(w, models.ErrorResponse{
