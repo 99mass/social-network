@@ -5,49 +5,47 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"database/sql"
-	"encoding/json"
 	"net/http"
 
 	"github.com/gofrs/uuid"
 )
 
-func LogOutHandler(db *sql.DB) http.HandlerFunc {
+func ProfilHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
-		case http.MethodPost:
-			var lReq sessionReq
-			err := json.NewDecoder(r.Body).Decode(&lReq)
+		case http.MethodGet:
+			session := r.Header.Get("SessionID")
+			sessId, err := uuid.FromString(session)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
-					Message: "incorrect request",
+					Message: "format value session incorrect",
 				}, http.StatusBadRequest)
 				return
 			}
-			id, err := uuid.FromString(lReq.SessionID)
+			sess, err := controller.GetSessionByID(db, sessId)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
-					Message: "invalid value session",
+					Message: "you're not authorized",
 				}, http.StatusBadRequest)
 				return
 			}
-			err = controller.DeleteSession(db, id)
+			user, err := controller.GetUserByID(db, sess.UserID)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
-					Message: "we got an issue",
-				}, http.StatusInternalServerError)
+					Message: "you're not authorized",
+				}, http.StatusBadRequest)
 				return
 			}
+			helper.SendResponse(w, user, http.StatusOK)
 
-			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
 				Status:  "error",
 				Message: "Method not allowed",
 			}, http.StatusMethodNotAllowed)
-
 		}
 	}
 }
