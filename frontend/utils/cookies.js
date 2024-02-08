@@ -12,15 +12,18 @@ export const createSessionCookie = (sessionId, expiration) => {
 export const getSessionCookie = () => {
   return Cookies.get("sessionID");
 };
+export const deleteSessionCookie = () => {
+  Cookies.remove("sessionID");
+};
 
 export const isValideSession = async () => {
-  const sessionID = getSessionCookie();
+  let sessionID = getSessionCookie();
   if (sessionID) {
     let isSession = await sendSession(api.Session, sessionID);
     if (isSession) {
-      console.log("isSession:", isSession);
       return true;
     }
+    deleteSessionCookie();
     return false;
   }
   return false;

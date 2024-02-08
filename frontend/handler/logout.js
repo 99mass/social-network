@@ -1,6 +1,9 @@
-import { createSessionCookie } from "../utils/cookies";
+import { api } from "../utils/api";
+import { deleteSessionCookie, getSessionCookie } from "../utils/cookies";
 
-export const sendSession = async (linkApi, sessionID) => {
+export const logout = async () => {
+  const linkApi = api.Logout;
+  const sessionID = getSessionCookie();
   try {
     const response = await fetch(linkApi, {
       method: "POST",
@@ -11,8 +14,7 @@ export const sendSession = async (linkApi, sessionID) => {
     });
 
     if (response.ok) {
-      const cookieDatas = await response.json();
-      createSessionCookie(cookieDatas.value, cookieDatas.expiration);
+      deleteSessionCookie();
       return true;
     } else {
       const errorData = await response.json();

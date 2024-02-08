@@ -49,3 +49,12 @@ func UpdateSessionExpiryTime(db *sql.DB, sessionID uuid.UUID) error {
     _, err := db.Exec(query, time.Now().Add(24 * time.Hour), sessionID)
     return err
 }
+
+func DeleteSession(db *sql.DB, sessionID uuid.UUID) error {
+    query := `
+        DELETE FROM sessions
+        WHERE id = ?;
+    `
+    _, err := db.Exec(query, sessionID)
+    return err
+}

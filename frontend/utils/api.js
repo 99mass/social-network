@@ -4,6 +4,6 @@ const domain = "http://localhost:8080";
   Registre: `${domain}/register`,
   Login: `${domain}/login`,
   Session: `${domain}/session`,
-
+  Logout: `${domain}/logout`,
 };
 
