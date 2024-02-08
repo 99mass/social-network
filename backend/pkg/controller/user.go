@@ -75,6 +75,23 @@ func GetUserByEmail(db *sql.DB,email string)(uuid.UUID,error){
 	return userID,nil
 }
 
+func GetUserByID(db *sql.DB, userID uuid.UUID) (models.User, error) {
+    var user models.User
+    query := `
+        SELECT *
+        FROM users
+        WHERE id = ?
+    `
+    err := db.QueryRow(query, userID).Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt)
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return models.User{}, errors.New("no user found with the provided ID")
+        }
+        return models.User{}, err
+    }
+    return user, nil
+}
+
 func IsDuplicateEmail(db *sql.DB, email string) (bool, error) {
 	query := `
         SELECT COUNT(*)

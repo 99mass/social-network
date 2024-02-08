@@ -12,4 +12,5 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/login", helper.Middleware(handler.LoginHandler(db)))
 	http.HandleFunc("/session",helper.Middleware(handler.CheckSessionHandler(db)))
 	http.HandleFunc("/logout",helper.Middleware(handler.LogOutHandler(db)))
+	http.HandleFunc("/profil",helper.Middleware(handler.ProfilHandler(db)))
 }

@@ -11,4 +11,5 @@ type User struct {
 	Nickname    string    `db:"nickname" json:"nickname"`
 	AboutMe     string    `db:"aboutme" json:"aboutme"`
 	IsPublic    bool      `db:"ispublic" json:"ispublic"`
+	CreatedAt 	string		`db:"createdat" json:"createdat"`
 }
