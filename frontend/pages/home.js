@@ -10,7 +10,14 @@ import { useRouter } from "next/router";
 export default function Home() {
   const router = useRouter();
   useEffect(() => {
-    if(!isValideSession()) router.push("/")
+    const checkSession = async () => {
+      const isValid = await isValideSession();
+      if (!isValid) {
+        router.push("/");
+      }
+    };
+
+    checkSession();
   }, []);
 
   return (

@@ -12,7 +12,15 @@ export default function Friend() {
 
     const router = useRouter();
     useEffect(() => {
-      if(!isValideSession()) router.push("/")
+    //   if(!isValideSession()) router.push("/")
+    const checkSession = async () => {
+        const isValid = await isValideSession();
+        if (!isValid) {
+          router.push("/");
+        }
+      };
+  
+      checkSession();
     }, []);
 
     return (
