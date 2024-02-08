@@ -1,17 +1,17 @@
 import Head from "next/head";
-import Sign_in from "../components/auth/signin_page";
+import Header from "../components/header";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { getSessionCookie, isValideSession } from "../utils/cookies";
+import { isValideSession } from "../utils/cookies";
+import Profile_group from "../components/profilegroup/profile_group";
 
 export default function SignIn() {
   const router = useRouter();
-  
   useEffect(() => {
     const checkSession = async () => {
       const isValid = await isValideSession();
-      if (isValid) {
-        router.push("/home");
+      if (!isValid) {
+        router.push("/");
       }
     };
 
@@ -21,11 +21,14 @@ export default function SignIn() {
   return (
     <>
       <Head>
-        <title>Social-network/Authentification</title>
+        <title>Social-network/profile-group</title>
         <meta name="description" content="project social-network" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Sign_in />
+      <Header />
+      <section className="section-group-profile">
+        <Profile_group/>
+      </section>
     </>
   );
 }
