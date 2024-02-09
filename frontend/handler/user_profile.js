@@ -1,5 +1,6 @@
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
+import { successNotification } from "../utils/sweeAlert";
 
 
 export const getDatasProfilUser = async (setDatas) => {
@@ -42,9 +43,10 @@ export const updateDataProfile = async (data,setErrorMessage) => {
             body: JSON.stringify(data),
         });
 
-        if (response.ok && response.status) {
+        if (response.ok) {
             const datas = await response.json();
             console.log("profile", datas);
+            successNotification('Update profile done')
         } else {
             const errorData = await response.json();
             console.log(errorData);
