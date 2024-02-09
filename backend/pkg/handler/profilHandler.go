@@ -5,6 +5,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/gofrs/uuid"
@@ -15,6 +16,7 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodGet:
 			session := r.Header.Get("SessionID")
+			fmt.Println(("sessionID: " + session))
 			sessId, err := uuid.FromString(session)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{

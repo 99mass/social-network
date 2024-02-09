@@ -32,7 +32,7 @@ export default function Profile_user() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'SessionID': sessionId 
+            'Authorization': sessionId 
           }
         });
     
