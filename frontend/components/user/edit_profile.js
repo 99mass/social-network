@@ -1,13 +1,62 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from '../../styles/modules/edit-profil.module.css';
 import { getDatasProfilUser } from '../../handler/user_profile';
+import { convertAge } from '../../utils/convert_dates';
 
 export default function EditProfile({ CloseEditForm }) {
+
+    // recuperer les donnes du user
     const [datas, setDatas] = useState(null)
+    // const [FirstName, setFirstName] = useState(null)
+    // const [LastName, setLastName] = useState(null)
+    // const [NickName, setNickName] = useState(null)
+    // const [DateBirth, setDateBirth] = useState(null)
+    // const [Email, setEmail] = useState(null)
+    // const [AboutMe, setAboutMe] = useState(null)
 
     useEffect(() => {
         getDatasProfilUser(setDatas);
     }, [])
+
+   
+    // update profile user
+    const fileInputRef = useRef(null);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        console.log("aaa",formData.get("FirstName"));
+        if (formData.get("FirstName")==null) formData.FirstName= datas.firstname
+        const jsonData = {};
+
+        formData.forEach((value, key) => {           
+            jsonData[key] = value;
+        });
+
+
+        // Appel de la fonction pour convertire l'âge
+        if (jsonData.DateOfBirth) {
+            const dateOfBirth = new Date(jsonData.DateOfBirth);
+            const age = convertAge(dateOfBirth);
+            jsonData.DateOfBirth = age;
+        }
+
+        // recuperer le fichier le convertir en base64
+        const file = fileInputRef.current.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                const base64File = reader.result;
+                jsonData.Avatarpath = base64File;
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            jsonData.Avatarpath = datas.avatarpath;
+        }
+        console.log("jsonData:", jsonData);
+    };
 
     return (
         <div className={styles.editProfileBloc}>
@@ -16,8 +65,8 @@ export default function EditProfile({ CloseEditForm }) {
                 <i className="fa-regular fa-circle-xmark" title="Close form" onClick={CloseEditForm}></i>
             </h1>
             <hr />
-            <form action="#" method="post">
-                {datas && <Picture picture={datas.avatarpath} />}
+            <form action="#" method="post" onSubmit={handleSubmit} encType="multipart/form-data">
+                {datas && <Picture fileInputRef={fileInputRef} picture={datas.avatarpath} />}
                 <hr />
                 {datas && <TypeProfile ispublic={datas.ispublic} />}
                 <hr />
@@ -27,14 +76,11 @@ export default function EditProfile({ CloseEditForm }) {
     )
 }
 
-export function Picture({ picture }) {
+export function Picture({ fileInputRef, picture }) {
 
-    // lier mon icon plu avec mon input de type file 
-    const fileInputRef = useRef(null);
     const handleFileIconClick = () => {
         fileInputRef.current.click();
     };
-
 
     return (
         <div className={styles.pictureActual}>
@@ -89,7 +135,8 @@ export function TypeProfile({ ispublic }) {
                     <input
                         className={`${styles.input} ${styles.inputAltChecked}`}
                         type="radio"
-                        name="privacy"
+                        name="Privacy"
+                        defaultValue={privacy}
                         checked={privacy}
                         onChange={() => handlePrivacyChange(true)}
                     />
@@ -101,6 +148,7 @@ export function TypeProfile({ ispublic }) {
                         className={`${styles.input} ${styles.inputAltChecked}`}
                         name="privacy"
                         type="radio"
+                        defaultValue={privacy}
                         checked={!privacy}
                         onChange={() => handlePrivacyChange(false)}
                     />
@@ -174,7 +222,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         </span >
                         <span className={styles.edit} title="Click to edit First Name" onClick={handleInputFirstName}>edit</span>
                     </p>
-                    {inputFirstName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="new First Name here... " type="text" />}
+                    {inputFirstName && <input name='FirstName' defaultValue={firstname} className={`${styles.input} ${styles.inputAlt}`} placeholder="new First Name here... " type="text" />}
                 </div>
                 {/* Last Name */}
                 <div className={styles.group}>
@@ -184,7 +232,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         </span >
                         <span className={styles.edit} title="Click to edit Last Name" onClick={handleInputLastName}>edit</span>
                     </p>
-                    {inputLastName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="new Last Name here... " type="text" />}
+                    {inputLastName && <input name='LastName' defaultValue={lastname} className={`${styles.input} ${styles.inputAlt}`} placeholder="new Last Name here... " type="text" />}
                 </div>
                 {/* Nickname */}
                 <div className={styles.group}>
@@ -194,7 +242,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         </span>
                         <span className={styles.edit} title="Click to edit Nickname" onClick={handleInputNickName}>edit</span>
                     </p>
-                    {inputNickName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="new Nickname here... " type="text" />}
+                    {inputNickName && <input name='Nickname' defaultValue={nickname} className={`${styles.input} ${styles.inputAlt}`} placeholder="new Nickname here... " type="text" />}
                 </div>
                 {/* Date Of birth */}
                 <div className={styles.group}>
@@ -204,7 +252,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         </span>
                         <span className={styles.edit} title="Click to edit Date of Birth" onClick={handleInputDateBirthName}>edit</span>
                     </p>
-                    {inputDateBirthName && <input className={`${styles.input} ${styles.inputAlt}`} type="date" />}
+                    {inputDateBirthName && <input name='DateOfBirth' defaultValue={dateofbirth} className={`${styles.input} ${styles.inputAlt}`} type="date" />}
                 </div>
                 {/* Email */}
                 <div className={styles.group}>
@@ -214,7 +262,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         </span>
                         <span className={styles.edit} title="Click to edit Email" onClick={handleInputEmailName}>edit</span>
                     </p>
-                    {inputEmailName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="new Email here... " type="text" />}
+                    {inputEmailName && <input name='Email' defaultValue={email} className={`${styles.input} ${styles.inputAlt}`} placeholder="new Email here... " type="text" />}
                 </div>
                 {/* About me */}
                 <div className={styles.group}>
@@ -224,7 +272,8 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         </span>
                         <span className={styles.edit} title="Click to edit Bio" onClick={handleInputAboutMeName}>edit</span>
                     </p>
-                    {inputAboutMeName && <textarea
+                    {inputAboutMeName && <textarea name="AboutMe"
+                        defaultValue={aboutme}
                         className={`${styles.input} ${styles.inputAlt} ${styles.inputAltTextarea}`}
                         placeholder="About Me here... "
                     ></textarea>}

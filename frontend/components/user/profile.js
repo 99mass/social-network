@@ -22,7 +22,6 @@ export default function Profile_user() {
   };
 
 
-  
 
   return (
     <>
@@ -96,48 +95,6 @@ export function NavMenu({ handleEditForm, setViewfriend, edit, viewfriend }) {
     </div>
   );
 }
-
-
-  
-  
-// export async function getServerSideProps() {
-//   try {
-//     const sessionId = getSessionCookie();
-//     console.log(sessionId);
-//     const response = await fetch(api.Profil, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': sessionId 
-//       }
-//     });
-
-//     if (!response.ok) {
-//       console.error('Failed to fetch profile data');
-//       return {
-//         props: {
-//           profileData: null // En cas d'échec de la requête, retournez null pour les données du profil
-//         }
-//       };
-//     }
-    
-//     const profileData = await response.json();
-//     console.log(profileData);
-
-//     return {
-//       props: {
-//         profileData
-//       }
-//     };
-//   } catch (error) {
-//     console.error('Error fetching profile data:', error.message);
-//     return {
-//       props: {
-//         profileData: null // En cas d'erreur, retournez null pour les données du profil
-//       }
-//     };
-//   }
-// }
 
 
   
