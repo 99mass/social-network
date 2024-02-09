@@ -17,7 +17,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:
-			session := r.Header.Get("SessionID")
+			session := r.Header.Get("Authorization")
 			sessId, err := uuid.FromString(session)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
