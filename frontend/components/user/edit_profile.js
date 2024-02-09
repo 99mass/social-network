@@ -1,24 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from '../../styles/modules/edit-profil.module.css';
-import { getDatasProfilUser } from '../../handler/user_profile';
+import { getDatasProfilUser, updateDataProfile } from '../../handler/user_profile';
 import { convertAge } from '../../utils/convert_dates';
 
-export default function EditProfile({ CloseEditForm }) {
+export default function Edit_Profile({ CloseEditForm }) {
 
     // recuperer les donnes du user
     const [datas, setDatas] = useState(null)
-    // const [FirstName, setFirstName] = useState(null)
-    // const [LastName, setLastName] = useState(null)
-    // const [NickName, setNickName] = useState(null)
-    // const [DateBirth, setDateBirth] = useState(null)
-    // const [Email, setEmail] = useState(null)
-    // const [AboutMe, setAboutMe] = useState(null)
+    const [errorMessage, setErrorMessage] = useState(null);
 
     useEffect(() => {
         getDatasProfilUser(setDatas);
     }, [])
 
-   
     // update profile user
     const fileInputRef = useRef(null);
 
@@ -26,37 +20,35 @@ export default function EditProfile({ CloseEditForm }) {
         event.preventDefault();
 
         const formData = new FormData(event.target);
-        console.log("aaa",formData.get("FirstName"));
-        if (formData.get("FirstName")==null) formData.FirstName= datas.firstname
-        const jsonData = {};
 
-        formData.forEach((value, key) => {           
-            jsonData[key] = value;
-        });
+        const jsonData = Object.fromEntries(formData.entries());
 
-
-        // Appel de la fonction pour convertire l'âge
         if (jsonData.DateOfBirth) {
-            const dateOfBirth = new Date(jsonData.DateOfBirth);
-            const age = convertAge(dateOfBirth);
-            jsonData.DateOfBirth = age;
+            jsonData.DateOfBirth = convertAge(new Date(jsonData.DateOfBirth));
         }
 
-        // recuperer le fichier le convertir en base64
+        const fields = ["FirstName", "LastName", "Nickname", "DateOfBirth", "Email", "AboutMe"];
+        fields.forEach(field => {
+            if (!formData.has(field) && datas) {
+                jsonData[field] = datas[field.toLowerCase()];
+            }
+        });
+
         const file = fileInputRef.current.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = function () {
-                const base64File = reader.result;
-                jsonData.Avatarpath = base64File;
+                jsonData.Avatarpath = reader.result;
             };
-
             reader.readAsDataURL(file);
         } else {
-            jsonData.Avatarpath = datas.avatarpath;
+            jsonData.Avatarpath = datas?.avatarpath;
         }
+
+        updateDataProfile(jsonData, setErrorMessage)
         console.log("jsonData:", jsonData);
     };
+
 
     return (
         <div className={styles.editProfileBloc}>
@@ -65,7 +57,8 @@ export default function EditProfile({ CloseEditForm }) {
                 <i className="fa-regular fa-circle-xmark" title="Close form" onClick={CloseEditForm}></i>
             </h1>
             <hr />
-            <form action="#" method="post" onSubmit={handleSubmit} encType="multipart/form-data">
+            {errorMessage && <p className={styles.error}><i class="fa-solid fa-circle-exclamation"></i>{errorMessage}</p>}
+            <form method="put" onSubmit={handleSubmit} encType="multipart/form-data">
                 {datas && <Picture fileInputRef={fileInputRef} picture={datas.avatarpath} />}
                 <hr />
                 {datas && <TypeProfile ispublic={datas.ispublic} />}
@@ -165,6 +158,8 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
     const [inputDateBirthName, showInputDateBirthName] = useState(false)
     const [inputEmailName, showInputEmailName] = useState(false)
     const [inputAboutMeName, showInputAboutMeName] = useState(false)
+    const [inputPassword, showInputPassword] = useState(false)
+
 
     const handleInputFirstName = () => {
         if (!inputFirstName) {
@@ -208,7 +203,13 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
             showInputAboutMeName(false);
         }
     }
-
+    const handleInputPassword=()=>{
+        if (!inputPassword) {
+            showInputPassword(true);
+        } else {
+            showInputPassword(false);
+        }
+    }
 
     return (
         <div className={styles.basicInfos}>
@@ -278,6 +279,22 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         placeholder="About Me here... "
                     ></textarea>}
                 </div>
+
+                {/* Password */}
+                <div className={styles.group}>
+                    <p className={styles.formGroup}>
+                        <span
+                        ><span className={styles.identiti}>Change password </span ><span></span>
+                        </span>
+                        <span className={styles.edit} title="Click to change password" onClick={handleInputPassword}>edit</span>
+                    </p>
+                    {inputPassword && <input name='Email' className={`${styles.input} ${styles.inputAlt}`} placeholder="current password " type="password" />}
+                    {inputPassword && <input name='Email' className={`${styles.input} ${styles.inputAlt}`} placeholder="new password " type="password" />}
+
+                </div>
+
+
+
             </div>
             <div className={styles.submitUpdate}>
                 <button type="submit">update profile</button>
@@ -286,4 +303,3 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
     )
 
 }
-
