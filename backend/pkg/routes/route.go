@@ -1,10 +1,11 @@
 package routes
 
 import (
-	"backend/pkg/handler"
-	"backend/pkg/helper"
 	"database/sql"
 	"net/http"
+
+	"backend/pkg/handler"
+	"backend/pkg/helper"
 )
 
 func Route(db *sql.DB) {
@@ -14,4 +15,5 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/logout",helper.Middleware(handler.LogOutHandler(db)))
 	http.HandleFunc("/profil",helper.Middleware(handler.ProfilHandler(db)))
 	http.HandleFunc("/update_profil",helper.Middleware(handler.UpdateProfil(db)))
+	http.HandleFunc("/addpost", helper.Middleware(handler.PostHandler(db)))
 }
