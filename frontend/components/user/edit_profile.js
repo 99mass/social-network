@@ -9,7 +9,6 @@ export default function EditProfile({ CloseEditForm }) {
         getDatasProfilUser(setDatas);
     }, [])
 
-
     return (
         <div className={styles.editProfileBloc}>
             <h1>
@@ -40,7 +39,7 @@ export function Picture({ picture }) {
     return (
         <div className={styles.pictureActual}>
             <h3>actual picture</h3>
-            <img src={picture} alt="" />
+            <img src={`data:image/png;base64,${picture}`} alt="" />
             <label htmlFor="file" className={styles.custumFileUpload} onClick={handleFileIconClick}>
                 <div className={styles.icon}>
                     <svg
