@@ -39,13 +39,15 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "enable to encode image avatar",
-				}, http.StatusInternalServerError)
-				return
+			if user.AvatarPath != "" {
+				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+				if err != nil {
+					helper.SendResponse(w, models.ErrorResponse{
+						Status:  "error",
+						Message: "enable to encode image avatar",
+					}, http.StatusInternalServerError)
+					return
+				}
 			}
 			helper.SendResponse(w, user, http.StatusOK)
 
