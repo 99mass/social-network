@@ -16,12 +16,18 @@ class MyDocument extends Document {
                     />
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossOrigin="anonymous" />
 
+                    <link href="
+                        https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
+                        " rel="stylesheet" />
+
                 </Head>
                 <body>
 
                     <Main />
                     <NextScript />
-
+                    <script src="
+                    https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
+                    "></script>
                 </body>
             </Html>
         )
