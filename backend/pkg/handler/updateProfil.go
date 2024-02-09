@@ -13,6 +13,19 @@ import (
 	"github.com/gofrs/uuid"
 )
 
+type UpdateRequest struct {
+	Email           string `json:"email"`
+	Password        string `json:"password"`
+	NewPassword string `json:"confirmpassword"`
+	FirstName       string `json:"firstname"`
+	LastName        string `json:"lastname"`
+	DateOfBirth     string `json:"dateofbirth"`
+	AvatarPath      string `json:"avatarpath"`
+	Nickname        string `json:"nickname"`
+	AboutMe         string `json:"aboutme"`
+}
+
+
 func UpdateProfil(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("methode: " + r.Method)
@@ -36,7 +49,8 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			var user models.User
-			err = json.NewDecoder(r.Body).Decode(&user)
+			var userReq UpdateRequest
+			err = json.NewDecoder(r.Body).Decode(&userReq)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
@@ -44,8 +58,8 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			checkRegister, err := utils.CheckRegisterFormat(user.FirstName, user.LastName,
-				user.Nickname, user.Email, user.Password, user.Password, user.DateOfBirth, db)
+			checkRegister, err := utils.CheckUpdateFormat(userReq.FirstName, userReq.LastName,
+				 userReq.Nickname, userReq.Email, userReq.DateOfBirth, sess.UserID, db)
 
 			if !checkRegister {
 				helper.SendResponse(w, models.ErrorResponse{
@@ -54,8 +68,8 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			dir := "./pkg/static/avatarImage/"
-			userAvatar, err := utils.ReadAndSaveImage(user.AvatarPath, dir)
+
+			newPass,err := utils.CheckUpdatePassword(userReq.Password, userReq.NewPassword,sess.UserID,db)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
@@ -63,6 +77,21 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+			dir := "./pkg/static/avatarImage/"
+			userAvatar, err := utils.ReadAndSaveImage(userReq.AvatarPath, dir)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+			user.Email = userReq.Email
+			user.FirstName = userReq.FirstName
+			user.LastName = userReq.LastName
+			user.Nickname = userReq.Nickname
+			user.DateOfBirth = userReq.DateOfBirth
+			user.Password = newPass
 			user.AvatarPath = userAvatar
 			user.ID = sess.UserID.String()
 			//log.Println("info user to update", user)

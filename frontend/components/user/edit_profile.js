@@ -45,8 +45,8 @@ export default function Edit_Profile({ CloseEditForm }) {
             jsonData.Avatarpath = datas?.avatarpath;
         }
 
+        console.log("jsonData:", jsonData);     
         updateDataProfile(jsonData, setErrorMessage)
-        console.log("jsonData:", jsonData);
     };
 
 
@@ -57,7 +57,7 @@ export default function Edit_Profile({ CloseEditForm }) {
                 <i className="fa-regular fa-circle-xmark" title="Close form" onClick={CloseEditForm}></i>
             </h1>
             <hr />
-            {errorMessage && <p className={styles.error}><i class="fa-solid fa-circle-exclamation"></i>{errorMessage}</p>}
+            {errorMessage && <p className={styles.error}><i className="fa-solid fa-circle-exclamation"></i>{errorMessage}</p>}
             <form method="put" onSubmit={handleSubmit} encType="multipart/form-data">
                 {datas && <Picture fileInputRef={fileInputRef} picture={datas.avatarpath} />}
                 <hr />
@@ -288,9 +288,8 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         </span>
                         <span className={styles.edit} title="Click to change password" onClick={handleInputPassword}>edit</span>
                     </p>
-                    {inputPassword && <input name='Email' className={`${styles.input} ${styles.inputAlt}`} placeholder="current password " type="password" />}
-                    {inputPassword && <input name='Email' className={`${styles.input} ${styles.inputAlt}`} placeholder="new password " type="password" />}
-
+                    {inputPassword && <input name='Password' className={`${styles.input} ${styles.inputAlt}`} placeholder="current password " type="password" />}
+                    {inputPassword && <input name='NewPassword' className={`${styles.input} ${styles.inputAlt}`} placeholder="new password " type="password" />}
                 </div>
 
 
