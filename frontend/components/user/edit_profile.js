@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
-
+import { useEffect, useRef, useState } from 'react';
 import styles from '../../styles/modules/edit-profil.module.css';
+import { getSessionCookie } from '../../utils/cookies';
+import { api } from '../../utils/api';
 
 
 export default function EditProfile({ CloseEditForm }) {
@@ -169,7 +170,7 @@ export function BasicInfons() {
                         </span >
                         <span className={styles.edit} title="Click to edit First Name" onClick={handleInputFirstName}>edit</span>
                     </p>
-                    {inputFirstName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="First Name here... " type="text" />}                   
+                    {inputFirstName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="First Name here... " type="text" />}
                 </div>
                 {/* Last Name */}
                 <div className={styles.group}>
@@ -179,7 +180,7 @@ export function BasicInfons() {
                         </span >
                         <span className={styles.edit} title="Click to edit Last Name" onClick={handleInputLastName}>edit</span>
                     </p>
-                    {inputLastName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Last Name here... " type="text" />  }                 
+                    {inputLastName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Last Name here... " type="text" />}
                 </div>
                 {/* Nickname */}
                 <div className={styles.group}>
@@ -189,7 +190,7 @@ export function BasicInfons() {
                         </span>
                         <span className={styles.edit} title="Click to edit Nickname" onClick={handleInputNickName}>edit</span>
                     </p>
-                    {inputNickName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Nickname here... " type="text" />}                   
+                    {inputNickName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Nickname here... " type="text" />}
                 </div>
                 {/* Date Of birth */}
                 <div className={styles.group}>
@@ -199,7 +200,7 @@ export function BasicInfons() {
                         </span>
                         <span className={styles.edit} title="Click to edit Date of Birth" onClick={handleInputDateBirthName}>edit</span>
                     </p>
-                    {inputDateBirthName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Date of Birth ex: dd/mm/yyyy here... " type="text" />}                   
+                    {inputDateBirthName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Date of Birth ex: dd/mm/yyyy here... " type="text" />}
                 </div>
                 {/* Email */}
                 <div className={styles.group}>
@@ -209,7 +210,7 @@ export function BasicInfons() {
                         </span>
                         <span className={styles.edit} title="Click to edit Email" onClick={handleInputEmailName}>edit</span>
                     </p>
-                   {inputEmailName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Email here... " type="text" />}                   
+                    {inputEmailName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Email here... " type="text" />}
                 </div>
                 {/* About me */}
                 <div className={styles.group}>
@@ -224,10 +225,10 @@ export function BasicInfons() {
                         </span>
                         <span className={styles.edit} title="Click to edit Bio" onClick={handleInputAboutMeName}>edit</span>
                     </p>
-                   {inputAboutMeName && <textarea
+                    {inputAboutMeName && <textarea
                         className={`${styles.input} ${styles.inputAlt} ${styles.inputAltTextarea}`}
                         placeholder="About Me here... "
-                    ></textarea> }                  
+                    ></textarea>}
                 </div>
             </div>
             <div className={styles.submitUpdate}>
@@ -237,3 +238,4 @@ export function BasicInfons() {
     )
 
 }
+
