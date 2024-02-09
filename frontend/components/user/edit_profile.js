@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from '../../styles/modules/edit-profil.module.css';
-import { getSessionCookie } from '../../utils/cookies';
-import { api } from '../../utils/api';
-
+import { getDatasProfilUser } from '../../handler/user_profile';
 
 export default function EditProfile({ CloseEditForm }) {
+    const [datas, setDatas] = useState(null)
+
+    useEffect(() => {
+        getDatasProfilUser(setDatas);
+    }, [])
+
+
     return (
         <div className={styles.editProfileBloc}>
             <h1>
@@ -13,17 +18,17 @@ export default function EditProfile({ CloseEditForm }) {
             </h1>
             <hr />
             <form action="#" method="post">
-                <Picture />
+                {datas && <Picture picture={datas.avatarpath} />}
                 <hr />
-                <TypeProfile />
+                {datas && <TypeProfile ispublic={datas.ispublic} />}
                 <hr />
-                <BasicInfons />
+                {datas && <BasicInfons lastname={datas.lastname} firstname={datas.firstname} nickname={datas.nickname} dateofbirth={datas.dateofbirth} email={datas.email} aboutme={datas.aboutme} />}
             </form>
         </div>
     )
 }
 
-export function Picture() {
+export function Picture({ picture }) {
 
     // lier mon icon plu avec mon input de type file 
     const fileInputRef = useRef(null);
@@ -35,7 +40,7 @@ export function Picture() {
     return (
         <div className={styles.pictureActual}>
             <h3>actual picture</h3>
-            <img src="https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=" alt="" />
+            <img src={picture} alt="" />
             <label htmlFor="file" className={styles.custumFileUpload} onClick={handleFileIconClick}>
                 <div className={styles.icon}>
                     <svg
@@ -68,8 +73,8 @@ export function Picture() {
     )
 }
 
-export function TypeProfile() {
-    const [privacy, setPrivacy] = useState('public');
+export function TypeProfile({ ispublic }) {
+    const [privacy, setPrivacy] = useState(ispublic);
 
     const handlePrivacyChange = (newPrivacy) => {
         setPrivacy(newPrivacy);
@@ -86,8 +91,8 @@ export function TypeProfile() {
                         className={`${styles.input} ${styles.inputAltChecked}`}
                         type="radio"
                         name="privacy"
-                        checked={privacy === 'public'}
-                        onChange={() => handlePrivacyChange('public')}
+                        checked={privacy}
+                        onChange={() => handlePrivacyChange(true)}
                     />
                 </div>
                 <div>
@@ -97,8 +102,8 @@ export function TypeProfile() {
                         className={`${styles.input} ${styles.inputAltChecked}`}
                         name="privacy"
                         type="radio"
-                        checked={privacy === 'private'}
-                        onChange={() => handlePrivacyChange('private')}
+                        checked={!privacy}
+                        onChange={() => handlePrivacyChange(false)}
                     />
                 </div>
             </div>
@@ -106,7 +111,7 @@ export function TypeProfile() {
     );
 }
 
-export function BasicInfons() {
+export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email, aboutme }) {
     const [inputFirstName, showInputFirstName] = useState(false)
     const [inputLastName, showInputLastName] = useState(false)
     const [inputNickName, showInputNickName] = useState(false)
@@ -166,62 +171,57 @@ export function BasicInfons() {
                 <div className={styles.group}>
                     <p className={styles.formGroup}>
                         <span
-                        ><span className={styles.identiti}>First Name : </span><span>Breukh</span>
+                        ><span className={styles.identiti}>First Name : </span><span>{firstname}</span>
                         </span >
                         <span className={styles.edit} title="Click to edit First Name" onClick={handleInputFirstName}>edit</span>
                     </p>
-                    {inputFirstName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="First Name here... " type="text" />}
+                    {inputFirstName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="new First Name here... " type="text" />}
                 </div>
                 {/* Last Name */}
                 <div className={styles.group}>
                     <p className={styles.formGroup}>
                         <span
-                        ><span className={styles.identiti}>Last Name : </span><span>Doe</span>
+                        ><span className={styles.identiti}>Last Name : </span><span>{lastname}</span>
                         </span >
                         <span className={styles.edit} title="Click to edit Last Name" onClick={handleInputLastName}>edit</span>
                     </p>
-                    {inputLastName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Last Name here... " type="text" />}
+                    {inputLastName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="new Last Name here... " type="text" />}
                 </div>
                 {/* Nickname */}
                 <div className={styles.group}>
                     <p className={styles.formGroup}>
                         <span
-                        ><span className={styles.identiti}>Nickname : </span><span>breukhDoe</span>
+                        ><span className={styles.identiti}>Nickname : </span><span>{nickname}</span>
                         </span>
                         <span className={styles.edit} title="Click to edit Nickname" onClick={handleInputNickName}>edit</span>
                     </p>
-                    {inputNickName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Nickname here... " type="text" />}
+                    {inputNickName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="new Nickname here... " type="text" />}
                 </div>
                 {/* Date Of birth */}
                 <div className={styles.group}>
                     <p className={styles.formGroup}>
                         <span
-                        ><span className={styles.identiti}>Date of Birth : </span><span>15-02-2024</span>
+                        ><span className={styles.identiti}>Date of Birth : </span><span>{dateofbirth}</span>
                         </span>
                         <span className={styles.edit} title="Click to edit Date of Birth" onClick={handleInputDateBirthName}>edit</span>
                     </p>
-                    {inputDateBirthName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Date of Birth ex: dd/mm/yyyy here... " type="text" />}
+                    {inputDateBirthName && <input className={`${styles.input} ${styles.inputAlt}`} type="date" />}
                 </div>
                 {/* Email */}
                 <div className={styles.group}>
                     <p className={styles.formGroup}>
                         <span
-                        ><span className={styles.identiti}>Email : </span ><span>breukh@gmail.com</span>
+                        ><span className={styles.identiti}>Email : </span ><span>{email}</span>
                         </span>
                         <span className={styles.edit} title="Click to edit Email" onClick={handleInputEmailName}>edit</span>
                     </p>
-                    {inputEmailName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="Email here... " type="text" />}
+                    {inputEmailName && <input className={`${styles.input} ${styles.inputAlt}`} placeholder="new Email here... " type="text" />}
                 </div>
                 {/* About me */}
                 <div className={styles.group}>
                     <p className={styles.formGroup}>
                         <span >
-                            <span className={styles.identiti}>About Me : </span ><span>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Iste quasi tempore ipsa laudantium perspiciatis placeat
-                                veritatis sapiente beatae quae minus. Eius dolore tempore
-                                dicta soluta officiis eum adipisci rem quas.
-                            </span>
+                            <span className={styles.identiti}>About Me : </span ><span>{aboutme}</span>
                         </span>
                         <span className={styles.edit} title="Click to edit Bio" onClick={handleInputAboutMeName}>edit</span>
                     </p>

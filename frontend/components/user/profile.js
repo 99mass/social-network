@@ -2,13 +2,11 @@ import Link from "next/link";
 import styles from "../../styles/modules/profile.module.css";
 import Posts_user from "./posts";
 import EditProfile from "./edit_profile";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Friends from "./friend";
-import { getSessionCookie } from "../../utils/cookies";
-import { api } from "../../utils/api";
 
 export default function Profile_user() {
-  const [datas,setDatas]=useState(null)
+  
   
   const [edit, setEdit] = useState(false);
   const [viewfriend, setViewfriend] = useState(true);
@@ -24,40 +22,7 @@ export default function Profile_user() {
   };
 
 
-  useEffect(()=>{
-   const getDatas= async ()=> {
-      try {
-        const sessionId = getSessionCookie();
-        const response = await fetch(api.Profil, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionId 
-          }
-        });
-    
-        // Vérifier le statut de la réponse
-        if (!response.ok) {
-          console.error('Failed to fetch profile data');
-        }
-    
-        // Analyser la réponse JSON
-        const data = await response.json();
-        setDatas(data)
   
-      } catch (error) {
-        console.error('Error fetching profile data:', error.message);
-      }
-    }
-    getDatas()
-  },[])
-  
-  console.log(datas);
-
-
-
-
-
 
   return (
     <>
@@ -125,7 +90,7 @@ export function NavMenu({ handleEditForm, setViewfriend, edit, viewfriend }) {
       <span
         onClick={() => setViewfriend(false)}
         className={!viewfriend ? styles.active : styles.default}
-      >
+        >
         <i className="fa-solid fa-user-group"></i>Friends
       </span>
     </div>
@@ -133,38 +98,46 @@ export function NavMenu({ handleEditForm, setViewfriend, edit, viewfriend }) {
 }
 
 
-// // export async function getServerSideProps() {
+  
+  
+// export async function getServerSideProps() {
 //   try {
 //     const sessionId = getSessionCookie();
-//      console.log(sessionId);
-//     // Faire une requête avec le cookie de session dans l'en-tête
+//     console.log(sessionId);
 //     const response = await fetch(api.Profil, {
 //       method: 'GET',
 //       headers: {
-//         // 'Content-Type': 'application/json',
-//         'SessionID': sessionId // Assurez-vous que le nom du cookie correspond à celui attendu par votre serveur
+//         'Content-Type': 'application/json',
+//         'Authorization': sessionId 
 //       }
 //     });
 
-//     // Vérifier le statut de la réponse
 //     if (!response.ok) {
-//       throw new Error('Failed to fetch profile data');
+//       console.error('Failed to fetch profile data');
+//       return {
+//         props: {
+//           profileData: null // En cas d'échec de la requête, retournez null pour les données du profil
+//         }
+//       };
 //     }
+    
+//     const profileData = await response.json();
+//     console.log(profileData);
 
-//     // Analyser la réponse JSON
-//     const data = await response.json();
-//     // Retourner les données en tant que props
 //     return {
 //       props: {
-//         profileData: data
+//         profileData
 //       }
 //     };
 //   } catch (error) {
 //     console.error('Error fetching profile data:', error.message);
 //     return {
 //       props: {
-//         error: 'Error fetching profile data'
+//         profileData: null // En cas d'erreur, retournez null pour les données du profil
 //       }
 //     };
 //   }
-// // }
+// }
+
+
+  
