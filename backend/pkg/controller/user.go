@@ -131,7 +131,17 @@ func IsDuplicateNickname(db *sql.DB, nickname string) (bool, error) {
 }
 
 func UpdateUser(db *sql.DB, user models.User) error {
-    query := `
+    if user.Password == ""{
+		query := `
+        UPDATE users
+        SET email = ?, firstname = ?, lastname = ?, dateofbirth = ?, avatarpath = ?, nickname = ?, aboutme = ?, ispublic = ?
+        WHERE id = ?;
+    `
+    _, err := db.Exec(query, user.Email, user.FirstName, user.LastName, user.DateOfBirth, user.AvatarPath, user.Nickname, user.AboutMe, user.IsPublic, user.ID)
+    return err
+	}
+	
+	query := `
         UPDATE users
         SET email = ?, password = ?, firstname = ?, lastname = ?, dateofbirth = ?, avatarpath = ?, nickname = ?, aboutme = ?, ispublic = ?
         WHERE id = ?;

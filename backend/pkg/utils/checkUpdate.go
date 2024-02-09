@@ -39,24 +39,25 @@ func CheckUpdateFormat(firstName, lastName, username, email, dateofbirth string,
 	return ok, nil
 }
 
-func CheckUpdatePassword(password, newPassword string,userID uuid.UUID,db *sql.DB) (string,error) {
-	if password != "" && newPassword != "" {
-		pass, err := controller.GetPassword(db, userID)
-		if err != nil {
-			return "", err
-		}
-		if !helper.CheckPasswordHash(password, pass) {
-			return "", errors.New("password incorrect")
-		}
-		okPassWord, errP := CheckPassword(newPassword)
-		if !okPassWord {
-			return "", errP
-		}
-		newPass,err := HashPassword(newPassword)
-		if err != nil {
-			return "",err
-		}
-		return newPass,nil
+func CheckUpdatePassword(password, newPassword string, userID uuid.UUID, db *sql.DB) (string, error) {
+	if password == "" && newPassword == "" {
+		return "", nil
 	}
-	return "",nil
+	pass, err := controller.GetPassword(db, userID)
+	if err != nil {
+		return "", err
+	}
+	if !helper.CheckPasswordHash(password, pass) {
+		return "", errors.New("password incorrect")
+	}
+	okPassWord, errP := CheckPassword(newPassword)
+	if !okPassWord {
+		return "", errP
+	}
+	newPass, err := HashPassword(newPassword)
+	if err != nil {
+		return "", err
+	}
+	return newPass, nil
+
 }
