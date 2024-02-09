@@ -12,6 +12,7 @@ export default function Edit_Profile({ CloseEditForm }) {
     useEffect(() => {
         getDatasProfilUser(setDatas);
     }, [])
+    console.log(datas && datas.ispublic);
 
     // update profile user
     const fileInputRef = useRef(null);
