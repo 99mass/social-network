@@ -12,7 +12,7 @@ export default function Edit_Profile({ CloseEditForm }) {
     useEffect(() => {
         getDatasProfilUser(setDatas);
     }, [])
-    console.log(datas && datas.ispublic);
+    
 
     // update profile user
     const fileInputRef = useRef(null);
@@ -21,34 +21,78 @@ export default function Edit_Profile({ CloseEditForm }) {
         event.preventDefault();
 
         const formData = new FormData(event.target);
-
-        const jsonData = Object.fromEntries(formData.entries());
-
-        if (jsonData.DateOfBirth) {
-            jsonData.DateOfBirth = convertAge(new Date(jsonData.DateOfBirth));
-        }
-
-        const fields = ["FirstName", "LastName", "Nickname", "DateOfBirth", "Email", "AboutMe"];
-        fields.forEach(field => {
-            if (!formData.has(field) && datas) {
-                jsonData[field] = datas[field.toLowerCase()];
-            }
+        
+        const jsonData = {};
+        let comptChamps=0 
+        formData.forEach((value, key) => {           
+            jsonData[key] = value;
+            comptChamps++
         });
 
+        // Appel de la fonction pour convertire l'âge
+        if (jsonData.DateOfBirth) {
+            const dateOfBirth = new Date(jsonData.DateOfBirth);
+            const age = convertAge(dateOfBirth);
+            jsonData.DateOfBirth = age;
+        }
+        // si le champs est vide
+        if (!formData.has("FirstName")) jsonData.FirstName= datas.firstname
+        if (!formData.has("LastName")) jsonData.LastName= datas.lastname
+        if (!formData.has("Nickname")) jsonData.Nickname= datas.nickname
+        if (!formData.has("DateOfBirth")) jsonData.DateOfBirth= datas.dateofbirth
+        if (!formData.has("Email")) jsonData.Email= datas.email
+        if (!formData.has("AboutMe")) jsonData.AboutMe= datas.aboutme
+
+        // recuperer le fichier le convertir en base64
         const file = fileInputRef.current.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = function () {
-                jsonData.Avatarpath = reader.result;
+                const base64File = reader.result;
+                jsonData.Avatarpath = base64File;
             };
+
             reader.readAsDataURL(file);
         } else {
-            jsonData.Avatarpath = datas?.avatarpath;
+            jsonData.Avatarpath = datas.avatarpath;
         }
-
-        console.log("jsonData:", jsonData);     
         updateDataProfile(jsonData, setErrorMessage)
+        console.log("jsonData:", jsonData);
     };
+
+
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();
+
+    //     const formData = new FormData(event.target);
+
+    //     const jsonData = Object.fromEntries(formData.entries());
+
+    //     if (jsonData.DateOfBirth) {
+    //         jsonData.DateOfBirth = convertAge(new Date(jsonData.DateOfBirth));
+    //     }
+
+    //     const fields = ["FirstName", "LastName", "Nickname", "DateOfBirth", "Email", "AboutMe"];
+    //     fields.forEach(field => {
+    //         if (!formData.has(field) && datas) {
+    //             jsonData[field] = datas[field.toLowerCase()];
+    //         }
+    //     });
+
+    //     const file = fileInputRef.current.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onloadend = function () {
+    //             jsonData.avatarpath = reader.result;
+    //         };
+    //         reader.readAsDataURL(file);
+    //     } else {
+    //         jsonData.avatarpath = datas?.avatarpath;
+    //     }
+
+    //     console.log("jsonData:", jsonData);     
+    //     updateDataProfile(jsonData, setErrorMessage)
+    // };
 
 
     return (

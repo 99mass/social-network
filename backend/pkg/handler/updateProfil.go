@@ -14,17 +14,16 @@ import (
 )
 
 type UpdateRequest struct {
-	Email           string `json:"email"`
-	Password        string `json:"password"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
 	NewPassword string `json:"newpassword"`
-	FirstName       string `json:"firstname"`
-	LastName        string `json:"lastname"`
-	DateOfBirth     string `json:"dateofbirth"`
-	AvatarPath      string `json:"avatarpath"`
-	Nickname        string `json:"nickname"`
-	AboutMe         string `json:"aboutme"`
+	FirstName   string `json:"firstname"`
+	LastName    string `json:"lastname"`
+	DateOfBirth string `json:"dateofbirth"`
+	AvatarPath  string `json:"avatarpath"`
+	Nickname    string `json:"nickname"`
+	AboutMe     string `json:"aboutme"`
 }
-
 
 func UpdateProfil(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -58,8 +57,9 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+			log.Println("avt path",userReq.AvatarPath)
 			checkRegister, err := utils.CheckUpdateFormat(userReq.FirstName, userReq.LastName,
-				 userReq.Nickname, userReq.Email, userReq.DateOfBirth, sess.UserID, db)
+				userReq.Nickname, userReq.Email, userReq.DateOfBirth, sess.UserID, db)
 
 			if !checkRegister {
 				helper.SendResponse(w, models.ErrorResponse{
@@ -69,7 +69,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			newPass,err := utils.CheckUpdatePassword(userReq.Password, userReq.NewPassword,sess.UserID,db)
+			newPass, err := utils.CheckUpdatePassword(userReq.Password, userReq.NewPassword, sess.UserID, db)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
@@ -77,6 +77,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+			log.Println("user avatar", userReq)
 			dir := "./pkg/static/avatarImage/"
 			userAvatar, err := utils.ReadAndSaveImageForUpdate(userReq.AvatarPath, dir)
 			if err != nil {

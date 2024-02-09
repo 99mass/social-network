@@ -19,10 +19,6 @@ export function successNotification(text) {
         text: text,
         confirmButtonColor: "#3155f1",
         confirmButtonText: "Go, to sign in"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            router.push("/" + pageRedirect);
-        }
     });
     
 }
