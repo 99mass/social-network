@@ -4,16 +4,19 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	"backend/pkg/utils"
 	"database/sql"
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gofrs/uuid"
 )
 
-func ProfilHandler(db *sql.DB) http.HandlerFunc {
+func UpdateProfil(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
-		case http.MethodGet:
+		case http.MethodPut:
 			session := r.Header.Get("Authorization")
 			sessId, err := uuid.FromString(session)
 			if err != nil {
@@ -31,29 +34,53 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			user, err := controller.GetUserByID(db, sess.UserID)
+			var user models.User
+			err = json.NewDecoder(r.Body).Decode(&user)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
-					Message: "you're not authorized",
+					Message: "incorrect request",
 				}, http.StatusBadRequest)
 				return
 			}
-			user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+			checkRegister, err := utils.CheckRegisterFormat(user.FirstName, user.LastName,
+				 user.Nickname, user.Email, user.Password, user.Password, user.DateOfBirth, db)
+
+			if !checkRegister {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+			dir := "./pkg/static/avatarImage/"
+			userAvatar, err := utils.ReadAndSaveImage(user.AvatarPath, dir)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
-					Message: "enable to encode image avatar",
+					Message: err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+			user.AvatarPath = userAvatar
+			user.ID = sess.UserID.String()
+			//log.Println("info user to update", user)
+			err = controller.UpdateUser(db, user)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "we got an issue",
 				}, http.StatusInternalServerError)
 				return
 			}
-			helper.SendResponse(w, user, http.StatusOK)
+			helper.SendResponse(w, nil , http.StatusOK)
 
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
 				Status:  "error",
 				Message: "Method not allowed",
 			}, http.StatusMethodNotAllowed)
+			log.Println("methods not allowed")
 		}
 	}
 }
