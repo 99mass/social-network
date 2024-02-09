@@ -77,7 +77,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			dir := "./pkg/static/avatarImage/"
-			userAvatar, err := utils.ReadAndSaveImage(userReq.AvatarPath, dir)
+			userAvatar, err := utils.ReadAndSaveImageForUpdate(userReq.AvatarPath, dir)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
