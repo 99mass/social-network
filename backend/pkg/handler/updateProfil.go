@@ -53,7 +53,16 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-
+			dir := "./pkg/static/avatarImage/"
+			userAvatar, err := utils.ReadAndSaveImage(user.AvatarPath, dir)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+			user.AvatarPath = userAvatar
 			user.ID = sess.UserID.String()
 			//log.Println("info user to update", user)
 			err = controller.UpdateUser(db, user)
