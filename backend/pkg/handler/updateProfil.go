@@ -73,7 +73,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusInternalServerError)
 				return
 			}
-			helper.SendResponse(w, user , http.StatusOK)
+			helper.SendResponse(w, nil , http.StatusOK)
 
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
