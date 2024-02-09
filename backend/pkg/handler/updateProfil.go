@@ -16,7 +16,7 @@ import (
 type UpdateRequest struct {
 	Email           string `json:"email"`
 	Password        string `json:"password"`
-	NewPassword string `json:"confirmpassword"`
+	NewPassword string `json:"newpassword"`
 	FirstName       string `json:"firstname"`
 	LastName        string `json:"lastname"`
 	DateOfBirth     string `json:"dateofbirth"`
