@@ -1,4 +1,5 @@
 import { createSessionCookie } from "../utils/cookies";
+import { signUpNotification } from "../utils/sweeAlert";
 
 export const sendData = async (
   linkApi,
@@ -20,9 +21,12 @@ export const sendData = async (
     if (response.ok && response.status) {
       const cookieDatas = await response.json();
 
-      if (createCookie)
+      if (createCookie){
         createSessionCookie(cookieDatas.value, cookieDatas.expiration);
-      router.push("/" + pageRedirect);
+        router.push("/" + pageRedirect);
+      }else{
+        signUpNotification(router,pageRedirect)
+      }
     } else {
       const errorData = await response.json();
       setErrorMessage(errorData.message);

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import styles from "../../styles/modules/profile.module.css";
 import Posts_user from "./posts";
-import EditProfile from "./edit_profile";
-import {  useState } from "react";
+import Edit_Profile from "./edit_profile";
+import { useState } from "react";
 import Friends from "./friend";
 
 export default function Profile_user() {
@@ -32,7 +32,7 @@ export default function Profile_user() {
         viewfriend={viewfriend}
       />
       {viewfriend && <Posts_user />}
-      {edit && <EditProfile CloseEditForm={CloseEditForm}  />}
+      {edit && <Edit_Profile CloseEditForm={CloseEditForm}  />}
       {!viewfriend && <Friends />}
     </>
   );

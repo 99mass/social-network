@@ -28,6 +28,7 @@ type UpdateRequest struct {
 
 func UpdateProfil(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println("methode: " + r.Method)
 		switch r.Method {
 		case http.MethodPut:
 			session := r.Header.Get("Authorization")
@@ -102,7 +103,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusInternalServerError)
 				return
 			}
-			helper.SendResponse(w, nil , http.StatusOK)
+			helper.SendResponse(w, nil, http.StatusOK)
 
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
