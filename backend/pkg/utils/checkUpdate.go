@@ -21,17 +21,6 @@ func CheckUpdateFormat(firstName, lastName, username, email, dateofbirth string,
 	//fmt.Println("checkemail:",okEmail)
 	if !okEmail {
 		return false, errE
-	} else {
-		//fmt.Println("checking dupli")
-		email, errdup := controller.IsDuplicateEmail(db, email)
-
-		if email {
-			return false, errdup
-		}
-		username, err := controller.IsDuplicateNickname(db, username)
-		if username {
-			return false, err
-		}
 	}
 	okfirstName, err := CheckFLName(firstName)
 	if !okfirstName {
