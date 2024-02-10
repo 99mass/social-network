@@ -40,7 +40,7 @@ export default function Sign_up() {
       reader.onloadend = function () {
         const base64File = reader.result;
         jsonData.Avatarpath = base64File;
-
+        console.log(jsonData);
         sendData(api.Registre, jsonData, router,"", setErrorMessage,false);
       };
 

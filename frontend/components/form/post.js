@@ -1,13 +1,19 @@
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import styles from '../../styles/modules/CreatePost.module.css'
+import EmojiForm from "../emoji/emoji";
 
 export default function Post({ PostForm }) {
 
-      // lier mon icon plu avec mon input de type file 
-      const fileInputRef = useRef(null);
-      const handleFileIconClick = () => {
-          fileInputRef.current.click();
-      };
+  const [emoji, setEmoji] = useState(false)
+  const [selectedEmoji, setSelectedEmoji] = useState(''); // État pour le contenu du textarea
+  const fileInputRef = useRef(null);
+
+  // lier mon icon plu avec mon input de type file 
+  const handleFileIconClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const toggleEmojicon = () => setEmoji(!emoji);
 
   return (
     <div className={`${styles.contentFormPost} content-form-post`}>
@@ -15,15 +21,23 @@ export default function Post({ PostForm }) {
         <h1>create post</h1>
         <i className="fa-regular fa-circle-xmark close-form-btn" onClick={PostForm} title="Close form"></i>
       </div>
+
       <hr />
       <form action="">
         <PrivacyBloc />
         <div className={styles.postContent}>
-          <textarea name="" placeholder="What's on your mind, Breukh?" id="" ></textarea>
+          <textarea
+            value={selectedEmoji}
+            name="content"
+            onChange={(e) => setSelectedEmoji(e.target.value)} // Mettez à jour l'état lorsque le contenu du textarea change
+            placeholder="What's on your mind, Breukh?" id="" />
           <div className={styles.contentAssets}>
-            <i className="fa-regular fa-file-image" title="Choose image" onClick={handleFileIconClick}><input type="file"  className={styles.filesPost} ref={fileInputRef} />
-              </i><span className="emoji" title="Choose emoji">😄</span>
-              </div>
+            <i className="fa-regular fa-file-image" title="Choose image" onClick={handleFileIconClick}><input type="file" className={styles.filesPost} ref={fileInputRef} />
+            </i><span onClick={toggleEmojicon} className="emoji" title="Choose emoji">😄</span>
+          {/* emoji form */}
+            {emoji && <EmojiForm setSelectedEmoji={setSelectedEmoji} />}
+
+          </div>
         </div>
         <button className={styles.btnPost}>Post</button>
       </form>

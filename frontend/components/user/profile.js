@@ -2,15 +2,24 @@ import Link from "next/link";
 import styles from "../../styles/modules/profile.module.css";
 import Posts_user from "./posts";
 import Edit_Profile from "./edit_profile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Friends from "./friend";
+import { getDatasProfilUser } from "../../handler/user_profile";
+
 
 export default function Profile_user() {
-  
-  
+
+  const [datas, setDatas] = useState(null);
   const [edit, setEdit] = useState(false);
   const [viewfriend, setViewfriend] = useState(true);
   
+
+  // recuperer les information du user 
+  useEffect(() => {
+    getDatasProfilUser(setDatas);
+  }, []);
+
+
   const handleEditForm = () => {
     if (!edit) setEdit(true);
   };
@@ -26,18 +35,20 @@ export default function Profile_user() {
   return (
     <>
       <ContentCovertPhoto
+        userPicture={datas && datas.avatarpath}
         handleEditForm={handleEditForm}
         setViewfriend={handleSetViewfriend}
         edit={edit}
         viewfriend={viewfriend}
       />
       {viewfriend && <Posts_user />}
-      {edit && <Edit_Profile CloseEditForm={CloseEditForm}  />}
+      {edit && <Edit_Profile CloseEditForm={CloseEditForm} datas={datas} setDatas={setDatas} />}
       {!viewfriend && <Friends />}
     </>
   );
 }
 export function ContentCovertPhoto({
+  userPicture,
   handleEditForm,
   setViewfriend,
   edit,
@@ -45,14 +56,16 @@ export function ContentCovertPhoto({
 }) {
   return (
     <div className={styles.photoCovert}>
-      <img
-        src="https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY="
-        alt=""
-      />
+      <div className={styles.firstImg}>
+        <img
+          src={`data:image/png;base64,${userPicture}`}
+        />
+      </div>
+
       <div>
         <div>
           <img
-            src="https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY="
+            src={userPicture !== "" ? `data:image/png;base64,${userPicture}` : "../images/default-image.svg"}
             alt=""
           />
           <p>
@@ -89,7 +102,7 @@ export function NavMenu({ handleEditForm, setViewfriend, edit, viewfriend }) {
       <span
         onClick={() => setViewfriend(false)}
         className={!viewfriend ? styles.active : styles.default}
-        >
+      >
         <i className="fa-solid fa-user-group"></i>Friends
       </span>
     </div>
@@ -97,4 +110,3 @@ export function NavMenu({ handleEditForm, setViewfriend, edit, viewfriend }) {
 }
 
 
-  

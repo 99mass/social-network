@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
-import { successNotification } from "../utils/sweeAlert";
+import { errorNotification, successNotification } from "../utils/sweeAlert";
 
 
 export const getDatasProfilUser = async (setDatas) => {
@@ -22,7 +23,7 @@ export const getDatasProfilUser = async (setDatas) => {
         }
         // Analyser la réponse JSON
         const data = await response.json();
-        console.log(data);
+        console.log('data', data);
         setDatas(data)
 
     } catch (error) {
@@ -31,7 +32,8 @@ export const getDatasProfilUser = async (setDatas) => {
 }
 
 
-export const updateDataProfile = async (data,setErrorMessage) => {
+export const updateDataProfile = async (data, setDatas, setErrorMessage) => {
+
     try {
         const sessionId = getSessionCookie();
         const response = await fetch(api.UpdateProfilUser, {
@@ -47,12 +49,18 @@ export const updateDataProfile = async (data,setErrorMessage) => {
             const datas = await response.json();
             console.log("profile", datas);
             successNotification('Update profile done')
+
+            // actualiser les donnes 
+            getDatasProfilUser(setDatas);
+
+
         } else {
             const errorData = await response.json();
-            console.log(errorData);
-              setErrorMessage(errorData.message);
+            errorNotification(errorData.message)
+            setErrorMessage(errorData.message);
         }
     } catch (error) {
+        errorNotification(error)
         console.error("Error:", error);
         setErrorMessage("An error occurred while processing your request.");
     }

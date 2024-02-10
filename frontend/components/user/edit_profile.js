@@ -1,98 +1,58 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from '../../styles/modules/edit-profil.module.css';
 import { getDatasProfilUser, updateDataProfile } from '../../handler/user_profile';
 import { convertAge } from '../../utils/convert_dates';
 
-export default function Edit_Profile({ CloseEditForm }) {
+export default function Edit_Profile({ datas, setDatas, CloseEditForm }) {
 
-    // recuperer les donnes du user
-    const [datas, setDatas] = useState(null)
     const [errorMessage, setErrorMessage] = useState(null);
-
-    useEffect(() => {
-        getDatasProfilUser(setDatas);
-    }, [])
-    
-
-    // update profile user
+    const [privacy, setPrivacy] = useState(null);
     const fileInputRef = useRef(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         const formData = new FormData(event.target);
-        
-        const jsonData = {};
-        let comptChamps=0 
-        formData.forEach((value, key) => {           
-            jsonData[key] = value;
-            comptChamps++
-        });
 
-        // Appel de la fonction pour convertire l'âge
+        const jsonData = Object.fromEntries(formData.entries());
+
         if (jsonData.DateOfBirth) {
             const dateOfBirth = new Date(jsonData.DateOfBirth);
             const age = convertAge(dateOfBirth);
             jsonData.DateOfBirth = age;
         }
-        // si le champs est vide
-        if (!formData.has("FirstName")) jsonData.FirstName= datas.firstname
-        if (!formData.has("LastName")) jsonData.LastName= datas.lastname
-        if (!formData.has("Nickname")) jsonData.Nickname= datas.nickname
-        if (!formData.has("DateOfBirth")) jsonData.DateOfBirth= datas.dateofbirth
-        if (!formData.has("Email")) jsonData.Email= datas.email
-        if (!formData.has("AboutMe")) jsonData.AboutMe= datas.aboutme
 
-        // recuperer le fichier le convertir en base64
+        const defaultValues = {
+            FirstName: datas.firstname,
+            LastName: datas.lastname,
+            Nickname: datas.nickname,
+            DateOfBirth: datas.dateofbirth,
+            Email: datas.email,
+            AboutMe: datas.aboutme,
+            NewPassword: "P@ssword95",
+            Password: "P@ssword95",
+            IsPublic: privacy === null ? datas.ispublic : privacy
+        };
+
+        for (const key in defaultValues) {
+            if (!formData.has(key)) {
+                jsonData[key] = defaultValues[key];
+            }
+        }
+        jsonData.IsPublic = defaultValues.IsPublic;
         const file = fileInputRef.current.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = function () {
-                const base64File = reader.result;
-                jsonData.Avatarpath = base64File;
+                jsonData.Avatarpath = reader.result;
+                updateDataProfile(jsonData, setDatas, setErrorMessage);
             };
-
             reader.readAsDataURL(file);
         } else {
-            jsonData.Avatarpath = datas.avatarpath;
+            jsonData.Avatarpath = `data:image/png;base64,${datas.avatarpath}`;
+            updateDataProfile(jsonData, setDatas, setErrorMessage);
         }
-        updateDataProfile(jsonData, setErrorMessage)
-        console.log("jsonData:", jsonData);
+        // console.log("jsonData:", jsonData);
     };
-
-
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();
-
-    //     const formData = new FormData(event.target);
-
-    //     const jsonData = Object.fromEntries(formData.entries());
-
-    //     if (jsonData.DateOfBirth) {
-    //         jsonData.DateOfBirth = convertAge(new Date(jsonData.DateOfBirth));
-    //     }
-
-    //     const fields = ["FirstName", "LastName", "Nickname", "DateOfBirth", "Email", "AboutMe"];
-    //     fields.forEach(field => {
-    //         if (!formData.has(field) && datas) {
-    //             jsonData[field] = datas[field.toLowerCase()];
-    //         }
-    //     });
-
-    //     const file = fileInputRef.current.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onloadend = function () {
-    //             jsonData.avatarpath = reader.result;
-    //         };
-    //         reader.readAsDataURL(file);
-    //     } else {
-    //         jsonData.avatarpath = datas?.avatarpath;
-    //     }
-
-    //     console.log("jsonData:", jsonData);     
-    //     updateDataProfile(jsonData, setErrorMessage)
-    // };
 
 
     return (
@@ -102,11 +62,12 @@ export default function Edit_Profile({ CloseEditForm }) {
                 <i className="fa-regular fa-circle-xmark" title="Close form" onClick={CloseEditForm}></i>
             </h1>
             <hr />
+
             {errorMessage && <p className={styles.error}><i className="fa-solid fa-circle-exclamation"></i>{errorMessage}</p>}
             <form method="put" onSubmit={handleSubmit} encType="multipart/form-data">
                 {datas && <Picture fileInputRef={fileInputRef} picture={datas.avatarpath} />}
                 <hr />
-                {datas && <TypeProfile ispublic={datas.ispublic} />}
+                {datas && <TypeProfile ispublic={datas.ispublic} setPrivacy={setPrivacy} />}
                 <hr />
                 {datas && <BasicInfons lastname={datas.lastname} firstname={datas.firstname} nickname={datas.nickname} dateofbirth={datas.dateofbirth} email={datas.email} aboutme={datas.aboutme} />}
             </form>
@@ -156,10 +117,11 @@ export function Picture({ fileInputRef, picture }) {
     )
 }
 
-export function TypeProfile({ ispublic }) {
-    const [privacy, setPrivacy] = useState(ispublic);
+export function TypeProfile({ ispublic, setPrivacy }) {
 
+    const [ispublicc, setIsPublic] = useState(ispublic)
     const handlePrivacyChange = (newPrivacy) => {
+        setIsPublic(newPrivacy);
         setPrivacy(newPrivacy);
     };
 
@@ -173,9 +135,8 @@ export function TypeProfile({ ispublic }) {
                     <input
                         className={`${styles.input} ${styles.inputAltChecked}`}
                         type="radio"
-                        name="Privacy"
-                        defaultValue={privacy}
-                        checked={privacy}
+                        name="IsPublic"
+                        checked={ispublicc === true ? true : false}
                         onChange={() => handlePrivacyChange(true)}
                     />
                 </div>
@@ -184,10 +145,9 @@ export function TypeProfile({ ispublic }) {
                     <span>Private</span>
                     <input
                         className={`${styles.input} ${styles.inputAltChecked}`}
-                        name="privacy"
+                        name="IsPublic"
                         type="radio"
-                        defaultValue={privacy}
-                        checked={!privacy}
+                        checked={ispublicc === false ? true : false}
                         onChange={() => handlePrivacyChange(false)}
                     />
                 </div>
@@ -197,64 +157,23 @@ export function TypeProfile({ ispublic }) {
 }
 
 export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email, aboutme }) {
-    const [inputFirstName, showInputFirstName] = useState(false)
-    const [inputLastName, showInputLastName] = useState(false)
-    const [inputNickName, showInputNickName] = useState(false)
-    const [inputDateBirthName, showInputDateBirthName] = useState(false)
-    const [inputEmailName, showInputEmailName] = useState(false)
-    const [inputAboutMeName, showInputAboutMeName] = useState(false)
-    const [inputPassword, showInputPassword] = useState(false)
+    
+    const [inputFirstName, setInputFirstName] = useState(false);
+    const [inputLastName, setInputLastName] = useState(false);
+    const [inputNickName, setInputNickName] = useState(false);
+    const [inputDateBirthName, setInputDateBirthName] = useState(false);
+    const [inputEmailName, setInputEmailName] = useState(false);
+    const [inputAboutMeName, setInputAboutMeName] = useState(false);
+    const [inputPassword, setInputPassword] = useState(false);
 
+    const toggleInputFirstName = () => setInputFirstName(!inputFirstName);
+    const toggleInputLastName = () => setInputLastName(!inputLastName);
+    const toggleInputNickName = () => setInputNickName(!inputNickName);
+    const toggleInputDateBirthName = () => setInputDateBirthName(!inputDateBirthName);
+    const toggleInputEmailName = () => setInputEmailName(!inputEmailName);
+    const toggleInputAboutMeName = () => setInputAboutMeName(!inputAboutMeName);
+    const toggleInputPassword = () => setInputPassword(!inputPassword);
 
-    const handleInputFirstName = () => {
-        if (!inputFirstName) {
-            showInputFirstName(true);
-        } else {
-            showInputFirstName(false);
-        }
-    }
-    const handleInputLastName = () => {
-        if (!inputLastName) {
-            showInputLastName(true);
-        } else {
-            showInputLastName(false);
-        }
-    }
-    const handleInputNickName = () => {
-        if (!inputNickName) {
-            showInputNickName(true);
-        } else {
-            showInputNickName(false);
-        }
-    }
-    const handleInputDateBirthName = () => {
-        if (!inputDateBirthName) {
-            showInputDateBirthName(true);
-        } else {
-            showInputDateBirthName(false);
-        }
-    }
-    const handleInputEmailName = () => {
-        if (!inputEmailName) {
-            showInputEmailName(true);
-        } else {
-            showInputEmailName(false);
-        }
-    }
-    const handleInputAboutMeName = () => {
-        if (!inputAboutMeName) {
-            showInputAboutMeName(true);
-        } else {
-            showInputAboutMeName(false);
-        }
-    }
-    const handleInputPassword=()=>{
-        if (!inputPassword) {
-            showInputPassword(true);
-        } else {
-            showInputPassword(false);
-        }
-    }
 
     return (
         <div className={styles.basicInfos}>
@@ -266,7 +185,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         <span
                         ><span className={styles.identiti}>First Name : </span><span>{firstname}</span>
                         </span >
-                        <span className={styles.edit} title="Click to edit First Name" onClick={handleInputFirstName}>edit</span>
+                        <span className={styles.edit} title="Click to edit First Name" onClick={toggleInputFirstName}>edit</span>
                     </p>
                     {inputFirstName && <input name='FirstName' defaultValue={firstname} className={`${styles.input} ${styles.inputAlt}`} placeholder="new First Name here... " type="text" />}
                 </div>
@@ -276,7 +195,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         <span
                         ><span className={styles.identiti}>Last Name : </span><span>{lastname}</span>
                         </span >
-                        <span className={styles.edit} title="Click to edit Last Name" onClick={handleInputLastName}>edit</span>
+                        <span className={styles.edit} title="Click to edit Last Name" onClick={toggleInputLastName}>edit</span>
                     </p>
                     {inputLastName && <input name='LastName' defaultValue={lastname} className={`${styles.input} ${styles.inputAlt}`} placeholder="new Last Name here... " type="text" />}
                 </div>
@@ -286,7 +205,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         <span
                         ><span className={styles.identiti}>Nickname : </span><span>{nickname}</span>
                         </span>
-                        <span className={styles.edit} title="Click to edit Nickname" onClick={handleInputNickName}>edit</span>
+                        <span className={styles.edit} title="Click to edit Nickname" onClick={toggleInputNickName}>edit</span>
                     </p>
                     {inputNickName && <input name='Nickname' defaultValue={nickname} className={`${styles.input} ${styles.inputAlt}`} placeholder="new Nickname here... " type="text" />}
                 </div>
@@ -296,7 +215,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         <span
                         ><span className={styles.identiti}>Date of Birth : </span><span>{dateofbirth}</span>
                         </span>
-                        <span className={styles.edit} title="Click to edit Date of Birth" onClick={handleInputDateBirthName}>edit</span>
+                        <span className={styles.edit} title="Click to edit Date of Birth" onClick={toggleInputDateBirthName}>edit</span>
                     </p>
                     {inputDateBirthName && <input name='DateOfBirth' defaultValue={dateofbirth} className={`${styles.input} ${styles.inputAlt}`} type="date" />}
                 </div>
@@ -306,7 +225,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         <span
                         ><span className={styles.identiti}>Email : </span ><span>{email}</span>
                         </span>
-                        <span className={styles.edit} title="Click to edit Email" onClick={handleInputEmailName}>edit</span>
+                        <span className={styles.edit} title="Click to edit Email" onClick={toggleInputEmailName}>edit</span>
                     </p>
                     {inputEmailName && <input name='Email' defaultValue={email} className={`${styles.input} ${styles.inputAlt}`} placeholder="new Email here... " type="text" />}
                 </div>
@@ -316,7 +235,7 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         <span >
                             <span className={styles.identiti}>About Me : </span ><span>{aboutme}</span>
                         </span>
-                        <span className={styles.edit} title="Click to edit Bio" onClick={handleInputAboutMeName}>edit</span>
+                        <span className={styles.edit} title="Click to edit Bio" onClick={toggleInputAboutMeName}>edit</span>
                     </p>
                     {inputAboutMeName && <textarea name="AboutMe"
                         defaultValue={aboutme}
@@ -331,13 +250,11 @@ export function BasicInfons({ lastname, firstname, nickname, dateofbirth, email,
                         <span
                         ><span className={styles.identiti}>Change password </span ><span></span>
                         </span>
-                        <span className={styles.edit} title="Click to change password" onClick={handleInputPassword}>edit</span>
+                        <span className={styles.edit} title="Click to change password" onClick={toggleInputPassword}>edit</span>
                     </p>
                     {inputPassword && <input name='Password' className={`${styles.input} ${styles.inputAlt}`} placeholder="current password " type="password" />}
                     {inputPassword && <input name='NewPassword' className={`${styles.input} ${styles.inputAlt}`} placeholder="new password " type="password" />}
                 </div>
-
-
 
             </div>
             <div className={styles.submitUpdate}>

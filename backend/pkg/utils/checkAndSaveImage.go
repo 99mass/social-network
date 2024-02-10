@@ -54,7 +54,7 @@ func ReadAndSaveImage(base64img, directory string) (string, error) {
 }
 
 func ReadAndSaveImageForUpdate(base64img, directory string) (string, error) {
-	log.Println("base64",base64img)
+
 	if base64img != "" {
 		mimeType := strings.Split(base64img, ";")[0]
 		mimeType = strings.TrimPrefix(mimeType, "data:")

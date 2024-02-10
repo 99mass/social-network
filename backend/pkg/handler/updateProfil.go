@@ -23,6 +23,7 @@ type UpdateRequest struct {
 	AvatarPath  string `json:"avatarpath"`
 	Nickname    string `json:"nickname"`
 	AboutMe     string `json:"aboutme"`
+	IsPublic    bool   `json:"ispublic"`
 }
 
 func UpdateProfil(db *sql.DB) http.HandlerFunc {
@@ -57,7 +58,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			log.Println("avt path",userReq.AvatarPath)
+			log.Println("AboutMe:", userReq.AboutMe)
 			checkRegister, err := utils.CheckUpdateFormat(userReq.FirstName, userReq.LastName,
 				userReq.Nickname, userReq.Email, userReq.DateOfBirth, sess.UserID, db)
 
@@ -77,7 +78,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			log.Println("user avatar", userReq)
+
 			dir := "./pkg/static/avatarImage/"
 			userAvatar, err := utils.ReadAndSaveImageForUpdate(userReq.AvatarPath, dir)
 			if err != nil {
@@ -94,8 +95,10 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 			user.DateOfBirth = userReq.DateOfBirth
 			user.Password = newPass
 			user.AvatarPath = userAvatar
+			user.IsPublic = userReq.IsPublic
+			user.AboutMe = userReq.AboutMe
 			user.ID = sess.UserID.String()
-			//log.Println("info user to update", user)
+
 			err = controller.UpdateUser(db, user)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{

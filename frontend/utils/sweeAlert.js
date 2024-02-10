@@ -1,4 +1,4 @@
-export function signUpNotification(router,pageRedirect) {
+export function signUpNotification(router, pageRedirect) {
     Swal.fire({
         icon: 'success',
         title: 'Great!',
@@ -10,7 +10,7 @@ export function signUpNotification(router,pageRedirect) {
             router.push("/" + pageRedirect);
         }
     });
-    
+
 }
 export function successNotification(text) {
     Swal.fire({
@@ -18,7 +18,24 @@ export function successNotification(text) {
         title: 'Great!',
         text: text,
         confirmButtonColor: "#3155f1",
-        confirmButtonText: "Go, to sign in"
+        confirmButtonText: "Glose"
     });
-    
+}
+export function errorNotification(text) {
+    const Toast = Swal.mixin({
+        toast: true,
+        color: "red",
+        position: "center",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+    Toast.fire({
+        icon: "error",
+        title: text
+    });
 }

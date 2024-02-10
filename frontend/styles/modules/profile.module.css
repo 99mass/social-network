@@ -1,13 +1,21 @@
 .photoCovert {
   position: relative;
   width: 100%;
-  /* height: 250px; */
-  /* border-bottom: 1px solid white; */
+  height: fit-content;
 }
 
-.photoCovert img:first-of-type {
+.photoCovert .firstImg {
   width: 100%;
-  height: 100%;
+  min-height: 200px;
+  max-height: 450px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.photoCovert .firstImg img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .photoCovert div {
@@ -20,6 +28,7 @@
   top: -15px;
   margin-left: 10px;
 }
+
 .photoCovert div div {
   width: fit-content;
   display: flex;
@@ -73,6 +82,7 @@
   font-size: 20px;
   margin-right: 5px;
 }
+
 .body1 {
   width: 100%;
   display: flex;
@@ -99,30 +109,37 @@
     border-bottom: 0px;
     background: var(--nav-bar-background-gradient);
   }
-  .photoCovert img:first-of-type {
+
+  .photoCovert .firstImg {
     width: 60%;
-    height: 50%;
-    margin-top: 0px;
+    box-sizing: border-box;
     border-radius: 0px 0px 10px 10px;
   }
+
+
   .photoCovert div {
     width: 60%;
   }
+
   .body1 {
     padding: 20px 20%;
   }
+
   .body1 .bodymenu {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 }
+
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-  .photoCovert img:first-of-type,
+
+  .photoCovert .firstImg,
   .photoCovert div {
-    width: 80%;
+    width: 70%;
   }
 }
+
 @media screen and (max-width: 500px) {
   .body1 {
     width: 100%;
@@ -130,9 +147,11 @@
     justify-content: center;
     flex-direction: column;
   }
+
   .bodymenu {
     order: 2;
   }
+
   .bio {
     order: 1;
   }
@@ -234,6 +253,7 @@
 .unfollowBtn i {
   margin-right: 5px;
 }
+
 @media screen and (min-width: 768px) {
   .body2 {
     padding: 20px 20%;
@@ -252,11 +272,13 @@
     padding-bottom: 20px;
   }
 }
+
 @media screen and (max-width: 525px) {
   .body2 {
     padding: 0px 20px;
     padding-bottom: 20px;
   }
+
   .contentListFriend .bloc {
     width: 100%;
   }
