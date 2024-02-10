@@ -13,37 +13,43 @@
 .photoCovert div {
   width: fit-content;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+
   gap: 10px;
   position: relative;
-  top: -30px;
+  top: -15px;
   margin-left: 10px;
 }
+.photoCovert div div {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 
-.photoCovert div img:last-of-type {
+.photoCovert div div img:last-of-type {
   width: 120px;
   height: 120px;
   border-radius: 100%;
   border: 1px solid white;
 }
 
-.photoCovert div p {
+.photoCovert div div p {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.photoCovert div p span {
+.photoCovert div div p span {
   font-size: 18px;
   text-transform: capitalize;
 }
 
-.photoCovert div p a {
+.photoCovert div div p a {
   text-transform: lowercase;
   color: gray;
   cursor: pointer;
 }
-
 
 .menu {
   width: 100%;
@@ -52,25 +58,22 @@
   margin-top: 20px;
 }
 
-.menu a:first-of-type {
-  background: var(--second-blue);
-}
 
-.menu a {
+.menu span {
   display: flex;
   align-items: center;
   width: fit-content;
-  padding: 5px 10px;
+  padding: 10px 15px;
   font-size: 18px;
   border-radius: 10px;
-  background: var(--secondary-bg);
+  cursor: pointer;
 }
 
-.menu a i {
+.menu span i {
   font-size: 20px;
   margin-right: 5px;
 }
-.body1{
+.body1 {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -78,7 +81,7 @@
   padding: 10px;
 }
 
-.bio{
+.bio {
   height: fit-content;
   padding: 15px;
   border-radius: 10px;
@@ -86,62 +89,66 @@
   background: var(--secondary-bg);
 }
 
-@media screen and (min-width:768px) {
-
+@media screen and (min-width: 768px) {
   .photoCovert {
     width: 100%;
     height: fit-content;
-    padding: 0px 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-bottom: 0px;
     background: var(--nav-bar-background-gradient);
   }
-
   .photoCovert img:first-of-type {
-    width: 100%;
-    height: 400px;
+    width: 60%;
+    height: 50%;
     margin-top: 0px;
     border-radius: 0px 0px 10px 10px;
   }
- .body1{
-  padding: 20px 20%;
- }
-  .body1 .bodymenu{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
+  .photoCovert div {
+    width: 60%;
+  }
+  .body1 {
+    padding: 20px 20%;
+  }
+  .body1 .bodymenu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 }
-
-@media screen and (max-width:500px) {
-  .body1{
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .photoCovert img:first-of-type,
+  .photoCovert div {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 500px) {
+  .body1 {
     width: 100%;
     display: flex;
     justify-content: center;
-   flex-direction: column;
-  
+    flex-direction: column;
   }
-  .bodymenu{
+  .bodymenu {
     order: 2;
   }
-  .bio{
+  .bio {
     order: 1;
   }
 }
 
-@media screen and (max-width:425px) {
+@media screen and (max-width: 425px) {
   .menu {
-    flex-wrap: nowrap;
+    display: flex;
+    flex-wrap: wrap;
   }
 }
-
-
 
 /* bloc friend */
 
 .friendFololowingMe {
   width: 100%;
-  margin: 30px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -150,16 +157,12 @@
 }
 
 .menus {
-  width: 80%;
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   margin: 20px 0px;
   margin-top: 0px;
-}
-
-.menus span:first-of-type {
-  background: var(--second-blue);
 }
 
 .menus span {
@@ -169,7 +172,6 @@
   padding: 8px;
   font-size: 18px;
   border-radius: 10px;
-  background: var(--secondary-bg);
   cursor: pointer;
 }
 
@@ -182,7 +184,7 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  width: 80%;
+  width: 100%;
   height: fit-content;
   padding: 30px;
   margin: 0px 20px;
@@ -195,7 +197,6 @@
   margin-bottom: 50px;
   display: flex;
   border-radius: 10px;
-
 }
 
 .contentListFriend .bloc img {
@@ -233,20 +234,33 @@
 .unfollowBtn i {
   margin-right: 5px;
 }
-
-@media screen and (max-width:525px) {
-  .contentListFriend {
-    width: 85%;
-    margin: 0px;
-  }
-
-  .contentListFriend .bloc {
-    width: 100%;
-
+@media screen and (min-width: 768px) {
+  .body2 {
+    padding: 20px 20%;
   }
 }
 
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .body2 {
+    padding: 20px 10%;
+  }
+}
 
+@media screen and (max-width: 767px) {
+  .body2 {
+    padding: 0px 20px;
+    padding-bottom: 20px;
+  }
+}
+@media screen and (max-width: 525px) {
+  .body2 {
+    padding: 0px 20px;
+    padding-bottom: 20px;
+  }
+  .contentListFriend .bloc {
+    width: 100%;
+  }
+}
 
 .friendiFololow {
   width: 100%;
@@ -258,17 +272,10 @@
   text-align: center;
 }
 
-.friendiFololow .menus span:first-of-type {
+.default {
   background: var(--secondary-bg);
 }
 
-.friendiFololow .menus span:last-of-type {
-
+.active {
   background: var(--second-blue);
-}
-
-
-.friendFololowingMe,
-.friendiFololow {
-  display: none;
 }

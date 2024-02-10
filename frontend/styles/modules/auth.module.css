@@ -24,7 +24,16 @@
    font-size: 20px;
 
  }
-
+ .error{
+   color: red;
+   padding: 5px;
+   text-transform: lowercase;
+   font-size: 18px;
+   background: white;
+ }
+ .error::first-letter{
+  text-transform: capitalize;
+ }
  .container .form {
    display: flex;
    flex-direction: column;

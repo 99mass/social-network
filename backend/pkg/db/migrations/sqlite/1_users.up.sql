@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS users (
     avatarpath VARCHAR,
     nickname VARCHAR,
     aboutme TEXT,
-    ispublic BOOLEAN DEFAULT false,
+    ispublic BOOLEAN DEFAULT true,
     created_at TIMESTAMP
 );

@@ -10,6 +10,7 @@
   --secondary-bg: rgb(27, 30, 34);
   --primary-bg: #383838;
   --second-blue: #3155f1;
+  --third-blue: #3154f198;
   --teal60: #00D4A1;
   --green55: #00ED4F;
   --fds-blue-05: #ECF3FF;
@@ -51,9 +52,10 @@ body {
   min-height: 100vh;
   background-color: rgb(20, 20, 20);
   overflow-x: hidden;
-  /* margin-top: 130px; */
   scroll-behavior: smooth;
 }
+
+
 
 ::-webkit-scrollbar {
   width: 12px;
@@ -83,5 +85,8 @@ a {
 @import url("notification.css");
 @import url("comment.css");
 @import url("profile.css");
+@import url("group.css");
+@import url("profile-group.css");
+
 
 

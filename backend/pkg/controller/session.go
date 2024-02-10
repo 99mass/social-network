@@ -37,3 +37,24 @@ func GetSessionByID(db *sql.DB, sessionID uuid.UUID) (models.Session, error) {
 	}
 	return session, nil
 }
+
+
+
+func UpdateSessionExpiryTime(db *sql.DB, sessionID uuid.UUID) error {
+    query := `
+        UPDATE sessions
+        SET expires_at = ?
+        WHERE id = ?;
+    `
+    _, err := db.Exec(query, time.Now().Add(24 * time.Hour), sessionID)
+    return err
+}
+
+func DeleteSession(db *sql.DB, sessionID uuid.UUID) error {
+    query := `
+        DELETE FROM sessions
+        WHERE id = ?;
+    `
+    _, err := db.Exec(query, sessionID)
+    return err
+}

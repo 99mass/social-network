@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import Link from 'next/link';
-import styles from '../../styles/Comment.module.css';
+import styles from '../../styles/modules/Comment.module.css';
 
 import { PostHeader, PostMiddle } from '../home/middle_bloc';
 

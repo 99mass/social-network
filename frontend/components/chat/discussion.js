@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '../../styles/discussion.module.css'
+import styles from '../../styles/modules/discussion.module.css'
 
 export default function DiscussionPage() {
     return (

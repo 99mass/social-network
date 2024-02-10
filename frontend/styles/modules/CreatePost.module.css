@@ -107,7 +107,9 @@
     transparent 100%
   );
 }
-
+.filesPost{
+   display: none;
+}
 .listFriend {
   width: 92%;
   height: fit-content;
