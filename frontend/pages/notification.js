@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Header from '../components/header'
 import LeftBloc from '../components/home/left_bloc'
 import Notification from '../components/notification/notification_page';
-import { useAuthGuard } from '../components/useAuthGuard';
+import { useAuthGuard } from '../controller/useAuthGuard';
 
 
 

@@ -3,7 +3,7 @@ import Header from "../components/header";
 import LeftBloc from "../components/home/left_bloc";
 import ListUser from "../components/chat/chat";
 import DiscussionPage from "../components/chat/discussion";
-import { useAuthGuard } from "../components/useAuthGuard";
+import { useAuthGuard } from "../controller/useAuthGuard";
 
 export default function Chatpage() {
 

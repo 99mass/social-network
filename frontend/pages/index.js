@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Sign_in from "../components/auth/signin_page";
-import { useAuthGuard2 } from "../components/useAuthGuard";
+import { useAuthGuard2 } from "../controller/useAuthGuard";
 
 export default function SignIn() {
 

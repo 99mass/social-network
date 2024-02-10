@@ -2,7 +2,7 @@ import Head from "next/head";
 import Header from "../components/header";
 import GroupPage from "../components/group/group_page";
 import styles from "../styles/modules/group.module.css";
-import { useAuthGuard } from "../components/useAuthGuard";
+import { useAuthGuard } from "../controller/useAuthGuard";
 
 export default function Goup() {
 
