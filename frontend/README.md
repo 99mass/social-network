@@ -5,11 +5,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
+cd social-network
+make dev
+# or
 cd frontend
 npm install
 npm run dev
-# or
-yarn dev
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -24,9 +26,3 @@ To learn more about Next.js, take a look at the following resources:
 ## Version next js
 version  12.0.4
 
-## How to push file in the Repository
-remove the directors:
-```
-node_modules
-.next
-```
