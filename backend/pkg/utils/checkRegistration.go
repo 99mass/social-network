@@ -113,7 +113,7 @@ func CheckUserName(username string) (bool, error) {
 	// 	return true, nil
 	// }
 	// Cette expression exige que le pseudo ait entre 5 et 20 caractères alphanumériques.
-	usernameRegex := `^[a-zA-Z0-9]{3,20}$`
+	usernameRegex := `^[a-zA-Z0-9]{0,20}$`
 
 	match, _ := regexp.MatchString(usernameRegex, username)
 

@@ -28,8 +28,8 @@ export default function Edit_Profile({ datas, setDatas, CloseEditForm }) {
             DateOfBirth: datas.dateofbirth,
             Email: datas.email,
             AboutMe: datas.aboutme,
-            NewPassword: "P@ssword95",
-            Password: "P@ssword95",
+            NewPassword: "",
+            Password: "",
             IsPublic: privacy === null ? datas.ispublic : privacy
         };
 
