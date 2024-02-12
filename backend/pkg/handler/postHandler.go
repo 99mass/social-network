@@ -96,20 +96,23 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			if post.Privacy == "almost" && postReq.Authorize_User != nil {
-				var almost models.Almost_Users
-				almost.Post_id = result.String()
-				almost.User_id = sess.UserID.String()
-				almost.Authorize_User = postReq.Authorize_User
-				//TODO : create almost user
-				err := controller.CreateAlmostUser(db, &almost)
-				if err != nil {
-					helper.SendResponse(w, models.ErrorResponse{
-						Status:  "error",
-						Message: "we got an issue",
-					}, http.StatusInternalServerError)
-					log.Println("internal ERROR from database: ", err.Error())
-					return
+				for _, alm := range postReq.Authorize_User {
+					var almost models.Almost_Users
+					almost.Post_id = result.String()
+					almost.User_id = sess.UserID.String()
+					almost.Authorize_User = alm
+					//TODO : create almost user
+					err := controller.CreateAlmostUser(db, &almost)
+					if err != nil {
+						helper.SendResponse(w, models.ErrorResponse{
+							Status:  "error",
+							Message: "we got an issue",
+						}, http.StatusInternalServerError)
+						log.Println("internal ERROR from database: ", err.Error())
+						return
+					}
 				}
+
 			}
 			helper.SendResponse(w, nil, http.StatusOK)
 			log.Println("post created successfully")
