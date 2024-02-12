@@ -3,7 +3,7 @@ import styles from '../../styles/modules/edit-profil.module.css';
 import { getDatasProfilUser, updateDataProfile } from '../../handler/user_profile';
 import { convertAge } from '../../utils/convert_dates';
 
-export default function Edit_Profile({ datas, setDatas, CloseEditForm }) {
+export default function Edit_Profile({ datas,userid, setDatas, CloseEditForm }) {
 
     const [errorMessage, setErrorMessage] = useState(null);
     const [privacy, setPrivacy] = useState(null);
@@ -44,12 +44,12 @@ export default function Edit_Profile({ datas, setDatas, CloseEditForm }) {
             const reader = new FileReader();
             reader.onloadend = function () {
                 jsonData.Avatarpath = reader.result;
-                updateDataProfile(jsonData, setDatas, setErrorMessage);
+                updateDataProfile(jsonData,userid, setDatas, setErrorMessage);
             };
             reader.readAsDataURL(file);
         } else {
             jsonData.Avatarpath = `data:image/png;base64,${datas.avatarpath}`;
-            updateDataProfile(jsonData, setDatas, setErrorMessage);
+            updateDataProfile(jsonData,userid, setDatas, setErrorMessage);
         }
         // console.log("jsonData:", jsonData);
     };

@@ -6,6 +6,7 @@ import (
 	"backend/pkg/utils"
 	"database/sql"
 	"net/http"
+	"strings"
 )
 
 func ConnectedUser(db *sql.DB) http.HandlerFunc {
@@ -23,13 +24,16 @@ func ConnectedUser(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "user doesn't exist", http.StatusBadRequest)
 				return
 			}
+
 			if user.AvatarPath != "" {
-				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+
+				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + strings.TrimSpace(user.AvatarPath))
 				if err != nil {
 					helper.SendResponseError(w, "error", "enable to encode image avatar", http.StatusInternalServerError)
 					return
 				}
 			}
+
 			helper.SendResponse(w, user, http.StatusOK)
 
 		default:

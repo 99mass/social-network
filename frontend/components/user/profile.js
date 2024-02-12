@@ -14,7 +14,6 @@ export default function Profile_user() {
   const router = useRouter();
   const { userid } = router.query;
 
-  console.log(userid);
   // recuperer les information du user
   useEffect(() => {
     getDatasProfilUser(setDatas,userid);
@@ -46,6 +45,7 @@ export default function Profile_user() {
         <Edit_Profile
           CloseEditForm={CloseEditForm}
           datas={datas}
+          userid={userid}
           setDatas={setDatas}
         />
       )}

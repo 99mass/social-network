@@ -32,7 +32,7 @@ export const getDatasProfilUser = async (setDatas,userid) => {
 }
 
 
-export const updateDataProfile = async (data, setDatas, setErrorMessage) => {
+export const updateDataProfile = async (data,userid, setDatas, setErrorMessage) => {
 
     try {
         const sessionId = getSessionCookie();
@@ -51,7 +51,7 @@ export const updateDataProfile = async (data, setDatas, setErrorMessage) => {
             successNotification('Update profile done')
 
             // actualiser les donnes 
-            getDatasProfilUser(setDatas);
+            getDatasProfilUser(setDatas,userid);
 
 
         } else {

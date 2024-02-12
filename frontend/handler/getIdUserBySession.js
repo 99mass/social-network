@@ -18,14 +18,14 @@ export const getUserIdBySession = async (setDatasUser) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: sessionID,
+        "Authorization": sessionID,
       },
     });
 
     if (response.ok) {
       const idUser = await response.json();
         setDatasUser(idUser)
-      console.log("idUser:", idUser);
+      console.log("User:", idUser);
     } else {
       const errorData = await response.json();
       console.error("errorData:", errorData.message);

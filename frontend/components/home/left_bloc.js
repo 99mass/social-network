@@ -26,7 +26,6 @@ export default function LeftBloc() {
     // getDatasProfilUser(setDatasUser, idUser);
   }, []);
 
-  console.log(user && user.id);
 
   return (
     <>
