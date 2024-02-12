@@ -5,8 +5,8 @@ export const api = {
   Login: `${domain}/login`,
   Session: `${domain}/session`,
   Logout: `${domain}/logout`,
-  User:`${domain}/user`,
+  User: `${domain}/user`,
   Profil: `${domain}/profil`,
-  UpdateProfilUser:`${domain}/update_profil`
+  UpdateProfilUser: `${domain}/update_profil`,
+  Addpost: `${domain}/addpost`,
 };
-

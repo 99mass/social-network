@@ -1,7 +1,7 @@
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 
-export const getUserIdBySession = async (setDatasUser) => {
+export const getUserBySession = async (setDatasUser) => {
   let sessionID = getSessionCookie();
 
   if (
@@ -18,13 +18,13 @@ export const getUserIdBySession = async (setDatasUser) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": sessionID,
+        Authorization: sessionID,
       },
     });
 
     if (response.ok) {
       const idUser = await response.json();
-        setDatasUser(idUser)
+      setDatasUser(idUser);
       console.log("User:", idUser);
     } else {
       const errorData = await response.json();

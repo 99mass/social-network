@@ -3,11 +3,10 @@ import { useState, useEffect } from "react";
 import Post from "../form/post";
 import Group from "../form/group";
 import { getDatasProfilUser } from "../../handler/user_profile";
-import { getUserIdBySession } from "../../handler/getIdUserBySession";
+import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function LeftBloc() {
   const [datasUser, setDatasUser] = useState(null);
-  const [user, setUser] = useState(null);
 
   const [postForm, setPostForm] = useState(false);
   const [groupForm, setGroupForm] = useState(false);
@@ -22,8 +21,7 @@ export default function LeftBloc() {
 
   // recuperer les information du user
   useEffect(() => {
-    getUserIdBySession(setDatasUser);
-    // getDatasProfilUser(setDatasUser, idUser);
+    getUserBySession(setDatasUser);
   }, []);
 
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import styles from "../../styles/modules/profile.module.css";
 import Posts_user from "./posts";
 import Edit_Profile from "./edit_profile";
@@ -15,9 +15,9 @@ export default function Profile_user() {
   const { userid } = router.query;
 
   // recuperer les information du user
-  useEffect(() => {
-    getDatasProfilUser(setDatas,userid);
-  }, []);
+  useEffect(() => {   
+      getDatasProfilUser(setDatas, userid);
+  }, [userid,datas]);
 
   const handleEditForm = () => {
     if (!edit) setEdit(true);
@@ -65,21 +65,17 @@ export function ContentCovertPhoto({
   return (
     <div className={styles.photoCovert}>
       <div className={styles.firstImg}>
-        <img src={`data:image/png;base64,${userPicture}`} />
+        <img src={userPicture ? `data:image/png;base64,${userPicture}` : ""} />
       </div>
 
       <div>
         <div>
-          <img
-            src={
-              userPicture !== ""
-                ? `data:image/png;base64,${userPicture}`
-                : "../images/default-image.svg"
-            }
-            alt=""
-          />
+          {userPicture && (
+            <img src={`data:image/png;base64,${userPicture}`} alt="" />
+          )}
+          {!userPicture && <img src={"../images/default-image.svg"} alt="" />}
           <p>
-            <span>{`${firstname} ${lastname}`}</span>
+            <span>{firstname && `${firstname} ${lastname}`}</span>
             <Link href="viewfriend">259 friends</Link>
           </p>
         </div>
