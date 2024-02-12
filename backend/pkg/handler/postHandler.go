@@ -15,11 +15,11 @@ import (
 )
 
 type PostRequest struct {
-	UserID    string `json:"user_id"`
-	GroupID   string `json:"group_id"`
-	Content   string `json:"content"`
-	ImagePath string `json:"image_path"`
-	Privacy   string `json:"privacy"`
+	GroupID        string   `json:"group_id"`
+	Content        string   `json:"content"`
+	ImagePath      string   `json:"image_path"`
+	Privacy        string   `json:"privacy"`
+	Authorize_User []string `json:"authorize_user"`
 }
 
 func PostHandler(db *sql.DB) http.HandlerFunc {
@@ -43,14 +43,6 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			user, err := controller.GetUserByID(db, sess.UserID)
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "you're not authorized",
-				}, http.StatusBadRequest)
-				return
-			}
 			var postReq PostRequest
 			_err := json.NewDecoder(r.Body).Decode(&postReq)
 			if _err != nil {
@@ -58,6 +50,21 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 					Status:  "error",
 					Message: "incorrect request",
 				}, http.StatusBadRequest)
+				return
+			}
+			if postReq.Privacy != "public" && postReq.Privacy != "private" && postReq.Privacy != "almost"{
+				helper.SendResponse(w,models.ErrorResponse{
+					Status: "error",
+					Message: "given value incorrect",
+					},http.StatusBadRequest)
+				return
+			}
+
+			if postReq.Privacy == "almost" && postReq.Authorize_User == nil {
+				helper.SendResponse(w,models.ErrorResponse{
+					Status: "error",
+					Message: "you must take at least one user for almost",
+					},http.StatusBadRequest)
 				return
 			}
 
@@ -72,12 +79,14 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			post := models.Post{
-				UserID:    user.ID,
+				UserID:    sess.UserID.String(),
 				GroupID:   postReq.GroupID,
 				Content:   postReq.Content,
 				ImagePath: postImage,
 				Privacy:   postReq.Privacy,
 			}
+			
+
 			result, err := controller.CreatePost(db, post)
 			if err != nil {
 				log.Println("Unable to create the post: ", err)
@@ -87,7 +96,24 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusInternalServerError)
 				return
 			}
-			log.Println("post created successfully", result)
+			if post.Privacy == "almost" && postReq.Authorize_User != nil {
+				var almost models.Almost_Users
+				almost.Post_id = result.String()
+				almost.User_id = sess.UserID.String()
+				almost.Authorize_User = postReq.Authorize_User
+				//TODO : create almost user
+				err := controller.CreateAlmostUser(db,&almost)
+				if err != nil {
+					helper.SendResponse(w,models.ErrorResponse{
+						Status: "error",
+						Message: "we got an issue",
+					},http.StatusInternalServerError)
+					log.Println("internal ERROR from database: ",err.Error())
+					return
+				}
+			}
+			helper.SendResponse(w,nil,http.StatusOK)
+			log.Println("post created successfully")
 
 		default:
 			helper.SendResponse(w, models.ErrorResponse{

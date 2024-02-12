@@ -4,26 +4,39 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	"backend/pkg/utils"
 	"database/sql"
 	"net/http"
-
-	"github.com/gofrs/uuid"
 )
 
 func ProfilHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			session := r.Header.Get("Authorization")
-			sessId, err := uuid.FromString(session)
+			// session := r.Header.Get("Authorization")
+			// sessId, err := uuid.FromString(session)
+			// if err != nil {
+			// 	helper.SendResponse(w, models.ErrorResponse{
+			// 		Status:  "error",
+			// 		Message: "format value session incorrect",
+			// 	}, http.StatusBadRequest)
+			// 	return
+			// }
+			// sess, err := controller.GetSessionByID(db, sessId)
+			// if err != nil {
+			// 	helper.SendResponse(w, models.ErrorResponse{
+			// 		Status:  "error",
+			// 		Message: "you're not authorized",
+			// 	}, http.StatusBadRequest)
+			// 	return
+			// }
+
+			_, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "format value session incorrect",
-				}, http.StatusBadRequest)
 				return
 			}
-			sess, err := controller.GetSessionByID(db, sessId)
+			// check user id format
+			userid, err := utils.TextToUUID(r.URL.Query().Get("userid"))
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
@@ -31,11 +44,13 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			user, err := controller.GetUserByID(db, sess.UserID)
+
+			// get the user
+			user, err := controller.GetUserByID(db, userid)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
-					Message: "you're not authorized",
+					Message: "user doesn't exist",
 				}, http.StatusBadRequest)
 				return
 			}
