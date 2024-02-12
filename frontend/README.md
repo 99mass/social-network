@@ -25,4 +25,4 @@ To learn more about Next.js, take a look at the following resources:
 
 ## Version next js
 version  12.0.4
-
+nod
