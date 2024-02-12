@@ -7,3 +7,44 @@
 
 //Answer : let's choose the second one, cause I just change it on user's table
 
+/*
+
+-User
+	Action 
+	v-	Register
+	v-	Signin
+	x	creat post -> Comment, like
+	v-	follow a user
+	x	accept a follow request (if the profile is private)
+	x	decline a follow request
+	x	unfollow a user
+
+	x	Create a group
+	x	send invitation to other user join a group where hi is a memeber
+	x	Accept invitation to join a group
+	x	Decline invitaion to join a group
+	x	Send a Request to join a group (only the creator of a groupe can accepte un invitation)
+	x	create event in a group
+	x	make an event available
+
+		Send Private message (to following or followers users)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
