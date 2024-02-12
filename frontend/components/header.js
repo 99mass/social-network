@@ -6,19 +6,26 @@ import styles from "../styles/modules/Header.module.css";
 import Post from "./form/post";
 import Group from "./form/group";
 import { logout } from "../handler/logout";
+import { getDatasProfilUser } from "../handler/user_profile";
 
 export default function Header() {
-  
-    const router = useRouter();
-    const handlerLogOut = () => {
-      const checkLogOut = async () => {
-        const isLogOut = await logout();
-        if (isLogOut) {
-          router.push("/");
-        }
-      };
-      checkLogOut();
+  const [datasUser, setDatasUser] = useState(null);
+
+  const router = useRouter();
+  const handlerLogOut = () => {
+    const checkLogOut = async () => {
+      const isLogOut = await logout();
+      if (isLogOut) {
+        router.push("/");
+      }
     };
+    checkLogOut();
+  };
+
+  // recuperer les information du user
+  useEffect(() => {
+    getDatasProfilUser(setDatasUser);
+  }, []);
 
   return (
     <nav className={styles.top}>
@@ -27,7 +34,7 @@ export default function Header() {
           <div className={styles.topContent}>
             <h2>social-network</h2>
             <MidlleNAvForBigScreen />
-            <ToggleButton handlerLogOut={handlerLogOut} />
+            <ToggleButton handlerLogOut={handlerLogOut} firstname={datasUser && datasUser.firstname} lastname={datasUser && datasUser.lastname} />
           </div>
           <MidlleNAvFormSmallScreen />
         </div>
@@ -97,7 +104,7 @@ export function MidlleNAvFormSmallScreen() {
   );
 }
 
-export function ToggleButton({ handlerLogOut }) {
+export function ToggleButton({ handlerLogOut,firstname,lastname }) {
   const [postForm, setPostFrom] = useState(false);
   const [groupForm, setGroupFrom] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -121,8 +128,6 @@ export function ToggleButton({ handlerLogOut }) {
     setMenuOpen(!isMenuOpen);
   };
 
-
-
   return (
     <>
       <div className={styles.topContentIcons}>
@@ -133,7 +138,7 @@ export function ToggleButton({ handlerLogOut }) {
           <ul>
             <li>
               <Link href="/profileuser">
-                <i className="fa-regular fa-user"></i>Profile
+                <i className="fa-regular fa-user"></i>{`${firstname} ${lastname}`}
               </Link>{" "}
             </li>
             <li onClick={PostForm}>

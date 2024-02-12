@@ -6,19 +6,15 @@ import { useEffect, useState } from "react";
 import Friends from "./friend";
 import { getDatasProfilUser } from "../../handler/user_profile";
 
-
 export default function Profile_user() {
-
   const [datas, setDatas] = useState(null);
   const [edit, setEdit] = useState(false);
   const [viewfriend, setViewfriend] = useState(true);
-  
 
-  // recuperer les information du user 
+  // recuperer les information du user
   useEffect(() => {
     getDatasProfilUser(setDatas);
   }, []);
-
 
   const handleEditForm = () => {
     if (!edit) setEdit(true);
@@ -30,25 +26,33 @@ export default function Profile_user() {
     setViewfriend(state);
   };
 
-
-
   return (
     <>
       <ContentCovertPhoto
         userPicture={datas && datas.avatarpath}
+        firstname={datas && datas.firstname}
+        lastname={datas && datas.lastname}
         handleEditForm={handleEditForm}
         setViewfriend={handleSetViewfriend}
         edit={edit}
         viewfriend={viewfriend}
       />
       {viewfriend && <Posts_user />}
-      {edit && <Edit_Profile CloseEditForm={CloseEditForm} datas={datas} setDatas={setDatas} />}
+      {edit && (
+        <Edit_Profile
+          CloseEditForm={CloseEditForm}
+          datas={datas}
+          setDatas={setDatas}
+        />
+      )}
       {!viewfriend && <Friends />}
     </>
   );
 }
 export function ContentCovertPhoto({
   userPicture,
+  firstname,
+  lastname,
   handleEditForm,
   setViewfriend,
   edit,
@@ -57,19 +61,21 @@ export function ContentCovertPhoto({
   return (
     <div className={styles.photoCovert}>
       <div className={styles.firstImg}>
-        <img
-          src={`data:image/png;base64,${userPicture}`}
-        />
+        <img src={`data:image/png;base64,${userPicture}`} />
       </div>
 
       <div>
         <div>
           <img
-            src={userPicture !== "" ? `data:image/png;base64,${userPicture}` : "../images/default-image.svg"}
+            src={
+              userPicture !== ""
+                ? `data:image/png;base64,${userPicture}`
+                : "../images/default-image.svg"
+            }
             alt=""
           />
           <p>
-            <span>breukh man</span>
+            <span>{`${firstname} ${lastname}`}</span>
             <Link href="viewfriend">259 friends</Link>
           </p>
         </div>
@@ -108,5 +114,3 @@ export function NavMenu({ handleEditForm, setViewfriend, edit, viewfriend }) {
     </div>
   );
 }
-
-

@@ -23,7 +23,6 @@ export const getDatasProfilUser = async (setDatas) => {
         }
         // Analyser la réponse JSON
         const data = await response.json();
-        console.log('data', data);
         setDatas(data)
 
     } catch (error) {

@@ -18,7 +18,6 @@ export default function Sign_in() {
     formData.forEach((value, key) => {
       jsonData[key] = value;
     });
-    console.log("json:",jsonData);
    
     sendData(api.Login, jsonData, router, "home", setErrorMessage, true);
   };
