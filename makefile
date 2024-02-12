@@ -6,6 +6,8 @@ run:
 update_package:
 	cd backend && go mod tidy
 
+db:
+	sqlite3 backend/pkg/db/database.db
 
 dev:
 	cd frontend && npm install && npm run dev
