@@ -28,7 +28,7 @@ export default function LeftBloc() {
     <>
       <div className="menu-left">
         <div className="user-actual">
-          <Link href="./profileuser">
+          <Link href={`./profileuser?userid=${datasUser && datasUser.id}`}>
             <img src={`data:image/png;base64,${datasUser && datasUser.avatarpath}`} alt="" />
             {datasUser && (
               <span>{`${datasUser.firstname} ${datasUser.lastname}`}</span>

@@ -34,7 +34,7 @@ export default function Header() {
           <div className={styles.topContent}>
             <h2>social-network</h2>
             <MidlleNAvForBigScreen />
-            <ToggleButton handlerLogOut={handlerLogOut} firstname={datasUser && datasUser.firstname} lastname={datasUser && datasUser.lastname} />
+            <ToggleButton handlerLogOut={handlerLogOut} firstname={datasUser && datasUser.firstname} lastname={datasUser && datasUser.lastname} userId={datasUser && datasUser.id}/>
           </div>
           <MidlleNAvFormSmallScreen />
         </div>
@@ -104,7 +104,7 @@ export function MidlleNAvFormSmallScreen() {
   );
 }
 
-export function ToggleButton({ handlerLogOut,firstname,lastname }) {
+export function ToggleButton({ handlerLogOut,firstname,lastname ,userId}) {
   const [postForm, setPostFrom] = useState(false);
   const [groupForm, setGroupFrom] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -137,7 +137,7 @@ export function ToggleButton({ handlerLogOut,firstname,lastname }) {
         <div className={styles.dropdownMenu}>
           <ul>
             <li>
-              <Link href="/profileuser">
+              <Link href={`./profileuser?userid=${userId}`}>
                 <i className="fa-regular fa-user"></i>{`${firstname} ${lastname}`}
               </Link>{" "}
             </li>

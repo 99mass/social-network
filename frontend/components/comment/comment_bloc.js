@@ -92,7 +92,7 @@ export function CommentPost({ data }) {
                 {data.map((item, index) => (
                     <div key={index} className={styles.contentMessage}>
                         <div>
-                            <Link href="./profileuser"><img src={item.commentUserUrl} alt="" /></Link>
+                            <Link href={`./profileuser?userid=`}><img src={item.commentUserUrl} alt="" /></Link>
                             <pre className={styles.message}>{item.textComment}</pre>
                         </div>
                         <p><span>by {item.user}</span>{item.time}</p>

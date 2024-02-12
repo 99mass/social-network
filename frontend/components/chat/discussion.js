@@ -6,7 +6,7 @@ export default function DiscussionPage() {
         <div className={styles.middleBloc}>
             <div className={styles.receiver}>
                 <Link href="./chat"><i className="fa-solid fa-arrow-left"></i></Link>
-                <Link href="./profileuser">
+                <Link href={`./profileuser?userid=`}>
                     <img src="https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=" alt="" />
                 </Link>
                 <p>breukh</p>
@@ -86,7 +86,7 @@ export function MessageReceiver({ image, text, time }) {
     return (
         <div className={styles.contentMesReceiver} >
             <div>
-                <Link href="./profileuser">
+                <Link href={`./profileuser?userid=`}>
                     <img src={"" + image} alt="" />
                 </Link>
                 <pre className={styles.messageReceiver}>{text}</pre >

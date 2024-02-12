@@ -236,8 +236,9 @@ body {
     width: 100%;
     height: fit-content;
     padding-bottom: 10em;
-}
-.event-details{
+} */
+
+.eventDetails{
      width: 100%;
      height: fit-content;
      display: flex;
@@ -246,29 +247,30 @@ body {
      margin-bottom: 20px;
      padding-top: 10px;
      border-radius: 10px;
-     background: var(--primary-bg);
+     /* background: var(--primary-bg); */
+     background: var(--secondary-bg);
 }
-.event-details h2{
+.eventDetails h2{
     padding: 10px ;
 }
-.event-details p,
-.event-details pre{
+.eventDetails p,
+.eventDetails pre{
     width: 100%;
     padding-left: 10px;
     font-size: 17px;
     text-wrap: wrap;
     word-wrap: break-word;
 }
-.event-details p i{
+.eventDetails p i{
     margin-right: 10px;
     font-size: 22px;
-    color: gray;
+    color: lightslategray;
 }
-.event-details p span{
+.eventDetails p span{
     margin-right: 10px;
     color: gray;
 }
-.event-details button{
+.eventDetails button{
   width: fit-content;
   padding: 8px;
   margin: 10px;
@@ -278,12 +280,12 @@ body {
   border-radius: 10px;
   cursor: pointer;
 }
-.event-details button i{
+.eventDetails button i{
   margin-right: 5px;
 }
-.event-details .btn-not-going{
-   background: var(--secondary-bg);
-} */
+.eventDetails .btnNotGoing{
+   background: var(--primary-bg);
+} 
 
 
 

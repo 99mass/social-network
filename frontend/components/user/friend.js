@@ -93,7 +93,7 @@ export function FollowerFriends({ data }) {
       {data.map((item, index) =>
         item.type === "follower" ? (
           <div key={index} className={styles.bloc}>
-            <Link href="./profileuser">
+            <Link href={`./profileuser?userid=`}>
               <img src={item.image} alt="" />
             </Link>
             <div className={styles.conteUnfollow}>
@@ -117,7 +117,7 @@ export function FollowingFriends({ data }) {
       {data.map((item, index) =>
         item.type === "following" ? (
           <div key={index} className={styles.bloc}>
-            <Link href="./profileuser">
+            <Link href={`./profileuser?userid=`}>
               <img src={item.image} alt="" />
             </Link>
             <div className={styles.conteUnfollow}>
