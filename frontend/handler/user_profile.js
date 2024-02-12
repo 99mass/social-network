@@ -5,10 +5,11 @@ import { errorNotification, successNotification } from "../utils/sweeAlert";
 
 
 export const getDatasProfilUser = async (setDatas,userid) => {
+    console.log(userid);
     try {
         const sessionId = getSessionCookie();
         
-        const response = await fetch(api.Profil, {
+        const response = await fetch(api.Profil+`?userid=${userid}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

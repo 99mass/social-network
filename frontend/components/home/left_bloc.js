@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import Post from "../form/post";
 import Group from "../form/group";
 import { getDatasProfilUser } from "../../handler/user_profile";
+import { getUserIdBySession } from "../../handler/getIdUserBySession";
 
 export default function LeftBloc() {
-    
   const [datasUser, setDatasUser] = useState(null);
+  const [idUser, setIdUser] = useState(null);
+
   const [postForm, setPostForm] = useState(false);
   const [groupForm, setGroupForm] = useState(false);
 
@@ -20,16 +22,19 @@ export default function LeftBloc() {
 
   // recuperer les information du user
   useEffect(() => {
-    getDatasProfilUser(setDatasUser);
+    getUserIdBySession(setIdUser);
+    getDatasProfilUser(setDatasUser, idUser);
   }, []);
-
 
   return (
     <>
       <div className="menu-left">
         <div className="user-actual">
           <Link href={`./profileuser?userid=${datasUser && datasUser.id}`}>
-            <img src={`data:image/png;base64,${datasUser && datasUser.avatarpath}`} alt="" />
+            <img
+              src={`data:image/png;base64,${datasUser && datasUser.avatarpath}`}
+              alt=""
+            />
             {datasUser && (
               <span>{`${datasUser.firstname} ${datasUser.lastname}`}</span>
             )}
