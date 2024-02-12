@@ -1,6 +1,6 @@
 import styles from "../../styles/modules/group.module.css";
 
-export default function DiscoverBloc() {
+export default function RequestGroup() {
   const data = [
     {
       image:
@@ -34,7 +34,7 @@ export default function DiscoverBloc() {
         <h3>Suggested for you</h3>
         <div className={styles.listPostSugession}>
           {data.map((item, index) => (
-            <GoupFace
+            <GoupName
               key={index}
               image={item.image}
               gName={item.gName}
@@ -47,7 +47,7 @@ export default function DiscoverBloc() {
   );
 }
 
-export function GoupFace({ image, gName, nMembres }) {
+export function GoupName({ image, gName, nMembres }) {
   return (
     <div className={styles.postSugess}>
       <a href="./profilegroup">

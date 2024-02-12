@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from 'next/router';
 import styles from "../../styles/modules/profile.module.css";
 import Posts_user from "./posts";
 import Edit_Profile from "./edit_profile";
@@ -10,10 +11,13 @@ export default function Profile_user() {
   const [datas, setDatas] = useState(null);
   const [edit, setEdit] = useState(false);
   const [viewfriend, setViewfriend] = useState(true);
+  const router = useRouter();
+  const { userid } = router.query;
 
+  console.log(userid);
   // recuperer les information du user
   useEffect(() => {
-    getDatasProfilUser(setDatas);
+    getDatasProfilUser(setDatas,userid);
   }, []);
 
   const handleEditForm = () => {

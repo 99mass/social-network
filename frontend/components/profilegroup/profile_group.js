@@ -3,9 +3,12 @@ import styles from "../../styles/modules/profile-group.module.css";
 import { useState } from "react";
 import Discussion from "./discussions";
 import Events from "./events";
-import Post from "../form/post";
+import PostGroup from "./post_group";
+import ChatGroup from "./chat_group";
 
 export default function Profile_group() {
+  const [postForm, setPostForm] = useState(false);
+
   const [section, setSection] = useState({
     section1: true,
     section2: false,
@@ -24,15 +27,22 @@ export default function Profile_group() {
     setSection({ section1, section2, section3, section4, section5 });
   };
 
+  const togglePostForm = () => {
+    setPostForm(!postForm);
+    section.section1 = true;
+    section.section2 = false;
+  };
+
   return (
     <>
       <ContentCovertPhotoGroup
         section={section}
         handleSection={handleSection}
       />
-      {section.section1 && <Discussion/>}
-      {section.section2 && <Post/>}
-      {section.section3 && <Events/>}
+      {section.section1 && <Discussion />}
+      {section.section2 && <PostGroup PostForm={togglePostForm} />}
+      {section.section3 && <Events />}
+      {section.section4 && <ChatGroup />}
     </>
   );
 }

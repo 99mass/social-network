@@ -36,7 +36,7 @@ export  function PostHeader({user,image,time}) {
         <div className="profileuser">
             <div className="left-side">
                 <div className="profile-pic">
-                    <Link href="./profileuser"><img src={image}alt="" /></Link>
+                    <Link href={`./profileuser?userid=`}><img src={image}alt="" /></Link>
                 </div>
                 <span>
                     <h3>{user} .<span className="follow" title="follow">Follow</span></h3>

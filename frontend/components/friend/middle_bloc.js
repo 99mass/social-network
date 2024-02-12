@@ -43,7 +43,7 @@ export default function MiddleBlocFriend() {
             {
                 data.map((item, index) => (
                     <div className={styles.contentFriend} key={index}>
-                        <Link href="./profileuser"><img src={"" + item.image} alt="" /></Link>
+                        <Link href={`./profileuser?userid=`}><img src={"" + item.image} alt="" /></Link>
                         <div className={styles.detailsFriendRequest}>
                             <div className={styles.friendName}><span>{item.username}</span><span>{item.time}</span></div>
                             <div className={styles.validateRequest}>

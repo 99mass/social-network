@@ -4,7 +4,7 @@ import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 
 
-export const getDatasProfilUser = async (setDatas) => {
+export const getDatasProfilUser = async (setDatas,userid) => {
     try {
         const sessionId = getSessionCookie();
         
