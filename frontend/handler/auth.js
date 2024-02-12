@@ -21,11 +21,11 @@ export const sendData = async (
     if (response.ok && response.status) {
       const cookieDatas = await response.json();
 
-      if (createCookie){
+      if (createCookie) {
         createSessionCookie(cookieDatas.value, cookieDatas.expiration);
         router.push("/" + pageRedirect);
-      }else{
-        signUpNotification(router,pageRedirect)
+      } else {
+        signUpNotification(router, pageRedirect);
       }
     } else {
       const errorData = await response.json();

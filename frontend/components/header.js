@@ -6,7 +6,7 @@ import styles from "../styles/modules/Header.module.css";
 import Post from "./form/post";
 import Group from "./form/group";
 import { logout } from "../handler/logout";
-import { getDatasProfilUser } from "../handler/user_profile";
+import { getUserBySession } from "../handler/getUserBySession";
 
 export default function Header() {
   const [datasUser, setDatasUser] = useState(null);
@@ -21,10 +21,12 @@ export default function Header() {
     };
     checkLogOut();
   };
+  const { userid } = router.query;
+
 
   // recuperer les information du user
   useEffect(() => {
-    getDatasProfilUser(setDatasUser);
+    getUserBySession(setDatasUser);
   }, []);
 
   return (
@@ -32,7 +34,7 @@ export default function Header() {
       <div className={styles.fixed}>
         <div className={styles.mainHeader}>
           <div className={styles.topContent}>
-            <h2>social-network</h2>
+           <Link href="/" ><h2>social-network</h2></Link>
             <MidlleNAvForBigScreen />
             <ToggleButton handlerLogOut={handlerLogOut} firstname={datasUser && datasUser.firstname} lastname={datasUser && datasUser.lastname} userId={datasUser && datasUser.id}/>
           </div>

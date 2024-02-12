@@ -1,7 +1,7 @@
 import { api } from "../utils/api";
-import { createSessionCookie, getSessionCookie } from "../utils/cookies";
+import { getSessionCookie } from "../utils/cookies";
 
-export const sendSession = async () => {
+export const getUserBySession = async (setDatasUser) => {
   let sessionID = getSessionCookie();
 
   if (
@@ -14,25 +14,23 @@ export const sendSession = async () => {
   }
 
   try {
-    const response = await fetch(api.Session, {
-      method: "POST",
+    const response = await fetch(api.User, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: sessionID,
       },
-      body: JSON.stringify({ sessionID }),
     });
 
     if (response.ok) {
-      const cookieDatas = await response.json();
-      createSessionCookie(cookieDatas.value, cookieDatas.expiration);
-      return true;
+      const idUser = await response.json();
+      setDatasUser(idUser);
+      console.log("User:", idUser);
     } else {
       const errorData = await response.json();
       console.error("errorData:", errorData.message);
-      return false;
     }
   } catch (error) {
     console.error("Error:", error);
-    return false;
   }
 };

@@ -1,64 +1,153 @@
 import { useState, useRef } from "react";
-import styles from '../../styles/modules/CreatePost.module.css'
+import styles from "../../styles/modules/CreatePost.module.css";
 import EmojiForm from "../emoji/emoji";
+import { errorNotification } from "../../utils/sweeAlert";
+import { AddPostUser } from "../../handler/sendUser";
+import { EncodeImage } from "../../utils/encodeImage";
 
 export default function Post({ PostForm }) {
-
-  const [emoji, setEmoji] = useState(false)
-  const [selectedEmoji, setSelectedEmoji] = useState(''); // État pour le contenu du textarea
+  const [emoji, setEmoji] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState(""); // État pour le contenu du textarea
   const fileInputRef = useRef(null);
 
-  // lier mon icon plu avec mon input de type file 
+  // lier mon icon plu avec mon input de type file
   const handleFileIconClick = () => {
     fileInputRef.current.click();
   };
 
   const toggleEmojicon = () => setEmoji(!emoji);
 
+  const handlerFromPost = (e) => {
+    e.preventDefault();
+    const dataFrom = new FormData(e.target);
+
+    const content = dataFrom.get("Content");
+    if (content == "") {
+      errorNotification("Content can not be empty.");
+      return;
+    }
+    const radioName = "Privacy";
+    const radios = document.querySelectorAll(
+      `input[name="${radioName}"]:checked`
+    );
+    let radioSelected;
+    if (radios.length > 0) {
+      radioSelected = radios[0].id;
+    } else {
+      errorNotification("Please choose a privacy.");
+      return;
+    }
+
+    const checkedValues = Array.from(
+      document.querySelectorAll('input[type="checkbox"]:checked')
+    ).map((checkbox) => checkbox.value);
+
+    // si on n'a pas d'image
+    if (!fileInputRef.current.files[0]) {
+      const data = {
+        GroupID: "",
+        Content: content,
+        image_path: "",
+        Privacy: radioSelected,
+        Authorize_User: checkedValues,
+      };
+      AddPostUser(data);
+      return;
+    }
+
+    // si on a une image
+    async function someFunction() {
+      try {
+        const encodedFile = await EncodeImage(fileInputRef);
+
+        const data = {
+          GroupID: "",
+          Content: content,
+          image_path: encodedFile,
+          Privacy: radioSelected,
+          Authorize_User: checkedValues,
+        };
+        AddPostUser(data);
+      } catch (error) {
+        errorNotification(error);
+      }
+    }
+    someFunction();
+  };
+
   return (
     <div className={`${styles.contentFormPost} content-form-post`}>
       <div className={styles.postHeader}>
         <h1>create post</h1>
-        <i className="fa-regular fa-circle-xmark close-form-btn" onClick={PostForm} title="Close form"></i>
+        <i
+          className="fa-regular fa-circle-xmark close-form-btn"
+          onClick={PostForm}
+          title="Close form"
+        ></i>
       </div>
 
       <hr />
-      <form action="">
+      <form
+        method="post"
+        onSubmit={handlerFromPost}
+        encType="multipart/form-data"
+      >
         <PrivacyBloc />
         <div className={styles.postContent}>
           <textarea
             value={selectedEmoji}
-            name="content"
-            onChange={(e) => setSelectedEmoji(e.target.value)} // Mettez à jour l'état lorsque le contenu du textarea change
-            placeholder="What's on your mind, Breukh?" id="" />
+            name="Content"
+            onChange={(e) => setSelectedEmoji(e.target.value)} 
+            placeholder="What's on your mind ?"
+          />
           <div className={styles.contentAssets}>
-            <i className="fa-regular fa-file-image" title="Choose image" onClick={handleFileIconClick}><input type="file" className={styles.filesPost} ref={fileInputRef} />
-            </i><span onClick={toggleEmojicon} className="emoji" title="Choose emoji">😄</span>
-          {/* emoji form */}
+            <i
+              className="fa-regular fa-file-image"
+              title="Choose image"
+              onClick={handleFileIconClick}
+            >
+              <input
+                type="file"
+                className={styles.filesPost}
+                ref={fileInputRef}
+              />
+            </i>
+            <span
+              onClick={toggleEmojicon}
+              className="emoji"
+              title="Choose emoji"
+            >
+              😄
+            </span>
+            {/* emoji form */}
             {emoji && <EmojiForm setSelectedEmoji={setSelectedEmoji} />}
-
           </div>
         </div>
-        <button className={styles.btnPost}>Post</button>
+        <button type="submit" className={styles.btnPost}>
+          Post
+        </button>
       </form>
     </div>
-
   );
 }
 
 export function PrivacyBloc() {
-
-  const [listFriend, setListFriend] = useState(false)
+  const [listFriend, setListFriend] = useState(false);
   const showListF = (state) => {
-    setListFriend(state)
-  }
-
+    setListFriend(state);
+  };
 
   return (
     <div className={styles.blocPrivacyPost}>
-      <p>Who can see your post?<br /><br />
-        Your post will show up in Feed, on your profile.<br /><br />
-        Your post will be send  to your Specific friends, but you can change the audience of this specific post.
+      <p>
+        Who can see your post?
+        <br />
+        <br />
+        Your post will show up in Feed, on your profile.
+        <br />
+        <br />
+        Your post will be send to your Specific friends, but you can change the
+        audience of this specific post.
       </p>
       <div>
         <div>
@@ -68,7 +157,12 @@ export function PrivacyBloc() {
             <div>Anyone on or off Social-network</div>
           </div>
         </div>
-        <input name="privacy" type="radio" onClick={() => showListF(false)} />
+        <input
+          id="public"
+          name="Privacy"
+          type="radio"
+          onClick={() => showListF(false)}
+        />
       </div>
 
       <div>
@@ -79,7 +173,12 @@ export function PrivacyBloc() {
             <div>Your friends on Social-network</div>
           </div>
         </div>
-        <input name="privacy" type="radio" onClick={() => showListF(false)} />
+        <input
+          id="private"
+          name="Privacy"
+          type="radio"
+          onClick={() => showListF(false)}
+        />
       </div>
 
       <div>
@@ -90,48 +189,61 @@ export function PrivacyBloc() {
             <div>Only show to some friends</div>
           </div>
         </div>
-        <input name="privacy" type="radio" onChange={() => showListF(true)} />
+        <input
+          id="almost"
+          name="Privacy"
+          type="radio"
+          onChange={() => showListF(true)}
+        />
       </div>
       {listFriend && <ListFriend />}
-
     </div>
-  )
+  );
 }
 
 export function ListFriend() {
   const data = [
     {
+      id: 1,
       name: "alice doe",
-      image: "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY="
+      image:
+        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
     },
     {
+      id: 2,
       name: "michel doe",
-      image: "https://media.istockphoto.com/id/1413765605/fr/photo/portrait-dune-femme-daffaires-afro-am%C3%A9ricaine-prosp%C3%A8re.webp?b=1&s=170667a&w=0&k=20&c=T8Aiogu4Y9EnlE3sNKP_L6H5sHrYv4ttFMfzNgcUmwI="
+      image:
+        "https://media.istockphoto.com/id/1413765605/fr/photo/portrait-dune-femme-daffaires-afro-am%C3%A9ricaine-prosp%C3%A8re.webp?b=1&s=170667a&w=0&k=20&c=T8Aiogu4Y9EnlE3sNKP_L6H5sHrYv4ttFMfzNgcUmwI=",
     },
     {
+      id: 3,
       name: "jack doe",
-      image: "https://media.istockphoto.com/id/1369508766/fr/photo/belle-femme-latine-%C3%A0-succ%C3%A8s-souriante.webp?b=1&s=170667a&w=0&k=20&c=hYzjJHP1DkGQIbtSjqwB87c2hplYO1Mn9cgheKr0M7o="
+      image:
+        "https://media.istockphoto.com/id/1369508766/fr/photo/belle-femme-latine-%C3%A0-succ%C3%A8s-souriante.webp?b=1&s=170667a&w=0&k=20&c=hYzjJHP1DkGQIbtSjqwB87c2hplYO1Mn9cgheKr0M7o=",
     },
     {
+      id: 4,
       name: "christin doe",
-      image: "https://media.istockphoto.com/id/1511315040/fr/photo/souriez-tablette-et-recherchez-avec-une-femme-noire-au-bureau-pour-la-technologie.webp?b=1&s=170667a&w=0&k=20&c=D9yNSpTwRSf2Iw2xeOxFKnSxqD2xijYXsU4B6vxt-ys="
-    }
+      image:
+        "https://media.istockphoto.com/id/1511315040/fr/photo/souriez-tablette-et-recherchez-avec-une-femme-noire-au-bureau-pour-la-technologie.webp?b=1&s=170667a&w=0&k=20&c=D9yNSpTwRSf2Iw2xeOxFKnSxqD2xijYXsU4B6vxt-ys=",
+    },
   ];
+
   return (
     <div className={styles.listFriend}>
-      <h3> <span>select friends</span></h3>
+      <h3>
+        {" "}
+        <span>select friends</span>
+      </h3>
       {data.map((item, index) => (
-
         <div className={styles.userBloc} key={index}>
           <div>
             <img src={"" + item.image} alt="" />
             <span>{item.name}</span>
           </div>
-          <input type="checkbox" name="" id="" />
+          <input defaultValue={item.id} name={item.id} type="checkbox" id="" />
         </div>
-
-      ))
-      }
+      ))}
     </div>
-  )
+  );
 }
