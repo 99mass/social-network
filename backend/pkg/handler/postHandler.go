@@ -52,6 +52,13 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+			if postReq.Privacy != "public" && postReq.Privacy != "private" && postReq.Privacy != "almost"{
+				helper.SendResponse(w,models.ErrorResponse{
+					Status: "error",
+					Message: "given value incorrect",
+					},http.StatusBadRequest)
+				return
+			}
 
 			if postReq.Privacy == "almost" && postReq.Authorize_User == nil {
 				helper.SendResponse(w,models.ErrorResponse{
