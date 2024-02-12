@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"backend/pkg/models"
 	"encoding/json"
 	"net/http"
 
@@ -12,6 +13,13 @@ func SendResponse(w http.ResponseWriter, data interface{}, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(data)
+}
+
+func SendResponseError(w http.ResponseWriter, Status string, Message string, StatusCode int) {
+	SendResponse(w, models.ErrorResponse{
+		Status:  Status,
+		Message: Message,
+	}, StatusCode)
 }
 
 func HashPassword(password string) (string, error) {

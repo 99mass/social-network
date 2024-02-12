@@ -7,7 +7,7 @@ import { getUserIdBySession } from "../../handler/getIdUserBySession";
 
 export default function LeftBloc() {
   const [datasUser, setDatasUser] = useState(null);
-  const [idUser, setIdUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   const [postForm, setPostForm] = useState(false);
   const [groupForm, setGroupForm] = useState(false);
@@ -22,9 +22,11 @@ export default function LeftBloc() {
 
   // recuperer les information du user
   useEffect(() => {
-    getUserIdBySession(setIdUser);
-    getDatasProfilUser(setDatasUser, idUser);
+    getUserIdBySession(setDatasUser);
+    // getDatasProfilUser(setDatasUser, idUser);
   }, []);
+
+  console.log(user && user.id);
 
   return (
     <>

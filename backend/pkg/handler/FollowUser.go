@@ -6,7 +6,6 @@ import (
 
 	"backend/pkg/controller"
 	"backend/pkg/helper"
-	"backend/pkg/models"
 	"backend/pkg/utils"
 )
 
@@ -21,16 +20,13 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 		// check user id format
 		userid, err := utils.TextToUUID(r.URL.Query().Get("userid"))
 		if err != nil {
-			helper.SendResponse(w, models.ErrorResponse{
-				Status:  "error",
-				Message: "you're not authorized",
-			}, http.StatusBadRequest)
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 			return
 		}
 		// Appelez la fonction de contrôleur pour suivre l'utilisateur
 		err = controller.FollowUser(db, sess.UserID, userid)
 		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
 			return
 		}
 
