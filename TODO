@@ -1,8 +1,8 @@
 // Remarks:
 // there are two formats of columns names in the sql fils:
-		* userid
-		* user_id
-	We should choose one formats
+	// 	* userid
+	// 	* user_id
+	// We should choose one formats
 
 
 //Answer : let's choose the second one, cause I just change it on user's table
