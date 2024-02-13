@@ -56,12 +56,13 @@ func UpdatePost(db *sql.DB, post models.Post) error {
 func PostToShow(db *sql.DB, userID string) ([]models.Post, error) {
 	// Define the SQL query
 	query := `
-        SELECT p.*
+        SELECT DISTINCT p.*
         FROM posts p
         LEFT JOIN followers f ON p.user_id = f.following_id AND f.follower_id = ?
-        LEFT JOIN almost_users au ON p.id = au.post_id AND au.authorize_users = ?
+        LEFT JOIN almost_users au ON p.id = au.post_id AND au.authorize_users = ? 
 		LEFT JOIN group_members gm ON p.group_id = gm.group_id AND gm.user_id = ?
         WHERE (
+			p.user_id = ? OR
             p.privacy = 'public' OR
             (p.privacy = 'private' AND (f.follower_id IS NOT NULL OR f.following_id IS NOT NULL)) OR
             (p.privacy = 'almost' AND au.user_id IS NOT NULL)
@@ -76,7 +77,7 @@ func PostToShow(db *sql.DB, userID string) ([]models.Post, error) {
 	defer stmt.Close()
 
 	// Execute the query with the userID parameter
-	rows, err := stmt.Query(userID, userID, userID)
+	rows, err := stmt.Query(userID, userID, userID,userID)
 	if err != nil {
 		return nil, err
 	}
