@@ -1,0 +1,780 @@
+[33mcommit a794fb51fb9ef9aeeda438b3ea75f5f5d7ba927e[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Tue Feb 13 08:18:31 2024 +0000
+
+    Dell heavy picture
+
+[33mcommit 5a7c9b253488a30fb4c899fec4fd380ad275e5f2[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Tue Feb 13 08:10:07 2024 +0000
+
+    Update database
+
+[33mcommit b5c9f7810b678d10fa9a116f66724aa02633e1d0[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Tue Feb 13 08:09:50 2024 +0000
+
+    Update todo
+
+[33mcommit d5c07a31639cf2859dbce622c3315cec5e6a0194[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 22:22:08 2024 +0000
+
+    Add New users and new posts
+
+[33mcommit 483f64b2d3ef5bf0ddc41eaad9f8352a078830cb[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 22:21:44 2024 +0000
+
+    Add Todo
+
+[33mcommit b2a844ac1dfed1a2914215c0925b4422c4e6b29c[m
+Merge: 8478631 10a9bbd
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 20:44:56 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 8478631b81434e229cb0cb797d3d802c0f0f0d04[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 20:44:35 2024 +0000
+
+    db
+
+[33mcommit 10a9bbd29d6539e8286d23bb8a89f42deebaff28[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: bc715db 6ed1519
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 18:42:05 2024 +0000
+
+    add post done
+
+[33mcommit bc715db88ce01e48b207f13ffc35db06e3684a67[m
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 18:38:06 2024 +0000
+
+    update
+
+[33mcommit 6ed15191928708780835c608c09cb367a582d9c2[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Feb 12 18:05:01 2024 +0000
+
+    update almost user, handle table almost users
+
+[33mcommit af082aaedac21f431c3325be59ddf61d47583d47[m
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 15:49:04 2024 +0000
+
+    update
+
+[33mcommit 45561c2f1870b3a784ad338ed3775f61f43a6d77[m
+Merge: f0829d1 2af5401
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 15:17:01 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit f0829d1fdf20282224706cda09b057cf0b5bdb89[m
+Merge: 4a69592 52d3aef
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 15:16:46 2024 +0000
+
+    update
+
+[33mcommit 2af5401f624689cdb72e982f63c3ef6803a7b1c0[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 15:04:00 2024 +0000
+
+    enable avatar in ConnectedUser
+
+[33mcommit 4a6959231a8563ac83cbd9dbf1af70ff920e9321[m
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 14:56:26 2024 +0000
+
+    update
+
+[33mcommit 52d3aef8091c92bc20413727adc8f5fbf1968b09[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 14:55:23 2024 +0000
+
+    Add connected user
+
+[33mcommit fa091b6291e17e915c0aad0de69fffb5f35efb69[m
+Merge: 55c87c0 bd0adba
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 14:02:54 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 55c87c0b521a97d6ee6a6916a1a22cb1ce11cd69[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 14:02:33 2024 +0000
+
+    add the follow user handler
+
+[33mcommit 2cd1cf623604cf19c95b8ec982abad65901a039c[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 13:59:52 2024 +0000
+
+    add SendResponseError
+
+[33mcommit d41a99350e915d1cf87149798e1a6843c7751abf[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 13:58:55 2024 +0000
+
+    Simplify the sendResonse Error.
+
+[33mcommit bd0adbaf1b62541aa12df86c84818e1a12dc8a4d[m
+Merge: 3ce977b d768fdf
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 13:51:20 2024 +0000
+
+    design page group
+
+[33mcommit 3ce977b146d495ba0397c7dd9a781d30daaa6152[m
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 13:50:23 2024 +0000
+
+    design page group
+
+[33mcommit d768fdf954db38500eda4972bb91788d8d93dfee[m
+Merge: 35b5f9c 76cf855
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Feb 12 13:38:21 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 35b5f9cc42f1b49f0f7fd88b0db1ee6717314431[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Feb 12 13:37:24 2024 +0000
+
+    update
+
+[33mcommit 76cf85568a199b26247f53b08ea8560160be503e[m
+Merge: 82770c7 050b3c8
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 13:23:59 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 82770c710eefb35dc222c20ab1baadedb8fad6b7[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 13:22:00 2024 +0000
+
+    makefile to open database. add status column to followers.
+
+[33mcommit 050b3c89bf568c2b8240fdc546ac5ca6f9c5ef92[m
+Merge: 8b9c139 9c6cbec
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Feb 12 13:20:28 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 8b9c1392bc4f62371a4828249f4da2ed0e7f43ce[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Feb 12 13:17:59 2024 +0000
+
+    completed the addpost module
+
+[33mcommit 9c6cbecfd6c6d98380795f9ebbd3033178147c57[m
+Merge: 9f3ddd0 571385c
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 13:05:16 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 9f3ddd07fa1c508286705d3f4ecc2d46ab4a8ff0[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Mon Feb 12 13:04:11 2024 +0000
+
+    add follow handler
+
+[33mcommit 571385c9aad6474b55203a1cf6193695d11dedf2[m
+Author: ssambadi <you@example.com>
+Date:   Mon Feb 12 11:50:19 2024 +0000
+
+    update
+
+[33mcommit 0b6a6e6883073a41d101ce1310931c153f840c66[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Feb 12 10:47:29 2024 +0000
+
+    update
+
+[33mcommit a3a514825f6dce0efea4e5c914daba68373086fd[m
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Sat Feb 10 20:34:00 2024 +0000
+
+    add form emoji
+
+[33mcommit 550ee6dfc64280b1beb3a86b8e2ffd3116f21e6c[m
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Sat Feb 10 12:54:12 2024 +0000
+
+    .gitignore file file now you can push
+
+[33mcommit fc7dc033b57d11cf99b344393864a2127e041407[m
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Sat Feb 10 12:50:43 2024 +0000
+
+    makefile to run frontend app
+
+[33mcommit 261f16d89d89a4f64520691cbb3d89c9ce8ae828[m
+Merge: e27b7fd 5bd780d
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Sat Feb 10 12:39:55 2024 +0000
+
+    makefile to run frontend app
+
+[33mcommit e27b7fdd308a0077eea122015c87137c91a435f9[m
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Sat Feb 10 11:23:56 2024 +0000
+
+    makefile to run frontend
+
+[33mcommit 5bd780d83c1cd10c2aea12fc8b23d1c6523fb090[m
+Merge: ab561a6 75e8325
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 19:01:41 2024 +0000
+
+    update
+
+[33mcommit ab561a67858e224593f8a8e5d52eb4da64eee277[m
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 19:00:52 2024 +0000
+
+    update
+
+[33mcommit 75e83252e9c1758280a620fff063e3706b7072ba[m
+Merge: e1ea31f 2cbc304
+Author: bayerane <bayerane89@hotmail.fr>
+Date:   Fri Feb 9 19:00:47 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit e1ea31f4e358da55bbd0c02ca36f5048532a62bf[m
+Author: bayerane <bayerane89@hotmail.fr>
+Date:   Fri Feb 9 19:00:19 2024 +0000
+
+    add post handler
+
+[33mcommit 745e69c14ce43535c52e57328a0c257966a1a673[m
+Merge: e26e447 2cbc304
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 18:21:10 2024 +0000
+
+    update
+
+[33mcommit e26e44767cec57424c14a1461af66c76741c7ccf[m
+Merge: fe1a179 a8ab0e6
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 18:00:33 2024 +0000
+
+    updateProfile
+
+[33mcommit 2cbc3042364751467416cfcf1f5d776c5b0e1f7c[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 17:58:51 2024 +0000
+
+    update
+
+[33mcommit fe1a17918bb7435c40ac20b193cafa61c51dd5c9[m
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 17:45:54 2024 +0000
+
+    updateProfile
+
+[33mcommit a8ab0e64bf8bdfbda2e56e506d2afef72243b653[m
+Merge: 3a8f41a 8a9e1e7
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 17:44:19 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 3a8f41a29056a73fb535e9231e94a6dd1aafb79d[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 17:43:39 2024 +0000
+
+    update
+
+[33mcommit 8a9e1e7f331889bcfa9ef03e5dfee05383eeee17[m
+Merge: 2e935c7 4be9ac3
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 17:40:58 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 2e935c75d6cd672dd70bb281607c127378c31b52[m
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 17:40:45 2024 +0000
+
+    updateProfile
+
+[33mcommit 4be9ac3dd30adc33b99371d10efe106d87f5637a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 17:08:42 2024 +0000
+
+    update
+
+[33mcommit 7a53d635d89193db909e50a795464daa737e4fd2[m
+Merge: 8090d7f 721f61e
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 16:36:20 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 8090d7f36ddc5ac375fb7cfbd734883ce27f2cfb[m
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 16:36:01 2024 +0000
+
+    updateProfile
+
+[33mcommit 721f61e8e38ceac0f3216fcee7f8de9522cc1fab[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 16:35:14 2024 +0000
+
+    update
+
+[33mcommit 666183c070c730d95b08c0601dcbe6fdeeaf440e[m
+Merge: 0191f04 6652587
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 16:29:14 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 0191f04076b53dad9cae7235bcab98f6fe561d69[m
+Merge: 9f4fcd9 89d81f0
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 16:29:01 2024 +0000
+
+    updateProfile
+
+[33mcommit 66525877bcde8b5951e8d457593ad8b52d96a889[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 16:28:05 2024 +0000
+
+    update
+
+[33mcommit 9f4fcd989e19def756b9a7e5f278f91c505dd68d[m
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 16:19:34 2024 +0000
+
+    updateProfile
+
+[33mcommit 89d81f0ccff6c37b93b311e713a148abea36f13d[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 16:12:35 2024 +0000
+
+    mise à jour de update profil
+
+[33mcommit 251bfa07aeb605a4f2debc0294801c0165a6fa24[m
+Merge: 7c848f7 08d0668
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 13:53:19 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 7c848f7392c31a3b700cddc394d3c56282cc0332[m
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 13:53:04 2024 +0000
+
+    update
+
+[33mcommit 08d0668024876109f8e589432e0026c5587c0975[m
+Merge: 15cb611 8944d0a
+Author: bayerane <bayerane89@hotmail.fr>
+Date:   Fri Feb 9 13:32:15 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 15cb61157cec8a72f60ea954638fc1ff8d63e34d[m
+Author: bayerane <bayerane89@hotmail.fr>
+Date:   Fri Feb 9 13:31:11 2024 +0000
+
+    add post model
+
+[33mcommit 7ad8f9c02cf9143aed958315770de50341ddb4ba[m
+Merge: 4a1803e 8944d0a
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 12:58:29 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 4a1803ed98466ce19738f295f33e02075c6d7d67[m
+Merge: ec35ab9 c302ac9
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 12:58:12 2024 +0000
+
+    update
+
+[33mcommit 8944d0a8222e8f3e6e39e2d864f896a703426e6a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 12:57:13 2024 +0000
+
+    update
+
+[33mcommit ec35ab9348fad731f52a23cbf712ee61b3adfbd1[m
+Merge: 77d3b37 3d5de41
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 12:43:36 2024 +0000
+
+    update
+
+[33mcommit c302ac9fd6fc415789a3b6c96cfe8f1a249f311a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 12:32:00 2024 +0000
+
+    handle image for profil and update profil
+
+[33mcommit e56914a4e781ec45a45164428a83285e0a1f7321[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 12:31:56 2024 +0000
+
+    handle image for profil and update profil
+
+[33mcommit 77d3b37fc8de914db28310711c304ec1574e238e[m
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 11:35:36 2024 +0000
+
+    update
+
+[33mcommit 3d5de414c5009183f42c245574549624b3e9d8fb[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 11:34:03 2024 +0000
+
+    update
+
+[33mcommit fa9b120dd5fd13b49eb34c95f4b91b95d13035fc[m
+Merge: c727430 292788a
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 11:31:12 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit c7274304bae8db15ce6d7e0ec45b7f2ac2734241[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 9 11:30:36 2024 +0000
+
+    adding update profil handler for updating the user informations
+
+[33mcommit 292788aa4f492434794c10d0c7a628b8fc2616bc[m
+Author: ssambadi <you@example.com>
+Date:   Fri Feb 9 11:28:57 2024 +0000
+
+    update
+
+[33mcommit 6be4990ee53c1559dd73253da8f8ca96e241e5bb[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 8 17:25:14 2024 +0000
+
+    beginning the update user
+
+[33mcommit 3ad74077bd2fb0e6b7a2894e2455b19f9160b573[m
+Merge: 9319d17 f8a4b58
+Author: ssambadi <you@example.com>
+Date:   Thu Feb 8 17:07:26 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit 9319d172fb11225321d414f623835f434aa9d4b4[m
+Author: ssambadi <you@example.com>
+Date:   Thu Feb 8 17:07:07 2024 +0000
+
+    logout
+
+[33mcommit f8a4b580091da202f948efd170248aa0dae54ddc[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 8 16:09:16 2024 +0000
+
+    adding the handler profil for the user
+
+[33mcommit df184108da96824bfab272b6443739b61e587a40[m
+Merge: 22ab1a9 732d5c6
+Author: ssambadi <you@example.com>
+Date:   Thu Feb 8 13:55:16 2024 +0000
+
+    logout
+
+[33mcommit 22ab1a9144cbf404a2aa98d18c72b23ff0ed362a[m
+Merge: 6f00444 3aef48f
+Author: ssambadi <you@example.com>
+Date:   Thu Feb 8 12:44:11 2024 +0000
+
+    update
+
+[33mcommit 732d5c6b4c8d9d7367ea6ced74496d8219045819[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 8 12:43:49 2024 +0000
+
+    update
+
+[33mcommit a7e9cf922dd2e45030d4cc395d3fcc1c0cb9234a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 8 12:37:08 2024 +0000
+
+    adding logOut handler
+
+[33mcommit 6f00444ab12b0adeafc19ce45a2ad10db01b184d[m
+Author: ssambadi <you@example.com>
+Date:   Thu Feb 8 12:15:02 2024 +0000
+
+    update
+
+[33mcommit 3aef48ff75325651b2de37f607ff2aedb5c0f514[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 8 11:31:15 2024 +0000
+
+    adding the endpoint for verifying the session and update it
+
+[33mcommit b0eeed9f1a477d60634538cfe8fe1b5ee8bb36f3[m
+Author: ssambadi <you@example.com>
+Date:   Wed Feb 7 16:35:34 2024 +0000
+
+    authentification done
+
+[33mcommit 71269ba2910389f928ab37ba392d5125c79f85d5[m
+Author: ssambadi <you@example.com>
+Date:   Wed Feb 7 14:11:28 2024 +0000
+
+    authentification done
+
+[33mcommit d8d87bb60c0837564a31830181a036612d1bbe7d[m
+Author: ssambadi <you@example.com>
+Date:   Tue Feb 6 16:43:12 2024 +0000
+
+    create components
+
+[33mcommit 9bb95c1ddbec9fa7af5f82d281d7e2e19973748a[m
+Author: ssambadi <you@example.com>
+Date:   Tue Feb 6 14:12:12 2024 +0000
+
+    create components
+
+[33mcommit 365c132e99fbc90afc09c6db5e5eac5a8a989713[m
+Merge: fd92a9b 7a6f58c
+Author: ssambadi <you@example.com>
+Date:   Tue Feb 6 13:37:03 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit fd92a9b57e60a4a52bc619e2dc55ffa2921e276e[m
+Author: ssambadi <you@example.com>
+Date:   Tue Feb 6 13:35:59 2024 +0000
+
+    create components
+
+[33mcommit 7a6f58c685bd83eef7c33e262543ad61ad4c7768[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Feb 6 13:00:17 2024 +0000
+
+    handling where the user add an image while he/she register
+
+[33mcommit b767cc9ccbd8885ed74db4fe3f3ec5ce04222c7b[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Feb 6 12:57:52 2024 +0000
+
+    handling where the user add an image while he/she register
+
+[33mcommit 5c1d20934d8937d582a8a983372538035e7dfbc0[m
+Merge: c60bff2 f6c7ca4
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Mon Feb 5 19:04:13 2024 +0000
+
+    Merge branch 'master' of https://learn.zone01dakar.sn/git/osamb/social-network
+
+[33mcommit c60bff260e5ec1015d94b26802e2a7e9ab4b770a[m
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Mon Feb 5 19:02:49 2024 +0000
+
+    update
+
+[33mcommit f6c7ca4ecc76dface66e6e2b6884524135da933a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Feb 5 15:35:56 2024 +0000
+
+    update
+
+[33mcommit 376330503e9a5a8e53de4d2b4c09452c376013b1[m
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Sat Feb 3 21:36:11 2024 +0000
+
+    updates
+
+[33mcommit 0c0bd0e599d29863cdc4fee05fd3973e8848a1bc[m
+Author: ssambadi <sambadiop161@gmail.com>
+Date:   Sat Feb 3 12:07:13 2024 +0000
+
+    first commit
+
+[33mcommit 8629f3fe926685bf6869bae45b6cfa28c084b4dc[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 15:45:15 2024 +0000
+
+    update
+
+[33mcommit ff032ad08ca59554b01e6fece211426415f101f6[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 15:15:56 2024 +0000
+
+    update
+
+[33mcommit 66e8c14c21c10ab4d8bdbd2c87df5fe5295dcc9f[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 13:21:08 2024 +0000
+
+    update
+
+[33mcommit 181c79a95015fc06cd69997fb8321fe55e22a150[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 12:54:52 2024 +0000
+
+    beggining the login endpoint
+
+[33mcommit edb04e42063ddac7736a092b86ce3b0deee7b5d8[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 11:51:57 2024 +0000
+
+    update
+
+[33mcommit 3c574e0ccc67cb386845cc18e6b188aceb45f39a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 11:43:08 2024 +0000
+
+    some funny comment in registration checking while the guy try to get birth in the future
+
+[33mcommit 9b19c8127ad9cf2957a9a181f581bfc719aac516[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 11:35:00 2024 +0000
+
+    update
+
+[33mcommit d87b1818ec31e6ebbae9e6066cccef8cc62e241a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 11:27:39 2024 +0000
+
+    now registration checking format is done
+
+[33mcommit 8aa585fc30f27ea135be25945b3fda545d5b0d63[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Feb 2 09:04:33 2024 +0000
+
+    answer to todo file
+
+[33mcommit 7bbe291799ef9c6e773be5b6afc840c6f0e9d492[m
+Author: mouhametadiouf <diegargonefaye@gmail.com>
+Date:   Thu Feb 1 18:22:26 2024 +0000
+
+    add some tables
+
+[33mcommit db6b0e32c9744efa3d799f48395bca04eaf3eac5[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 1 16:08:51 2024 +0000
+
+    register module is going at the way that we want it
+
+[33mcommit 1c195b6472200fae45b86d8748fc4cb49ac2f9bb[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 1 13:41:17 2024 +0000
+
+    now register is done
+
+[33mcommit f9eaf039b7261088c1e4b8e0c1b7f3f53dffedd0[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 1 13:21:55 2024 +0000
+
+    trying to handle registration of the user
+
+[33mcommit e48a12d4331c30fc84b1a815359a8f2daa5f9761[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Thu Feb 1 11:51:12 2024 +0000
+
+    architecture that look good
+
+[33mcommit 1f2a02815d973bb81e6890bf3ed2ea57b35004ca[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Jan 30 17:49:18 2024 +0000
+
+    update
+
+[33mcommit b0f77e5f6bdd8ffb16a49bdf5560efb09497e672[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Jan 30 17:48:09 2024 +0000
+
+    update
+
+[33mcommit 363404d662698d32937b159883f80af575bbd157[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Jan 30 15:27:52 2024 +0000
+
+    update
+
+[33mcommit e5906f3e37af5643c8b6d8d4f4c708fd5dd407fa[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Jan 30 13:39:32 2024 +0000
+
+    update
+
+[33mcommit 9f863a41b0b40da115640d90813817eb59dca680[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Jan 30 11:55:35 2024 +0000
+
+    update
+
+[33mcommit ec6ce7041497271bf2137cae106c1d8f89f65095[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Jan 30 11:36:06 2024 +0000
+
+    update
+
+[33mcommit a445cacd24c1903fea63c0fc2768571d15f6ba6a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Tue Jan 30 11:26:56 2024 +0000
+
+    update
+
+[33mcommit a799ea4b6bc7cae5724befdc1e92c11f49e1fb33[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Jan 29 16:06:08 2024 +0000
+
+    update
+
+[33mcommit cecb1fdf2cdcc342428798ee374161a4581d3e2a[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Jan 29 13:13:42 2024 +0000
+
+    update
+
+[33mcommit fed0d01649aed2363fa5dad7459325633a3aeb99[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Jan 29 13:07:20 2024 +0000
+
+    update
+
+[33mcommit 8e16f58a391e2c8924f4957df89676b24a64926d[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Jan 29 12:56:51 2024 +0000
+
+    deleted
+
+[33mcommit b95e170fc156fe9842a7b39d27a762671cb225b1[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Mon Jan 29 12:51:01 2024 +0000
+
+    update
+
+[33mcommit 912bddfff609e6f525222dcc0516b1d24658492f[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Jan 26 12:38:11 2024 +0000
+
+    update
+
+[33mcommit 44b11f4e06cc7028beebdc4e0d7284d6d1080f2f[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Jan 26 12:15:31 2024 +0000
+
+    update
+
+[33mcommit 0a890c4437391d8a2c0efb01378dac48127ae9ff[m
+Author: osamb <omarsamb955@gmail.com>
+Date:   Fri Jan 26 12:12:16 2024 +0000
+
+    this is the first commit about migration test
