@@ -10,7 +10,7 @@ import (
 
 // CreateAlmostUser inserts a new models.Almost_Users record into the database.
 func CreateAlmostUser(db *sql.DB, almostUser *models.Almost_Users) error {
-	stmt, err := db.Prepare("INSERT INTO almost_users(post_id, user_id, authorize_user) VALUES(?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO almost_users(post_id, user_id, authorize_users) VALUES(?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func CreateAlmostUser(db *sql.DB, almostUser *models.Almost_Users) error {
 
 // ReadAlmostUser retrieves an models.Almost_Users record from the database by its ID.
 func ReadAlmostUser(db *sql.DB, postID string, userID string) (*models.Almost_Users, error) {
-	row := db.QueryRow("SELECT post_id, user_id, authorize_user FROM almost_users WHERE post_id = ? AND user_id = ?", postID, userID)
+	row := db.QueryRow("SELECT post_id, user_id, authorize_users FROM almost_users WHERE post_id = ? AND user_id = ?", postID, userID)
 
 	var authorizeUser string
 	almostUser := &models.Almost_Users{}
@@ -34,7 +34,7 @@ func ReadAlmostUser(db *sql.DB, postID string, userID string) (*models.Almost_Us
 	// Assuming authorize_user is stored as a JSON array in the database, parse it back into a slice of strings
 	err = json.Unmarshal([]byte(authorizeUser), &almostUser.Authorize_User)
 	if err != nil {
-		log.Printf("Error parsing authorize_user: %v", err)
+		log.Printf("Error parsing authorize_users: %v", err)
 		return nil, err
 	}
 
@@ -43,7 +43,7 @@ func ReadAlmostUser(db *sql.DB, postID string, userID string) (*models.Almost_Us
 
 // UpdateAlmostUser updates an existing models.Almost_Users record in the database.
 func UpdateAlmostUser(db *sql.DB, almostUser *models.Almost_Users) error {
-	stmt, err := db.Prepare("UPDATE almost_users SET authorize_user = ? WHERE post_id = ? AND user_id = ?")
+	stmt, err := db.Prepare("UPDATE almost_users SET authorize_users = ? WHERE post_id = ? AND user_id = ?")
 	if err != nil {
 		return err
 	}

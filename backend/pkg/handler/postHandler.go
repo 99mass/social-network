@@ -101,7 +101,6 @@ func PostHandler(db *sql.DB) http.HandlerFunc {
 					almost.Post_id = result.String()
 					almost.User_id = sess.UserID.String()
 					almost.Authorize_User = alm
-					//TODO : create almost user
 					err := controller.CreateAlmostUser(db, &almost)
 					if err != nil {
 						helper.SendResponse(w, models.ErrorResponse{

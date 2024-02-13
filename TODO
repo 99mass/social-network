@@ -7,3 +7,21 @@
 
 //Answer : let's choose the second one, cause I just change it on user's table
 
+// pour afficher les posts que dois voir un utilisateur nous aurons besoin d'une requete qui regroupera
+// les tables posts followers et almost users pour sortir les bonnes postes à montrer à l'utilisateur
+
+/*
+like this below :
+
+SELECT p.*
+FROM posts p
+LEFT JOIN followers f ON p.user_id = f.following_id AND f.follower_id = "userID of user who want to see the post"
+LEFT JOIN almost_users au ON p.id = au.post_id AND au.authorize_users = "userID of user who want to see the post"
+WHERE (
+    p.privacy = 'public' OR
+    (p.privacy = 'private' AND (f.follower_id IS NOT NULL OR f.following_id IS NOT NULL)) OR
+    (p.privacy = 'almost' AND au.user_id IS NOT NULL)
+);
+
+
+*/
