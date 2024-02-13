@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"backend/pkg/models"
 	"database/sql"
 	"errors"
-	"backend/pkg/models"
+	"fmt"
+	"log"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -25,71 +27,71 @@ func CreateUser(db *sql.DB, user models.User) (uuid.UUID, error) {
 	return newUUID, nil
 }
 
-func GetPassword(db *sql.DB,userID uuid.UUID)(string,error){
+func GetPassword(db *sql.DB, userID uuid.UUID) (string, error) {
 	query := `
 		SELECT password
 		FROM users
 		WHERE id = ?
 	`
 	var password string
-	err := db.QueryRow(query,userID.String()).Scan(&password)
-	if err !=nil{
-		return "",errors.New("unable to get the password for this user"+err.Error())
+	err := db.QueryRow(query, userID.String()).Scan(&password)
+	if err != nil {
+		return "", errors.New("unable to get the password for this user" + err.Error())
 	}
-	return password,nil
+	return password, nil
 }
 
-func GetUserByNickName(db *sql.DB,nickname string)(uuid.UUID,error){
+func GetUserByNickName(db *sql.DB, nickname string) (uuid.UUID, error) {
 	query := `
 		SELECT id
 		FROM users
 		WHERE nickname = ?
 	`
 	var id string
-	err := db.QueryRow(query,nickname).Scan(&id)
+	err := db.QueryRow(query, nickname).Scan(&id)
 	if err != nil {
-		return uuid.UUID{},errors.New("there's no user for this nickname")
+		return uuid.UUID{}, errors.New("there's no user for this nickname")
 	}
-	userID,err := uuid.FromString(id)
+	userID, err := uuid.FromString(id)
 	if err != nil {
-		return uuid.UUID{},errors.New("incorrect uuid from database")
+		return uuid.UUID{}, errors.New("incorrect uuid from database")
 	}
-	return userID,nil
+	return userID, nil
 }
 
-func GetUserByEmail(db *sql.DB,email string)(uuid.UUID,error){
+func GetUserByEmail(db *sql.DB, email string) (uuid.UUID, error) {
 	query := `
 		SELECT id
 		FROM users
 		WHERE email = ?
 	`
 	var id string
-	err := db.QueryRow(query,email).Scan(&id)
+	err := db.QueryRow(query, email).Scan(&id)
 	if err != nil {
-		return uuid.UUID{},errors.New("there's no user for this email")
+		return uuid.UUID{}, errors.New("there's no user for this email")
 	}
-	userID,err := uuid.FromString(id)
+	userID, err := uuid.FromString(id)
 	if err != nil {
-		return uuid.UUID{},errors.New("incorrect uuid from database")
+		return uuid.UUID{}, errors.New("incorrect uuid from database")
 	}
-	return userID,nil
+	return userID, nil
 }
 
 func GetUserByID(db *sql.DB, userID uuid.UUID) (models.User, error) {
-    var user models.User
-    query := `
+	var user models.User
+	query := `
         SELECT *
         FROM users
         WHERE id = ?
     `
-    err := db.QueryRow(query, userID).Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt)
-    if err != nil {
-        if err == sql.ErrNoRows {
-            return models.User{}, errors.New("no user found with the provided ID")
-        }
-        return models.User{}, err
-    }
-    return user, nil
+	err := db.QueryRow(query, userID).Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return models.User{}, errors.New("no user found with the provided ID")
+		}
+		return models.User{}, err
+	}
+	return user, nil
 }
 
 func IsDuplicateEmail(db *sql.DB, email string) (bool, error) {
@@ -131,21 +133,74 @@ func IsDuplicateNickname(db *sql.DB, nickname string) (bool, error) {
 }
 
 func UpdateUser(db *sql.DB, user models.User) error {
-    if user.Password == ""{
+	if user.Password == "" {
 		query := `
         UPDATE users
         SET email = ?, firstname = ?, lastname = ?, dateofbirth = ?, avatarpath = ?, nickname = ?, aboutme = ?, ispublic = ?
         WHERE id = ?;
     `
-    _, err := db.Exec(query, user.Email, user.FirstName, user.LastName, user.DateOfBirth, user.AvatarPath, user.Nickname, user.AboutMe, user.IsPublic, user.ID)
-    return err
+		_, err := db.Exec(query, user.Email, user.FirstName, user.LastName, user.DateOfBirth, user.AvatarPath, user.Nickname, user.AboutMe, user.IsPublic, user.ID)
+		return err
 	}
-	
+
 	query := `
         UPDATE users
         SET email = ?, password = ?, firstname = ?, lastname = ?, dateofbirth = ?, avatarpath = ?, nickname = ?, aboutme = ?, ispublic = ?
         WHERE id = ?;
     `
-    _, err := db.Exec(query, user.Email, user.Password, user.FirstName, user.LastName, user.DateOfBirth, user.AvatarPath, user.Nickname, user.AboutMe, user.IsPublic, user.ID)
-    return err
+	_, err := db.Exec(query, user.Email, user.Password, user.FirstName, user.LastName, user.DateOfBirth, user.AvatarPath, user.Nickname, user.AboutMe, user.IsPublic, user.ID)
+	return err
+}
+
+func GetMyFriends(db *sql.DB, userId uuid.UUID) ([]models.User, error) {
+	query := `
+		WITH Discussions AS (
+			SELECT sender_id, recipient_id
+			FROM private_messages
+			WHERE sender_id = $1 OR recipient_id = $1
+		),
+		DiscussionUsers AS (
+			SELECT DISTINCT CASE WHEN sender_id = $1 THEN recipient_id ELSE sender_id END AS user_id
+			FROM Discussions
+		)
+		SELECT u.*, MAX(u.created_at) as last_message_timestamp
+		FROM users u
+		JOIN followers f ON u.id = f.following_id AND f.follower_id = $1
+		LEFT JOIN Discussions pm ON u.id = pm.sender_id OR u.id = pm.recipient_id
+		GROUP BY u.id
+		HAVING u.id IN (SELECT user_id FROM DiscussionUsers)
+
+		UNION ALL
+
+		SELECT u.*, NULL as last_message_timestamp
+		FROM users u
+		JOIN followers f ON u.id = f.following_id AND f.follower_id = $1
+		LEFT JOIN Discussions pm ON u.id = pm.sender_id OR u.id = pm.recipient_id
+		WHERE u.id NOT IN (SELECT user_id FROM DiscussionUsers)
+
+		ORDER BY last_message_timestamp DESC, u.nickname ASC;
+	`
+	rows, err := db.Query(query, userId.String())
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %w", err)
+	}
+	defer rows.Close()
+
+	var users []models.User
+	for rows.Next() {
+		var user models.User
+		var lastMessageTimestamp sql.NullTime
+		err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt, &lastMessageTimestamp)
+		if err != nil {
+			log.Println("Error scanning row:", err)
+			continue
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating over rows: %w", err)
+	}
+
+	return users, nil
 }
