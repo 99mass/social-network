@@ -41,7 +41,6 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 				log.Println("we got an issue : ",err.Error())
 				return
 			}
-			log.Println("post to see :\n",post)
 			helper.SendResponse(w,post,http.StatusOK)
 		default:
 			helper.SendResponse(w, models.ErrorResponse{

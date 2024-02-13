@@ -9,3 +9,4 @@ type Post struct {
 	Privacy   string `db:"privacy" json:"privacy"`
 	CreatedAt string `db:"created_at" json:"created_at"`
 }
+
