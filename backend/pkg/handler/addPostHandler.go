@@ -22,7 +22,7 @@ type PostRequest struct {
 	Authorize_User []string `json:"authorize_user"`
 }
 
-func PostHandler(db *sql.DB) http.HandlerFunc {
+func AddPostHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:

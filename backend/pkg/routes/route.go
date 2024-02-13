@@ -16,7 +16,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/profil", helper.Middleware(handler.ProfilHandler(db)))
 	http.HandleFunc("/user", helper.Middleware(handler.ConnectedUser(db)))
 	http.HandleFunc("/update_profil", helper.Middleware(handler.UpdateProfil(db)))
-	http.HandleFunc("/addpost", helper.Middleware(handler.PostHandler(db)))
+	http.HandleFunc("/addpost", helper.Middleware(handler.AddPostHandler(db)))
 	http.HandleFunc("/followuser", helper.Middleware(handler.FollowUser(db)))
 
 }
