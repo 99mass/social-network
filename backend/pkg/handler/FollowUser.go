@@ -2,6 +2,7 @@ package handler
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 
 	"backend/pkg/controller"
@@ -16,22 +17,41 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 		if err != nil {
 			return
 		}
-
 		// check user id format
 		userid, err := utils.TextToUUID(r.URL.Query().Get("userid"))
 		if err != nil {
 			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 			return
 		}
-		// Appelez la fonction de contrôleur pour suivre l'utilisateur
-		err = controller.FollowUser(db, sess.UserID, userid)
-		if err != nil {
-			helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
-			return
-		}
+		switch r.Method {
+		case http.MethodPost:
+			// Appelez la fonction de contrôleur pour suivre l'utilisateur
+			err = controller.FollowUser(db, sess.UserID.String(), userid.String())
+			if err != nil {
+				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
+				return
+			}
+			helper.SendResponse(w, nil, http.StatusOK)
+		case http.MethodPut:
+			// Appelez la fonction de contrôleur pour suivre l'utilisateur
+			err = controller.AccepRequestFollow(db, userid.String(), sess.UserID.String())
+			if err != nil {
+				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
+				return
+			}
+			helper.SendResponse(w, nil, http.StatusOK)
+		case http.MethodDelete:
+			// Appelez la fonction de contrôleur pour supprimer le follow
+			err = controller.Decline(db, userid.String(), sess.UserID.String())
+			if err != nil {
+				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
+				return
+			}
+			helper.SendResponse(w, nil, http.StatusOK)
 
-		// Répondez avec succès
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status": "success"}`))
+		default:
+			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
+			log.Println("method not allowed")
+		}
 	}
 }

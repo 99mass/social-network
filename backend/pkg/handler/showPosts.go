@@ -41,15 +41,18 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 				log.Println("we got an issue : ", err.Error())
 				return
 			}
-			for _, p := range post {
+			for i, p := range post {
 				if p.ImagePath != "" {
-					p.ImagePath, err = helper.EncodeImageToBase64("./pkg/static/postImage/" + p.ImagePath)
+					img, err := helper.EncodeImageToBase64("./pkg/static/postImage/" + p.ImagePath)
 					if err != nil {
 						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
 						return
 					}
+					post[i].ImagePath = img
 				}
+				log.Println(p.ImagePath)
 			}
+
 			helper.SendResponse(w, post, http.StatusOK)
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
