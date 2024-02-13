@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styles from '../../styles/modules/emoji.module.css'
 
 
-export default function EmojiForm({ setSelectedEmoji }) {
+export default function EmojiForm({toggleEmojicon, setSelectedEmoji }) {
 
     const [emojiData, setEmojiData] = useState(null)
     const [searchTerm, setSearchTerm] = useState('');
@@ -58,6 +58,7 @@ export default function EmojiForm({ setSelectedEmoji }) {
                         value={searchTerm}
                         onChange={handleSearchChange}
                     />
+                    <i class="fa-solid fa-xmark" onClick={toggleEmojicon}></i>
                 </div>
                 <div className={styles.listes}>
                     {

@@ -120,7 +120,7 @@ export default function Post({ PostForm }) {
               😄
             </span>
             {/* emoji form */}
-            {emoji && <EmojiForm setSelectedEmoji={setSelectedEmoji} />}
+            {emoji && <EmojiForm toggleEmojicon={toggleEmojicon} setSelectedEmoji={setSelectedEmoji}  />}
           </div>
         </div>
         <button type="submit" className={styles.btnPost}>
