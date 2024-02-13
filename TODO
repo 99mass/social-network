@@ -13,22 +13,56 @@
 	Action 
 	v-	Register
 	v-	Signin
-	x	creat post -> Comment, like
+	v-  Update user infos
 	v-	follow a user
+	x	creat post -> Comment, like
 	x	accept a follow request (if the profile is private)
 	x	decline a follow request
 	x	unfollow a user
+	x   delete a follower
 
 	x	Create a group
-	x	send invitation to other user join a group where hi is a memeber
+	x	send invitation to other users to join a group where hi is a memeber
 	x	Accept invitation to join a group
 	x	Decline invitaion to join a group
 	x	Send a Request to join a group (only the creator of a groupe can accepte un invitation)
+	
 	x	create event in a group
 	x	make an event available
+	x   choose to go or not go to an event
 
 		Send Private message (to following or followers users)
 
+		
+Avoid heavy picture on create post, user, and send message.
+
+Query For Display
+	user
+		Get all following and followers users (Ordered as real time forum)
+		Get all following users
+		Get all followers users
+		Get all users of a group (doesn't need order)
+		Get all users that send a request to follow a user
+		Get the last following request
+	Post
+		Get all posts done by a user
+		get all posts a user can see
+		gel all posts created in a group
+	Group
+		Get all groups
+		Get all groups a user has joined
+		Get all groups managed by a user
+		get all groups that the user is not a member
+	Events
+		Get all events of a groups
+	Notification
+		Get all notifications 
+	Messages
+		Get 10 first messages between two users
+		Get 10 first messages of a groups
+		Load 10 more messages of a group
+		Load 10 more messages between two users
+	
 
 
 
