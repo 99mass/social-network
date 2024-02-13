@@ -33,9 +33,9 @@ WHERE (
 	v-	Signin
 	v-  Update user infos
 	v-	follow a user
-	x	creat post -> Comment, like
+	v-	creat post -> Comment, like
 	x	accept a follow request (if the profile is private)
-	x	decline a follow request
+	v-	decline a follow request
 	x	unfollow a user
 	x   delete a follower
 
