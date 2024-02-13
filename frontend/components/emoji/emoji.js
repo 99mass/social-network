@@ -58,7 +58,7 @@ export default function EmojiForm({toggleEmojicon, setSelectedEmoji }) {
                         value={searchTerm}
                         onChange={handleSearchChange}
                     />
-                    <i class="fa-solid fa-xmark" onClick={toggleEmojicon}></i>
+                    <i className="fa-solid fa-xmark" onClick={toggleEmojicon}></i>
                 </div>
                 <div className={styles.listes}>
                     {

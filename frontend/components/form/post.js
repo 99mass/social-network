@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import styles from "../../styles/modules/CreatePost.module.css";
 import EmojiForm from "../emoji/emoji";
 import { errorNotification } from "../../utils/sweeAlert";
-import { AddPostUser } from "../../handler/sendUser";
+import { AddPostUser } from "../../handler/sendPostUser";
 import { EncodeImage } from "../../utils/encodeImage";
 
 export default function Post({ PostForm }) {
@@ -210,7 +210,7 @@ export function ListFriend() {
         "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
     },
     {
-      id: 2,
+      id: "253c1c84-231d-4653-a40e-93220938f571",
       name: "michel doe",
       image:
         "https://media.istockphoto.com/id/1413765605/fr/photo/portrait-dune-femme-daffaires-afro-am%C3%A9ricaine-prosp%C3%A8re.webp?b=1&s=170667a&w=0&k=20&c=T8Aiogu4Y9EnlE3sNKP_L6H5sHrYv4ttFMfzNgcUmwI=",

@@ -10,7 +10,7 @@
   background-color: var(--secondary-bg);
 }
 
-.section-comment .middle .profile {
+.section-comment .middle .profileuser {
   width: 100%;
   padding: 10px 0px;
   border-top: solid 0.01rem #515151;
@@ -19,8 +19,8 @@
   justify-content: space-between;
 }
 
-.section-comment .middle .profile .left-side,
-.section-comment .middle .profile .right-side {
+.section-comment .middle .profileuser .left-side,
+.section-comment .middle .profileuser .right-side {
   display: flex;
   justify-content: flex-start;
   align-items: center;

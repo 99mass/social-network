@@ -52,3 +52,50 @@ func UpdatePost(db *sql.DB, post models.Post) error {
 	_, err := db.Exec(query, post.UserID, post.GroupID, post.Content, post.ImagePath, post.Privacy, post.CreatedAt, post.ID)
 	return err
 }
+
+func PostToShow(db *sql.DB, userID string) ([]models.Post, error) {
+    // Define the SQL query
+    query := `
+        SELECT p.*
+        FROM posts p
+        LEFT JOIN followers f ON p.user_id = f.following_id AND f.follower_id = ?
+        LEFT JOIN almost_users au ON p.id = au.post_id AND au.authorize_users = ?
+        WHERE (
+            p.privacy = 'public' OR
+            (p.privacy = 'private' AND (f.follower_id IS NOT NULL OR f.following_id IS NOT NULL)) OR
+            (p.privacy = 'almost' AND au.user_id IS NOT NULL)
+        );
+    `
+
+    // Prepare the statement
+    stmt, err := db.Prepare(query)
+    if err != nil {
+        return nil, err
+    }
+    defer stmt.Close()
+
+    // Execute the query with the userID parameter
+    rows, err := stmt.Query(userID, userID)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    // Scan the results into a slice of models.Post
+    var posts []models.Post
+    for rows.Next() {
+        var post models.Post
+        err := rows.Scan(&post.ID, &post.UserID, &post.GroupID, &post.Content, &post.ImagePath, &post.Privacy, &post.CreatedAt)
+        if err != nil {
+            return nil, err
+        }
+        posts = append(posts, post)
+    }
+
+    // Check for any errors that occurred during iteration
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return posts, nil
+}

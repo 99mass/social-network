@@ -132,12 +132,12 @@ export function NavMenuGroup({ section, handleSection }) {
       >
         <i className="fa-solid fa-comment"></i>chat
       </button>
-      <button
+      {/* <button
         onClick={() => handleClick("section5")}
         className={section.section5 ? styles.activeBtn : ""}
       >
         <i className="fa-solid fa-gear"></i>Settings
-      </button>
+      </button> */}
     </div>
   );
 }
