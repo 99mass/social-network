@@ -18,7 +18,7 @@ export default function MidlleBloc() {
     return (
         <div className="menu-middle">
             {posts && posts.map((item) => (
-                <div className="post" key={item.user_id}>
+                <div className="post" key={item.id}>
                     <PostHeader
                         iduser={item.user_id}
                         user={"breukh"}

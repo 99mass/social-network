@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type RegisterRequest struct {
@@ -36,6 +37,8 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+
+			registerReq.Nickname = strings.TrimSpace(registerReq.Nickname)
 
 			checkRegister, err := utils.CheckRegisterFormat(registerReq.FirstName, registerReq.LastName, registerReq.Nickname, registerReq.Email, registerReq.Password, registerReq.ConfirmPassword, registerReq.DateOfBirth, db)
 
