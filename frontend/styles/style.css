@@ -74,13 +74,11 @@
 
 .post-content-text pre {
   width: 100%;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
   overflow: hidden;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: pre-wrap;
+  cursor: pointer;
 }
 
 .post-content {

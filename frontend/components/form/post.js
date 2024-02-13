@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import styles from "../../styles/modules/CreatePost.module.css";
 import EmojiForm from "../emoji/emoji";
 import { errorNotification } from "../../utils/sweeAlert";
-import { AddPostUser } from "../../handler/sendUser";
+import { AddPostUser } from "../../handler/sendPostUser";
 import { EncodeImage } from "../../utils/encodeImage";
 
 export default function Post({ PostForm }) {
@@ -120,7 +120,7 @@ export default function Post({ PostForm }) {
               😄
             </span>
             {/* emoji form */}
-            {emoji && <EmojiForm setSelectedEmoji={setSelectedEmoji} />}
+            {emoji && <EmojiForm toggleEmojicon={toggleEmojicon} setSelectedEmoji={setSelectedEmoji}  />}
           </div>
         </div>
         <button type="submit" className={styles.btnPost}>
