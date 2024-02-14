@@ -24,4 +24,6 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/users_follows", helper.Middleware(handler.GetUsersHandler(db)))
 	http.HandleFunc("/show_posts", helper.Middleware(handler.ShowPosts(db)))
 	http.HandleFunc("/userPosts", helper.Middleware(handler.UserPosts(db)))
+	http.HandleFunc("/requestfollow", helper.Middleware(handler.RequestFollowsHandler(db)))
+
 }
