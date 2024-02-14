@@ -20,9 +20,5 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/addpost", helper.Middleware(handler.AddPostHandler(db)))
 	http.HandleFunc("/followuser", helper.Middleware(handler.FollowUser(db)))
 	http.HandleFunc("/show_posts", helper.Middleware(handler.ShowPosts(db)))
-<<<<<<< HEAD
-=======
-
->>>>>>> 4635ed15e08d43468aceb136ecb342292c0d32f9
+	http.HandleFunc("/userPosts", helper.Middleware(handler.UserPosts(db)))
 }
-
