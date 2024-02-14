@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 )
 
 type Follow struct {
@@ -15,8 +16,8 @@ type Follow struct {
 }
 
 func FollowUser(db *sql.DB, followerID string, followingID string) error {
-	query := `INSERT INTO followers (follower_id, following_id, status) VALUES (?, ?, ?)`
-	_, err := db.Exec(query, followerID, followingID, "waiting")
+	query := `INSERT INTO followers (follower_id, following_id, status, created_at) VALUES (?, ?, ?, ?)`
+	_, err := db.Exec(query, followerID, followingID, "waiting", time.Now())
 	if err != nil {
 		log.Println("Error inserting")
 		return fmt.Errorf("failed to follow user: %w", err)
@@ -28,7 +29,7 @@ func AccepRequestFollow(db *sql.DB, followerID string, followingID string) error
 	// Préparez la requête SQL pour mettre à jour la colonne status en 'accepted'
 	query := `
 		UPDATE followers
-		SET status = 'accepted'
+		SET status = 'accepted', created_at = NOW()
 		WHERE follower_id = ? AND following_id = ? AND status = "waiting"
 	`
 
@@ -101,4 +102,40 @@ func GetFollowInfos(db *sql.DB, user string) ([]Follow, error) {
 	}
 
 	return followerList, nil
+}
+
+func GetOldestPendingFollowRequest(db *sql.DB, user string) (Follow, error) {
+	query := `
+		SELECT 
+			f.follower_id,
+			f.following_id,
+			f.created_at,
+			u.firstname,
+			u.avatarpath
+		FROM 
+			followers f
+		INNER JOIN 
+			users u ON f.follower_id = u.id
+		WHERE 
+			f.following_id = $1
+			AND f.status = 'waiting'
+		ORDER BY 
+			f.created_at ASC
+		LIMIT 1
+	`
+
+	var follower Follow
+	err := db.QueryRow(query, user).Scan(
+		&follower.FollowerID,
+		&follower.FollowingID,
+		&follower.CreatedAt,
+		&follower.UserAvatarPath,
+		&follower.UserFirstName,
+	)
+
+	if err != nil {
+		return Follow{}, err
+	}
+
+	return follower, nil
 }

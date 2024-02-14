@@ -72,6 +72,7 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 
 			followers, err := controller.GetFollowInfos(db, sess.UserID.String())
 			if err != nil {
+				log.Println("error getfollowers info", err)
 				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
 				return
 			}
