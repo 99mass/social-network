@@ -70,6 +70,15 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
 				return
 			}
+			for i, follower := range followers {
+				if follower.AvatarPath != "" {
+					followers[i].AvatarPath,err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.AvatarPath)
+					if err != nil {
+						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
+						return
+					}
+				}
+			}
 			helper.SendResponse(w, followers, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
