@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"backend/pkg/models"
 	"database/sql"
 	"fmt"
 )
@@ -32,8 +33,8 @@ func AccepRequestFollow(db *sql.DB, followerID string, followingID string) error
 }
 
 func Decline(db *sql.DB, followerID string, followingID string) error {
-		// Préparez la requête SQL pour supprimer la relation de suivi
-		query := `
+	// Préparez la requête SQL pour supprimer la relation de suivi
+	query := `
 		DELETE FROM followers
 		WHERE follower_id = ? AND following_id = ?;
 	`
@@ -44,4 +45,37 @@ func Decline(db *sql.DB, followerID string, followingID string) error {
 	}
 
 	return nil
+}
+
+func GetRequestFollower(db *sql.DB, user string) ([]models.User, error) {
+	var users []models.User
+
+	// Requête SQL pour obtenir les demandes de suivi reçues par l'utilisateur
+	query := `
+		SELECT u.*
+		FROM users u
+		JOIN followers f ON u.id = f.follower_id
+		WHERE f.following_id = ? AND f.status = 'waiting';
+	`
+
+	rows, err := db.Query(query, user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query follow requests: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var user models.User
+		err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan row into User model: %w", err)
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during rows iteration: %w", err)
+	}
+
+	return users, nil
 }

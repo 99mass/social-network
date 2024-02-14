@@ -1,12 +1,15 @@
 package utils
 
 import (
-	"backend/pkg/helper"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"strings"
+	"time"
+
+	"backend/pkg/helper"
 )
 
 func ReadAndSaveImage(base64img, directory string) (string, error) {
@@ -26,7 +29,9 @@ func ReadAndSaveImage(base64img, directory string) (string, error) {
 		if imgSize > 20 {
 			return "", errors.New("the size of image is bigger than 20ko")
 		}
-		name := helper.NewNameForImage()
+
+		uniqueID := time.Now().Format("20060102150405")
+		name := helper.NewNameForImage() + "_" + uniqueID
 		if mimeType == "image/jpeg" {
 			base64img = name + ".jpeg"
 		}
@@ -53,7 +58,7 @@ func ReadAndSaveImage(base64img, directory string) (string, error) {
 	return base64img, nil
 }
 
-func ReadAndSaveImageForUpdate(base64img, directory string) (string, error) {
+func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (string, error) {
 
 	if base64img != "" {
 		mimeType := strings.Split(base64img, ";")[0]
@@ -71,7 +76,9 @@ func ReadAndSaveImageForUpdate(base64img, directory string) (string, error) {
 		if imgSize > 20 {
 			return "", errors.New("the size of image is bigger than 20ko")
 		}
-		name := helper.NewNameForImage()
+
+		uniqueID := time.Now().Format("20060102150405")
+		name := helper.NewNameForImage() + "_" + uniqueID
 		if mimeType == "image/jpeg" {
 			base64img = name + ".jpeg"
 		}
@@ -87,6 +94,16 @@ func ReadAndSaveImageForUpdate(base64img, directory string) (string, error) {
 			}
 		} else if err != nil {
 			return "", errors.New("we got an issue for avatar images")
+		}
+
+		// Supprimer l'ancienne image si elle existe
+		if oldImagePath != "" {
+			fmt.Println("older image: ", oldImagePath)
+			err = os.Remove(oldImagePath)
+			if err != nil {
+				log.Println("error removing the older avatar image: ", err.Error())
+				return "", errors.New("failed to remove avatar image")
+			}
 		}
 		err = os.WriteFile(directory+base64img, img, 0644)
 		if err != nil {
