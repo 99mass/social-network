@@ -22,7 +22,7 @@ export default function Posts_user({postsCreated,about}) {
                 ))
                 }
             </div>
-           {about && <div className={styles.bio}>{about} </div>}
+           {about && <div className={styles.bio}> {about} </div>}
            {!about && <div className={styles.notBio}> </div>}
         </div>
     )

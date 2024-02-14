@@ -3,6 +3,7 @@ import { getPostsUser } from "../../handler/getPostsUser";
 import { useEffect, useState } from "react";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { truncateText } from "../../utils/helper";
+import { askForFriends } from "../../handler/follower";
 
 export default function MidlleBloc() {
 
@@ -43,6 +44,11 @@ export default function MidlleBloc() {
 }
 
 export function PostHeader({ iduser, user, image, time }) {
+
+    const handlerFollower=()=>{
+        askForFriends(iduser);
+    }
+
     return (
         <div className="profileuser">
             <div className="left-side">
@@ -53,7 +59,7 @@ export function PostHeader({ iduser, user, image, time }) {
                         alt="" /></Link>
                 </div>
                 <span>
-                    <h3>{user} .<span className="follow" title="follow">Follow</span></h3>
+                    <h3>{user} .<span onClick={handlerFollower} className="follow" title="follow">Follow</span></h3>
                     <p>{time} <sup>.</sup> <i className="fas fa-globe-africa"></i></p>
                 </span>
 
