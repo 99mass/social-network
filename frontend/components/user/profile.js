@@ -40,13 +40,14 @@ export default function Profile_user() {
         edit={edit}
         viewfriend={viewfriend}
       />
-      {viewfriend && <Posts_user />}
+      {viewfriend && <Posts_user about={datas && datas.aboutme} />}
       {edit && (
         <Edit_Profile
           CloseEditForm={CloseEditForm}
           datas={datas}
           userid={userid}
           setDatas={setDatas}
+          
         />
       )}
       {!viewfriend && <Friends />}

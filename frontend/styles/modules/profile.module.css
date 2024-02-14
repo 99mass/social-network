@@ -99,6 +99,7 @@
   background: var(--secondary-bg);
 }
 
+
 @media screen and (min-width: 768px) {
   .photoCovert {
     width: 100%;
@@ -124,7 +125,10 @@
   .body1 {
     padding: 20px 20%;
   }
-
+  .bio,
+  .notBio{
+    width: 50%;
+  }
   .body1 .bodymenu {
     display: flex;
     flex-direction: column;
