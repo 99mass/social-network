@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/modules/Friend.module.css";
-import { getAskForFriendLists } from "../../handler/follower";
+import { confirmFriends, deleteAskingFriends, getAskForFriendLists } from "../../handler/follower";
 import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function MiddleBlocFriend() {
@@ -13,9 +13,11 @@ export default function MiddleBlocFriend() {
 
   const handlerConfirmFollow=(iduser)=>{
       console.log("iduser"+iduser);
+      confirmFriends(iduser,setDatas)
   }
   const handlerDeleteFollow=(iduser)=>{
     console.log("iduser"+iduser);
+    deleteAskingFriends(iduser,setDatas)
 }
 
   return (
@@ -26,7 +28,7 @@ export default function MiddleBlocFriend() {
         datas.map((item) => (
           <div className={styles.contentFriend} key={item.id}>
             <Link href={`./profileuser?userid=${item.id}`}>
-              <img src={item.avatarpath} alt="" />
+              <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />
             </Link>
             <div className={styles.detailsFriendRequest}>
               <div className={styles.friendName}>

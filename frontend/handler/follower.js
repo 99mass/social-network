@@ -20,6 +20,7 @@ export const getAskForFriendLists = async (setDatas) => {
     }
     const data = await response.json();
     setDatas(data);
+
   } catch (error) {
     console.error("Error fetching profile data:", error.message);
   }
@@ -50,8 +51,6 @@ export const askForFriends = async (userid) => {
     }
   }
 };
-
-
 
 
 export const confirmFriends = async (userid,setDatas) => {
