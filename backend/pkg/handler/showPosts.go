@@ -31,7 +31,7 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 				log.Println("we got an issue : ", err.Error())
 				return
 			}
-			for i, post := range posts {
+			for _, post := range posts {
 				var Post Post
 
 				//for each post
@@ -41,18 +41,21 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
 						return
 					}
-					posts[i].ImagePath = img
+					post.ImagePath = img
 				}
 				// Get the post creator
 				userid, _ := utils.TextToUUID(post.UserID)
 				user, _ := controller.GetUserByID(db, userid)
 				Post.Post = post
-				Post.User = user
-				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
-				if err != nil {
-					helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
-					return
+				log.Println("AvatarPath:", user.AvatarPath)
+				if user.AvatarPath != "" {
+					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+					if err != nil {
+						helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
+						return
+					}
 				}
+				Post.User = user
 				Posts = append(Posts, Post)
 			}
 
