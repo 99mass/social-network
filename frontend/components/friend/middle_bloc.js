@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/modules/Friend.module.css";
-import { confirmFriends, deleteAskingFriends, getAskForFriendLists } from "../../handler/follower";
+import {
+  confirmFriends,
+  deleteAskingFriends,
+  getAskForFriendLists,
+} from "../../handler/follower";
 import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function MiddleBlocFriend() {
@@ -11,14 +15,12 @@ export default function MiddleBlocFriend() {
     getAskForFriendLists(setDatas);
   }, [datas]);
 
-  const handlerConfirmFollow=(iduser)=>{
-      console.log("iduser"+iduser);
-      confirmFriends(iduser,setDatas)
-  }
-  const handlerDeleteFollow=(iduser)=>{
-    console.log("iduser"+iduser);
-    deleteAskingFriends(iduser,setDatas)
-}
+  const handlerConfirmFollow = (iduser) => {
+    confirmFriends(iduser, setDatas);
+  };
+  const handlerDeleteFollow = (iduser) => {
+    deleteAskingFriends(iduser, setDatas);
+  };
 
   return (
     <div className={styles.middleBloc}>
@@ -28,7 +30,8 @@ export default function MiddleBlocFriend() {
         datas.map((item) => (
           <div className={styles.contentFriend} key={item.id}>
             <Link href={`./profileuser?userid=${item.id}`}>
-              <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />
+              {item.avatarpath && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />}
+              {!item.avatarpath && <img src={"../images/default-image.svg"} alt="" />}
             </Link>
             <div className={styles.detailsFriendRequest}>
               <div className={styles.friendName}>
@@ -40,8 +43,12 @@ export default function MiddleBlocFriend() {
                 </span>
               </div>
               <div className={styles.validateRequest}>
-                <button onClick={()=>handlerConfirmFollow(item.id)}>confirm</button>
-                <button onClick={()=>handlerDeleteFollow(item.id)}>delete</button>
+                <button onClick={() => handlerConfirmFollow(item.id)}>
+                  confirm
+                </button>
+                <button onClick={() => handlerDeleteFollow(item.id)}>
+                  delete
+                </button>
               </div>
             </div>
           </div>

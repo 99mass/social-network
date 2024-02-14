@@ -10,45 +10,97 @@ export default function ChatGroup() {
   );
 }
 
-
 export function ChatContainer() {
-
   return (
     <div className={styles.containerChatGroup}>
       <ChatHeader />
       <hr />
       <ChatBody />
       <ChatFooter />
-
     </div>
-  )
+  );
 }
 
 export function ChatHeader() {
+  
   return (
     <div className={styles.chatHeader}>
       <h3>Démarches Visa depuis le Sénégal</h3>
       <i className="fa-regular fa-circle-xmark" title="Close chat"></i>
     </div>
-  )
+  );
 }
 
 export function ChatBody() {
+  const data = [
+    {
+      image: "../images/default-image.svg",
+      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      user: "jack",
+      time: "10m ago",
+    },
+    {
+      image: "../images/default-image.svg",
+      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      user: "paul",
+      time: "5m ago",
+    },
+    {
+      image: "../images/default-image.svg",
+      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      user: "breukh",
+      time: "2m ago",
+    },
+    {
+      image: "../images/default-image.svg",
+      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      user: "breukh",
+      time: "2m ago",
+    },
+    {
+      image: "../images/default-image.svg",
+      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      user: "breukh",
+      time: "2m ago",
+    },
+    {
+      image: "../images/default-image.svg",
+      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      user: "breukh",
+      time: "2m ago",
+    },
+    {
+      image: "../images/default-image.svg",
+      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      user: "breukh",
+      time: "2m ago",
+    },
+    {
+      image: "../images/default-image.svg",
+      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      user: "breukh",
+      time: "2m ago",
+    },
+  ];
   return (
     <div className={styles.chatBody}>
-      <div className={styles.contentMess}>
-        <img src="https://scontent.fdkr6-1.fna.fbcdn.net/v/t39.30808-6/313253877_10160642361074235_7947257140729249691_n.jpg?stp=dst-jpg_s960x960&_nc_cat=103&ccb=1-7&_nc_sid=173fa1&_nc_eui2=AeHS-pL8hG9404bzleqq3HoguhWiboypV-66FaJujKlX7opVFmohOdQkhqcVwsX1KuJG9AiyGlkJhL_Qb9wmvvRZ&_nc_ohc=WPoRNWoiJokAX-ItpOM&_nc_ht=scontent.fdkr6-1.fna&oh=00_AfDrTsxyee2eJb45CgnLSLC4BFb1UAoP8VuRRSf_mUjgBA&oe=65CA881A" alt="" />
-        <div>
-          <pre>Lorem ipsum dolor sit amet consectetur adipisicing elit.</pre>
-          <p><span>by jack</span>10m ago</p>
+      {data.map((item, index) => (
+        <div key={index} className={styles.contentMess}>
+          <img src={item.image} alt="" />
+          <div>
+            <pre>{item.content}</pre>
+            <p>
+              <span>by {item.user}</span>
+              {item.time}
+            </p>
+          </div>
         </div>
-      </div>
+      ))}
     </div>
-  )
+  );
 }
 
 export function ChatFooter() {
-
   return (
     <div className={styles.chatFooter}>
       <textarea
@@ -78,5 +130,5 @@ export function ChatFooter() {
         </svg>
       </button>
     </div>
-  )
+  );
 }

@@ -56,10 +56,7 @@ export function ContentCovertPhotoGroup({ section, handleSection }) {
 
   return (
     <div className={styles.photoCovert}>
-      <img
-        src="https://scontent.fdkr6-1.fna.fbcdn.net/v/t39.30808-6/313253877_10160642361074235_7947257140729249691_n.jpg?stp=dst-jpg_s960x960&_nc_cat=103&ccb=1-7&_nc_sid=173fa1&_nc_eui2=AeHS-pL8hG9404bzleqq3HoguhWiboypV-66FaJujKlX7opVFmohOdQkhqcVwsX1KuJG9AiyGlkJhL_Qb9wmvvRZ&_nc_ohc=WPoRNWoiJokAX-ItpOM&_nc_ht=scontent.fdkr6-1.fna&oh=00_AfDrTsxyee2eJb45CgnLSLC4BFb1UAoP8VuRRSf_mUjgBA&oe=65CA881A"
-        alt=""
-      />
+      <img src={"../images/groups-defaul.png"} alt="" />
       <h1>Démarches Visa depuis le Sénégal</h1>
       <div className={styles.blocActionGroupType}>
         <div className={styles.groupType}>
