@@ -26,6 +26,11 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodPost:
 			// Appelez la fonction de contrôleur pour suivre l'utilisateur
+			if sess.UserID.String() == userid.String() {
+				helper.SendResponseError(w, "error", "You can't follow yourself", http.StatusBadRequest)
+				log.Println("You can't follow yourself")
+				return
+			}
 			err = controller.FollowUser(db, sess.UserID.String(), userid.String())
 			if err != nil {
 				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
@@ -65,14 +70,14 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			followers, err := controller.GetRequestFollower(db, sess.UserID.String())
+			followers, err := controller.GetFollowInfos(db, sess.UserID.String())
 			if err != nil {
 				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
 				return
 			}
 			for i, follower := range followers {
-				if follower.AvatarPath != "" {
-					followers[i].AvatarPath,err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.AvatarPath)
+				if follower.UserAvatarPath != "" {
+					followers[i].UserAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
 					if err != nil {
 						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
 						return

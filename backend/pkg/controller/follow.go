@@ -1,15 +1,24 @@
 package controller
 
 import (
-	"backend/pkg/models"
 	"database/sql"
 	"fmt"
+	"log"
 )
+
+type Follow struct {
+	FollowerID     string `db:"follower_id" json:"follower_id"`
+	FollowingID    string `db:"following_id" json:"following_id"`
+	CreatedAt      string `db:"created_at" json:"created_at"`
+	UserFirstName  string `db:"firstname" json:"firstname"`
+	UserAvatarPath string `db:"avatarpath" json:"avatarpath"`
+}
 
 func FollowUser(db *sql.DB, followerID string, followingID string) error {
 	query := `INSERT INTO followers (follower_id, following_id, status) VALUES (?, ?, ?)`
 	_, err := db.Exec(query, followerID, followingID, "waiting")
 	if err != nil {
+		log.Println("Error inserting")
 		return fmt.Errorf("failed to follow user: %w", err)
 	}
 	return nil
@@ -20,15 +29,15 @@ func AccepRequestFollow(db *sql.DB, followerID string, followingID string) error
 	query := `
 		UPDATE followers
 		SET status = 'accepted'
-		WHERE follower_id = ? AND following_id = ?
+		WHERE follower_id = ? AND following_id = ? AND status = "waiting"
 	`
 
 	// Exécutez la requête avec le followerID comme paramètre
 	_, err := db.Exec(query, followerID, followingID)
 	if err != nil {
+		log.Println("Error accepting")
 		return fmt.Errorf("failed to accept follow request: %w", err)
 	}
-
 	return nil
 }
 
@@ -41,45 +50,55 @@ func Decline(db *sql.DB, followerID string, followingID string) error {
 	// Exécutez la requête avec les IDs de follower et follow comme paramètres
 	_, err := db.Exec(query, followerID, followingID)
 	if err != nil {
+		log.Println("Error Declining follower request", err.Error())
 		return fmt.Errorf("failed to unfollow user: %w", err)
 	}
 
 	return nil
 }
 
-func GetRequestFollower(db *sql.DB, user string) ([]models.User, error) {
-	var users []models.User
+// func GetFollowInfos(db *sql.DB, userid string) models.Follow{
 
-	// Requête SQL pour obtenir les demandes de suivi reçues par l'utilisateur
+// }
+
+func GetFollowInfos(db *sql.DB, user string) ([]Follow, error) {
 	query := `
-		SELECT u.*
-		FROM users u
-		JOIN followers f ON u.id = f.follower_id
-		WHERE f.following_id = ? AND f.status = 'waiting';
+		SELECT 
+			f.follower_id,
+			f.following_id,
+			f.created_at,
+			u.firstname,
+			u.avatarpath
+		FROM 
+			followers f
+		INNER JOIN 
+			users u ON f.follower_id = u.id
+		WHERE 
+			f.following_id = $1
+			AND f.status = 'waiting'
 	`
 
 	rows, err := db.Query(query, user)
 	if err != nil {
-		return nil, fmt.Errorf("failed to query follow requests: %w", err)
+		return nil, err
 	}
 	defer rows.Close()
 
+	var followerList []Follow
 	for rows.Next() {
-		var user models.User
-		err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt)
+		var follower Follow
+		err := rows.Scan(
+			&follower.FollowerID,
+			&follower.FollowingID,
+			&follower.CreatedAt,
+			&follower.UserAvatarPath,
+			&follower.UserFirstName,
+		)
 		if err != nil {
-			return nil, fmt.Errorf("failed to scan row into User model: %w", err)
+			return nil, err
 		}
-		users = append(users, user)
+		followerList = append(followerList, follower)
 	}
 
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error during rows iteration: %w", err)
-	}
-
-	return users, nil
+	return followerList, nil
 }
-
-// func GetFollowInfos(db *sql.DB, userid string) models.Follow{
-
-// }
