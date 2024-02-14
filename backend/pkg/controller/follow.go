@@ -79,3 +79,7 @@ func GetRequestFollower(db *sql.DB, user string) ([]models.User, error) {
 
 	return users, nil
 }
+
+// func GetFollowInfos(db *sql.DB, userid string) models.Follow{
+
+// }
