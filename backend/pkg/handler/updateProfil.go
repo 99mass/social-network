@@ -1,16 +1,17 @@
 package handler
 
 import (
-	"backend/pkg/controller"
-	"backend/pkg/helper"
-	"backend/pkg/models"
-	"backend/pkg/utils"
 	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/gofrs/uuid"
+
+	"backend/pkg/controller"
+	"backend/pkg/helper"
+	"backend/pkg/models"
+	"backend/pkg/utils"
 )
 
 type UpdateRequest struct {
@@ -79,8 +80,20 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
+			// Récupérer l'ancienne image à partir de la base de données
+			oldUser, err := controller.GetUserByID(db, sess.UserID)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "failed to get user",
+				}, http.StatusInternalServerError)
+				return
+			}
+			oldImage := oldUser.AvatarPath
+			oldImagePath := "./pkg/static/avatarImage/" + oldImage
+
 			dir := "./pkg/static/avatarImage/"
-			userAvatar, err := utils.ReadAndSaveImageForUpdate(userReq.AvatarPath, dir)
+			userAvatar, err := utils.ReadAndSaveImageForUpdate(userReq.AvatarPath, dir, oldImagePath)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
