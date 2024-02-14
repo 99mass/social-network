@@ -55,3 +55,24 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 		}
 	}
 }
+
+func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			sess, err := utils.CheckAuthorization(db, w, r)
+			if err != nil {
+				return
+			}
+
+			followers, err := controller.GetRequestFollower(db, sess.UserID.String())
+			if err != nil {
+				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
+				return
+			}
+			helper.SendResponse(w, followers, http.StatusOK)
+		default:
+			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	}
+}
