@@ -47,7 +47,6 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 				userid, _ := utils.TextToUUID(post.UserID)
 				user, _ := controller.GetUserByID(db, userid)
 				Post.Post = post
-				log.Println("AvatarPath:", user.AvatarPath)
 				if user.AvatarPath != "" {
 					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
 					if err != nil {
