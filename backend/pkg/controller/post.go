@@ -77,7 +77,7 @@ func PostToShow(db *sql.DB, userID string) ([]models.Post, error) {
 	defer stmt.Close()
 
 	// Execute the query with the userID parameter
-	rows, err := stmt.Query(userID, userID, userID,userID)
+	rows, err := stmt.Query(userID, userID, userID, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -95,6 +95,36 @@ func PostToShow(db *sql.DB, userID string) ([]models.Post, error) {
 	}
 
 	// Check for any errors that occurred during iteration
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return posts, nil
+}
+
+func GetPostsByUserID(db *sql.DB, userID string) ([]models.Post, error) {
+	query := `
+		SELECT *
+		FROM posts
+		WHERE user_id = ?
+	`
+
+	rows, err := db.Query(query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []models.Post
+	for rows.Next() {
+		var post models.Post
+		err := rows.Scan(&post.ID, &post.UserID, &post.GroupID, &post.Content, &post.ImagePath, &post.Privacy, &post.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+	
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
