@@ -26,3 +26,29 @@ export const getPostsUser = async (setPosts) => {
       }
 
   };
+
+  export const getPostsUserCreated = async (userid,setPostsCreated) => {
+
+    try {
+      const sessionId = getSessionCookie();
+
+      const response = await fetch(`${api.userPosts}?user_id=${userid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      });
+
+      // Vérifier le statut de la réponse
+      if (!response.ok) {
+        console.error("Failed to fetch profile data");
+      }
+      // Analyser la réponse JSON
+      const data = await response.json();
+      setPostsCreated(data);
+    } catch (error) {
+      console.error("Error fetching profile data:", error.message);
+    }
+
+};

@@ -6,9 +6,12 @@ import Edit_Profile from "./edit_profile";
 import { useEffect, useState } from "react";
 import Friends from "./friend";
 import { getDatasProfilUser } from "../../handler/user_profile";
+import { getPostsUserCreated } from "../../handler/getPostsUser";
 
 export default function Profile_user() {
   const [datas, setDatas] = useState(null);
+  const [postsCreated, setPostsCreated] = useState(null);
+
   const [edit, setEdit] = useState(false);
   const [viewfriend, setViewfriend] = useState(true);
   const router = useRouter();
@@ -17,7 +20,11 @@ export default function Profile_user() {
   // recuperer les information du user
   useEffect(() => {   
       getDatasProfilUser(setDatas, userid);
+      getPostsUserCreated(userid,setPostsCreated);
   }, [userid,datas]);
+
+
+
 
   const handleEditForm = () => {
     if (!edit) setEdit(true);
@@ -40,13 +47,13 @@ export default function Profile_user() {
         edit={edit}
         viewfriend={viewfriend}
       />
-      {viewfriend && <Posts_user />}
+      {viewfriend && <Posts_user postsCreated={postsCreated && postsCreated} about={datas && datas.aboutme} />}
       {edit && (
         <Edit_Profile
           CloseEditForm={CloseEditForm}
           datas={datas}
           userid={userid}
-          setDatas={setDatas}
+          setDatas={setDatas}          
         />
       )}
       {!viewfriend && <Friends />}

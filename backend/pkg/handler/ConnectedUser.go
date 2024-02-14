@@ -25,7 +25,7 @@ func ConnectedUser(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			if user.AvatarPath != "" {
+			if user.AvatarPath != ""  {
 
 				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + strings.TrimSpace(user.AvatarPath))
 				if err != nil {

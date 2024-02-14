@@ -2,6 +2,7 @@ import Link from "next/link";
 import styles from '../../styles/modules/Friend.module.css'
 
 export  default function RightBloc() {
+
     return(
         <div className="menu-rigth">
             <LastFrienRequest/>
@@ -57,7 +58,8 @@ export function FriendOnLine() {
                     data.map((item,index)=>(
                         <div key={index}>
                             <Link href="./chatpage">
-                                <img src={""+item.image} alt="" /><i className="fas fa-circle"></i>
+                                <img src={""+item.image} alt="" />
+                                {/* <i className="fas fa-circle"></i> */}
                                 <p>{item.name}</p>
                             </Link>
                         </div>

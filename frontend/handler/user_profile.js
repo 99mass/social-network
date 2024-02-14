@@ -33,7 +33,8 @@ export const updateDataProfile = async (
   data,
   userid,
   setDatas,
-  setErrorMessage
+  setErrorMessage,
+  CloseEditForm
 ) => {
   try {
     const sessionId = getSessionCookie();
@@ -48,11 +49,11 @@ export const updateDataProfile = async (
 
     if (response.ok) {
       const datas = await response.json();
-      console.log("profile", datas);
       successNotification("Update profile done");
-
       // actualiser les donnes
       getDatasProfilUser(setDatas, userid);
+      
+      CloseEditForm()
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);

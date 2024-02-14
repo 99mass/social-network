@@ -10,4 +10,5 @@ export const api = {
   UpdateProfilUser: `${domain}/update_profil`,
   Addpost: `${domain}/addpost`,
   ShowPosts:`${domain}/show_posts`,
+  userPosts:`${domain}/userPosts`
 };
