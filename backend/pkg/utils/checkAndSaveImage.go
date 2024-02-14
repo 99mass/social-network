@@ -29,7 +29,9 @@ func ReadAndSaveImage(base64img, directory string) (string, error) {
 		if imgSize > 20 {
 			return "", errors.New("the size of image is bigger than 20ko")
 		}
-		name := helper.NewNameForImage()
+
+		uniqueID := time.Now().Format("20060102150405")
+		name := helper.NewNameForImage() + "_" + uniqueID
 		if mimeType == "image/jpeg" {
 			base64img = name + ".jpeg"
 		}

@@ -4,61 +4,64 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	"backend/pkg/utils"
 	"database/sql"
 	"log"
 	"net/http"
-
-	"github.com/gofrs/uuid"
 )
+
+type Post struct {
+	Post models.Post
+	User models.User
+}
 
 func ShowPosts(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			session := r.Header.Get("Authorization")
-			sessId, err := uuid.FromString(session)
+			var Posts []Post
+			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "format value session incorrect",
-				}, http.StatusBadRequest)
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
 			}
-			sess, err := controller.GetSessionByID(db, sessId)
+			posts, err := controller.PostToShow(db, sess.UserID.String())
 			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "you're not authorized",
-				}, http.StatusBadRequest)
-				return
-			}
-			post, err := controller.PostToShow(db, sess.UserID.String())
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "we got an issue",
-				}, http.StatusBadRequest)
+				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
 				log.Println("we got an issue : ", err.Error())
 				return
 			}
-			for i, p := range post {
-				if p.ImagePath != "" {
-					img, err := helper.EncodeImageToBase64("./pkg/static/postImage/" + p.ImagePath)
+			for _, post := range posts {
+				var Post Post
+
+				//for each post
+				if post.ImagePath != "" {
+					img, err := helper.EncodeImageToBase64("./pkg/static/postImage/" + post.ImagePath)
 					if err != nil {
 						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
 						return
 					}
-					post[i].ImagePath = img
+					post.ImagePath = img
 				}
-				log.Println(p.ImagePath)
+				// Get the post creator
+				userid, _ := utils.TextToUUID(post.UserID)
+				user, _ := controller.GetUserByID(db, userid)
+				Post.Post = post
+				log.Println("AvatarPath:", user.AvatarPath)
+				if user.AvatarPath != "" {
+					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+					if err != nil {
+						helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
+						return
+					}
+				}
+				Post.User = user
+				Posts = append(Posts, Post)
 			}
 
-			helper.SendResponse(w, post, http.StatusOK)
+			helper.SendResponse(w, Posts, http.StatusOK)
 		default:
-			helper.SendResponse(w, models.ErrorResponse{
-				Status:  "error",
-				Message: "Method not allowed",
-			}, http.StatusMethodNotAllowed)
+			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")
 		}
 	}
