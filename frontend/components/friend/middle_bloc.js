@@ -4,11 +4,7 @@ import styles from '../../styles/modules/Friend.module.css';
 export default function MiddleBlocFriend() {
 
     const data = [
-        {
-            image: "https://plus.unsplash.com/premium_photo-1706430116397-3aaba92f5a0a?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHx8",
-            username: "username",
-            time: "1 week"
-        },
+      
         {
             image: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGFmcmljYXxlbnwwfHwwfHx8MA%3D%3D",
             username: "username",
