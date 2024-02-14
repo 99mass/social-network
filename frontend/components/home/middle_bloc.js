@@ -86,7 +86,7 @@ export function PostMiddle({ content, image }) {
       </div>
 
       <div className="post-content">
-        {image && <img src={`data:image/png;base64,${image}`} alt=""/>}        
+        {image && <img src={`data:image/png;base64,${image}`} alt=""/>}      
       </div>
     </>
   );
