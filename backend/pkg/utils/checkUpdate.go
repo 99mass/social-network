@@ -68,18 +68,12 @@ func CheckAuthorization(db *sql.DB, w http.ResponseWriter, r *http.Request) (mod
 	session := r.Header.Get("Authorization")
 	sessId, err := uuid.FromString(session)
 	if err != nil {
-		helper.SendResponse(w, models.ErrorResponse{
-			Status:  "error",
-			Message: "format value session incorrect",
-		}, http.StatusBadRequest)
+		helper.SendResponseError(w, "error","format value session incorrect",http.StatusBadRequest)
 		return models.Session{}, err
 	}
 	sess, err := controller.GetSessionByID(db, sessId)
 	if err != nil {
-		helper.SendResponse(w, models.ErrorResponse{
-			Status:  "error",
-			Message: "you're not authorized",
-		}, http.StatusBadRequest)
+		helper.SendResponseError(w, "error","you're not authorized",http.StatusBadRequest)
 		return models.Session{}, err
 	}
 	return sess, nil

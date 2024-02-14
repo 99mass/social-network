@@ -24,16 +24,22 @@ export default function LeftBloc() {
     getUserBySession(setDatasUser);
   }, []);
 
-
   return (
     <>
       <div className="menu-left">
         <div className="user-actual">
           <Link href={`./profileuser?userid=${datasUser && datasUser.id}`}>
-            <img
-              src={`data:image/png;base64,${datasUser && datasUser.avatarpath}`}
-              alt=""
-            />
+            {datasUser && datasUser.avatarpath && (
+              <img
+                src={`data:image/png;base64,${
+                  datasUser && datasUser.avatarpath
+                }`}
+                alt=""
+              />
+            )}
+            {datasUser && !datasUser.avatarpath && (
+              <img src="../images/default-image.svg" alt="" />
+            )}
             {datasUser && (
               <span>{`${datasUser.firstname} ${datasUser.lastname}`}</span>
             )}
