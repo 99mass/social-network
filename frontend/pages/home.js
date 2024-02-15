@@ -5,10 +5,12 @@ import MidlleBloc from "../components/home/middle_bloc";
 import RightBloc from "../components/home/rigthB_bloc";
 import { useAuthGuard } from "../controller/useAuthGuard";
 
+
 export default function Home() {
 
   // gerer l'acces a cette route 
   useAuthGuard();
+ 
 
   return (
     <>
@@ -19,9 +21,9 @@ export default function Home() {
       </Head>
       <Header />
       <section className="section-index">
-        <LeftBloc />
-        <MidlleBloc />
-        <RightBloc />
+        <LeftBloc  />
+        <MidlleBloc  />
+        <RightBloc  />
       </section>
     </>
   );

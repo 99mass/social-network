@@ -165,7 +165,7 @@ func GetMyFriends(db *sql.DB, userId uuid.UUID) ([]models.User, error) {
 		)
 		SELECT u.*, MAX(u.created_at) as last_message_timestamp
 		FROM users u
-		JOIN followers f ON u.id = f.following_id AND f.follower_id = $1
+		JOIN followers f ON u.id = f.following_id AND f.follower_id = $1 OR u.id = f.follower_id AND f.following_id = $1
 		LEFT JOIN Discussions pm ON u.id = pm.sender_id OR u.id = pm.recipient_id
 		GROUP BY u.id
 		HAVING u.id IN (SELECT user_id FROM DiscussionUsers)
