@@ -35,12 +35,9 @@ export default function Edit_Profile({
         }
       }
     }
-    console.log("has",privacy);
-    console.log("has 1",datas.ispublic);
 
     let dontSend = true;
-    if (!hasValue && (privacy === datas.ispublic || privacy===null)) {
-      console.log("aaaa");
+    if (!hasValue && (privacy === datas.ispublic || privacy === null)) {
       dontSend = false;
     }
 
@@ -100,7 +97,6 @@ export default function Edit_Profile({
         CloseEditForm
       );
     }
-    // console.log("jsonData:", jsonData);
   };
 
   return (

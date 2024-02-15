@@ -32,7 +32,6 @@ export const sendData = async (
       setErrorMessage(errorData.message);
     }
   } catch (error) {
-    console.error("Error:", error);
     setErrorMessage("An error occurred while processing your request.");
   }
 };

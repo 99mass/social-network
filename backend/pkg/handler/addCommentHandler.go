@@ -64,9 +64,9 @@ func AddCommentHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			comment := models.Comment{
-				UserID:  sess.UserID.String(),
-				PostID:  reqComment.PostID,
-				Content: reqComment.Content,
+				UserID:    sess.UserID.String(),
+				PostID:    reqComment.PostID,
+				Content:   reqComment.Content,
 				ImagePath: commentImage,
 			}
 

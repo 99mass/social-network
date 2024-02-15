@@ -17,7 +17,7 @@ export default function SignIn() {
       </Head>
       <Header />
       <section className="section-group-profile">
-        <Profile_group/>
+        <Profile_group />
       </section>
     </>
   );

@@ -6,11 +6,11 @@ import { truncateText } from "../../utils/helper";
 import { askForFriends } from "../../handler/follower";
 
 export default function MidlleBloc() {
-  
+
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
-    if (posts===null) {      
+    if (posts === null) {
       getPostsUser(setPosts);
     }
   }, []);
@@ -18,25 +18,25 @@ export default function MidlleBloc() {
   return (
     <div className="menu-middle">
       {posts && posts.map((item) => (
-                <div className="post" key={item.Post.id}>
-                    <PostHeader
-                        iduser={item.User.id}
-                        user={item.User.firstname}
-                        image={item.User.avatarpath}
-                        time={`${getElapsedTime(item.Post.created_at).value} ${getElapsedTime(item.Post.created_at).unit}`}
-                    />
-                    <PostMiddle
-                        content={item.Post.content}
-                        image={item.Post.image_path}
-                    />
-                    <PostFooter
-                        numberLike={"15k"}
-                        numberComment={"6k"}
-                        postid={item.Post.id}
-                    />
-                </div>
-            ))
-            }
+        <div className="post" key={item.Post.id}>
+          <PostHeader
+            iduser={item.User.id}
+            user={item.User.firstname}
+            image={item.User.avatarpath}
+            time={`${getElapsedTime(item.Post.created_at).value} ${getElapsedTime(item.Post.created_at).unit}`}
+          />
+          <PostMiddle
+            content={item.Post.content}
+            image={item.Post.image_path}
+          />
+          <PostFooter
+            numberLike={"15k"}
+            numberComment={"6k"}
+            postid={item.Post.id}
+          />
+        </div>
+      ))
+      }
     </div>
   );
 }
@@ -50,8 +50,8 @@ export function PostHeader({ iduser, user, image, time }) {
     <div className="profileuser">
       <div className="left-side">
         <div className="profile-pic">
-          <Link href={`./profileuser?userid=${iduser}`}>
-             <img src={ image ?`data:image/png;base64,${image}` : "../images/default-image.svg"} alt="" />            
+            <Link href={`./profileuser?userid=${iduser}`}>           
+              <img src={image ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />           
           </Link>
         </div>
         <span>
@@ -86,7 +86,7 @@ export function PostMiddle({ content, image }) {
       </div>
 
       <div className="post-content">
-        {image && <img src={`data:image/png;base64,${image}`} alt=""/>}      
+        {image && <img src={`data:image/png;base64,${image}`} alt="" />}
       </div>
     </>
   );

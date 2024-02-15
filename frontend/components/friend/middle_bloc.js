@@ -43,9 +43,8 @@ export default function MiddleBlocFriend() {
               <div className={styles.friendName}>
                 <span>{`${item.firstname} ${item.lastname}`}</span>
                 <span>
-                  {`${getElapsedTime(item.created_at).value} ${
-                    getElapsedTime(item.created_at).unit
-                  }`}
+                  {`${getElapsedTime(item.created_at).value} ${getElapsedTime(item.created_at).unit
+                    }`}
                 </span>
               </div>
               <div className={styles.validateRequest}>
