@@ -73,17 +73,17 @@ export function FriendOnLine({FriendsList}) {
         <div className="friend-online">
             <h4>Chat with Friend online</h4>
             <div className="list-users">
-                {/* {
+                 {
                     FriendsList && FriendsList.map((item,index)=>(
                         <div key={index}>
                             <Link href="./chatpage">
-                                <img src={""+item.image} alt="" />
+                                <img src={""+item.avatarpath} alt="" />
                                 
-                                <p>{item.name}</p>
+                                <p>{item.firstname}</p>
                             </Link>
                         </div>
                     ))
-                }                       */}
+                }                       
             </div>
         </div>
     );
