@@ -16,8 +16,11 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/update_profil", helper.Middleware(handler.UpdateProfil(db)))
 	http.HandleFunc("/followuser", helper.Middleware(handler.FollowUser(db)))
 	http.HandleFunc("/addpost", helper.Middleware(handler.AddPostHandler(db)))
+<<<<<<< HEAD
 	http.HandleFunc("/addcomment", helper.Middleware(handler.AddCommentHandler(db)))
 	http.HandleFunc("/commentspost", helper.Middleware(handler.ShowCommentsByPost(db)))
+=======
+>>>>>>> 4928cd2bf32f3162fe2be9a458c9f1ceed0bfbbb
 
 	// Display Request
 	http.HandleFunc("/session", helper.Middleware(handler.CheckSessionHandler(db)))
@@ -25,7 +28,12 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/profil", helper.Middleware(handler.ProfilHandler(db)))
 	http.HandleFunc("/users_follows", helper.Middleware(handler.GetUsersHandler(db)))
 	http.HandleFunc("/show_posts", helper.Middleware(handler.ShowPosts(db)))
+<<<<<<< HEAD
 	http.HandleFunc("/userposts", helper.Middleware(handler.UserPosts(db)))
+=======
+	http.HandleFunc("/show_comments", helper.Middleware(handler.ShowComments(db)))
+	http.HandleFunc("/userPosts", helper.Middleware(handler.UserPosts(db)))
+>>>>>>> 4928cd2bf32f3162fe2be9a458c9f1ceed0bfbbb
 	http.HandleFunc("/requestfollow", helper.Middleware(handler.RequestFollowsHandler(db)))
-
+	http.HandleFunc("/oldestrequestfollow", helper.Middleware(handler.OldestPendingRequestFollow(db)))
 }

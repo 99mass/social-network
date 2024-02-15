@@ -12,4 +12,5 @@ export const api = {
   ShowPosts: `${domain}/show_posts`,
   userPosts: `${domain}/userPosts`,
   Followuser: `${domain}/followuser`,
+  Requestfollow: `${domain}/requestfollow`
 };

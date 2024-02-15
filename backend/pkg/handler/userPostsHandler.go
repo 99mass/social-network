@@ -41,7 +41,6 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 					}
 					post[i].ImagePath = img
 				}
-				log.Println(p.ImagePath)
 			}
 
 			helper.SendResponse(w, post, http.StatusOK)

@@ -16,7 +16,7 @@ export function useAuthGuard() {
   }, [router]);
 }
 export function useAuthGuard2() {
-    const router = useRouter();
+    const router = useRouter(); 
   
     useEffect(() => {
       const checkSession = async () => {

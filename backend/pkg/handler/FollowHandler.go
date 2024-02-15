@@ -26,6 +26,11 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodPost:
 			// Appelez la fonction de contrôleur pour suivre l'utilisateur
+			if sess.UserID.String() == userid.String() {
+				helper.SendResponseError(w, "error", "You can't follow yourself", http.StatusBadRequest)
+				log.Println("You can't follow yourself")
+				return
+			}
 			err = controller.FollowUser(db, sess.UserID.String(), userid.String())
 			if err != nil {
 				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
@@ -65,14 +70,53 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			followers, err := controller.GetRequestFollower(db, sess.UserID.String())
+			followers, err := controller.GetFollowRequestInfos(db, sess.UserID.String())
 			if err != nil {
+				log.Println("error getfollowers info", err)
 				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
 				return
+			}
+			for i, follower := range followers {
+				if follower.UserAvatarPath != "" {
+					followers[i].UserAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
+					if err != nil {
+						helper.SendResponseError(w, "error", "enable to encode image avatar", http.StatusInternalServerError)
+						return
+					}
+				}
 			}
 			helper.SendResponse(w, followers, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
 		}
+	}
+}
+
+func OldestPendingRequestFollow(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			sess, err := utils.CheckAuthorization(db, w, r)
+			if err != nil {
+				return
+			}
+			follower, err := controller.GetOldestFollowRequest(db, sess.UserID.String())
+			if err != nil {
+				log.Println("error getfollowers info", err)
+				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
+				return
+			}
+			if follower.UserAvatarPath != "" {
+				follower.UserAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
+				if err != nil {
+					helper.SendResponseError(w, "error", "enable to encode image avatar", http.StatusInternalServerError)
+					return
+				}
+			}
+			helper.SendResponse(w, follower, http.StatusOK)
+		default:
+			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
+		}
+
 	}
 }

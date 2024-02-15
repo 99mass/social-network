@@ -1,15 +1,26 @@
 package controller
 
 import (
-	"backend/pkg/models"
 	"database/sql"
 	"fmt"
+	"log"
+	"time"
 )
 
+type Follow struct {
+	FollowerID     string `db:"follower_id" json:"follower_id"`
+	FollowingID    string `db:"following_id" json:"following_id"`
+	CreatedAt      string `db:"created_at" json:"created_at"`
+	UserFirstName  string `db:"firstname" json:"firstname"`
+	UserLastName   string `db:"lastname" json:"lastname"`
+	UserAvatarPath string `db:"avatarpath" json:"avatarpath"`
+}
+
 func FollowUser(db *sql.DB, followerID string, followingID string) error {
-	query := `INSERT INTO followers (follower_id, following_id, status) VALUES (?, ?, ?)`
-	_, err := db.Exec(query, followerID, followingID, "waiting")
+	query := `INSERT INTO followers (follower_id, following_id, status, created_at) VALUES (?, ?, ?, ?)`
+	_, err := db.Exec(query, followerID, followingID, "waiting", time.Now())
 	if err != nil {
+		log.Println("Error inserting")
 		return fmt.Errorf("failed to follow user: %w", err)
 	}
 	return nil
@@ -19,16 +30,16 @@ func AccepRequestFollow(db *sql.DB, followerID string, followingID string) error
 	// Préparez la requête SQL pour mettre à jour la colonne status en 'accepted'
 	query := `
 		UPDATE followers
-		SET status = 'accepted'
-		WHERE follower_id = ? AND following_id = ?
+		SET status = 'accepted', created_at = NOW()
+		WHERE follower_id = ? AND following_id = ? AND status = "waiting"
 	`
 
 	// Exécutez la requête avec le followerID comme paramètre
 	_, err := db.Exec(query, followerID, followingID)
 	if err != nil {
+		log.Println("Error accepting")
 		return fmt.Errorf("failed to accept follow request: %w", err)
 	}
-
 	return nil
 }
 
@@ -41,41 +52,187 @@ func Decline(db *sql.DB, followerID string, followingID string) error {
 	// Exécutez la requête avec les IDs de follower et follow comme paramètres
 	_, err := db.Exec(query, followerID, followingID)
 	if err != nil {
+		log.Println("Error Declining follower request", err.Error())
 		return fmt.Errorf("failed to unfollow user: %w", err)
 	}
 
 	return nil
 }
 
-func GetRequestFollower(db *sql.DB, user string) ([]models.User, error) {
-	var users []models.User
-
-	// Requête SQL pour obtenir les demandes de suivi reçues par l'utilisateur
+// Get all follow requests that are on waiting state
+// datas are follower_id, following_id, created_at, first_name, last_name, useravatar
+func GetFollowRequestInfos(db *sql.DB, user string) ([]Follow, error) {
 	query := `
-		SELECT u.*
-		FROM users u
-		JOIN followers f ON u.id = f.follower_id
-		WHERE f.following_id = ? AND f.status = 'waiting';
+		SELECT 
+			f.follower_id,
+			f.following_id,
+			f.created_at,
+			u.firstname,
+			u.lastname,
+			u.avatarpath
+		FROM 
+			followers f
+		INNER JOIN 
+			users u ON f.follower_id = u.id
+		WHERE 
+			f.following_id = $1
+			AND f.status = 'waiting'
 	`
 
 	rows, err := db.Query(query, user)
 	if err != nil {
-		return nil, fmt.Errorf("failed to query follow requests: %w", err)
+		return nil, err
 	}
 	defer rows.Close()
 
+	var followerList []Follow
 	for rows.Next() {
-		var user models.User
-		err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt)
+		var follower Follow
+		err := rows.Scan(
+			&follower.FollowerID,
+			&follower.FollowingID,
+			&follower.CreatedAt,
+			&follower.UserFirstName,
+			&follower.UserLastName,
+			&follower.UserAvatarPath,
+		)
 		if err != nil {
-			return nil, fmt.Errorf("failed to scan row into User model: %w", err)
+			return nil, err
 		}
-		users = append(users, user)
+		followerList = append(followerList, follower)
 	}
 
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error during rows iteration: %w", err)
+	return followerList, nil
+}
+
+// Get the informations of the followers you alrady accept
+// Information include the following information like created_at, follower_id and following_id
+func GetFollowerInfos(db *sql.DB, user string) ([]Follow, error) {
+	query := `
+		SELECT 
+			f.follower_id,
+			f.following_id,
+			f.created_at,
+			u.firstname,
+			u.lastname,
+			u.avatarpath
+		FROM 
+			followers f
+		INNER JOIN 
+			users u ON f.follower_id = u.id
+		WHERE 
+			f.following_id = $1
+			AND f.status = 'accepted'
+	`
+
+	rows, err := db.Query(query, user)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var followerList []Follow
+	for rows.Next() {
+		var follower Follow
+		err := rows.Scan(
+			&follower.FollowerID,
+			&follower.FollowingID,
+			&follower.CreatedAt,
+			&follower.UserFirstName,
+			&follower.UserLastName,
+			&follower.UserAvatarPath,
+		)
+		if err != nil {
+			return nil, err
+		}
+		followerList = append(followerList, follower)
 	}
 
-	return users, nil
+	return followerList, nil
+}
+
+// Get the informations of the users you are following
+// Information include the following information like created_at, follower_id and following_id
+func GetFollowingInfos(db *sql.DB, user string) ([]Follow, error) {
+	query := `
+		SELECT 
+			f.follower_id,
+			f.following_id,
+			f.created_at,
+			u.firstname,
+			u.lastname,
+			u.avatarpath
+		FROM 
+			followers f
+		INNER JOIN 
+			users u ON f.following_id = u.id
+		WHERE 
+			f.follower_id = $1
+			AND f.status = 'accepted'
+	`
+
+	rows, err := db.Query(query, user)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var followerList []Follow
+	for rows.Next() {
+		var follower Follow
+		err := rows.Scan(
+			&follower.FollowerID,
+			&follower.FollowingID,
+			&follower.CreatedAt,
+			&follower.UserFirstName,
+			&follower.UserLastName,
+			&follower.UserAvatarPath,
+		)
+		if err != nil {
+			return nil, err
+		}
+		followerList = append(followerList, follower)
+	}
+
+	return followerList, nil
+}
+
+// Get the oldest follow request that is on waiting status
+// datas are follower_id, following_id, created_at, first_name, last_name, useravatar
+func GetOldestFollowRequest(db *sql.DB, user string) (Follow, error) {
+	query := `
+		SELECT 
+			f.follower_id,
+			f.following_id,
+			f.created_at,
+			u.firstname,
+			u.lastname,
+			u.avatarpath
+		FROM 
+			followers f
+		INNER JOIN 
+			users u ON f.follower_id = u.id
+		WHERE 
+			f.following_id = $1
+			AND f.status = 'waiting'
+		ORDER BY 
+			f.created_at ASC
+		LIMIT 1
+	`
+
+	var follower Follow
+	err := db.QueryRow(query, user).Scan(
+		&follower.FollowerID,
+		&follower.FollowingID,
+		&follower.CreatedAt,
+		&follower.UserFirstName,
+		&follower.UserLastName,
+		&follower.UserAvatarPath,
+	)
+
+	if err != nil {
+		return Follow{}, err
+	}
+
+	return follower, nil
 }
