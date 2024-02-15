@@ -22,6 +22,7 @@ export const sendSession = async () => {
       body: JSON.stringify({ sessionID }),
     });
 
+    alert("Couldn't create session cookie")
     if (response.ok) {
       const cookieDatas = await response.json();
       createSessionCookie(cookieDatas.value, cookieDatas.expiration);
