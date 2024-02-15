@@ -47,10 +47,10 @@ export default function MiddleBlocFriend() {
                 </span>
               </div>
               <div className={styles.validateRequest}>
-                <button onClick={() => handlerConfirmFollow(item.id)}>
+                <button onClick={() => handlerConfirmFollow(item.follower_id)}>
                   confirm
                 </button>
-                <button onClick={() => handlerDeleteFollow(item.id)}>
+                <button onClick={() => handlerDeleteFollow(item.follower_id)}>
                   delete
                 </button>
               </div>
