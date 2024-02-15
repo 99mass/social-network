@@ -27,11 +27,15 @@ export default function MiddleBlocFriend() {
       <h1>Friends</h1>
       <h4>Friend requests</h4>
       {datas &&
-        datas.map((item) => (
-          <div className={styles.contentFriend} key={item.id}>
+        datas.map((item, index) => (
+          <div className={styles.contentFriend} key={index}>
             <Link href={`./profileuser?userid=${item.id}`}>
-              {item.avatarpath && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />}
-              {!item.avatarpath && <img src={"../images/default-image.svg"} alt="" />}
+              {item.avatarpath && (
+                <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />
+              )}
+              {!item.avatarpath && (
+                <img src={"../images/default-image.svg"} alt="" />
+              )}
             </Link>
             <div className={styles.detailsFriendRequest}>
               <div className={styles.friendName}>

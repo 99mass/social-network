@@ -1,7 +1,10 @@
+import { useState } from "react";
 import styles from "../../styles/modules/profile-group.module.css";
 import { AboutGroup } from "./discussions";
 
 export default function Events() {
+  const [listUserGoing, setListUserGoing] = useState(false);
+
   const data = [
     {
       nameGroup: "Démarches Visa depuis le Sénégal",
@@ -42,19 +45,29 @@ export default function Events() {
             time={item.time}
             content={item.content}
             isGoing={item.isGoing}
+            setListUserGoing={setListUserGoing}
           />
         ))}
       </div>
       <AboutGroup />
+      {listUserGoing && <ListUserAcceptedEvent />}
     </div>
   );
 }
 
-export function EventBloc({ nameGroup, numberPerson, time, content, isGoing }) {
+export function EventBloc({
+  nameGroup,
+  numberPerson,
+  time,
+  content,
+  isGoing,
+  setListUserGoing,
+}) {
+  const toggleListUsers = () => setListUserGoing(true);
   return (
     <div className={styles.eventDetails}>
       <h2>{nameGroup}</h2>
-      <p>
+      <p onClick={toggleListUsers}>
         <i className="fa-solid fa-user-group"></i>
         {numberPerson} person responded Going
       </p>
@@ -72,9 +85,125 @@ export function EventBloc({ nameGroup, numberPerson, time, content, isGoing }) {
         <button>
           <i className="fa-solid fa-circle-check"></i>Going
         </button>
-      ):(
-        <button className={styles.btnNotGoing}><i class="fa-solid fa-circle-check"></i>Not going</button>
+      ) : (
+        <button className={styles.btnNotGoing}>
+          <i className="fa-solid fa-circle-check"></i>Not going
+        </button>
       )}
+      
+    </div>
+  );
+}
+export function FromCreateEvent({ setSection }) {
+  const toggleForm = () =>
+    setSection({
+      section1: true,
+      section2: false,
+      section3: false,
+      section4: false,
+      section5: false,
+    });
+
+  return (
+    <div className={styles.contentFormEvent}>
+      <div className={styles.eventHeader}>
+        <h1>create event</h1>
+        <i
+          onClick={toggleForm}
+          className="fa-regular fa-circle-xmark close-form-btn"
+          title="Close form"
+        ></i>
+      </div>
+      <hr />
+      <form method="post">
+        <div className={styles.eventContent}>
+          <input
+            type="text"
+            className={styles.titleEvent}
+            placeholder="Title of the event"
+            required
+          />
+          <hr />
+          <textarea
+            name=""
+            placeholder="Add description for event..."
+            id=""
+            required
+          ></textarea>
+          <hr />
+          <div className={styles.contentDateTime}>
+            <div>
+              <span>Start date</span>
+              <input type="date" />
+            </div>
+            <div>
+              <span>Start time</span>
+              <input type="time" />
+            </div>
+          </div>
+        </div>
+        <button className={styles.btnEvent}>Create event</button>
+      </form>
+    </div>
+  );
+}
+
+export function ListUserAcceptedEvent() {
+  const data = [
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    
+  ];
+  return (
+    <div className={styles.contentListPeopleGoing}>
+      <div className={styles.listHeader}>
+        <h1>
+          <span>Listes Users</span>
+          <i className="fa-regular fa-circle-xmark" title="Close lists"></i>
+        </h1>
+      </div>
+      <hr />
+      <div className={styles.listFriend}>
+        <div className={styles.goingLists}>
+          <h2>Going</h2>
+          {data.map((item, index) => (
+            <div key={index} className={styles.userBloc}>
+              <div>
+                <img src={item.image} alt="" />
+                <span>{item.user}</span> 
+                <i class="fa-regular fa-circle-check"></i>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.notGoingLists}>
+        <h2>Not Going</h2>
+          {data.map((item, index) => (
+            <div key={index} className={styles.userBloc}>
+              <div>
+                <img src={item.image} alt="" />
+                <span>{item.user}</span>
+                <i class="fa-solid fa-xmark"></i>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

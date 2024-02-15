@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from "../../styles/modules/profile-group.module.css";
 import { useState } from "react";
 import Discussion from "./discussions";
-import Events from "./events";
+import Events, { FromCreateEvent } from "./events";
 import PostGroup from "./post_group";
 import ChatGroup from "./chat_group";
 
@@ -42,7 +42,8 @@ export default function Profile_group() {
       {section.section1 && <Discussion />}
       {section.section2 && <PostGroup PostForm={togglePostForm} />}
       {section.section3 && <Events />}
-      {section.section4 && <ChatGroup />}
+      {section.section4 && <ChatGroup setSection={setSection} />}
+      {section.section5 && <FromCreateEvent setSection={setSection} />}
     </>
   );
 }
@@ -122,19 +123,18 @@ export function NavMenuGroup({ section, handleSection }) {
       >
         <i className="fa-brands fa-elementor"></i>Events
       </button>
-
+      <button
+        onClick={() => handleClick("section5")}
+        className={section.section5 ? styles.activeBtn : ""}
+      >
+        <i className="fa-solid fa-plus"></i>Add Event
+      </button>
       <button
         onClick={() => handleClick("section4")}
         className={section.section4 ? styles.activeBtn : ""}
       >
         <i className="fa-solid fa-comment"></i>chat
       </button>
-      {/* <button
-        onClick={() => handleClick("section5")}
-        className={section.section5 ? styles.activeBtn : ""}
-      >
-        <i className="fa-solid fa-gear"></i>Settings
-      </button> */}
     </div>
   );
 }

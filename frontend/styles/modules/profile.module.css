@@ -123,11 +123,13 @@
   }
 
   .body1 {
-    padding: 20px 20%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px 0% 20px 20%;
   }
   .bio,
   .notBio{
-    width: 50%;
+   width: 50%;
   }
   .body1 .bodymenu {
     width: 50%;

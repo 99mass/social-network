@@ -24,5 +24,5 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 ## Version next js
-version  12.0.4
+version  14.1.0
 nod

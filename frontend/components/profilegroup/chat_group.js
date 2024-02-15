@@ -1,19 +1,19 @@
 import styles from "../../styles/modules/profile-group.module.css";
 import Discussion from "./discussions";
 
-export default function ChatGroup() {
+export default function ChatGroup({ setSection }) {
   return (
     <>
       <Discussion />
-      <ChatContainer />
+      <ChatContainer setSection={setSection} />
     </>
   );
 }
 
-export function ChatContainer() {
+export function ChatContainer({ setSection }) {
   return (
     <div className={styles.containerChatGroup}>
-      <ChatHeader />
+      <ChatHeader setSection={setSection} />
       <hr />
       <ChatBody />
       <ChatFooter />
@@ -21,12 +21,25 @@ export function ChatContainer() {
   );
 }
 
-export function ChatHeader() {
-  
+export function ChatHeader({ setSection }) {
+  const toggleChat = () => {
+    setSection({
+      section1: true,
+      section2: false,
+      section3: false,
+      section4: false,
+      section5: false,
+    });
+  };
+
   return (
     <div className={styles.chatHeader}>
       <h3>Démarches Visa depuis le Sénégal</h3>
-      <i className="fa-regular fa-circle-xmark" title="Close chat"></i>
+      <i
+        onClick={toggleChat}
+        className={`${styles.closeChatGroup} fa-regular fa-circle-xmark`}
+        title="Close chat"
+      ></i>
     </div>
   );
 }
