@@ -14,6 +14,7 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 		case http.MethodGet:
 			_, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
+				helper.SendResponseError(w, "error","you're not authorized",http.StatusBadRequest)
 				return
 			}
 			// check user id format
