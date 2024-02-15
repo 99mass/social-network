@@ -12,6 +12,7 @@ type Follow struct {
 	FollowingID    string `db:"following_id" json:"following_id"`
 	CreatedAt      string `db:"created_at" json:"created_at"`
 	UserFirstName  string `db:"firstname" json:"firstname"`
+	UserLastName   string `db:"lastname" json:"lastname"`
 	UserAvatarPath string `db:"avatarpath" json:"avatarpath"`
 }
 
@@ -69,6 +70,7 @@ func GetFollowInfos(db *sql.DB, user string) ([]Follow, error) {
 			f.following_id,
 			f.created_at,
 			u.firstname,
+			u.lastname,
 			u.avatarpath
 		FROM 
 			followers f
@@ -92,8 +94,9 @@ func GetFollowInfos(db *sql.DB, user string) ([]Follow, error) {
 			&follower.FollowerID,
 			&follower.FollowingID,
 			&follower.CreatedAt,
-			&follower.UserAvatarPath,
 			&follower.UserFirstName,
+			&follower.UserLastName,
+			&follower.UserAvatarPath,
 		)
 		if err != nil {
 			return nil, err
@@ -111,6 +114,7 @@ func GetOldestPendingFollowRequest(db *sql.DB, user string) (Follow, error) {
 			f.following_id,
 			f.created_at,
 			u.firstname,
+			u.lastname,
 			u.avatarpath
 		FROM 
 			followers f
@@ -129,8 +133,9 @@ func GetOldestPendingFollowRequest(db *sql.DB, user string) (Follow, error) {
 		&follower.FollowerID,
 		&follower.FollowingID,
 		&follower.CreatedAt,
-		&follower.UserAvatarPath,
 		&follower.UserFirstName,
+		&follower.UserLastName,
+		&follower.UserAvatarPath,
 	)
 
 	if err != nil {
