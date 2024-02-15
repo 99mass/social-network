@@ -40,7 +40,7 @@ export const getFriendsLists = async (userid, setDatas) => {
       // Vérifier le statut de la réponse
       if (response.ok) {
         const data = await response.json();
-        console.log("ssv",userid);
+        console.log("dsssv",userid);
         console.log("ddddd", data);
         setDatas(data);
        

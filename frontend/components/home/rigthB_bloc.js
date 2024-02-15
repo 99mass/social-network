@@ -77,9 +77,10 @@ export function FriendOnLine({FriendsList}) {
                     FriendsList && FriendsList.map((item,index)=>(
                         <div key={index}>
                             <Link href="./chatpage">
-                                <img src={""+item.avatarpath} alt="" />
-                                
-                                <p>{item.firstname}</p>
+                                { item && item.avatarpath &&(
+                                <img src={`data:image/png;base64,${item && item.avatarpath}`} alt="" />
+                                )}
+                                <p>{item.firstname+' '+ item.lastname}</p>
                             </Link>
                         </div>
                     ))
