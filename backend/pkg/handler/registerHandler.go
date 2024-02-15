@@ -82,31 +82,30 @@ func RegisterHandler(db *sql.DB) http.HandlerFunc {
 
 			// TODO : Verify if informations given by the user are correct
 
-			userID, err := controller.CreateUser(db, user)
+			_, err = controller.CreateUser(db, user)
 			if err != nil {
+				helper.SendResponseError(w, "error", "enable to create the user: ", http.StatusInternalServerError)
 				log.Println("enable to create the user: ", err)
-			}
-			sessionID, err := helper.AddSession(userID, db)
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "incorrect request",
-				}, http.StatusBadRequest)
 				return
 			}
-			session, err := controller.GetSessionByID(db, sessionID)
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "we got an issue",
-				}, http.StatusInternalServerError)
-				return
-			}
+			// sessionID, err := helper.AddSession(userID, db)
+			// if err != nil {
+			// 	helper.SendResponse(w, models.ErrorResponse{
+			// 		Status:  "error",
+			// 		Message: "incorrect request",
+			// 	}, http.StatusBadRequest)
+			// 	return
+			// }
+			// session, err := controller.GetSessionByID(db, sessionID)
+			// if err != nil {
+			// 	helper.SendResponse(w, models.ErrorResponse{
+			// 		Status:  "error",
+			// 		Message: "we got an issue",
+			// 	}, http.StatusInternalServerError)
+			// 	return
+			// }
 			log.Println("user created succesfully")
-			helper.SendResponse(w, models.SessionToSend{
-				Value:      session.ID,
-				Expiration: session.ExpiresAt,
-			}, http.StatusOK)
+			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
 				Status:  "error",
