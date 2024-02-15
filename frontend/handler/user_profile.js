@@ -17,12 +17,11 @@ export const getDatasProfilUser = async (setDatas, userid) => {
       });
 
       // Vérifier le statut de la réponse
-      if (!response.ok) {
-        console.error("Failed to fetch profile data");
+      if (response.ok) {
+        // Analyser la réponse JSON
+        const data = await response.json();
+        setDatas(data);
       }
-      // Analyser la réponse JSON
-      const data = await response.json();
-      setDatas(data);
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
     }

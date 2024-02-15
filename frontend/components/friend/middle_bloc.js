@@ -12,7 +12,9 @@ export default function MiddleBlocFriend() {
   const [datas, setDatas] = useState(null);
 
   useEffect(() => {
-    getAskForFriendLists(setDatas);
+    if (datas === null) {
+      getAskForFriendLists(setDatas);
+    }
   }, [datas]);
 
   const handlerConfirmFollow = (iduser) => {
