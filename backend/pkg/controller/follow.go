@@ -59,11 +59,9 @@ func Decline(db *sql.DB, followerID string, followingID string) error {
 	return nil
 }
 
-// func GetFollowInfos(db *sql.DB, userid string) models.Follow{
-
-// }
-
-func GetFollowInfos(db *sql.DB, user string) ([]Follow, error) {
+// Get all follow requests that are on waiting state
+// datas are follower_id, following_id, created_at, first_name, last_name, useravatar
+func GetFollowRequestInfos(db *sql.DB, user string) ([]Follow, error) {
 	query := `
 		SELECT 
 			f.follower_id,
@@ -107,7 +105,101 @@ func GetFollowInfos(db *sql.DB, user string) ([]Follow, error) {
 	return followerList, nil
 }
 
-func GetOldestPendingFollowRequest(db *sql.DB, user string) (Follow, error) {
+// Get the informations of the followers you alrady accept
+// Information include the following information like created_at, follower_id and following_id
+func GetFollowerInfos(db *sql.DB, user string) ([]Follow, error) {
+	query := `
+		SELECT 
+			f.follower_id,
+			f.following_id,
+			f.created_at,
+			u.firstname,
+			u.lastname,
+			u.avatarpath
+		FROM 
+			followers f
+		INNER JOIN 
+			users u ON f.follower_id = u.id
+		WHERE 
+			f.following_id = $1
+			AND f.status = 'accepted'
+	`
+
+	rows, err := db.Query(query, user)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var followerList []Follow
+	for rows.Next() {
+		var follower Follow
+		err := rows.Scan(
+			&follower.FollowerID,
+			&follower.FollowingID,
+			&follower.CreatedAt,
+			&follower.UserFirstName,
+			&follower.UserLastName,
+			&follower.UserAvatarPath,
+		)
+		if err != nil {
+			return nil, err
+		}
+		followerList = append(followerList, follower)
+	}
+
+	return followerList, nil
+}
+
+// Get the informations of the users you are following
+// Information include the following information like created_at, follower_id and following_id
+func GetFollowingInfos(db *sql.DB, user string) ([]Follow, error) {
+	query := `
+		SELECT 
+			f.follower_id,
+			f.following_id,
+			f.created_at,
+			u.firstname,
+			u.lastname,
+			u.avatarpath
+		FROM 
+			followers f
+		INNER JOIN 
+			users u ON f.following_id = u.id
+		WHERE 
+			f.follower_id = $1
+			AND f.status = 'accepted'
+	`
+
+	rows, err := db.Query(query, user)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var followerList []Follow
+	for rows.Next() {
+		var follower Follow
+		err := rows.Scan(
+			&follower.FollowerID,
+			&follower.FollowingID,
+			&follower.CreatedAt,
+			&follower.UserFirstName,
+			&follower.UserLastName,
+			&follower.UserAvatarPath,
+		)
+		if err != nil {
+			return nil, err
+		}
+		followerList = append(followerList, follower)
+	}
+
+	return followerList, nil
+}
+
+// Get the oldest follow request that is on waiting status
+// datas are follower_id, following_id, created_at, first_name, last_name, useravatar
+func GetOldestFollowRequest(db *sql.DB, user string) (Follow, error) {
 	query := `
 		SELECT 
 			f.follower_id,
