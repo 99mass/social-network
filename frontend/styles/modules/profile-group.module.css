@@ -300,6 +300,9 @@
     align-items: center;
     padding: 15px 10px;
 }
+.closeChatGroup{
+  cursor: pointer;
+}
 .chatHeader i{
     font-size: 22px;
     color: gray;
@@ -427,17 +430,8 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-/* form create post */
-/* .content-form-post {
+  /* form create event */
+.contentFormEvent {
     width: 500px;
     height: fit-content;
     max-height: 70vh;
@@ -452,103 +446,25 @@
       rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
       rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   }
-  
-  .post-header h1 {
+  .eventHeader  {
+    display: flex;
+    justify-content: space-between;
+  }
+  .eventHeader h1 {
     font-weight: initial;
     text-transform: capitalize;
     text-align: center;
   }
-  .content-form-post hr {
-    margin: 10px 0px;
-    border-color: gray;
-  }
-  
-  .post-content textarea{
-    width: 98%;
-    height: 150px;
-    margin-top: 20px;
-    padding: 20px;
+  .eventHeader i{
     font-size: 22px;
-    font-weight: initial;
-    background: transparent;
-    border: none;
-    color: gray;
-    border-left: 5px solid gray;
-    resize: none;
-    outline: none;
-  }
-  .content-assets {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-  }
-  .content-assets i,
-  .content-assets span {
-    font-size: 25px;
     cursor: pointer;
   }
-  .content-assets i {
-    margin-right: 10px;
-    color: var(--teal60);
-  }
-  
-  .btn-post{
-     width: 100%;
-     margin: 20px 0px;
-     padding: 10px 0px;
-     font-size: 18px;
-     border: none;
-     border-radius: 5px;
-     color: gray;
-     background: var(--secondary-bg);
-     cursor: pointer;
-  }
-  
-  
-  @media screen and (max-width:767px) {
-    .content-form-post {
-      width: 90%;
-  
-    }
-  } */
-
-
-
-
-
-
-
-
-
-
-  /* form create event */
-/* .content-form-event {
-    width: 500px;
-    height: fit-content;
-    max-height: 70vh;
-    overflow: hidden;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background: var(--primary-bg);
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-      rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-      rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  }
-  
-  .event-header h1 {
-    font-weight: initial;
-    text-transform: capitalize;
-    text-align: center;
-  }
-  .content-form-event hr {
+  .contentFormEvent hr {
     margin: 10px 0px;
     border-color: gray;
   }
-  .event-content .title-event ,
-  .event-content textarea{
+  .eventContent .titleEvent ,
+  .eventContent textarea{
     width: 98%;
     height: 80px;
     margin-top: 20px;
@@ -557,12 +473,11 @@
     font-weight: initial;
     background: transparent;
     border: none;
-    color: gray;
     border-left: 5px solid gray;
     resize: none;
     outline: none;
   }
-  .event-content .title-event {
+  .eventContent .titleEvent {
     width: 98%;
     height: 40px;
     margin-top: 20px;
@@ -570,17 +485,17 @@
     border: none;
     border-left: 5px solid gray;
   }
-  .event-content .content-date-time{
+  .eventContent .contentDateTime{
    display: flex;
    justify-content: space-between;
   }
-  .event-content .content-date-time div{
+  .eventContent .contentDateTime div{
         width: 40%;
         display: flex;
         flex-direction: column;
         gap: 10px;      
     }
-    .event-content .content-date-time div input{
+    .eventContent .contentDateTime div input{
         width: 100%;
         height: 100%;
         padding: 8px 4px;
@@ -592,7 +507,7 @@
   }
 
   
-  .content-form-event  .btn-event{
+  .contentFormEvent  .btnEvent{
      width: 100%;
      margin: 0px 0px;
      margin-top: 25px;
@@ -604,14 +519,14 @@
      background: var(--secondary-bg);
      cursor: pointer;
   }
-  
+
   
   @media screen and (max-width:767px) {
-    .content-form-event {
+    .contentFormEvent {
       width: 90%;
   
     }
-  } */
+  }
 
 
 
@@ -625,7 +540,7 @@
 
   /* list people saying going */
 
-  /* .content-list-people-going {
+  .contentListPeopleGoing {
     width: 500px;
     height: fit-content;
     max-height: 70vh;
@@ -643,55 +558,70 @@
       rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   }
   
-  .list-header h1 {
+  .listHeader h1 {
     display: flex;
-    justify-content: space-between;
-    font-weight: initial;
+    justify-content: space-between;   
     text-transform: capitalize;
     text-align: center;
   }
-  .content-list-people-going hr {
+  .contentListPeopleGoing hr {
     margin: 10px 0px;
     border-color: gray;
   }
 
 
   
-  .list-friend {
+  .listFriend {
     width: 100%;
     height: fit-content;
     padding: 5px;
     display: flex;
-    flex-direction: column;
     gap: 5px;
-   
   }
-  .list-friend .user-bloc {
+  .listFriend .goingLists,
+  .listFriend .notGoingLists{
+    width: 50%;
+  }
+  .listFriend .goingLists h2,
+  .listFriend .notGoingLists h2{
+    margin-left: 5px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    font-weight: initial;
+  }
+  .listFriend .goingLists h2{
+    color: var(--second-blue);
+  }
+  .listFriend .notGoingLists h2{
+    color:gray;
+  }
+  .listFriend div .userBloc {
     display: flex;
   }
-  .list-friend .user-bloc div {
+  .listFriend .userBloc div {
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  .list-friend .user-bloc div img {
+  .listFriend .userBloc div img {
     width: 40px;
     height: 40px;
     border-radius: 100%;
   }
-  .list-friend .user-bloc div span{
+  .listFriend .userBloc div span{
     color: gray;
+  }
+  .listFriend .goingLists .userBloc div i{
+        color: var(--teal60);
+  }
+  .listFriend .notGoingLists .userBloc div i{
+    color: var(--red60);
   }
 
   
-
-  
   @media screen and (max-width:767px) {
-    .content-list-people-going {
+    .contentListPeopleGoing {
       width: 90%;
   
     }
   }
-  .content-list-people-going {
-    display: none;
-  } */

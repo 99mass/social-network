@@ -12,7 +12,7 @@ export default function MidlleBloc() {
     getPostsUser(setPosts);
   }, []);
 
-  console.log(posts && posts);
+  // console.log(posts && posts);
 
   return (
     <div className="menu-middle">
@@ -21,7 +21,7 @@ export default function MidlleBloc() {
                     <PostHeader
                         iduser={item.Post.user_id}
                         user={item.User.firstname}
-                        image={item.Post.image_path}
+                        image={item.User.avatarpath}
                         time={`${getElapsedTime(item.Post.created_at).value} ${getElapsedTime(item.Post.created_at).unit}`}
                     />
                     <PostMiddle
