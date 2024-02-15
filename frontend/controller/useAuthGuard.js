@@ -1,30 +1,22 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { isValideSession } from '../utils/cookies';
+import { useEffect } from "react";
+import { isValideSession } from "../utils/cookies";
 
 export function useAuthGuard() {
-  const router = useRouter();
-
   useEffect(() => {
     const checkSession = async () => {
       const isValid = await isValideSession();
-      if (!isValid) {
-        router.push('/');
-      }
+      if (!isValid) { window.location.href = "/";}
     };
     checkSession();
-  }, [router]);
+  }, []);
 }
 export function useAuthGuard2() {
-    const router = useRouter(); 
-  
-    useEffect(() => {
-      const checkSession = async () => {
-        const isValid = await isValideSession();
-        if (isValid) {
-          router.push('/home');
-        }
-      };
-      checkSession();
-    }, [router]);
-  }
+  useEffect(() => {
+    const checkSession = async () => {
+      const isValid = await isValideSession();
+      if (isValid) window.location.href = "/home";
+      
+    };
+    checkSession();
+  }, []);
+}

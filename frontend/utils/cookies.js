@@ -17,8 +17,10 @@ export const deleteSessionCookie = () => {
 };
 
 export const isValideSession = async () => {
-  let isSession = await sendSession();
-  if (isSession)  return true;
-  
-  return false;
+  try {
+    const isSession = await sendSession();
+    return isSession;
+  } catch (error) {
+    return false;
+  }
 };
