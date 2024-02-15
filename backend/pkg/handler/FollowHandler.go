@@ -70,7 +70,7 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			followers, err := controller.GetFollowInfos(db, sess.UserID.String())
+			followers, err := controller.GetFollowRequestInfos(db, sess.UserID.String())
 			if err != nil {
 				log.Println("error getfollowers info", err)
 				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
@@ -100,7 +100,7 @@ func OldestPendingRequestFollow(db *sql.DB) http.HandlerFunc {
 			if err != nil {
 				return
 			}
-			follower, err := controller.GetOldestPendingFollowRequest(db, sess.UserID.String())
+			follower, err := controller.GetOldestFollowRequest(db, sess.UserID.String())
 			if err != nil {
 				log.Println("error getfollowers info", err)
 				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
