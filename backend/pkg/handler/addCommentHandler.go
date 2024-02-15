@@ -11,12 +11,14 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	"backend/pkg/utils"
 )
 
 type RequestComment struct {
-	UserID  string `json:"user_id"`
-	PostID  string `json:"post_id"`
-	Content string `json:"content"`
+	UserID    string `json:"user_id"`
+	PostID    string `json:"post_id"`
+	Content   string `json:"content"`
+	ImagePath string `json:"image_path"`
 }
 
 func AddCommentHandler(db *sql.DB) http.HandlerFunc {
@@ -51,10 +53,21 @@ func AddCommentHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
+			dir := "./pkg/static/commentImage/"
+			commentImage, _err := utils.ReadAndSaveImage(reqComment.ImagePath, dir)
+			if _err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: _err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+
 			comment := models.Comment{
 				UserID:  sess.UserID.String(),
 				PostID:  reqComment.PostID,
 				Content: reqComment.Content,
+				ImagePath: commentImage,
 			}
 
 			newUUID, err := controller.CreateComment(db, comment)
