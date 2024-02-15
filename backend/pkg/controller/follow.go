@@ -30,12 +30,12 @@ func AccepRequestFollow(db *sql.DB, followerID string, followingID string) error
 	// Préparez la requête SQL pour mettre à jour la colonne status en 'accepted'
 	query := `
 		UPDATE followers
-		SET status = 'accepted', created_at = NOW()
+		SET status = 'accepted', created_at = ?
 		WHERE follower_id = ? AND following_id = ? AND status = "waiting"
 	`
 
 	// Exécutez la requête avec le followerID comme paramètre
-	_, err := db.Exec(query, followerID, followingID)
+	_, err := db.Exec(query, time.Now(), followerID, followingID)
 	if err != nil {
 		log.Println("Error accepting")
 		return fmt.Errorf("failed to accept follow request: %w", err)

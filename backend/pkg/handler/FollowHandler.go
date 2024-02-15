@@ -15,6 +15,7 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 		// Assurez-vous que l'utilisateur est authentifié et récupérez son ID
 		sess, err := utils.CheckAuthorization(db, w, r)
 		if err != nil {
+			helper.SendResponseError(w, "error","you're not authorized",http.StatusBadRequest)
 			return
 		}
 		// check user id format
@@ -38,9 +39,11 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			}
 			helper.SendResponse(w, nil, http.StatusOK)
 		case http.MethodPut:
+			log.Println("okkkk")
 			// Appelez la fonction de contrôleur pour suivre l'utilisateur
 			err = controller.AccepRequestFollow(db, userid.String(), sess.UserID.String())
 			if err != nil {
+				log.Println("noooooo")
 				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
 				return
 			}

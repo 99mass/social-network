@@ -16,6 +16,7 @@ func GetUsersHandler(db *sql.DB) http.HandlerFunc {
 		case http.MethodGet:
 			_, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
+				helper.SendResponseError(w, "error","you're not authorized",http.StatusBadRequest)
 				log.Println("not auth")
 				return
 			}

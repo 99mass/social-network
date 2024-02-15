@@ -17,11 +17,12 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 		case http.MethodGet:
 			_, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
+				log.Println("default")
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
 			}
-			// check user id format
 			userID := r.URL.Query().Get("user_id")
+			// check user id format
 
 			post, err := controller.GetPostsByUserID(db, userID)
 			if err != nil {
@@ -45,6 +46,7 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 
 			helper.SendResponse(w, post, http.StatusOK)
 		default:
+
 			helper.SendResponse(w, models.ErrorResponse{
 				Status:  "error",
 				Message: "Method not allowed",
