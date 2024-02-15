@@ -39,9 +39,11 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			}
 			helper.SendResponse(w, nil, http.StatusOK)
 		case http.MethodPut:
+			log.Println("okkkk")
 			// Appelez la fonction de contrôleur pour suivre l'utilisateur
 			err = controller.AccepRequestFollow(db, userid.String(), sess.UserID.String())
 			if err != nil {
+				log.Println("noooooo")
 				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
 				return
 			}

@@ -11,6 +11,7 @@ import { getPostsUserCreated } from "../../handler/getPostsUser";
 export default function Profile_user() {
   const [datas, setDatas] = useState(null);
   const [postsCreated, setPostsCreated] = useState(null);
+  const [error,setError]=useState(false);
 
   const [edit, setEdit] = useState(false);
   const [viewfriend, setViewfriend] = useState(true);
@@ -20,7 +21,7 @@ export default function Profile_user() {
   // recuperer les information du user
   useEffect(() => {   
       getDatasProfilUser(setDatas, userid);
-      getPostsUserCreated(userid,setPostsCreated);
+     if (!error) getPostsUserCreated(userid,setPostsCreated,setError);
   }, [userid,datas]);
 
 
@@ -38,7 +39,7 @@ export default function Profile_user() {
 
   return (
     <>
-      <ContentCovertPhoto
+     { error && <ContentCovertPhoto
         userPicture={datas && datas.avatarpath}
         firstname={datas && datas.firstname}
         lastname={datas && datas.lastname}
@@ -46,7 +47,7 @@ export default function Profile_user() {
         setViewfriend={handleSetViewfriend}
         edit={edit}
         viewfriend={viewfriend}
-      />
+      />   }
       {viewfriend && <Posts_user postsCreated={postsCreated && postsCreated} about={datas && datas.aboutme} />}
       {edit && (
         <Edit_Profile
@@ -57,6 +58,7 @@ export default function Profile_user() {
         />
       )}
       {!viewfriend && <Friends />}
+    
     </>
   );
 }
