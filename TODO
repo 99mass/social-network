@@ -58,12 +58,12 @@ Avoid heavy picture on create post, user, and send message.
 
 Query For Display
 	user
-		Get all following and followers users (Ordered as real time forum)
+	v	Get all following and followers users (Ordered as real time forum)
 		Get all following users
 		Get all followers users
 		Get all users of a group (doesn't need order)
-		Get all users that send a request to follow a user
-		Get the last following request
+	v	Get all users that send a request to follow a user
+	v	Get the oldest following request
 	Post
 		Get all posts done by a user
 		get all posts a user can see
