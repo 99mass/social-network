@@ -65,8 +65,8 @@ func GetCommentsByPostID(db *sql.DB, postID string) ([]models.Comment, error) {
 			&comment.UserID,
 			&comment.PostID,
 			&comment.Content,
-			&comment.ImagePath,
 			&comment.CreatedAt,
+			&comment.ImagePath,
 		)
 		if err != nil {
 			return nil, err
