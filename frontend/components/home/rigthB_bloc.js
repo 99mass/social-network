@@ -1,8 +1,7 @@
 import Link from "next/link";
 import styles from "../../styles/modules/Friend.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getFriendsLists } from "../../handler/follower";
-import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function RightBloc({ datasUser }) {
   const [FriendsList, setFriendsList] = useState(null);
