@@ -8,3 +8,7 @@ type Comment struct {
 	ImagePath string `db:"image_path" json:"image_path"`
 	CreatedAt string `db:"created_at" json:"created_at"`
 }
+
+type Comment_Request struct {
+	Comment       Comment   `json:"comment"`
+}
