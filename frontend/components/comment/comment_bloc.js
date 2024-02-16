@@ -16,14 +16,13 @@ export default function Comment() {
   const { postid } = router.query;
   const [posData, setPostData] = useState(null);
   const [comment, setComment] = useState(null);
-  //   useEffect(() => {
+
   if (comment === null) {
     getCommentPost(setComment, postid);
   }
   if (posData === null && postid !== null) {
     getSpecificPostsUser(postid, setPostData);
   }
-  //   }, []);
 
   console.log("comment...");
   console.log(comment && comment);
@@ -99,8 +98,8 @@ export default function Comment() {
         />
       )}
       {posData && <PostFooterComment like={"100k"} comment={"2k"} />}
-      {posData &&<CommentPost data={dataComment} />}
-      {posData && <FormComment  postid={posData.post.id}/>}
+      {posData && <CommentPost data={dataComment} />}
+      {posData && <FormComment postid={posData.post.id} />}
     </div>
   );
 }
@@ -149,7 +148,7 @@ export function CommentPost({ data }) {
   );
 }
 
-export function FormComment({postid}) {
+export function FormComment({ postid }) {
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
