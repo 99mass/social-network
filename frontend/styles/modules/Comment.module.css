@@ -1,13 +1,12 @@
 .middleBloc {
   width: 40%;
-  height: 100vh;
+  /* height: 100vh; */
   overflow-y: scroll;
   padding: 0px 10px;
-  padding-bottom: 10rem;
+  padding-bottom: 20px;
+  /* padding-bottom: 10rem; */
   z-index: 1;
-  background-color: red;
 }
-
 
 .middleBloc::-webkit-scrollbar {
   width: 0px;
@@ -39,7 +38,6 @@
   min-height: 0px;
   max-height: 400px;
   overflow-y: scroll;
-  padding: 20px;
   padding-left: 0px;
 }
 
@@ -48,15 +46,11 @@
 }
 
 .contentMessage {
-  margin-bottom: 10px;
   padding-bottom: 10px;
-  border-radius: 10px;
-  background: var(--primary-bg);
+  margin-bottom: 10px;
 }
 
 .contentMessage div div {
-  padding-top: 10px;
-
   display: flex;
 }
 
@@ -73,7 +67,7 @@
 .contentMessage p {
   margin-top: 5px;
   margin-left: 60px;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
   font-size: small;
 }
 
@@ -94,9 +88,9 @@
 }
 
 .contentMessage .containerImageComment img {
-  width: 80%;
-  height: 100%;
-  border-radius: 0px;
+  width: 50%;
+  height: 50%;
+  border-radius: 10px;
   margin-left: 60px;
 }
 

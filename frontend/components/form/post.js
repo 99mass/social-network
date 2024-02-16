@@ -228,8 +228,8 @@ export function ListFriend() {
       {FriendsList &&FriendsList.map((item ) => (
         <div className={styles.userBloc} key={item.id}>
           <div>
-            {/* {item.avatarpath!=='' && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />} */}
-            {/* {!item.avatarpath && <img src={`../images/user-circle.png`} alt="" />} */}
+            {item.avatarpath!=='' && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />}
+            {!item.avatarpath && <img src={`../images/user-circle.png`} alt="" />}
 
             <span>{item.firstname+' '+ item.lastname}</span>
           </div>

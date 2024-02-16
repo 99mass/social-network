@@ -27,7 +27,7 @@ export default function Profile_user() {
     getPostsUserCreated(userid, setPostsCreated, setError);
   }, [userid, datas]);
 
-
+console.log(datas && datas);
   const handleEditForm = () => {
     if (!edit) setEdit(true);
   };
@@ -45,6 +45,7 @@ export default function Profile_user() {
           userPicture={datas && datas.avatarpath}
           firstname={datas && datas.firstname}
           lastname={datas && datas.lastname}
+          ispublic={datas && datas.ispublic}
           handleEditForm={handleEditForm}
           setViewfriend={handleSetViewfriend}
           edit={edit}
@@ -57,10 +58,10 @@ export default function Profile_user() {
       {viewfriend && (
         <Posts_user
           postsCreated={postsCreated && postsCreated}
-          
+
           about={datas && datas.aboutme}
         />
-        
+
       )}
       {edit && (
         <Edit_Profile
@@ -78,6 +79,7 @@ export function ContentCovertPhoto({
   userPicture,
   firstname,
   lastname,
+  ispublic,
   handleEditForm,
   setViewfriend,
   edit,
@@ -97,7 +99,12 @@ export function ContentCovertPhoto({
           {!userPicture && <img src={"../images/default-image.svg"} alt="" />}
           <p>
             <span>{firstname && `${firstname} ${lastname}`}</span>
-            <Link href="viewfriend">259 friends</Link>
+            <span className={styles.profileTypes}>
+              <span>
+                <i className="fas fa-globe-africa"></i>{ispublic ? `Public` : `Private`} profile ·
+              </span>
+              <span> 25k friends</span>
+            </span>
           </p>
         </div>
         <NavMenu
