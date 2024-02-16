@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import styles from '../../styles/modules/emoji.module.css'
 
 
-export default function EmojiForm({toggleEmojicon, setSelectedEmoji }) {
+export default function EmojiForm({ toggleEmojicon, setSelectedEmoji }) {
 
     const [emojiData, setEmojiData] = useState(null)
     const [searchTerm, setSearchTerm] = useState('');
-   
+
 
     useEffect(() => {
         const fetchEmojis = async () => {
@@ -16,11 +16,10 @@ export default function EmojiForm({toggleEmojicon, setSelectedEmoji }) {
                     method: 'GET',
                 });
 
-                // Vérifier le statut de la réponse
                 if (!response.ok) {
                     console.error('Failed to fetch profile data');
                 }
-                // Analyser la réponse JSON
+
                 const data = await response.json();
                 setEmojiData(data)
 
@@ -30,11 +29,10 @@ export default function EmojiForm({toggleEmojicon, setSelectedEmoji }) {
         }
         fetchEmojis()
 
-    }, [])
+    }, [emojiData])
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
-
     };
 
     // Filtrez les émojis en fonction de la valeur de la recherche en utilisant la propriété 'unicodeName'
@@ -46,7 +44,7 @@ export default function EmojiForm({toggleEmojicon, setSelectedEmoji }) {
     };
 
     return (
-        <div className={styles.popup}>
+        <div  className={styles.popup}>
             <div className={styles.form}>
                 <div className={styles.contenInput}>
                     <input

@@ -32,20 +32,20 @@ export default function Discussion() {
           </div>
         ))}
       </div>
-      <AboutGroup/>
+      <AboutGroup />
     </div>
   );
 }
 
 export function AboutGroup() {
-    return(
-        <div className={styles.aboutBloc}>
-        Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
-        Lorem ipsum dolor Lorem ipsum dolor
-        Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
-        Lorem ipsum dolor Lorem ipsum dolor
-        Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
-        Lorem ipsum dolor Lorem ipsum dolor
-      </div>
-    )
+  return (
+    <div className={styles.aboutBloc}>
+      Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
+      Lorem ipsum dolor Lorem ipsum dolor
+      Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
+      Lorem ipsum dolor Lorem ipsum dolor
+      Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
+      Lorem ipsum dolor Lorem ipsum dolor
+    </div>
+  )
 }

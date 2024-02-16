@@ -2,15 +2,18 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Post from "../form/post";
 import Group from "../form/group";
-import { getDatasProfilUser } from "../../handler/user_profile";
 import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function LeftBloc() {
+
   const [datasUser, setDatasUser] = useState(null);
 
   const [postForm, setPostForm] = useState(false);
   const [groupForm, setGroupForm] = useState(false);
 
+  useEffect(() => {
+    getUserBySession(setDatasUser);
+  }, []);
   const togglePostForm = () => {
     setPostForm(!postForm);
   };
@@ -19,10 +22,7 @@ export default function LeftBloc() {
     setGroupForm(!groupForm);
   };
 
-  // recuperer les information du user
-  useEffect(() => {
-    getUserBySession(setDatasUser);
-  }, []);
+
 
   return (
     <>
@@ -31,9 +31,8 @@ export default function LeftBloc() {
           <Link href={`./profileuser?userid=${datasUser && datasUser.id}`}>
             {datasUser && datasUser.avatarpath && (
               <img
-                src={`data:image/png;base64,${
-                  datasUser && datasUser.avatarpath
-                }`}
+                src={`data:image/png;base64,${datasUser && datasUser.avatarpath
+                  }`}
                 alt=""
               />
             )}

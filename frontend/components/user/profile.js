@@ -7,11 +7,12 @@ import { useEffect, useState } from "react";
 import Friends from "./friend";
 import { getDatasProfilUser } from "../../handler/user_profile";
 import { getPostsUserCreated } from "../../handler/getPostsUser";
+import { ErrorProfile } from "../errors/error_profiles";
 
 export default function Profile_user() {
   const [datas, setDatas] = useState(null);
   const [postsCreated, setPostsCreated] = useState(null);
-  const [error,setError]=useState(false);
+  const [error, setError] = useState(false);
 
   const [edit, setEdit] = useState(false);
   const [viewfriend, setViewfriend] = useState(true);
@@ -19,12 +20,12 @@ export default function Profile_user() {
   const { userid } = router.query;
 
   // recuperer les information du user
-  useEffect(() => {   
+  useEffect(() => {
+    if (datas === null) {
       getDatasProfilUser(setDatas, userid);
-     if (!error) getPostsUserCreated(userid,setPostsCreated,setError);
-  }, [userid,datas]);
-
-
+    }
+    getPostsUserCreated(userid, setPostsCreated, setError);
+  }, [userid, datas]);
 
 
   const handleEditForm = () => {
@@ -39,26 +40,37 @@ export default function Profile_user() {
 
   return (
     <>
-     { error && <ContentCovertPhoto
-        userPicture={datas && datas.avatarpath}
-        firstname={datas && datas.firstname}
-        lastname={datas && datas.lastname}
-        handleEditForm={handleEditForm}
-        setViewfriend={handleSetViewfriend}
-        edit={edit}
-        viewfriend={viewfriend}
-      />   }
-      {viewfriend && <Posts_user postsCreated={postsCreated && postsCreated} about={datas && datas.aboutme} />}
+      {datas ? (
+        <ContentCovertPhoto
+          userPicture={datas && datas.avatarpath}
+          firstname={datas && datas.firstname}
+          lastname={datas && datas.lastname}
+          handleEditForm={handleEditForm}
+          setViewfriend={handleSetViewfriend}
+          edit={edit}
+          viewfriend={viewfriend}
+        />
+      ) : (
+        <ErrorProfile />
+      )}
+
+      {viewfriend && (
+        <Posts_user
+          postsCreated={postsCreated && postsCreated}
+          
+          about={datas && datas.aboutme}
+        />
+        
+      )}
       {edit && (
         <Edit_Profile
           CloseEditForm={CloseEditForm}
           datas={datas}
           userid={userid}
-          setDatas={setDatas}          
+          setDatas={setDatas}
         />
       )}
       {!viewfriend && <Friends />}
-    
     </>
   );
 }

@@ -3,7 +3,6 @@ package main
 import (
 	"backend/pkg/db/sqlite"
 	"backend/pkg/routes"
-	"fmt"
 	"net/http"
 )
 
@@ -16,7 +15,7 @@ func main() {
 	db := sqlite.Open()
 
 	routes.Route(db)
-	fmt.Println("Listening in http://localhost" + PORT)
+	// fmt.Println("Listening in http://localhost" + PORT)
 
 	http.ListenAndServe(PORT, nil)
 }

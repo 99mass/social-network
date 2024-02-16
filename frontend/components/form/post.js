@@ -7,10 +7,9 @@ import { EncodeImage } from "../../utils/encodeImage";
 
 export default function Post({ PostForm }) {
   const [emoji, setEmoji] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState(""); // État pour le contenu du textarea
+  const [selectedEmoji, setSelectedEmoji] = useState("");
   const fileInputRef = useRef(null);
 
-  // lier mon icon plu avec mon input de type file
   const handleFileIconClick = () => {
     fileInputRef.current.click();
   };
@@ -97,7 +96,7 @@ export default function Post({ PostForm }) {
           <textarea
             value={selectedEmoji}
             name="Content"
-            onChange={(e) => setSelectedEmoji(e.target.value)} 
+            onChange={(e) => setSelectedEmoji(e.target.value)}
             placeholder="What's on your mind ?"
           />
           <div className={styles.contentAssets}>
@@ -120,7 +119,7 @@ export default function Post({ PostForm }) {
               😄
             </span>
             {/* emoji form */}
-            {emoji && <EmojiForm toggleEmojicon={toggleEmojicon} setSelectedEmoji={setSelectedEmoji}  />}
+            {emoji && <EmojiForm toggleEmojicon={toggleEmojicon} setSelectedEmoji={setSelectedEmoji} />}
           </div>
         </div>
         <button type="submit" className={styles.btnPost}>
@@ -232,13 +231,12 @@ export function ListFriend() {
   return (
     <div className={styles.listFriend}>
       <h3>
-        {" "}
         <span>select friends</span>
       </h3>
       {data.map((item, index) => (
         <div className={styles.userBloc} key={index}>
           <div>
-            <img src={"" + item.image} alt="" />
+            <img src={item.image} alt="" />
             <span>{item.name}</span>
           </div>
           <input defaultValue={item.id} name={item.id} type="checkbox" id="" />

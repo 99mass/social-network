@@ -15,6 +15,7 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
+			var Posts []models.Post_Request
 			_, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				log.Println("default")
@@ -24,7 +25,7 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 			userID := r.URL.Query().Get("user_id")
 			// check user id format
 
-			post, err := controller.GetPostsByUserID(db, userID)
+			posts, err := controller.GetPostsByUserID(db, userID)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
@@ -33,18 +34,42 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 				log.Println("we got an issue : ", err.Error())
 				return
 			}
-			for i, p := range post {
-				if p.ImagePath != "" {
-					img, err := helper.EncodeImageToBase64("./pkg/static/postImage/" + p.ImagePath)
+			for _, post := range posts {
+				var Post models.Post_Request
+
+				if post.ImagePath != "" {
+					img, err := helper.EncodeImageToBase64("./pkg/static/postImage/" + post.ImagePath)
 					if err != nil {
 						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
 						return
 					}
-					post[i].ImagePath = img
+					post.ImagePath = img
 				}
+				// Get the post creator
+				userid, err := utils.TextToUUID(post.UserID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusBadRequest)
+					return
+				}
+				user, err := controller.GetUserByID(db, userid)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusBadRequest)
+					return
+				}
+				Post.Post = post
+				if user.AvatarPath != "" {
+					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+					if err != nil {
+						log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
+						// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
+						// return
+					}
+				}
+				Post.User = user
+				Posts = append(Posts, Post)
 			}
 
-			helper.SendResponse(w, post, http.StatusOK)
+			helper.SendResponse(w, Posts, http.StatusOK)
 		default:
 
 			helper.SendResponse(w, models.ErrorResponse{

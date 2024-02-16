@@ -1,8 +1,12 @@
 import { api } from "../utils/api";
-import { createSessionCookie, getSessionCookie } from "../utils/cookies";
+import {
+  createSessionCookie,
+  deleteSessionCookie,
+  getSessionCookie,
+} from "../utils/cookies";
 
 export const sendSession = async () => {
-  let sessionID = getSessionCookie();
+  const sessionID = getSessionCookie();
 
   if (
     typeof sessionID === undefined ||
@@ -22,17 +26,17 @@ export const sendSession = async () => {
       body: JSON.stringify({ sessionID }),
     });
 
+
     if (response.ok) {
       const cookieDatas = await response.json();
       createSessionCookie(cookieDatas.value, cookieDatas.expiration);
       return true;
     } else {
       const errorData = await response.json();
-      console.error("errorData:", errorData.message);
+      deleteSessionCookie();
       return false;
     }
   } catch (error) {
-    console.error("Error:", error);
     return false;
   }
 };

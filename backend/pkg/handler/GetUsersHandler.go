@@ -5,6 +5,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/utils"
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -29,6 +30,7 @@ func GetUsersHandler(db *sql.DB) http.HandlerFunc {
 
 			// get the user
 			users, err := controller.GetMyFriends(db, userid)
+			fmt.Println("users", users)
 			if err != nil {
 				helper.SendResponseError(w, "error", "user doesn't exist", http.StatusBadRequest)
 				log.Println("err:", err)

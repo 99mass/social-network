@@ -1,6 +1,5 @@
 import Cookies from "js-cookie";
 import { sendSession } from "../handler/session";
-import { api } from "./api";
 
 export const createSessionCookie = (sessionId, expiration) => {
   const expirationDate = new Date(expiration);
@@ -17,8 +16,10 @@ export const deleteSessionCookie = () => {
 };
 
 export const isValideSession = async () => {
-  let isSession = await sendSession();
-  if (isSession)  return true;
-  
-  return false;
+  try {
+    const isSession = await sendSession();
+    return isSession;
+  } catch (error) {
+    return false;
+  }
 };

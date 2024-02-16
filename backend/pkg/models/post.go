@@ -9,3 +9,8 @@ type Post struct {
 	Privacy   string `db:"privacy" json:"privacy"`
 	CreatedAt string `db:"created_at" json:"created_at"`
 }
+
+type Post_Request struct {
+	Post Post `json:"post"`
+	User User `json:"user"`
+}

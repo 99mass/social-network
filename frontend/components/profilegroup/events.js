@@ -90,7 +90,7 @@ export function EventBloc({
           <i className="fa-solid fa-circle-check"></i>Not going
         </button>
       )}
-      
+
     </div>
   );
 }
@@ -166,7 +166,7 @@ export function ListUserAcceptedEvent() {
       image: "../images/default-image.svg",
       user: "userName",
     },
-    
+
   ];
   return (
     <div className={styles.contentListPeopleGoing}>
@@ -184,7 +184,7 @@ export function ListUserAcceptedEvent() {
             <div key={index} className={styles.userBloc}>
               <div>
                 <img src={item.image} alt="" />
-                <span>{item.user}</span> 
+                <span>{item.user}</span>
                 <i class="fa-regular fa-circle-check"></i>
               </div>
             </div>
@@ -192,7 +192,7 @@ export function ListUserAcceptedEvent() {
         </div>
 
         <div className={styles.notGoingLists}>
-        <h2>Not Going</h2>
+          <h2>Not Going</h2>
           {data.map((item, index) => (
             <div key={index} className={styles.userBloc}>
               <div>

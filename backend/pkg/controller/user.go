@@ -154,31 +154,33 @@ func UpdateUser(db *sql.DB, user models.User) error {
 
 func GetMyFriends(db *sql.DB, userId uuid.UUID) ([]models.User, error) {
 	query := `
-		WITH Discussions AS (
-			SELECT sender_id, recipient_id
-			FROM private_messages
-			WHERE sender_id = $1 OR recipient_id = $1
-		),
-		DiscussionUsers AS (
-			SELECT DISTINCT CASE WHEN sender_id = $1 THEN recipient_id ELSE sender_id END AS user_id
-			FROM Discussions
-		)
-		SELECT u.*, MAX(u.created_at) as last_message_timestamp
-		FROM users u
-		JOIN followers f ON u.id = f.following_id AND f.follower_id = $1
-		LEFT JOIN Discussions pm ON u.id = pm.sender_id OR u.id = pm.recipient_id
-		GROUP BY u.id
-		HAVING u.id IN (SELECT user_id FROM DiscussionUsers)
-
-		UNION ALL
-
-		SELECT u.*, NULL as last_message_timestamp
-		FROM users u
-		JOIN followers f ON u.id = f.following_id AND f.follower_id = $1
-		LEFT JOIN Discussions pm ON u.id = pm.sender_id OR u.id = pm.recipient_id
-		WHERE u.id NOT IN (SELECT user_id FROM DiscussionUsers)
-
-		ORDER BY last_message_timestamp DESC, u.nickname ASC;
+	WITH Discussions AS (
+		SELECT sender_id, recipient_id
+		FROM private_messages
+		WHERE sender_id = $1 OR recipient_id = $1
+	),
+	DiscussionUsers AS (
+		SELECT DISTINCT CASE WHEN sender_id = $1 THEN recipient_id ELSE sender_id END AS user_id
+		FROM Discussions
+	)
+	SELECT u.*, MAX(u.created_at) as last_message_timestamp
+	FROM users u
+	JOIN followers f1 ON (u.id = f1.following_id AND f1.follower_id = $1)
+					   OR (u.id = f1.follower_id AND f1.following_id = $1)
+	LEFT JOIN Discussions pm ON u.id = pm.sender_id OR u.id = pm.recipient_id
+	GROUP BY u.id
+	HAVING u.id IN (SELECT user_id FROM DiscussionUsers)
+	
+	UNION
+	
+	SELECT u.*, NULL as last_message_timestamp
+	FROM users u
+	JOIN followers f1 ON (u.id = f1.following_id AND f1.follower_id = $1)
+					   OR (u.id = f1.follower_id AND f1.following_id = $1)
+	LEFT JOIN Discussions pm ON u.id = pm.sender_id OR u.id = pm.recipient_id
+	WHERE u.id NOT IN (SELECT user_id FROM DiscussionUsers)
+	
+	ORDER BY last_message_timestamp DESC, u.nickname ASC;	
 	`
 	rows, err := db.Query(query, userId.String())
 	if err != nil {

@@ -1,5 +1,4 @@
-// const domain = "http://localhost:8080";
-const domain = "http://11.11.80.36:8080";
+const domain = "http://localhost:8080";
 
 
 export const api = {
@@ -14,5 +13,8 @@ export const api = {
   ShowPosts: `${domain}/show_posts`,
   userPosts: `${domain}/userposts`,
   Followuser: `${domain}/followuser`,
-  Requestfollow: `${domain}/requestfollow`
+  Requestfollow: `${domain}/requestfollow`,
+  users_follows: `${domain}/users_follows`,
+  addcomment:`${domain}/addcomment`,
+  show_comments_post: `${domain}/show_comments_post`
 };
