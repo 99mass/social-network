@@ -48,13 +48,13 @@ export function PostHeader({ iduser, user, image,isfollowed, time }) {
   const handlerFollower = () => {
     askForFriends(iduser);
   };
-
+  console.log("image:",image);
   return (
     <div className="profileuser">
       <div className="left-side">
         <div className="profile-pic">
             <Link href={`./profileuser?userid=${iduser}`}>           
-              <img src={image ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />           
+              <img src={image && image!=="" ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />           
           </Link>
         </div>
         <span>

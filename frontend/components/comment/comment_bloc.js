@@ -24,61 +24,6 @@ export default function Comment() {
     getSpecificPostsUser(postid, setPostData);
   }
 
-  console.log("comment...");
-  console.log(comment && comment);
-
-  const dataComment = [
-    {
-      user: "alpha",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
-      time: "3mn",
-    },
-    {
-      user: "breukh",
-      textComment:
-        "Lorem ipsum dolor sit amet elit dolor sit amet elit. Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
-      time: "2mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
-      time: "1mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
-      time: "1mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
-      time: "1mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
-      time: "1mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
-      time: "1mn",
-    },
-  ];
 
   return (
     <div className={`${styles.middleBloc} middle`}>
@@ -98,8 +43,10 @@ export default function Comment() {
         />
       )}
       {posData && <PostFooterComment like={"100k"} comment={"2k"} />}
-      {posData && <CommentPost data={dataComment} />}
-      {posData && <FormComment postid={posData.post.id} />}
+      {posData && comment && <CommentPost data={comment} />}
+      {posData && (
+        <FormComment postid={posData.post.id} setComment={setComment} />
+      )}
     </div>
   );
 }
@@ -121,34 +68,47 @@ export function CommentPost({ data }) {
   return (
     <div className={styles.contentAllComments}>
       <div className={styles.containerCommentsMessage}>
-        {data.map((item, index) => (
-          <div key={index} className={styles.contentMessage}>
-            <div>
+        {data &&
+          data.map((item, index) => (
+            <div key={index} className={styles.contentMessage}>
               <div>
-                <Link href={`./profileuser?userid=`}>
-                  <img src={item.commentUserUrl} alt="" />
-                </Link>
-                <pre className={styles.message}>{item.textComment}</pre>
+                <div>
+                  <Link href={`./profileuser?userid=${item.comment.user_id}`}>
+                    {item.comment.image_path && (
+                      <img
+                        src={`data:image/png;base64,${item.comment.image_path}`}
+                        alt=""
+                      />
+                    )}
+                    {!item.comment.image_path && (
+                      <img src={`../images/user-circle.png`} alt="" />
+                    )}
+                  </Link>
+                  <pre className={styles.message}>{item.comment.content}</pre>
+                </div>
+                <div className={styles.containerImageComment}>
+                  {item.comment.image_path && (
+                    <img
+                      src={`data:image/png;base64,${item.comment.image_path}`}
+                      alt=""
+                    />
+                  )}
+                </div>
               </div>
-              <div className={styles.containerImageComment}>
-                <img
-                  src={`https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=`}
-                  alt=""
-                />
-              </div>
+              <p>
+                <span>by {"username"}</span>
+                {`${getElapsedTime(item.comment.created_at).value} ${
+                  getElapsedTime(item.comment.created_at).unit
+                } ago`} 
+              </p>
             </div>
-            <p>
-              <span>by {item.user}</span>
-              {item.time}
-            </p>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
 }
 
-export function FormComment({ postid }) {
+export function FormComment({ postid, setComment }) {
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
@@ -189,7 +149,7 @@ export function FormComment({ postid }) {
       image_path: encodedImage || undefined,
     };
 
-    AddComment(formData);
+    AddComment(formData, postid, setComment);
   };
 
   return (
