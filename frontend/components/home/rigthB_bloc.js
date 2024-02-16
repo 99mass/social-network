@@ -8,7 +8,7 @@ export  default function RightBloc() {
     const [datasUser, setDatasUser] = useState(null);
     const [FriendsList, setFriendsList] = useState(null);
 
-    useEffect(() => {
+    // useEffect(() => {
         if (FriendsList===null) {
             if (datasUser==null) {
                 getUserBySession(setDatasUser);
@@ -18,7 +18,7 @@ export  default function RightBloc() {
                 getFriendsLists(datasUser && datasUser.id,setFriendsList);
             }
         }
-    }, []);
+    // }, []);
 
    
     return(
@@ -50,8 +50,7 @@ export  function LastFrienRequest() {
     )
 }
 export function FriendOnLine({FriendsList}) {
-    console.log(FriendsList && FriendsList);
-
+   
     return (
         <div className="friend-online">
             <h4>Chat with Friend online</h4>
@@ -62,6 +61,9 @@ export function FriendOnLine({FriendsList}) {
                             <Link href="./chatpage">
                                 { item && item.avatarpath &&(
                                 <img src={`data:image/png;base64,${item && item.avatarpath}`} alt="" />
+                                )}
+                                { !item.avatarpath &&(
+                                <img src={`../images/user-circle.png`} alt="" />
                                 )}
                                 <p>{item.firstname+' '+ item.lastname}</p>
                             </Link>
