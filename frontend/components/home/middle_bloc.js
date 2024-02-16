@@ -25,6 +25,7 @@ export default function MidlleBloc() {
             iduser={item.user.id}
             user={item.user.firstname}
             image={item.user.avatarpath}
+            isfollowed={item.is_followed}
             time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
           />
           <PostMiddle
@@ -43,7 +44,7 @@ export default function MidlleBloc() {
   );
 }
 
-export function PostHeader({ iduser, user, image, time }) {
+export function PostHeader({ iduser, user, image,isfollowed, time }) {
   const handlerFollower = () => {
     askForFriends(iduser);
   };
@@ -60,7 +61,7 @@ export function PostHeader({ iduser, user, image, time }) {
           <h3>
             {user} .
             <span onClick={handlerFollower} className="follow" title="follow">
-              Follow
+              {isfollowed}
             </span>
           </h3>
           <p>
