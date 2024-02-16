@@ -10,16 +10,11 @@ import (
 	"net/http"
 )
 
-type Post struct {
-	Post models.Post
-	User models.User
-}
-
 func ShowPosts(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			var Posts []Post
+			var Posts []models.Post_Request
 			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
@@ -32,7 +27,7 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			for _, post := range posts {
-				var Post Post
+				var Post models.Post_Request
 
 				//for each post
 				if post.ImagePath != "" {
