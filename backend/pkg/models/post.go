@@ -11,6 +11,7 @@ type Post struct {
 }
 
 type Post_Request struct {
-	Post Post `json:"post"`
-	User User `json:"user"`
+	Post       Post   `json:"post"`
+	User       User   `json:"user"`
+	IsFollowed string `json:"is_followed"`
 }
