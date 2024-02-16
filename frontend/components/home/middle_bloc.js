@@ -18,21 +18,21 @@ export default function MidlleBloc() {
   return (
     <div className="menu-middle">
       {posts && posts.map((item) => (
-        <div className="post" key={item.Post.id}>
+        <div className="post" key={item.post.id}>
           <PostHeader
-            iduser={item.User.id}
-            user={item.User.firstname}
-            image={item.User.avatarpath}
-            time={`${getElapsedTime(item.Post.created_at).value} ${getElapsedTime(item.Post.created_at).unit}`}
+            iduser={item.user.id}
+            user={item.user.firstname}
+            image={item.user.avatarpath}
+            time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
           />
           <PostMiddle
-            content={item.Post.content}
-            image={item.Post.image_path}
+            content={item.post.content}
+            image={item.post.image_path}
           />
           <PostFooter
             numberLike={"15k"}
             numberComment={"6k"}
-            postid={item.Post.id}
+            postid={item.post.id}
           />
         </div>
       ))

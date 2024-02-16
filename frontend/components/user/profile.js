@@ -57,8 +57,10 @@ export default function Profile_user() {
       {viewfriend && (
         <Posts_user
           postsCreated={postsCreated && postsCreated}
+          
           about={datas && datas.aboutme}
         />
+        
       )}
       {edit && (
         <Edit_Profile

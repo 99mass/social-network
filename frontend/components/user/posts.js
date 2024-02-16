@@ -8,13 +8,13 @@ export default function Posts_user({ postsCreated, about }) {
         <div className={styles.body1}>
             <div className={styles.bodymenu}>
                 {postsCreated && postsCreated.map((item) => (
-                    <div className="post" key={item.id}>
+                    <div className="post" key={item.post.id}>
                         <PostHeader
-                            user={"breukh"}
-                            image={item.image_path}
-                            time={`${getElapsedTime(item.created_at).value} ${getElapsedTime(item.created_at).unit}`}
+                            user={item.user.firstname}
+                            image={item.user.image_path}
+                            time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
                         />
-                        <PostMiddle content={item.content} image={item.image_path} />
+                        <PostMiddle content={item.post.content} image={item.post.image_path} />
                         <PostFooter numberLike={"15k"} numberComment={"5k"} />
                     </div>
                 ))
