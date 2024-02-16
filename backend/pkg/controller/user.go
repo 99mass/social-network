@@ -175,8 +175,8 @@ func GetMyFriends(db *sql.DB, userId uuid.UUID) ([]models.User, error) {
 	
 	SELECT u.*, NULL as last_message_timestamp
 	FROM users u
-	JOIN followers f1 ON (u.id = f1.following_id AND f1.follower_id = $1)
-					   OR (u.id = f1.follower_id AND f1.following_id = $1)
+	JOIN followers f1 ON (u.id = f1.following_id AND f1.follower_id = $1 AND status="accepted")
+					   OR (u.id = f1.follower_id AND f1.following_id = $1 AND status="accepted")
 	LEFT JOIN Discussions pm ON u.id = pm.sender_id OR u.id = pm.recipient_id
 	WHERE u.id NOT IN (SELECT user_id FROM DiscussionUsers)
 	
