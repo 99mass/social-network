@@ -2,7 +2,7 @@ package handler
 
 import (
 	"database/sql"
-	"encoding/json"
+	"log"
 	"net/http"
 
 	"backend/pkg/controller"
@@ -11,78 +11,53 @@ import (
 	"backend/pkg/utils"
 )
 
-type CommentRequest struct {
-	PostID string `json:"postid"`
-}
-
-type Comment struct {
-	Comment models.Comment
-	User    models.User
-}
-
 func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
+			var Comments []models.Comment_Request
 			_, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
 			}
+			postID := r.URL.Query().Get("post_id")
+			// check user id format
 
-			var comReq CommentRequest
-			err = json.NewDecoder(r.Body).Decode(&comReq)
+			comments, err := controller.GetCommentsByPostID(db, postID)
 			if err != nil {
-				helper.SendResponseError(w, "error", "incorrect Request", http.StatusBadRequest)
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "we got an issue",
+				}, http.StatusBadRequest)
+				log.Println("we got an issue : ", err.Error())
 				return
 			}
+			for _, comment := range comments {
+				var Comment models.Comment_Request
 
-			comment, err := controller.GetCommentsByPostID(db, comReq.PostID)
-			if err != nil {
-				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
-				return
-			}
-
-			var Comments []Comment
-			for _, com := range comment {
-				var Comment Comment
-
-				//for each com
-				if com.ImagePath != "" {
-					img, err := helper.EncodeImageToBase64("./pkg/static/commentImage/" + com.ImagePath)
+				if comment.ImagePath != "" {
+					img, err := helper.EncodeImageToBase64("./pkg/static/commentImage/" + comment.ImagePath)
 					if err != nil {
-						helper.SendResponseError(w, "error", "enable to encode image com", http.StatusInternalServerError)
+						helper.SendResponseError(w, "error", "enable to encode image comment", http.StatusInternalServerError)
 						return
 					}
-					com.ImagePath = img
+					comment.ImagePath = img
 				}
-				// Get the com creator
-				userid, err := utils.TextToUUID(com.UserID)
-				if err != nil {
-					helper.SendResponseError(w, "error", err.Error(), http.StatusBadRequest)
-					return
-				}
-				user, err := controller.GetUserByID(db, userid)
-				if err != nil {
-					helper.SendResponseError(w, "error", err.Error(), http.StatusBadRequest)
-					return
-				}
-				Comment.Comment = com
-				if user.AvatarPath != "" {
-					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
-					if err != nil {
-						helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
-						return
-					}
-				}
-				Comment.User = user
+				Comment.Comment = comment
+
 				Comments = append(Comments, Comment)
+
 			}
 
 			helper.SendResponse(w, Comments, http.StatusOK)
-
 		default:
-			helper.SendResponseError(w, "error", "Method not Allowed", http.StatusMethodNotAllowed)
+
+			helper.SendResponse(w, models.ErrorResponse{
+				Status:  "error",
+				Message: "Method not allowed",
+			}, http.StatusMethodNotAllowed)
+			log.Println("methods not allowed")
 		}
 	}
 }
