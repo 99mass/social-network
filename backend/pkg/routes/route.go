@@ -19,6 +19,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/create_group", helper.Middleware(handler.AddGroupHandler(db)))
 	http.HandleFunc("/addcomment", helper.Middleware(handler.AddCommentHandler(db)))
 	http.HandleFunc("/show_comments_post", helper.Middleware(handler.ShowCommentsByPost(db)))
+	http.HandleFunc("/likepost", helper.Middleware(handler.LikePostHandler(db)))
 
 	// Display Request
 	http.HandleFunc("/session", helper.Middleware(handler.CheckSessionHandler(db)))
