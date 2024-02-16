@@ -11,6 +11,6 @@ type Post struct {
 }
 
 type Post_Request struct {
-	Post Post
-	User User
+	Post Post `json:"post"`
+	User User `json:"user"`
 }

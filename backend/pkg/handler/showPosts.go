@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func ShowPosts(db *sql.DB) http.HandlerFunc {
@@ -18,6 +19,7 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+				log.Println("not authorized", err)
 				return
 			}
 			posts, err := controller.PostToShow(db, sess.UserID.String())
@@ -34,6 +36,7 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 					img, err := helper.EncodeImageToBase64("./pkg/static/postImage/" + post.ImagePath)
 					if err != nil {
 						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
+						log.Println("enable to encode post image")
 						return
 					}
 					post.ImagePath = img
@@ -50,11 +53,12 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 					return
 				}
 				Post.Post = post
-				if user.AvatarPath != "" {
+				if strings.TrimSpace(user.AvatarPath) != "" {
 					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
 					if err != nil {
-						helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
-						return
+						// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
+						log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
+						// return
 					}
 				}
 				Post.User = user
