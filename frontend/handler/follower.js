@@ -15,12 +15,12 @@ export const getAskForFriendLists = async (setDatas) => {
 
     // Vérifier le statut de la réponse
     if (!response.ok) {
-      console.error("Failed to fetch profile data");
+      console.error("Failed to fetch Friend Lists data");
     }
     const data = await response.json();
     setDatas(data);
   } catch (error) {
-    console.error("Error fetching profile data:", error.message);
+    console.error("Error fetching  Friend Lists data:", error.message);
   }
 };
 
@@ -40,9 +40,7 @@ export const getFriendsLists = async (userid, setDatas) => {
       // Vérifier le statut de la réponse
       if (response.ok) {
         const data = await response.json();
-        
         setDatas(data);
-
       }
     } catch (error) {
       console.error("Error fetching Friends data:", error.message);

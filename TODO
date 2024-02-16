@@ -41,7 +41,7 @@ WHERE (
 	x	unfollow a user
 	x   delete a follower
 
-	x	Create a group
+	v	Create a group
 	x	send invitation to other users to join a group where hi is a memeber
 	x	Accept invitation to join a group
 	x	Decline invitaion to join a group
