@@ -64,6 +64,11 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 					}
 				}
 				Post.User = user
+				// Check if the user is followed
+				isfollowed, _ := controller.IsFollowed(db, sess.UserID.String(), user.ID)
+				Post.IsFollowed = isfollowed
+				log.Println("isfollowed", isfollowed)
+
 				Posts = append(Posts, Post)
 			}
 
