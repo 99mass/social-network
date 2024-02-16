@@ -217,7 +217,7 @@ export function ListFriend() {
     getFriendsLists(userId, setFriendsList);
   }
 
-  console.log(FriendsList && FriendsList)
+  // console.log(FriendsList && FriendsList)
  
 
   return (
@@ -228,7 +228,9 @@ export function ListFriend() {
       {FriendsList &&FriendsList.map((item ) => (
         <div className={styles.userBloc} key={item.id}>
           <div>
-            <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />
+            {/* {item.avatarpath!=='' && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />} */}
+            {/* {!item.avatarpath && <img src={`../images/user-circle.png`} alt="" />} */}
+
             <span>{item.firstname+' '+ item.lastname}</span>
           </div>
           <input defaultValue={item.id} name={item.id} type="checkbox" id="" />

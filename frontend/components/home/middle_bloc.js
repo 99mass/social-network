@@ -14,8 +14,7 @@ export default function MidlleBloc() {
       getPostsUser(setPosts);
     }
   }, []);
-
-  console.log(posts && posts);
+console.log('aaaabbb');
 
   return (
     <div className="menu-middle">
@@ -48,7 +47,7 @@ export function PostHeader({ iduser, user, image,isfollowed, time }) {
   const handlerFollower = () => {
     askForFriends(iduser);
   };
-  // console.log("image:",image);
+
   return (
     <div className="profileuser">
       <div className="left-side">
