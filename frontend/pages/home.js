@@ -4,13 +4,11 @@ import LeftBloc from "../components/home/left_bloc";
 import MidlleBloc from "../components/home/middle_bloc";
 import RightBloc from "../components/home/rigthB_bloc";
 import { useAuthGuard } from "../controller/useAuthGuard";
-
+import PageHome from "../components/home/page_home";
 
 export default function Home() {
-
-  // gerer l'acces a cette route 
+  // gerer l'acces a cette route
   useAuthGuard();
-
 
   return (
     <>
@@ -21,9 +19,7 @@ export default function Home() {
       </Head>
       <Header />
       <section className="section-index">
-        <LeftBloc />
-        <MidlleBloc />
-        <RightBloc />
+        <PageHome />
       </section>
     </>
   );

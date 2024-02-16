@@ -25,6 +25,30 @@ export const getPostsUser = async (setPosts) => {
   }
 };
 
+export const getSpecificPostsUser = async (post_id,setPostData) => {
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(api.ShowPosts+`?post_id=${post_id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionId,
+      },
+    });
+
+    // Vérifier le statut de la réponse
+    if (!response.ok) {
+      console.error("Failed to fetch SpecificPostsUser data");
+    } else {
+      const data = await response.json();
+      setPostData(data);
+    }
+  } catch (error) {
+    console.error("Error fetching SpecificPostsUser data:", error.message);
+  }
+};
+
 export const getPostsUserCreated = async (userid, setPostsCreated, setError) => {
   if (userid) {
     try {

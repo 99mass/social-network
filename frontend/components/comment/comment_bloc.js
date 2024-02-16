@@ -9,21 +9,24 @@ import { errorNotification } from '../../utils/sweeAlert';
 import { EncodeImage } from '../../utils/encodeImage';
 import { AddComment, getCommentPost } from '../../handler/comment';
 import { useRouter } from 'next/router';
+import { getSpecificPostsUser } from '../../handler/getPostsUser';
 
 
 export default function Comment() {
     const router = useRouter();
     const { postid } = router.query;
-
+    const [posData,setPostData]=useState(null);
     const [comment, setComment] = useState(null)
     useEffect(() => {
         if (comment === null) {
             getCommentPost(setComment, postid);
         }
+        getSpecificPostsUser(postid,setPostData);
     }, []);
 
     console.log('comment...');
-    console.log(comment && comment);
+    // console.log(comment && comment);
+    console.log(posData && posData);
 
     const data =
     {
