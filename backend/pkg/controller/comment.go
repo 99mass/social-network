@@ -62,8 +62,8 @@ func GetCommentsByPostID(db *sql.DB, postID string) ([]models.Comment, error) {
 		var comment models.Comment
 		err := rows.Scan(
 			&comment.ID,
-			&comment.UserID,
 			&comment.PostID,
+			&comment.UserID,
 			&comment.Content,
 			&comment.ImagePath,
 			&comment.CreatedAt,
@@ -79,5 +79,40 @@ func GetCommentsByPostID(db *sql.DB, postID string) ([]models.Comment, error) {
 	}
 
 	return comments, nil
+}
+
+// GetUserByCommentID récupère l'utilisateur associé à un commentaire en utilisant l'ID du commentaire.
+func GetUserByCommentID(db *sql.DB, commentID string) (models.User, error) {
+	var user models.User
+
+	query := `
+		SELECT u.* 
+		FROM users u
+		JOIN comments c ON u.id = c.user_id
+		WHERE c.id = ?
+	`
+
+	err := db.QueryRow(query, commentID).Scan(
+		&user.ID,
+		&user.Email,
+		&user.Password,
+		&user.FirstName,
+		&user.LastName,
+		&user.DateOfBirth,
+		&user.AvatarPath,
+		&user.Nickname,
+		&user.AboutMe,
+		&user.IsPublic,
+		&user.CreatedAt,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return models.User{}, errors.New("no user found for the provided comment ID")
+		}
+		return models.User{}, err
+	}
+
+	return user, nil
 }
 
