@@ -25,31 +25,37 @@ export const getPostsUser = async (setPosts) => {
   }
 };
 
-export const getSpecificPostsUser = async (post_id,setPostData) => {
-  try {
-    const sessionId = getSessionCookie();
+export const getSpecificPostsUser = async (post_id, setPostData) => {
+  if (post_id) {
+    try {
+      const sessionId = getSessionCookie();
 
-    const response = await fetch(api.ShowPosts+`?post_id=${post_id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: sessionId,
-      },
-    });
+      const response = await fetch(api.ShowPosts + `?post_id=${post_id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      });
 
-    // Vérifier le statut de la réponse
-    if (!response.ok) {
-      console.error("Failed to fetch SpecificPostsUser data");
-    } else {
-      const data = await response.json();
-      setPostData(data);
+      // Vérifier le statut de la réponse
+      if (!response.ok) {
+        console.error("Failed to fetch SpecificPostsUser data");
+      } else {
+        const data = await response.json();
+        setPostData(data);
+      }
+    } catch (error) {
+      console.error("Error fetching SpecificPostsUser data:", error.message);
     }
-  } catch (error) {
-    console.error("Error fetching SpecificPostsUser data:", error.message);
   }
 };
 
-export const getPostsUserCreated = async (userid, setPostsCreated, setError) => {
+export const getPostsUserCreated = async (
+  userid,
+  setPostsCreated,
+  setError
+) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -64,16 +70,14 @@ export const getPostsUserCreated = async (userid, setPostsCreated, setError) => 
 
       if (!response.ok) {
         console.error("Failed to fetch PostsUserCreated  data");
-        setError(true)
+        setError(true);
       } else {
         const data = await response.json();
         setPostsCreated(data);
       }
-
-
     } catch (error) {
       console.error("Error fetching PostsUserCreated data:", error.message);
-      setError(true)
+      setError(true);
     }
   }
 };
