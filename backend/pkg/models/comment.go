@@ -10,5 +10,6 @@ type Comment struct {
 }
 
 type Comment_Request struct {
-	Comment       Comment   `json:"comment"`
+	Comment Comment `json:"comment"`
+	User    User    `json:"user"`
 }
