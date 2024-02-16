@@ -6,8 +6,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gofrs/uuid"
-
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
@@ -15,7 +13,6 @@ import (
 )
 
 type RequestComment struct {
-	UserID    string `json:"user_id"`
 	PostID    string `json:"post_id"`
 	Content   string `json:"content"`
 	ImagePath string `json:"image_path"`
@@ -25,21 +22,9 @@ func AddCommentHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:
-			session := r.Header.Get("Authorization")
-			sessId, err := uuid.FromString(session)
+			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "format value session incorrect",
-				}, http.StatusBadRequest)
-				return
-			}
-			sess, err := controller.GetSessionByID(db, sessId)
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "you're not authorized",
-				}, http.StatusBadRequest)
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
 			}
 
