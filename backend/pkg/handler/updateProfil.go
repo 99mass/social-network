@@ -90,7 +90,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			oldImage := oldUser.AvatarPath
-			oldImagePath := "./pkg/static/avatarImage/" + oldImage
+			oldImagePath := oldImage
 
 			dir := "./pkg/static/avatarImage/"
 			userAvatar, err := utils.ReadAndSaveImageForUpdate(userReq.AvatarPath, dir, oldImagePath)
