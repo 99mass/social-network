@@ -48,7 +48,7 @@ export function PostHeader({ iduser, user, image,isfollowed, time }) {
   const handlerFollower = () => {
     askForFriends(iduser);
   };
-  console.log("image:",image);
+  // console.log("image:",image);
   return (
     <div className="profileuser">
       <div className="left-side">

@@ -23,6 +23,7 @@ export default function Comment() {
   if (posData === null && postid !== null) {
     getSpecificPostsUser(postid, setPostData);
   }
+console.log(comment && comment);
 
 
   return (
@@ -76,7 +77,7 @@ export function CommentPost({ data }) {
                   <Link href={`./profileuser?userid=${item.comment.user_id}`}>
                     {item.comment.image_path && (
                       <img
-                        src={`data:image/png;base64,${item.comment.image_path}`}
+                        src={`data:image/png;base64,${item.user.avatarpath}`}
                         alt=""
                       />
                     )}
@@ -96,7 +97,7 @@ export function CommentPost({ data }) {
                 </div>
               </div>
               <p>
-                <span>by {"username"}</span>
+                <span>by {item.user.firstname}</span>
                 {`${getElapsedTime(item.comment.created_at).value} ${
                   getElapsedTime(item.comment.created_at).unit
                 } ago`} 

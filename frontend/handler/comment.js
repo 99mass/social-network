@@ -15,7 +15,7 @@ export const AddComment = async (data,postid,setComment) => {
     });
 
     if (response.ok) {
-      successNotification("Comment added successful.");
+      // successNotification("Comment added successful.");
       getCommentPost(setComment, postid);
     } else {
       const errorData = await response.json();
