@@ -254,7 +254,7 @@ func IsFollowed(db *sql.DB, followerid, followingid string) (string, error) {
 		}
 		return "", err
 	}
-	if status == "Accepted" {
+	if status == "accepted" {
 		status = "Unfollow"
 	} else {
 		status = "delete"
