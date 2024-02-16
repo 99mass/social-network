@@ -15,6 +15,8 @@ export default function MidlleBloc() {
     }
   }, []);
 
+  console.log(posts && posts);
+
   return (
     <div className="menu-middle">
       {posts && posts.map((item) => (
@@ -23,6 +25,7 @@ export default function MidlleBloc() {
             iduser={item.user.id}
             user={item.user.firstname}
             image={item.user.avatarpath}
+            isfollowed={item.is_followed}
             time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
           />
           <PostMiddle
@@ -41,24 +44,24 @@ export default function MidlleBloc() {
   );
 }
 
-export function PostHeader({ iduser, user, image, time }) {
+export function PostHeader({ iduser, user, image,isfollowed, time }) {
   const handlerFollower = () => {
     askForFriends(iduser);
   };
-
+  // console.log("image:",image);
   return (
     <div className="profileuser">
       <div className="left-side">
         <div className="profile-pic">
             <Link href={`./profileuser?userid=${iduser}`}>           
-              <img src={image ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />           
+              <img src={image && image!=="" ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />           
           </Link>
         </div>
         <span>
           <h3>
             {user} .
             <span onClick={handlerFollower} className="follow" title="follow">
-              Follow
+              {isfollowed}
             </span>
           </h3>
           <p>

@@ -236,3 +236,28 @@ func GetOldestFollowRequest(db *sql.DB, user string) (Follow, error) {
 
 	return follower, nil
 }
+
+func IsFollowed(db *sql.DB, followerid, followingid string) (string, error) {
+	if followerid == followingid {
+		return "", nil
+	}
+	query := `
+        SELECT status
+        FROM followers
+        WHERE follower_id = ? AND following_id = ?
+    `
+	var status string
+	err := db.QueryRow(query, followerid, followingid).Scan(&status)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "Follow", nil
+		}
+		return "", err
+	}
+	if status == "accepted" {
+		status = "Unfollow"
+	} else {
+		status = "Delete"
+	}
+	return status, nil
+}

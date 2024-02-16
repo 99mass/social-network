@@ -31,7 +31,7 @@ export default function MiddleBlocFriend() {
       {datas &&
         datas.map((item, index) => (
           <div className={styles.contentFriend} key={index}>
-            <Link href={`./profileuser?userid=${item.id}`}>
+            <Link href={`./profileuser?userid=${item.follower_id}`}>
               {item.avatarpath && (
                 <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />
               )}
