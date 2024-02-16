@@ -218,32 +218,7 @@ export function ListFriend() {
   }
 
   console.log(FriendsList && FriendsList)
-  // const data = [
-  //   {
-  //     id: 1,
-  //     name: "alice doe",
-  //     image:
-  //       "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
-  //   },
-  //   {
-  //     id: "253c1c84-231d-4653-a40e-93220938f571",
-  //     name: "michel doe",
-  //     image:
-  //       "https://media.istockphoto.com/id/1413765605/fr/photo/portrait-dune-femme-daffaires-afro-am%C3%A9ricaine-prosp%C3%A8re.webp?b=1&s=170667a&w=0&k=20&c=T8Aiogu4Y9EnlE3sNKP_L6H5sHrYv4ttFMfzNgcUmwI=",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "jack doe",
-  //     image:
-  //       "https://media.istockphoto.com/id/1369508766/fr/photo/belle-femme-latine-%C3%A0-succ%C3%A8s-souriante.webp?b=1&s=170667a&w=0&k=20&c=hYzjJHP1DkGQIbtSjqwB87c2hplYO1Mn9cgheKr0M7o=",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "christin doe",
-  //     image:
-  //       "https://media.istockphoto.com/id/1511315040/fr/photo/souriez-tablette-et-recherchez-avec-une-femme-noire-au-bureau-pour-la-technologie.webp?b=1&s=170667a&w=0&k=20&c=D9yNSpTwRSf2Iw2xeOxFKnSxqD2xijYXsU4B6vxt-ys=",
-  //   },
-  // ];
+ 
 
   return (
     <div className={styles.listFriend}>
