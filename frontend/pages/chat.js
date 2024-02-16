@@ -6,8 +6,8 @@ import { useAuthGuard } from "../controller/useAuthGuard";
 
 export default function Chat() {
 
-    // gerer l'acces a cette route 
-    useAuthGuard();
+  // gerer l'acces a cette route 
+  useAuthGuard();
 
   return (
     <>

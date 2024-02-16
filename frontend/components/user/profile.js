@@ -24,7 +24,7 @@ export default function Profile_user() {
     if (datas === null) {
       getDatasProfilUser(setDatas, userid);
     }
-     getPostsUserCreated(userid, setPostsCreated, setError);
+    getPostsUserCreated(userid, setPostsCreated, setError);
   }, [userid, datas]);
 
 
@@ -57,8 +57,10 @@ export default function Profile_user() {
       {viewfriend && (
         <Posts_user
           postsCreated={postsCreated && postsCreated}
+          
           about={datas && datas.aboutme}
         />
+        
       )}
       {edit && (
         <Edit_Profile

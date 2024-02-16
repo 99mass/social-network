@@ -5,10 +5,8 @@ import Group from "../form/group";
 import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function LeftBloc() {
- 
+
   const [datasUser, setDatasUser] = useState(null);
-  // recuperer les information du user
- 
 
   const [postForm, setPostForm] = useState(false);
   const [groupForm, setGroupForm] = useState(false);
@@ -24,7 +22,7 @@ export default function LeftBloc() {
     setGroupForm(!groupForm);
   };
 
- 
+
 
   return (
     <>
@@ -33,9 +31,8 @@ export default function LeftBloc() {
           <Link href={`./profileuser?userid=${datasUser && datasUser.id}`}>
             {datasUser && datasUser.avatarpath && (
               <img
-                src={`data:image/png;base64,${
-                  datasUser && datasUser.avatarpath
-                }`}
+                src={`data:image/png;base64,${datasUser && datasUser.avatarpath
+                  }`}
                 alt=""
               />
             )}

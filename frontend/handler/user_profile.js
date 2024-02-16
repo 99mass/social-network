@@ -16,9 +16,7 @@ export const getDatasProfilUser = async (setDatas, userid) => {
         },
       });
 
-      // Vérifier le statut de la réponse
       if (response.ok) {
-        // Analyser la réponse JSON
         const data = await response.json();
         setDatas(data);
       }
@@ -49,9 +47,8 @@ export const updateDataProfile = async (
     if (response.ok) {
       const datas = await response.json();
       successNotification("Update profile done");
-      // actualiser les donnes
       getDatasProfilUser(setDatas, userid);
-      
+
       CloseEditForm()
     } else {
       const errorData = await response.json();
@@ -59,8 +56,7 @@ export const updateDataProfile = async (
       setErrorMessage(errorData.message);
     }
   } catch (error) {
-    errorNotification(error);
-    console.error("Error:", error);
+    errorNotification("An error occurred while processing your request.");
     setErrorMessage("An error occurred while processing your request.");
   }
 };
