@@ -17,13 +17,28 @@ type Follow struct {
 }
 
 func FollowUser(db *sql.DB, followerID string, followingID string) error {
-	query := `INSERT INTO followers (follower_id, following_id, status, created_at) VALUES (?, ?, ?, ?)`
-	_, err := db.Exec(query, followerID, followingID, "waiting", time.Now())
-	if err != nil {
-		log.Println("Error inserting")
-		return fmt.Errorf("failed to follow user: %w", err)
-	}
-	return nil
+    // Vérifier si l'utilisateur suivant est public
+    var isPublic bool
+    err := db.QueryRow("SELECT ispublic FROM users WHERE id = ?", followingID).Scan(&isPublic)
+    if err != nil {
+        log.Println("Error checking user's public status:", err)
+        return fmt.Errorf("failed to check user's public status: %w", err)
+    }
+
+    // Déterminer le statut du suivi en fonction de la valeur de ispublic
+    status := "waiting"
+    if isPublic {
+        status = "accepted"
+    }
+
+    // Insérer le suivi avec le statut déterminé
+    query := `INSERT INTO followers (follower_id, following_id, status, created_at) VALUES (?, ?, ?, ?)`
+    _, err = db.Exec(query, followerID, followingID, status, time.Now())
+    if err != nil {
+        log.Println("Error inserting follow:", err)
+        return fmt.Errorf("failed to follow user: %w", err)
+    }
+    return nil
 }
 
 func AccepRequestFollow(db *sql.DB, followerID string, followingID string) error {
@@ -257,7 +272,7 @@ func IsFollowed(db *sql.DB, followerid, followingid string) (string, error) {
 	if status == "accepted" {
 		status = "Unfollow"
 	} else {
-		status = "delete"
+		status = "Delete"
 	}
 	return status, nil
 }
