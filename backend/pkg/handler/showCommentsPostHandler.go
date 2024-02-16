@@ -16,12 +16,13 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodGet:
 			var Comments []models.Comment_Request
-			_, err := utils.CheckAuthorization(db, w, r)
+			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
 			}
 			postID := r.URL.Query().Get("post_id")
+
 			// check user id format
 
 			comments, err := controller.GetCommentsByPostID(db, postID)
@@ -45,6 +46,26 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 					comment.ImagePath = img
 				}
 				Comment.Comment = comment
+
+				userid, err := utils.TextToUUID(sess.UserID.String())
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusBadRequest)
+					return
+				}
+
+				user, err := controller.GetUserByID(db, userid)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusBadRequest)
+					return
+				}
+				if user.AvatarPath != "" {
+					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+					if err != nil {
+						log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
+						return
+					}
+				}
+				Comment.User = user
 
 				Comments = append(Comments, Comment)
 

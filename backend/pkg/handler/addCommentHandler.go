@@ -13,6 +13,7 @@ import (
 )
 
 type RequestComment struct {
+	UserID string `json:"user_id"`
 	PostID    string `json:"post_id"`
 	Content   string `json:"content"`
 	ImagePath string `json:"image_path"`

@@ -18,7 +18,15 @@ export default function RightBloc({ datasUser }) {
       <hr className="menu-rigth-hr" />
       <FriendOnLine FriendsList={FriendsList} />
     </div>
-  );
+  );   {data.map((item, index) => (
+    <div className={styles.userBloc} key={index}>
+      <div>
+        <img src={item.image} alt="" />
+        <span>{item.name}</span>
+      </div>
+      <input defaultValue={item.id} name={item.id} type="checkbox" id="" />
+    </div>
+  ))}
 }
 
 export function LastFrienRequest() {
@@ -59,8 +67,8 @@ export function FriendOnLine({ FriendsList }) {
       <h4>Chat with Friend online</h4>
       <div className="list-users">
         {FriendsList &&
-          FriendsList.map((item, index) => (
-            <div key={index}>
+          FriendsList.map((item ) => (
+            <div key={item.id}>
               <Link href="./chatpage">
                 {item && item.avatarpath && (
                   <img

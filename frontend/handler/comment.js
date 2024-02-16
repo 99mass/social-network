@@ -2,7 +2,7 @@ import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 
-export const AddComment = async (data) => {
+export const AddComment = async (data,postid,setComment) => {
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.addcomment, {
@@ -15,8 +15,8 @@ export const AddComment = async (data) => {
     });
 
     if (response.ok) {
-      // const datas = await response.json();
-      successNotification("Comment added successful.");
+      // successNotification("Comment added successful.");
+      getCommentPost(setComment, postid);
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);
