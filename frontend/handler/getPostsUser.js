@@ -15,17 +15,17 @@ export const getPostsUser = async (setPosts) => {
 
     // Vérifier le statut de la réponse
     if (!response.ok) {
-      console.error("Failed to fetch profile data");
+      console.error("Failed to fetch PostsUser data");
+    } else {
+      const data = await response.json();
+      setPosts(data);
     }
-    // Analyser la réponse JSON
-    const data = await response.json();
-    setPosts(data);
   } catch (error) {
     console.error("Error fetching profile data:", error.message);
   }
 };
 
-export const getPostsUserCreated = async (userid, setPostsCreated,setError) => {
+export const getPostsUserCreated = async (userid, setPostsCreated, setError) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -38,18 +38,17 @@ export const getPostsUserCreated = async (userid, setPostsCreated,setError) => {
         },
       });
 
-      // Vérifier le statut de la réponse
       if (!response.ok) {
-        // console.error("Failed to fetch profile data");
+        console.error("Failed to fetch PostsUserCreated  data");
         setError(true)
-        return
+      } else {
+        const data = await response.json();
+        setPostsCreated(data);
       }
-      // Analyser la réponse JSON
-      const data = await response.json();
 
-      setPostsCreated(data);
+
     } catch (error) {
-      // console.error("Error fetching profile data:", error.message);
+      console.error("Error fetching PostsUserCreated data:", error.message);
       setError(true)
     }
   }

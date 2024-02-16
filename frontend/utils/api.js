@@ -14,5 +14,7 @@ export const api = {
   userPosts: `${domain}/userposts`,
   Followuser: `${domain}/followuser`,
   Requestfollow: `${domain}/requestfollow`,
-  users_follows: `${domain}/users_follows`
+  users_follows: `${domain}/users_follows`,
+  addcomment:`${domain}/addcomment`,
+  show_comments_post: `${domain}/show_comments_post`
 };

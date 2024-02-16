@@ -7,7 +7,7 @@ import {
 
 export const sendSession = async () => {
   const sessionID = getSessionCookie();
-  
+
   if (
     typeof sessionID === undefined ||
     sessionID === undefined ||
@@ -34,11 +34,9 @@ export const sendSession = async () => {
     } else {
       const errorData = await response.json();
       deleteSessionCookie();
-      // console.error("errorData:", errorData.message);
       return false;
     }
   } catch (error) {
-    // console.error("Error:", error);
     return false;
   }
 };

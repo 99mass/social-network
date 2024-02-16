@@ -1,18 +1,36 @@
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from '../../styles/modules/Comment.module.css';
 
 import { PostHeader, PostMiddle } from '../home/middle_bloc';
+import EmojiForm from '../emoji/emoji';
+import { errorNotification } from '../../utils/sweeAlert';
+import { EncodeImage } from '../../utils/encodeImage';
+import { AddComment, getCommentPost } from '../../handler/comment';
+import { useRouter } from 'next/router';
 
 
 export default function Comment() {
+    const router = useRouter();
+    const { postid } = router.query;
+
+    const [comment, setComment] = useState(null)
+    useEffect(() => {
+        if (comment === null) {
+            getCommentPost(setComment, postid);
+        }
+    }, []);
+
+    console.log('comment...');
+    console.log(comment && comment);
 
     const data =
     {
         user: "Lions M ",
         text: "The Lions 💯 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus minima, quod nulla incidunt illum itaque esse fugit! Aspernatur earum, eaque adipisci facilis mollitia eos exercitationem ex porro, consequatur quibusdam perspiciatis.",
-        imageUrl: "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        // imageUrl: "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        imageUrl: "",
         date: "16m",
         like: "100k",
         comment: "2k",
@@ -86,14 +104,18 @@ export function PostFooterComment({ like, comment }) {
 
 
 export function CommentPost({ data }) {
+
     return (
         <div className={styles.contentAllComments}>
             <div className={styles.containerCommentsMessage}>
                 {data.map((item, index) => (
                     <div key={index} className={styles.contentMessage}>
                         <div>
-                            <Link href={`./profileuser?userid=`}><img src={item.commentUserUrl} alt="" /></Link>
-                            <pre className={styles.message}>{item.textComment}</pre>
+                            <div>
+                                <Link href={`./profileuser?userid=`}><img src={item.commentUserUrl} alt="" /></Link>
+                                <pre className={styles.message}>{item.textComment}</pre>
+                            </div>
+                            <div className={styles.containerImageComment}><img src={`https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=`} alt="" /></div>
                         </div>
                         <p><span>by {item.user}</span>{item.time}</p>
                     </div>
@@ -107,17 +129,62 @@ export function CommentPost({ data }) {
 
 export function FormComment() {
 
-    // lier mon icon plu avec mon input de type file 
+    const [emoji, setEmoji] = useState(false);
+    const [selectedEmoji, setSelectedEmoji] = useState("");
+
     const fileInputRef = useRef(null);
     const handleFileIconClick = () => {
         fileInputRef.current.click();
     };
 
+    const toggleEmojicon = () => setEmoji(!emoji);
+
+    const handlerFromComment = async (event) => {
+        event.preventDefault();
+
+        const hasText = selectedEmoji.trim().length > 0;
+
+        const hasFile = fileInputRef.current?.files[0];
+
+        if (!hasText && !hasFile) {
+            errorNotification('Please enter some text or upload an image before submitting.');
+            return;
+        }
+
+        let encodedImage = '';
+        if (hasFile) {
+            try {
+                encodedImage = await EncodeImage(fileInputRef);
+            } catch (error) {
+                errorNotification(`Failed to encode image: ${error}`);
+                return;
+            }
+        }
+
+        const formData = {
+            user_id: 1,
+            post_id: 2,
+            content: selectedEmoji,
+            image_path: encodedImage || undefined,
+        };
+
+        const jsonString = JSON.stringify(formData);
+
+        AddComment(jsonString)
+        //     console.log(jsonString);
+    };
+
+
+
     return (
-        <div className={styles.messageBox}>
+        <form method="post"
+            onSubmit={handlerFromComment}
+            encType="multipart/form-data"
+            className={styles.messageBox}
+        >
             <div className={styles.plusAndMessage}>
                 <div className={styles.fileUploadWrapper}>
-                    <label htmlFor="file"  onClick={handleFileIconClick}>
+                    <label htmlFor="file" onClick={handleFileIconClick}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 337 337">
                             <circle strokeWidth="20" stroke="#6c6c6c" fill="none" r="158.5" cy="168.5"
                                 cx="168.5"></circle>
@@ -128,9 +195,25 @@ export function FormComment() {
                         </svg>
                         <span className={styles.tooltip}>Add an image</span>
                     </label>
-                    <input type="file" id={styles.file} ref={fileInputRef} name="file" />
+                    <input type="file" id={styles.file} ref={fileInputRef} />
                 </div>
-                <input required="" placeholder="Write Comment here..." type="text" id={styles.messageInput} />
+                <span
+                    onClick={toggleEmojicon}
+                    className={styles.emoji}
+                    title="Choose emoji"
+                >
+                    😄
+                </span>
+
+                <textarea
+                    required=""
+                    placeholder="Write Comment here..."
+                    type="text"
+                    value={selectedEmoji}
+                    name="Content"
+                    onChange={(e) => setSelectedEmoji(e.target.value)}
+                    id={styles.messageInput}
+                />
             </div>
             <button className={styles.sendButton}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
@@ -143,6 +226,10 @@ export function FormComment() {
                     </path>
                 </svg>
             </button>
-        </div>
+
+            {/* emoji form */}
+            {emoji && <EmojiForm toggleEmojicon={toggleEmojicon} setSelectedEmoji={setSelectedEmoji} />}
+
+        </form>
     )
 }

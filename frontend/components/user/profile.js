@@ -24,7 +24,7 @@ export default function Profile_user() {
     if (datas === null) {
       getDatasProfilUser(setDatas, userid);
     }
-     getPostsUserCreated(userid, setPostsCreated, setError);
+    getPostsUserCreated(userid, setPostsCreated, setError);
   }, [userid, datas]);
 
 

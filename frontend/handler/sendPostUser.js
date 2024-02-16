@@ -23,6 +23,5 @@ export const AddPostUser = async (data) => {
     }
   } catch (error) {
     errorNotification(error);
-    console.error("Error:", error);
   }
 };

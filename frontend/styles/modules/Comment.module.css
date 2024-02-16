@@ -48,25 +48,31 @@
 
 .contentMessage {
   margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+  background: var(--primary-bg);
 }
 
-.contentMessage div {
+.contentMessage div div {
+  padding-top: 10px;
+
   display: flex;
 }
 
 .contentMessage div pre {
   width: 80%;
   padding: 10px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   text-wrap: wrap;
   word-wrap: break-word;
-  background: var(--primary-bg);
+  /* background: var(--primary-bg); */
 
 }
 
 .contentMessage p {
   margin-top: 5px;
   margin-left: 60px;
+  margin-bottom: 5px;
   font-size: small;
 }
 
@@ -74,6 +80,23 @@
   text-transform: capitalize;
   color: gray;
   padding-right: 10px;
+
+}
+
+.emoji {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.contentMessage .containerImageComment {
+  width: 100%;
+}
+
+.contentMessage .containerImageComment img {
+  width: 80%;
+  height: 100%;
+  border-radius: 0px;
+  margin-left: 60px;
 }
 
 /* comment form */
@@ -171,6 +194,7 @@
   background-color: transparent;
   outline: none;
   border: none;
+  resize: none;
   padding-left: 10px;
   color: white;
 }

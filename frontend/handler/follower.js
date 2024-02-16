@@ -40,10 +40,10 @@ export const getFriendsLists = async (userid, setDatas) => {
       // Vérifier le statut de la réponse
       if (response.ok) {
         const data = await response.json();
-        console.log("ssv",userid);
+        console.log("dsssv", userid);
         console.log("ddddd", data);
         setDatas(data);
-       
+
       }
     } catch (error) {
       console.error("Error fetching Friends data:", error.message);
@@ -69,7 +69,6 @@ export const askForFriends = async (userid) => {
         console.error("Failed to fetch profile data");
       }
 
-      console.log("yesss following.");
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
     }
@@ -92,11 +91,11 @@ export const confirmFriends = async (userid, setDatas) => {
       // Vérifier le statut de la réponse
       if (!response.ok) {
         console.error("Failed to fetch profile data");
+      } else {
+
+        getAskForFriendLists(setDatas);
       }
 
-      getAskForFriendLists(setDatas);
-
-      console.log("yesss confirmed following.");
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
     }
@@ -119,10 +118,10 @@ export const deleteAskingFriends = async (userid, setDatas) => {
       // Vérifier le statut de la réponse
       if (!response.ok) {
         console.error("Failed to fetch profile data");
+      } else {
+        getAskForFriendLists(setDatas);
       }
 
-      getAskForFriendLists(setDatas);
-      console.log("nooo deleting following.");
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
     }
