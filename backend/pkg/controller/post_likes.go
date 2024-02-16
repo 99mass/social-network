@@ -142,6 +142,6 @@ func GetPostLikesCount(db *sql.DB, postID string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	
+
 	return count, nil
 }
