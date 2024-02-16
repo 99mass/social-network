@@ -79,6 +79,7 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 
 		uniqueID := time.Now().Format("20060102150405")
 		name := helper.NewNameForImage() + "_" + uniqueID
+
 		if mimeType == "image/jpeg" {
 			base64img = name + ".jpeg"
 		}
@@ -99,7 +100,7 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 		// Supprimer l'ancienne image si elle existe
 		if oldImagePath != "" {
 			fmt.Println("older image: ", oldImagePath)
-			err = os.Remove(oldImagePath)
+			err = os.Remove("./pkg/static/avatarImage/" + oldImagePath)
 			if err != nil {
 				log.Println("error removing the older avatar image: ", err.Error())
 				return "", errors.New("failed to remove avatar image")
@@ -112,5 +113,6 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 		}
 		return base64img, nil
 	}
+
 	return base64img, nil
 }
