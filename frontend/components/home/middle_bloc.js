@@ -15,6 +15,8 @@ export default function MidlleBloc() {
     }
   }, []);
 
+  console.log(posts && posts);
+
   return (
     <div className="menu-middle">
       {posts && posts.map((item) => (
