@@ -80,8 +80,8 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 			}
 			if groupReq.AddedUsersToGroup != nil {
 				for _, userAdd := range groupReq.AddedUsersToGroup {
-					var _groupMembers models.Group_Members
-					_groupMembers.GroupID = result.String()
+					var _groupInvitations models.Group_Invitations
+
 					_userId, err := controller.GetUserByNickName(db, userAdd)
 					if err != nil {
 						helper.SendResponse(w, models.ErrorResponse{
@@ -91,9 +91,12 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 						log.Println("internal ERROR from database: ", err.Error())
 						return
 					}
+					_groupInvitations.UserID = _userId.String()
+					_groupInvitations.GroupID = result.String()
+					_groupInvitations.SenderID = sess.UserID.String()
+					_groupInvitations.Status = "false"
 
-					_groupMembers.UserID = _userId.String()
-					err = controller.CreateGroupMembers(db, &_groupMembers)
+					err = controller.CreateGroupInvitations(db, _groupInvitations)
 					if err != nil {
 						helper.SendResponse(w, models.ErrorResponse{
 							Status:  "error",

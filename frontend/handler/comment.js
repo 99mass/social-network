@@ -15,7 +15,7 @@ export const AddComment = async (data) => {
     });
 
     if (response.ok) {
-      const datas = await response.json();
+      // const datas = await response.json();
       successNotification("Comment added successful.");
     } else {
       const errorData = await response.json();
@@ -28,7 +28,6 @@ export const AddComment = async (data) => {
 
 export const getCommentPost = async (setComment, post_id) => {
   if (post_id) {
-
     try {
       const sessionId = getSessionCookie();
 
