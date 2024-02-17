@@ -8,7 +8,7 @@ export default function PageHome() {
   const [datasUser, setDatasUser] = useState(null);
 
   useEffect(() => {
-    if (datasUser == null) {
+    if (!datasUser) {
       getUserBySession(setDatasUser);
     }
   }, []);

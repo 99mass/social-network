@@ -16,16 +16,17 @@ export const getAskForFriendLists = async (setDatas) => {
 
     // Vérifier le statut de la réponse
     if (!response.ok) {
-      console.error("Failed to fetch Friend Lists data");
+      setDatas(null);
     } else {
       const data = await response.json();
       setDatas(data);
     }
   } catch (error) {
+    setDatas(null);
     console.error("Error fetching  Friend Lists data:", error.message);
   }
 };
-export const getOldestrequestfollow = async (setOldestrequestfollowDatas) => {
+export const getOlrequestFriend = async (setoldFriend) => {
   try {
     const sessionId = getSessionCookie();
 
@@ -40,12 +41,16 @@ export const getOldestrequestfollow = async (setOldestrequestfollowDatas) => {
     // Vérifier le statut de la réponse
     if (response.ok) {
       const data = await response.json();
-      setOldestrequestfollowDatas(data);
+      setoldFriend(data);
+    }else{
+      setoldFriend(null)
     }
   } catch (error) {
-    console.error("Error fetching  Oldestrequestfollow data:", error.message);
+    setoldFriend(null)
   }
 };
+
+// liste amies 
 export const getFriendsLists = async (userid, setDatas) => {
   if (userid) {
     try {
@@ -70,6 +75,7 @@ export const getFriendsLists = async (userid, setDatas) => {
   }
 };
 
+// fonctions cote user qui demades amie
 export const askForFriends = async (userid, setPosts) => {
   if (userid) {
     try {
@@ -95,6 +101,7 @@ export const askForFriends = async (userid, setPosts) => {
 };
 export const DeleteAskForFriends = async (userid, setPosts) => {
   if (userid) {
+   
     try {
       const sessionId = getSessionCookie();
 
@@ -117,7 +124,9 @@ export const DeleteAskForFriends = async (userid, setPosts) => {
   }
 };
 
-export const confirmFriends = async (userid, setDatas, setOldestrequestfollowDatas) => {
+
+//Fonctions  cote user a qui on demande amie
+export const confirmFriends = async (userid, setDatas, setoldFriend) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -136,7 +145,7 @@ export const confirmFriends = async (userid, setDatas, setOldestrequestfollowDat
       } else {
 
         if (setDatas) getAskForFriendLists(setDatas);
-        if (setOldestrequestfollowDatas) getOldestrequestfollow(setOldestrequestfollowDatas);
+        if (setoldFriend) getOlrequestFriend(setOldestrequestfollowDatas);
       }
 
     } catch (error) {
@@ -145,7 +154,7 @@ export const confirmFriends = async (userid, setDatas, setOldestrequestfollowDat
   }
 };
 
-export const deleteAskingFriends = async (userid, setDatas, setOldestrequestfollowDatas) => {
+export const deleteAskingFriends = async (userid, setDatas, setoldFriend) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -164,7 +173,7 @@ export const deleteAskingFriends = async (userid, setDatas, setOldestrequestfoll
       } else {
 
         if (setDatas) getAskForFriendLists(setDatas);
-        if (setOldestrequestfollowDatas) getOldestrequestfollow(setOldestrequestfollowDatas);
+        if (setoldFriend) getOlrequestFriend(setoldFriend);
       }
 
     } catch (error) {

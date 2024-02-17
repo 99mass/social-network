@@ -1,39 +1,39 @@
 import Link from "next/link";
 import styles from "../../styles/modules/Friend.module.css";
-import { useState } from "react";
-import { confirmFriends, deleteAskingFriends, getFriendsLists, getOldestrequestfollow } from "../../handler/follower";
+import { useEffect, useState } from "react";
+import { confirmFriends, deleteAskingFriends, getFriendsLists, getOlrequestFriend } from "../../handler/follower";
 import { getElapsedTime } from "../../utils/convert_dates";
+
 
 export default function RightBloc({ datasUser }) {
   const [FriendsList, setFriendsList] = useState(null);
-  const [oldestrequestfollowDatas, setOldestrequestfollowDatas] = useState(null);
+  const [oldFriend, setoldFriend] = useState(null);
 
-  let userId = datasUser && datasUser.id;
+  const userId = datasUser?.id;
 
-  if (FriendsList === null && userId !== null) {
-    getFriendsLists(userId, setFriendsList);
-  }
-  if (oldestrequestfollowDatas === null) {
-    getOldestrequestfollow(setOldestrequestfollowDatas);
-  }
-
+  useEffect(() => {
+    if (userId) {
+      getFriendsLists(userId, setFriendsList);
+      getOlrequestFriend(setoldFriend);
+    }
+  }, [userId]);
 
   return (
     <div className="menu-rigth">
-      {oldestrequestfollowDatas && <LastFrienRequest data={oldestrequestfollowDatas} setOldestrequestfollowDatas={setOldestrequestfollowDatas} />}
+      {oldFriend && <LastFrienRequest data={oldFriend} setoldFriend={setoldFriend} />}
       <hr className="menu-rigth-hr" />
-      <FriendOnLine FriendsList={FriendsList} />
+      {FriendsList && <FriendOnLine FriendsList={FriendsList} />}
     </div>
   );
 }
 
-export function LastFrienRequest({ data, setOldestrequestfollowDatas }) {
+export function LastFrienRequest({ data, setoldFriend }) {
 
   const handlerConfirmFollow = (iduser) => {
-    confirmFriends(iduser, null, setOldestrequestfollowDatas);
+    confirmFriends(iduser, null, setoldFriend);
   };
   const handlerDeleteFollow = (iduser) => {
-    deleteAskingFriends(iduser, null, setOldestrequestfollowDatas);
+    deleteAskingFriends(iduser, null, setoldFriend);
   };
 
 
