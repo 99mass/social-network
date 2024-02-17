@@ -155,7 +155,9 @@
   transform-origin: center;
   transform: rotateY(180deg);
 }
-
+.liked  .liked-yes {
+   color: var(--second-blue);
+}
 @media screen and (min-width: 768px) {
 
   .section-index {

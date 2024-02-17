@@ -42,10 +42,7 @@ export default function Comment() {
         />
       )}
       {posData && <PostFooterComment like={posData.nbr_likes} comment={posData.nbr_comments} />}
-      {posData && comment && <CommentPost data={comment} />}
-      {posData && (
-        <FormComment postid={posData.post.id} setComment={setComment} />
-      )}
+      {posData && (<FormComment postid={posData.post.id} setComment={setComment} setPostData={setPostData} />)}
       {posData && comment && <CommentPost data={comment} />}
     </div>
   );
@@ -73,7 +70,7 @@ export function CommentPost({ data }) {
             <div>
               <div>
                 <Link href={`./profileuser?userid=${item && item.user.id}`}>
-                  { item.comment.image_path && (
+                  {item.comment.image_path && (
                     <img
                       src={`data:image/png;base64,${item.user.avatarpath}`}
                       alt=""
@@ -106,7 +103,7 @@ export function CommentPost({ data }) {
   );
 }
 
-export function FormComment({ postid, setComment }) {
+export function FormComment({ postid, setComment ,setPostData}) {
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
 
@@ -147,7 +144,7 @@ export function FormComment({ postid, setComment }) {
       image_path: encodedImage || undefined,
     };
 
-    AddComment(formData, postid, setComment);
+    AddComment(formData, postid, setComment,setPostData);
   };
 
   return (
