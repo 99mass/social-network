@@ -20,7 +20,6 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/addcomment", helper.Middleware(handler.AddCommentHandler(db)))
 	http.HandleFunc("/show_comments_post", helper.Middleware(handler.ShowCommentsByPost(db)))
 	http.HandleFunc("/likepost", helper.Middleware(handler.LikePostHandler(db)))
-	http.HandleFunc("/dislikepost", helper.Middleware(handler.DislikePostHandler(db)))
 	http.HandleFunc("/countpostliked", helper.Middleware(handler.GetPostLikesCountHandler(db)))
 
 	// Display Request
