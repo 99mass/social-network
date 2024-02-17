@@ -2,11 +2,11 @@ import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 import { getPostsUser, getPostsUserCreated } from "./getPostsUser";
 
-export const likeDislikePost = async (userid,postid, setPosts,setPostsCreated) => {
+export const likeDislikePost = async (userid,postid,action, setPosts,setPostsCreated) => {
    
     const data = {
-        user_id: userid,
-        post_id: postid
+        post_id: postid,
+        action: action
       }
     try {
         const sessionId = getSessionCookie();

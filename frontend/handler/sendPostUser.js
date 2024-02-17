@@ -1,8 +1,9 @@
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
+import { getPostsUser } from "./getPostsUser";
 
-export const AddPostUser = async (data) => {
+export const AddPostUser = async (data, setPostForm, setPosts) => {
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.Addpost, {
@@ -15,8 +16,9 @@ export const AddPostUser = async (data) => {
     });
 
     if (response.ok) {
-      const datas = await response.json();
-      successNotification("Post added successful.");
+      successNotification("Post added successful you can see it in the home  or  profile page.");
+      setPostForm(false);
+      getPostsUser(setPosts);
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);

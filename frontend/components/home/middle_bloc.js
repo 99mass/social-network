@@ -6,9 +6,7 @@ import { truncateText } from "../../utils/helper";
 import { askForFriends, UnfollowUser } from "../../handler/follower";
 import { likeDislikePost } from "../../handler/likeDislikePost";
 
-export default function MidlleBloc() {
-
-  const [posts, setPosts] = useState(null);
+export default function MidlleBloc({posts, setPosts}) {
 
   useEffect(() => {
     getPostsUser(setPosts);

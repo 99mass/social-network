@@ -379,3 +379,7 @@
         width: 80%;
     }
 }
+
+body header .content-form-post{
+  overflow-y: scroll;
+}

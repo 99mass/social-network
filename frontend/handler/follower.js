@@ -67,6 +67,7 @@ export const getFriendsLists = async (userid, setDatas) => {
       // Vérifier le statut de la réponse
       if (response.ok) {
         const data = await response.json();
+        console.log('oooo');
         setDatas(data);
       }
     } catch (error) {
@@ -100,7 +101,7 @@ export const askForFriends = async (userid, setPosts) => {
   }
 };
 
-export const UnfollowUser = async (userid, setPosts) => {
+export const UnfollowUser = async (userid, setPosts,setFriendsList,idUserConnected) => {
   if (userid) {
 
     try {
@@ -116,7 +117,8 @@ export const UnfollowUser = async (userid, setPosts) => {
 
       // Vérifier le statut de la réponse
       if (response.ok) {
-        getPostsUser(setPosts);
+        if(setPosts)  getPostsUser(setPosts);
+        if(setFriendsList)  getFriendsLists(idUserConnected, setFriendsList);
       }
 
     } catch (error) {

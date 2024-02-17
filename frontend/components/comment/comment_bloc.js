@@ -12,43 +12,6 @@ import { getSpecificPostsUser } from "../../handler/getPostsUser";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { ErrorComment } from "../errors/error_profiles";
 
-// export default function Comment() {
-//   const router = useRouter();
-//   const { postid } = router.query;
-//   const [posData, setPostData] = useState(null);
-//   const [comment, setComment] = useState(null);
-
-//   if (posData === null && postid !== null) {
-//     getSpecificPostsUser(postid, setPostData);
-//   }
-//   if (comment === null && postid !== null) {
-//     getCommentPost(setComment, postid);
-//   }
-
-//   return (
-//     <div className={`${styles.middleBloc} middle`}>
-//       {posData && (
-//         <PostHeader
-//           iduser={posData.user.id}
-//           user={posData.user.firstname}
-//           image={posData.user.avatarpath}
-//           time={`${getElapsedTime(posData.post.created_at).value} ${getElapsedTime(posData.post.created_at).unit
-//             }`}
-//         />
-//       )}
-//       {posData && (
-//         <PostMiddle
-//           content={posData.post.content}
-//           image={posData.post.image_path}
-//         />
-//       )}
-//       {posData && <PostFooterComment like={posData.nbr_likes} comment={posData.nbr_comments} />}
-//       {posData && (<FormComment postid={posData.post.id} setComment={setComment} setPostData={setPostData} />)}
-//       {posData && comment && <CommentPost data={comment} />}
-//     </div>
-//   );
-// }
-
 export default function Comment() {
   const router = useRouter();
   const { postid } = router.query;

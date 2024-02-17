@@ -6,17 +6,16 @@ import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function PageHome() {
   const [datasUser, setDatasUser] = useState(null);
+  const [posts, setPosts] = useState(null);
 
   useEffect(() => {
-    if (!datasUser) {
       getUserBySession(setDatasUser);
-    }
   }, []);
 
   return (
     <>
-      <LeftBloc />
-      <MidlleBloc />
+      <LeftBloc setPosts={setPosts} />
+      <MidlleBloc posts={posts} setPosts={setPosts} />
       <RightBloc datasUser={datasUser && datasUser} />
     </>
   );
