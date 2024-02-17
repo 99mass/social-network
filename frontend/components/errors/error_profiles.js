@@ -10,3 +10,15 @@ export function ErrorProfile() {
     </div>
   );
 }
+
+export function ErrorComment() {
+  return (
+    <div className="pemission-bloc">
+      <img src="../images/permissions_dark_mode.svg" alt="" />
+      <h3>This content isn't available right now</h3>
+      <p>
+        When this happens, it's usually because the post doesn't exist.
+      </p>
+    </div>
+  );
+}
