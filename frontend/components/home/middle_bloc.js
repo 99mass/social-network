@@ -33,8 +33,8 @@ export default function MidlleBloc() {
             image={item.post.image_path}
           />
           <PostFooter
-            numberLike={"15k"}
-            numberComment={"6k"}
+            numberLike={item.nbr_likes}
+            numberComment={item.nbr_comments}
             postid={item.post.id}
           />
         </div>
