@@ -41,7 +41,8 @@ export default function Comment() {
           image={posData.post.image_path}
         />
       )}
-      {posData && <PostFooterComment like={"100k"} comment={"2k"} />}
+      {posData && <PostFooterComment like={posData.nbr_likes} comment={posData.nbr_comments} />}
+      {posData && comment && <CommentPost data={comment} />}
       {posData && (
         <FormComment postid={posData.post.id} setComment={setComment} />
       )}

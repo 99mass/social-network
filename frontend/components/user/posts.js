@@ -16,7 +16,7 @@ export default function Posts_user({ postsCreated, about }) {
                             time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
                         />
                         <PostMiddle content={item.post.content} image={item.post.image_path} />
-                        <PostFooter numberLike={"15k"} numberComment={"5k"} postid={item.post.id} />
+                        <PostFooter numberLike={item.nbr_likes} numberComment={item.nbr_comments} postid={item.post.id}/>
                     </div>
                 ))
                 }
