@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { truncateText } from "../../utils/helper";
 import { DeleteAskForFriends, askForFriends } from "../../handler/follower";
+import { likeDislikePost } from "../../handler/likeDislikePost";
 
 export default function MidlleBloc() {
 
@@ -32,7 +33,9 @@ export default function MidlleBloc() {
           <PostFooter
             numberLike={item.nbr_likes}
             numberComment={item.nbr_comments}
+            userid={item.user.id}
             postid={item.post.id}
+            setPosts={setPosts}
           />
         </div>
       ))
@@ -96,11 +99,21 @@ export function PostMiddle({ content, image }) {
   );
 }
 
-export function PostFooter({ numberLike, numberComment, postid }) {
+export function PostFooter({ numberLike, numberComment, userid, postid, setPosts }) {
+
+  const handlerLikeDislikePost = () => {
+    const data = {
+      user_id: userid,
+      post_id: postid
+    }
+    likeDislikePost(data, setPosts);
+  }
+
   return (
     <div className="liked">
-      <div className="liked-icon">
-        <i className="far fa-thumbs-up"></i> <span>{numberLike}</span>
+      <div onClick={handlerLikeDislikePost} className={`liked-icon ${true && 'liked-yes'}`}>
+        {true ? <i className="far fa-thumbs-up"></i> : <i className="fa-solid fa-thumbs-up liked-yes"></i>}
+        <span className={`${false && 'liked-yes'}`}>{numberLike}</span>
       </div>
       <Link href={`./comment?postid=${postid}`}>
         <div className="liked-icon">

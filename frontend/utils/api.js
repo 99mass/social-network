@@ -17,4 +17,5 @@ export const api = {
   addcomment:`${domain}/addcomment`,
   show_comments_post: `${domain}/show_comments_post`,
   oldestrequestfollow: `${domain}/oldestrequestfollow`,
+  likeDslikepost:`${domain}/likepost`,
 };
