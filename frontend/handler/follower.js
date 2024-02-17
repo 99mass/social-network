@@ -105,7 +105,7 @@ export const DeleteAskForFriends = async (userid, setPosts) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Followuser + `?userid=${userid}`, {
+      const response = await fetch(api.Unfollowuser + `?userid=${userid}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -123,8 +123,30 @@ export const DeleteAskForFriends = async (userid, setPosts) => {
     }
   }
 };
+export const UnfollowUser = async (userid, setPosts) => {
+  if (userid) {
+   
+    try {
+      const sessionId = getSessionCookie();
 
+      const response = await fetch(api.Unfollowuser + `?userid=${userid}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      });
 
+      // Vérifier le statut de la réponse
+      if (response.ok) {
+        getPostsUser(setPosts);
+      }
+
+    } catch (error) {
+      console.error("Error fetching profile data:", error.message);
+    }
+  }
+};
 //Fonctions  cote user a qui on demande amie
 export const confirmFriends = async (userid, setDatas, setoldFriend) => {
   if (userid) {

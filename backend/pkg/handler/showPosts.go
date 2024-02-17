@@ -67,7 +67,6 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 				// Check if the user is followed
 				isfollowed, _ := controller.IsFollowed(db, sess.UserID.String(), user.ID)
 				Post.IsFollowed = isfollowed
-				log.Println("isfollowed", isfollowed)
 
 				nbrLikes, _ := controller.CountPostLikes(db, post.ID)
 				nbrComments, _ := controller.CountCommentsByPostID(db, post.ID)
