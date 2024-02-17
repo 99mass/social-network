@@ -4,7 +4,7 @@ import Post from "../form/post";
 import Group from "../form/group";
 import { getUserBySession } from "../../handler/getUserBySession";
 
-export default function LeftBloc() {
+export default function LeftBloc({setPosts}) {
 
   const [datasUser, setDatasUser] = useState(null);
 
@@ -60,7 +60,7 @@ export default function LeftBloc() {
           </Link>
         </div>
       </div>
-      {postForm && <Post PostForm={togglePostForm} />}
+      {postForm && <Post PostForm={togglePostForm} setPostForm={setPostForm} setPosts={setPosts} />}
       {groupForm && <Group GroupForm={toggleGroupForm} />}
     </>
   );

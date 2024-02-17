@@ -10,38 +10,49 @@ import { getUserBySession } from "../handler/getUserBySession";
 
 export default function Header() {
   const [datasUser, setDatasUser] = useState(null);
+  const [postForm, setPostFrom] = useState(false);
+  const [groupForm, setGroupFrom] = useState(false);
 
   const router = useRouter();
-  const handlerLogOut = () => {
-    const checkLogOut = async () => {
-      const isLogOut = await logout();
-      if (isLogOut) {
-        router.push("/");
-      }
-    };
-    checkLogOut();
+
+  const handlerLogOut = async () => {
+    const isLogOut = await logout();
+    if (isLogOut) {
+      router.push("/");
+    }
   };
-  const { userid } = router.query;
 
-
-  // recuperer les information du user
   useEffect(() => {
     getUserBySession(setDatasUser);
   }, []);
 
+  const togglePostForm = () => setPostFrom((prevState) => !prevState);
+  const toggleGroupForm = () => setGroupFrom((prevState) => !prevState);
+
   return (
-    <nav className={styles.top}>
-      <div className={styles.fixed}>
-        <div className={styles.mainHeader}>
-          <div className={styles.topContent}>
-           <Link href="/" ><h2>social-network</h2></Link>
-            <MidlleNAvForBigScreen />
-            <ToggleButton handlerLogOut={handlerLogOut} firstname={datasUser && datasUser.firstname} lastname={datasUser && datasUser.lastname} userId={datasUser && datasUser.id}/>
+    <>
+      <nav className={styles.top}>
+        <div className={styles.fixed}>
+          <div className={styles.mainHeader}>
+            <div className={styles.topContent}>
+              <Link href="/"><h2>social-network</h2></Link>
+              <MidlleNAvForBigScreen />
+              <ToggleButton
+                togglePostForm={togglePostForm}
+                toggleGroupForm={toggleGroupForm}
+                handlerLogOut={handlerLogOut}
+                firstname={datasUser?.firstname}
+                lastname={datasUser?.lastname}
+                userId={datasUser?.id}
+              />
+            </div>
+            <MidlleNAvFormSmallScreen />
           </div>
-          <MidlleNAvFormSmallScreen />
         </div>
-      </div>
-    </nav>
+      </nav>
+      {postForm && <Post PostForm={togglePostForm} setPostForm={setPostFrom} />}
+      {groupForm && <Group GroupForm={toggleGroupForm} />}
+    </>
   );
 }
 
@@ -69,7 +80,7 @@ export function MidlleNAvForBigScreen() {
         </i>
       </Link>
       <Link href="/group" title="Groups">
-        {" "}
+
         <i className="fas fa-users"></i>
       </Link>
     </div>
@@ -99,33 +110,18 @@ export function MidlleNAvFormSmallScreen() {
         </i>
       </Link>
       <Link href="/group">
-        {" "}
         <i className="fas fa-users"></i>
       </Link>
     </div>
   );
 }
 
-export function ToggleButton({ handlerLogOut,firstname,lastname ,userId}) {
-  const [postForm, setPostFrom] = useState(false);
-  const [groupForm, setGroupFrom] = useState(false);
+export function ToggleButton({ togglePostForm, toggleGroupForm, handlerLogOut, firstname, lastname, userId }) {
+
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  // affichages des formulaires
-  const PostForm = () => {
-    if (!postForm) {
-      setPostFrom(true);
-    } else {
-      setPostFrom(false);
-    }
-  };
-  const GroupForm = () => {
-    if (!groupForm) {
-      setGroupFrom(true);
-    } else {
-      setGroupFrom(false);
-    }
-  };
+
+
   const handleToggleClick = () => {
     setMenuOpen(!isMenuOpen);
   };
@@ -141,14 +137,13 @@ export function ToggleButton({ handlerLogOut,firstname,lastname ,userId}) {
             <li>
               <Link href={`./profileuser?userid=${userId}`}>
                 <i className="fa-regular fa-user"></i>{`${firstname} ${lastname}`}
-              </Link>{" "}
+              </Link>
             </li>
-            <li onClick={PostForm}>
-              {" "}
+            <li onClick={togglePostForm}>
               <i className="fa-solid fa-pen-to-square"></i>Create post
             </li>
-            <li onClick={GroupForm}>
-              {" "}
+            <li onClick={toggleGroupForm}>
+
               <i className="fa-solid fa-users"></i>Create group
             </li>
             <li onClick={handlerLogOut}>
@@ -159,8 +154,8 @@ export function ToggleButton({ handlerLogOut,firstname,lastname ,userId}) {
           </ul>
         </div>
       )}
-      {postForm && <Post PostForm={PostForm} />}
-      {groupForm && <Group GroupForm={GroupForm} />}
+
+
     </>
   );
 }

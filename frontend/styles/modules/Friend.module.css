@@ -2,6 +2,40 @@
   margin-bottom: 20px;
 }
 
+.navbar {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.middleBloc hr {
+  margin-bottom: 20px;
+}
+
+.navbar h4 {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.navbar h4 i {
+  font-size: 25px;
+  margin-right: 8px;
+  color: var(--fds-blue-80);
+}
+
+.defaultColor {
+  background: var(--secondary-bg);
+}
+
+.activeColor {
+  background: var(--second-blue);
+}
+
 .contentFriend {
   width: 100%;
   height: 80px;
@@ -55,27 +89,54 @@
 }
 
 
+.containerAllFriend {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.containerAllFriend .userBloc {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.containerAllFriend .userBloc img {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  border: 1px solid;
+}
+
 
 @media screen and (min-width: 768px) {
   .sectionFriend {
     width: 100%;
     display: flex;
   }
+
   .middleBloc {
     width: 50%;
     height: 100vh;
     padding-bottom: 10rem;
     overflow: scroll;
   }
+
   .middleBloc::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     background: transparent;
   }
+
   .contentFriend a {
     width: 80px;
     height: 80px;
   }
+
   .menuLeft {
     display: block;
     width: 30%;
@@ -87,6 +148,7 @@
     flex-direction: column;
     gap: 20px;
   }
+
   .menuLeft .userActual a {
     width: 80%;
     display: flex;
@@ -105,18 +167,21 @@
     padding-left: 15px;
     text-transform: capitalize;
   }
+
   .menuLeft a {
     display: flex;
     align-items: center;
     gap: 5px;
     font-size: 18px;
   }
+
   .menuLeft a i {
     font-size: 35px;
     padding: 8px;
     color: var(--fds-blue-80);
     border-radius: 100%;
   }
+
   .menuLeft a:hover {
     width: 80%;
 
@@ -128,14 +193,17 @@
     width: 80%;
     border-color: gray;
   }
+
   .menuLeft h4 {
     color: gray;
     text-transform: capitalize;
   }
+
   .menuLeft .newPostContent {
     display: flex;
     flex-direction: column;
   }
+
   .menuLeft .newPostContent a {
     display: flex;
     align-items: center;
@@ -145,6 +213,7 @@
     font-size: 18px;
     text-transform: capitalize;
   }
+
   .menuLeft .newPostContent a i {
     padding: 8px;
     font-size: 22px;
@@ -152,6 +221,7 @@
     color: #fff;
     background: var(--primary-bg);
   }
+
   .detailsFriendRequest .validateRequest {
     width: fit-content;
     gap: 20px;
@@ -162,26 +232,41 @@
     padding: 10px 30px;
   }
 }
+
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-  .menuLeft{
+  .menuLeft {
     display: block;
     width: 50%;
     padding-left: 30px;
   }
+
   .middleBloc {
     width: 100%;
   }
 }
 
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
   .menuLeft {
     display: none;
   }
+  .navbar{
+    width: 100%;
+    gap: 10px;
+  }
+  .navbar h4 i {
+    font-size: 20px;
+  }
+  .navbar h4 {
+    padding: 10px;
+    border-radius: 5px;
+  }
+
   .middleBloc {
     padding-left: 5%;
     width: 100%;
   }
+
   .contentFriend a {
     width: 50px;
     height: 50px;

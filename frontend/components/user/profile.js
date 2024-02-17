@@ -21,7 +21,7 @@ export default function Profile_user() {
 
   // recuperer les information du user
   useEffect(() => {
-    if (datas === null) {
+    if (!datas) {
       getDatasProfilUser(setDatas, userid);
     }
     getPostsUserCreated(userid, setPostsCreated);
@@ -70,7 +70,7 @@ export default function Profile_user() {
           setDatas={setDatas}
         />
       )}
-      {!viewfriend && <Friends />}
+      {!viewfriend && <Friends idUser={userid} />}
     </>
   );
 }

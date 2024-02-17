@@ -4,7 +4,6 @@ import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function Posts_user({ postsCreated,setPostsCreated, about }) {
 
-    console.log(postsCreated && postsCreated);
     return (
         <div className={styles.body1}>
             <div className={styles.bodymenu}>

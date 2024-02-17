@@ -22,7 +22,7 @@ export default function RightBloc({ datasUser }) {
     <div className="menu-rigth">
       {oldFriend && <LastFrienRequest data={oldFriend} setoldFriend={setoldFriend} />}
       <hr className="menu-rigth-hr" />
-      {FriendsList && <FriendOnLine FriendsList={FriendsList} />}
+      {FriendsList && <Friends FriendsList={FriendsList} />}
     </div>
   );
 }
@@ -74,7 +74,7 @@ export function LastFrienRequest({ data, setoldFriend }) {
   );
 }
 
-export function FriendOnLine({ FriendsList }) {
+export function Friends({ FriendsList }) {
   return (
     <div className="friend-online">
       <h4>Chat with Friend online</h4>

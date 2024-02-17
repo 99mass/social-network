@@ -7,7 +7,7 @@ import { EncodeImage } from "../../utils/encodeImage";
 import { getFriendsLists } from "../../handler/follower";
 import { getUserBySession } from "../../handler/getUserBySession";
 
-export default function Post({ PostForm }) {
+export default function Post({ PostForm,setPostForm, setPosts }) {
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const fileInputRef = useRef(null);
@@ -23,7 +23,7 @@ export default function Post({ PostForm }) {
     const dataFrom = new FormData(e.target);
 
     const content = dataFrom.get("Content");
-    if (content == "") {
+    if (content.trim() == "") {
       errorNotification("Content can not be empty.");
       return;
     }
@@ -52,7 +52,8 @@ export default function Post({ PostForm }) {
         Privacy: radioSelected,
         Authorize_User: checkedValues,
       };
-      AddPostUser(data);
+      console.log(data);
+      AddPostUser(data,setPostForm, setPosts);
       return;
     }
 
@@ -68,7 +69,7 @@ export default function Post({ PostForm }) {
           Privacy: radioSelected,
           Authorize_User: checkedValues,
         };
-        AddPostUser(data);
+        AddPostUser(data,setPostForm, setPosts);
       } catch (error) {
         errorNotification(error);
       }
@@ -197,7 +198,7 @@ export function PrivacyBloc() {
           onChange={() => showListF(true)}
         />
       </div>
-      {listFriend && <ListFriend  />}
+      {listFriend && <ListFriend />}
     </div>
   );
 }
@@ -206,7 +207,7 @@ export function ListFriend() {
   const [datasUser, setDatasUser] = useState(null);
 
   const [FriendsList, setFriendsList] = useState(null);
-  
+
   if (datasUser == null) {
     getUserBySession(setDatasUser);
   }
@@ -218,20 +219,20 @@ export function ListFriend() {
   }
 
   // console.log(FriendsList && FriendsList)
- 
+
 
   return (
     <div className={styles.listFriend}>
       <h3>
         <span>select friends</span>
       </h3>
-      {FriendsList &&FriendsList.map((item ) => (
+      {FriendsList && FriendsList.map((item) => (
         <div className={styles.userBloc} key={item.id}>
           <div>
-            {item.avatarpath!=='' && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />}
+            {item.avatarpath !== '' && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />}
             {!item.avatarpath && <img src={`../images/user-circle.png`} alt="" />}
 
-            <span>{item.firstname+' '+ item.lastname}</span>
+            <span>{item.firstname + ' ' + item.lastname}</span>
           </div>
           <input defaultValue={item.id} name={item.id} type="checkbox" id="" />
         </div>
