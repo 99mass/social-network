@@ -167,7 +167,7 @@ export const confirmFriends = async (userid, setDatas, setoldFriend) => {
       } else {
 
         if (setDatas) getAskForFriendLists(setDatas);
-        if (setoldFriend) getOlrequestFriend(setOldestrequestfollowDatas);
+        if (setoldFriend) getOlrequestFriend(setoldFriend);
       }
 
     } catch (error) {
