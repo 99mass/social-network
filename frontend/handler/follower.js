@@ -67,7 +67,6 @@ export const getFriendsLists = async (userid, setDatas) => {
       // Vérifier le statut de la réponse
       if (response.ok) {
         const data = await response.json();
-        console.log('oooo');
         setDatas(data);
       }
     } catch (error) {

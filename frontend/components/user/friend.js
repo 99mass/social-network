@@ -11,7 +11,6 @@ export default function Friends({idUser}) {
   useEffect(() => {
       getFriendsLists(idUser, setFriendsList);
   }, []);
-  console.log(FriendsList && FriendsList);
 
   const handleSetFriend = () => {
     if (!friend) {
