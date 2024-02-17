@@ -1,20 +1,25 @@
 import Link from "next/link";
 import styles from "../../styles/modules/Friend.module.css";
-import { useState } from "react";
-import { getFriendsLists } from "../../handler/follower";
+import { useEffect, useState } from "react";
+import { confirmFriends, deleteAskingFriends, getAskForFriendLists, getFriendsLists, getOldFriendList } from "../../handler/follower";
+import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function RightBloc({ datasUser }) {
   const [FriendsList, setFriendsList] = useState(null);
-
+  const [oldFriend, setoldFriend] = useState(null);
+  console.log("oldFriend",oldFriend&&oldFriend);
+  
   let userId = datasUser && datasUser.id;
 
   if (FriendsList === null && userId !== null) {
     getFriendsLists(userId, setFriendsList);
   }
-
+  if (oldFriend === null && userId !== null) {
+  getOldFriendList(userId, setoldFriend)
+  }
   return (
     <div className="menu-rigth">
-      <LastFrienRequest />
+     {oldFriend && <LastFrienRequest oldFriend={oldFriend} userId={userId}/>}
       <hr className="menu-rigth-hr" />
       <FriendOnLine FriendsList={FriendsList} />
     </div>
@@ -29,7 +34,21 @@ export default function RightBloc({ datasUser }) {
   ))}
 }
 
-export function LastFrienRequest() {
+export function LastFrienRequest({oldFriend, datasUser}) {
+
+  const [datas, setDatas] = useState(null);
+
+  useEffect(() => {
+    if (datas === null) {
+      getAskForFriendLists(setDatas);
+    }
+  }, [datas]);
+  const handlerConfirmFollow = (iduser) => {
+    confirmFriends(iduser, setDatas);
+  };
+  const handlerDeleteFollow = (iduser) => {
+    deleteAskingFriends(iduser, setDatas);
+  };
   return (
     <>
       <div className="title">
@@ -41,20 +60,20 @@ export function LastFrienRequest() {
         </span>
       </div>
       <div className={styles.contentFriend}>
-        <Link href={`./profileuser?userid=`}>
+        <Link href={`./profileuser?userid=${datasUser && datasUser.id}`}>
           <img
-            src="https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM="
+            src={`data:image/png;base64,${oldFriend&&oldFriend.avatarpath}`}
             alt=""
           />
         </Link>
         <div className={styles.detailsFriendRequest}>
           <div className={styles.friendName}>
-            <span>ssambadi</span>
-            <span>19s</span>
+            <span>{oldFriend&&oldFriend.firstname+' '+ oldFriend.lastname}</span>
+            <span>{oldFriend&&`${getElapsedTime( oldFriend.created_at).value} ${getElapsedTime( oldFriend.created_at).unit}`}</span>
           </div>
           <div className={styles.validateRequest}>
-            <button>confirm</button>
-            <button>delete</button>
+            <button onClick={()=> handlerConfirmFollow(oldFriend.follower_id)}>confirm</button>
+            <button onClick={()=> handlerDeleteFollow(oldFriend.follower_id)}>delete</button>
           </div>
         </div>
       </div>
