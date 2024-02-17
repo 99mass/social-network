@@ -12,6 +12,8 @@ export default function MidlleBloc({posts, setPosts}) {
     getPostsUser(setPosts);
   }, []);
 
+  console.log(posts && posts);
+
   return (
     <div className="menu-middle">
       {posts && posts.map((item) => (
@@ -29,6 +31,7 @@ export default function MidlleBloc({posts, setPosts}) {
             image={item.post.image_path}
           />
           <PostFooter
+          is_liked={item.is_liked}
             numberLike={item.nbr_likes}
             numberComment={item.nbr_comments}
             userid={item.user.id}
@@ -97,17 +100,17 @@ export function PostMiddle({ content, image }) {
   );
 }
 
-export function PostFooter({ numberLike, numberComment, userid, postid, setPosts, setPostsCreated }) {
+export function PostFooter({ is_liked,numberLike, numberComment, userid, postid, setPosts, setPostsCreated }) {
 
-  const handlerLikeDislikePost = () => {
-    likeDislikePost(userid, postid, setPosts, setPostsCreated);
+  const handlerLikeDislikePost = (is_liked) => {
+    likeDislikePost(userid, postid,is_liked, setPosts, setPostsCreated);
   }
 
   return (
     <div className="liked">
-      <div onClick={handlerLikeDislikePost} className={`liked-icon ${true && 'liked-yes'}`}>
-        {true ? <i className="far fa-thumbs-up"></i> : <i className="fa-solid fa-thumbs-up liked-yes"></i>}
-        <span className={`${false && 'liked-yes'}`}>{numberLike}</span>
+      <div onClick={()=>handlerLikeDislikePost(is_liked)} className={`liked-icon ${true && 'liked-yes'}`}>
+        {is_liked ? <i className="fa-solid fa-thumbs-up liked-yes"></i> : <i className="far fa-thumbs-up"></i>  }
+        <span className={`${is_liked && 'liked-yes'}`}>{numberLike}</span>
       </div>
       <Link href={`./comment?postid=${postid}`}>
         <div className="liked-icon">
