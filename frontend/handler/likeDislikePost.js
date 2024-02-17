@@ -1,8 +1,13 @@
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
-import { getPostsUser } from "./getPostsUser";
+import { getPostsUser, getPostsUserCreated } from "./getPostsUser";
 
-export const likeDislikePost = async (data, setPosts) => {
+export const likeDislikePost = async (userid,postid, setPosts,setPostsCreated) => {
+   
+    const data = {
+        user_id: userid,
+        post_id: postid
+      }
     try {
         const sessionId = getSessionCookie();
 
@@ -17,7 +22,8 @@ export const likeDislikePost = async (data, setPosts) => {
 
         // Vérifier le statut de la réponse
         if (response.ok) {
-            getPostsUser(setPosts);
+          if(setPosts)  getPostsUser(setPosts);
+          if(setPostsCreated)  getPostsUserCreated(userid, setPostsCreated);
         }
 
     } catch (error) {

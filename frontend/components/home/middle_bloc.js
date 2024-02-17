@@ -99,14 +99,10 @@ export function PostMiddle({ content, image }) {
   );
 }
 
-export function PostFooter({ numberLike, numberComment, userid, postid, setPosts }) {
+export function PostFooter({ numberLike, numberComment, userid, postid, setPosts, setPostsCreated }) {
 
   const handlerLikeDislikePost = () => {
-    const data = {
-      user_id: userid,
-      post_id: postid
-    }
-    likeDislikePost(data, setPosts);
+    likeDislikePost(userid, postid, setPosts, setPostsCreated);
   }
 
   return (

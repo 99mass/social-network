@@ -24,10 +24,9 @@ export default function Profile_user() {
     if (datas === null) {
       getDatasProfilUser(setDatas, userid);
     }
-    getPostsUserCreated(userid, setPostsCreated, setError);
+    getPostsUserCreated(userid, setPostsCreated);
   }, [userid, datas]);
 
-console.log(datas && datas);
   const handleEditForm = () => {
     if (!edit) setEdit(true);
   };
@@ -58,7 +57,7 @@ console.log(datas && datas);
       {viewfriend && (
         <Posts_user
           postsCreated={postsCreated && postsCreated}
-
+          setPostsCreated={setPostsCreated}
           about={datas && datas.aboutme}
         />
 
