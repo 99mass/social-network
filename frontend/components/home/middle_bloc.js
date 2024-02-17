@@ -3,19 +3,15 @@ import { getPostsUser } from "../../handler/getPostsUser";
 import { useEffect, useState } from "react";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { truncateText } from "../../utils/helper";
-import { askForFriends } from "../../handler/follower";
+import { DeleteAskForFriends, askForFriends } from "../../handler/follower";
 
 export default function MidlleBloc() {
 
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
-    if (posts === null) {
-      getPostsUser(setPosts);
-    }
+    getPostsUser(setPosts);
   }, []);
-
-  console.log(posts && posts);
 
   return (
     <div className="menu-middle">
@@ -27,6 +23,7 @@ export default function MidlleBloc() {
             image={item.user.avatarpath}
             isfollowed={item.is_followed}
             time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
+            setPosts={setPosts}
           />
           <PostMiddle
             content={item.post.content}
@@ -44,23 +41,27 @@ export default function MidlleBloc() {
   );
 }
 
-export function PostHeader({ iduser, user, image,isfollowed, time }) {
-  const handlerFollower = () => {
-    askForFriends(iduser);
+export function PostHeader({ iduser, user, image, isfollowed, time, setPosts }) {
+  const handlerFollower = (stateFollow) => {
+    if (stateFollow !== "Follow") {
+      DeleteAskForFriends(iduser, setPosts);
+    } else {
+      askForFriends(iduser, setPosts);
+    }
   };
-  // console.log("image:",image);
+
   return (
     <div className="profileuser">
       <div className="left-side">
         <div className="profile-pic">
-            <Link href={`./profileuser?userid=${iduser}`}>           
-              <img src={image && image!=="" ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />           
+          <Link href={`./profileuser?userid=${iduser}`}>
+            <img src={image && image !== "" ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />
           </Link>
         </div>
         <span>
           <h3>
             {user} .
-            <span onClick={handlerFollower} className="follow" title="follow">
+            <span onClick={() => handlerFollower(isfollowed)} className="follow" title="follow">
               {isfollowed}
             </span>
           </h3>

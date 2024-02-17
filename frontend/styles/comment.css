@@ -7,6 +7,7 @@
 .middle {
   border-top: solid 0.01rem #515151;
   border-radius: 10px;
+  height: fit-content;
   background-color: var(--secondary-bg);
 }
 
@@ -26,6 +27,21 @@
   align-items: center;
   font-size: 12px;
   gap: 5px;
+}
+.section-comment .middle .profileuser  .profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: solid 2px;
+  padding-top: 10px;
+}
+
+.section-comment .middle .profileuser  .left-side img {
+  width: 100%;
 }
 
 @media screen and(max-width:768px) {

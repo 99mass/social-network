@@ -30,7 +30,7 @@ export function FeedBloc() {
       user: "alpha",
       textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
       commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        "",
       time: "3mn",
     },
     {
@@ -38,42 +38,42 @@ export function FeedBloc() {
       textComment:
         "Lorem ipsum dolor sit amet elit dolor sit amet elit. Lorem ipsum dolor sit amet elit dolor sit amet elit.",
       commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        "",
       time: "2mn",
     },
     {
       user: "tom",
       textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
       commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        "",
       time: "1mn",
     },
     {
       user: "tom",
       textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
       commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        "",
       time: "1mn",
     },
     {
       user: "tom",
       textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
       commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        "",
       time: "1mn",
     },
     {
       user: "tom",
       textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
       commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        "",
       time: "1mn",
     },
     {
       user: "tom",
       textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
       commentUserUrl:
-        "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY=",
+        "",
       time: "1mn",
     },
   ];
@@ -94,11 +94,11 @@ export function FeedBloc() {
 export function PostsFeed({ item, dataComment }) {
   return (
     <div className="post">
-      <PostHeader user={item.user} image={item.imageUrl} time={item.date} />
+      <PostHeader iduser={null} user={item.user} image={item.imageUrl} time={item.date} />
       <PostMiddle content={item.text} image={item.imageUrl} />
       <PostFooterComment like={item.like} comment={item.comment} />
-      <CommentPost data={dataComment} />
-      <FormComment />
+      <CommentPost data={null} />
+      <FormComment postid={null} setComment={null} />
     </div>
   );
 }

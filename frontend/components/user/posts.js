@@ -10,8 +10,9 @@ export default function Posts_user({ postsCreated, about }) {
                 {postsCreated && postsCreated.map((item) => (
                     <div className="post" key={item.post.id}>
                         <PostHeader
+                        iduser={item.user.id}
                             user={item.user.firstname}
-                            image={item.user.image_path}
+                            image={item.user.avatarpath}
                             time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
                         />
                         <PostMiddle content={item.post.content} image={item.post.image_path} />

@@ -17,24 +17,22 @@ export default function Comment() {
   const [posData, setPostData] = useState(null);
   const [comment, setComment] = useState(null);
 
-  if (comment === null) {
-    getCommentPost(setComment, postid);
-  }
   if (posData === null && postid !== null) {
     getSpecificPostsUser(postid, setPostData);
   }
-console.log(comment && comment);
-
+  if (comment === null && postid !== null) {
+    getCommentPost(setComment, postid);
+  }
 
   return (
     <div className={`${styles.middleBloc} middle`}>
       {posData && (
         <PostHeader
+          iduser={posData.user.id}
           user={posData.user.firstname}
           image={posData.user.avatarpath}
-          time={`${getElapsedTime(posData.post.created_at).value} ${
-            getElapsedTime(posData.post.created_at).unit
-          }`}
+          time={`${getElapsedTime(posData.post.created_at).value} ${getElapsedTime(posData.post.created_at).unit
+            }`}
         />
       )}
       {posData && (
@@ -48,6 +46,7 @@ console.log(comment && comment);
       {posData && (
         <FormComment postid={posData.post.id} setComment={setComment} />
       )}
+      {posData && comment && <CommentPost data={comment} />}
     </div>
   );
 }
@@ -67,45 +66,43 @@ export function PostFooterComment({ like, comment }) {
 
 export function CommentPost({ data }) {
   return (
-    <div className={styles.contentAllComments}>
+    (data && <div className={styles.contentAllComments}>
       <div className={styles.containerCommentsMessage}>
-        {data &&
-          data.map((item, index) => (
-            <div key={index} className={styles.contentMessage}>
+        {data && data.map((item, index) => (
+          <div key={index} className={styles.contentMessage}>
+            <div>
               <div>
-                <div>
-                  <Link href={`./profileuser?userid=${item.comment.user_id}`}>
-                    {item.comment.image_path && (
-                      <img
-                        src={`data:image/png;base64,${item.user.avatarpath}`}
-                        alt=""
-                      />
-                    )}
-                    {!item.comment.image_path && (
-                      <img src={`../images/user-circle.png`} alt="" />
-                    )}
-                  </Link>
-                  <pre className={styles.message}>{item.comment.content}</pre>
-                </div>
-                <div className={styles.containerImageComment}>
-                  {item.comment.image_path && (
+                <Link href={`./profileuser?userid=${item && item.user.id}`}>
+                  { item.comment.image_path && (
                     <img
-                      src={`data:image/png;base64,${item.comment.image_path}`}
+                      src={`data:image/png;base64,${item.user.avatarpath}`}
                       alt=""
                     />
                   )}
-                </div>
+                  {item.comment.image_path === '' && (
+                    <img src={`../images/user-circle.png`} alt="" />
+                  )}
+                </Link>
+                <pre className={styles.message}>{item.comment.content}</pre>
               </div>
-              <p>
-                <span>by {item.user.firstname}</span>
-                {`${getElapsedTime(item.comment.created_at).value} ${
-                  getElapsedTime(item.comment.created_at).unit
-                } ago`} 
-              </p>
+              <div className={styles.containerImageComment}>
+                {item.comment.image_path && (
+                  <img
+                    src={`data:image/png;base64,${item.comment.image_path}`}
+                    alt=""
+                  />
+                )}
+              </div>
             </div>
-          ))}
+            <p>
+              <span>by {item.user.firstname}</span>
+              {`${getElapsedTime(item.comment.created_at).value} ${getElapsedTime(item.comment.created_at).unit
+                } ago`}
+            </p>
+          </div>
+        ))}
       </div>
-    </div>
+    </div>)
   );
 }
 
