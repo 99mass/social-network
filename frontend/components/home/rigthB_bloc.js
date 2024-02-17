@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "../../styles/modules/Friend.module.css";
-import { useState } from "react";
-import { getFriendsLists, getOldFriendList } from "../../handler/follower";
+import { useEffect, useState } from "react";
+import { confirmFriends, deleteAskingFriends, getAskForFriendLists, getFriendsLists, getOldFriendList } from "../../handler/follower";
 import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function RightBloc({ datasUser }) {
@@ -36,8 +36,19 @@ export default function RightBloc({ datasUser }) {
 
 export function LastFrienRequest({oldFriend, datasUser}) {
 
-  
-  
+  const [datas, setDatas] = useState(null);
+
+  useEffect(() => {
+    if (datas === null) {
+      getAskForFriendLists(setDatas);
+    }
+  }, [datas]);
+  const handlerConfirmFollow = (iduser) => {
+    confirmFriends(iduser, setDatas);
+  };
+  const handlerDeleteFollow = (iduser) => {
+    deleteAskingFriends(iduser, setDatas);
+  };
   return (
     <>
       <div className="title">
@@ -61,8 +72,8 @@ export function LastFrienRequest({oldFriend, datasUser}) {
             <span>{oldFriend&&`${getElapsedTime( oldFriend.created_at).value} ${getElapsedTime( oldFriend.created_at).unit}`}</span>
           </div>
           <div className={styles.validateRequest}>
-            <button>confirm</button>
-            <button>delete</button>
+            <button onClick={()=> handlerConfirmFollow(oldFriend.follower_id)}>confirm</button>
+            <button onClick={()=> handlerDeleteFollow(oldFriend.follower_id)}>delete</button>
           </div>
         </div>
       </div>
