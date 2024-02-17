@@ -14,6 +14,7 @@ export default function LeftBloc() {
   useEffect(() => {
     getUserBySession(setDatasUser);
   }, []);
+
   const togglePostForm = () => {
     setPostForm(!postForm);
   };
@@ -21,8 +22,6 @@ export default function LeftBloc() {
   const toggleGroupForm = () => {
     setGroupForm(!groupForm);
   };
-
-
 
   return (
     <>

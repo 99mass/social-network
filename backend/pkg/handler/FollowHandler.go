@@ -13,9 +13,10 @@ import (
 func FollowUser(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Assurez-vous que l'utilisateur est authentifié et récupérez son ID
+		log.Println("follow handler:", r.Method)
 		sess, err := utils.CheckAuthorization(db, w, r)
 		if err != nil {
-			helper.SendResponseError(w, "error","you're not authorized",http.StatusBadRequest)
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 			return
 		}
 		// check user id format
@@ -52,11 +53,46 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			// Appelez la fonction de contrôleur pour supprimer le follow
 			err = controller.Decline(db, userid.String(), sess.UserID.String())
 			if err != nil {
+				log.Println("erro delete", err)
 				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
 				return
 			}
+			log.Println("no error")
 			helper.SendResponse(w, nil, http.StatusOK)
 
+		default:
+			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
+			log.Println("method not allowed")
+		}
+	}
+}
+
+func UnfollowUser(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Assurez-vous que l'utilisateur est authentifié et récupérez son ID
+		log.Println("follow handler:", r.Method)
+		sess, err := utils.CheckAuthorization(db, w, r)
+		if err != nil {
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+			return
+		}
+		// check user id format
+		userid, err := utils.TextToUUID(r.URL.Query().Get("userid"))
+		if err != nil {
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+			return
+		}
+		switch r.Method {
+		case http.MethodDelete:
+			// Appelez la fonction de contrôleur pour supprimer le follow
+			err = controller.Decline(db, sess.UserID.String(), userid.String())
+			if err != nil {
+				log.Println("erro delete", err)
+				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
+				return
+			}
+			log.Println("no error")
+			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
 			log.Println("method not allowed")
@@ -105,6 +141,10 @@ func OldestPendingRequestFollow(db *sql.DB) http.HandlerFunc {
 			}
 			follower, err := controller.GetOldestFollowRequest(db, sess.UserID.String())
 			if err != nil {
+				if err == sql.ErrNoRows {
+					// Si aucune ligne n'est trouvée, retournez une erreur personnalisée ou une valeur par défaut
+					return
+				}
 				log.Println("error getfollowers info", err)
 				helper.SendResponseError(w, "error", "can't load followers", http.StatusBadRequest)
 				return

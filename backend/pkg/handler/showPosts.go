@@ -67,7 +67,12 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 				// Check if the user is followed
 				isfollowed, _ := controller.IsFollowed(db, sess.UserID.String(), user.ID)
 				Post.IsFollowed = isfollowed
-				log.Println("isfollowed", isfollowed)
+
+				nbrLikes, _ := controller.CountPostLikes(db, post.ID)
+				nbrComments, _ := controller.CountCommentsByPostID(db, post.ID)
+
+				Post.NbrLikes = nbrLikes
+				Post.NbrComments = nbrComments
 
 				Posts = append(Posts, Post)
 			}
@@ -121,6 +126,11 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 						}
 					}
 					postToShow.User = user
+					nbrLikes, _ := controller.CountPostLikes(db, post.ID)
+					nbrComments, _ := controller.CountCommentsByPostID(db, post.ID)
+
+					postToShow.NbrLikes = nbrLikes
+					postToShow.NbrComments = nbrComments
 				}
 			}
 			if count != 1 {

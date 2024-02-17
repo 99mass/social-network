@@ -53,8 +53,7 @@ export const getSpecificPostsUser = async (post_id, setPostData) => {
 
 export const getPostsUserCreated = async (
   userid,
-  setPostsCreated,
-  setError
+  setPostsCreated
 ) => {
   if (userid) {
     try {
@@ -69,15 +68,13 @@ export const getPostsUserCreated = async (
       });
 
       if (!response.ok) {
-        console.error("Failed to fetch PostsUserCreated  data");
-        setError(true);
+        console.error("Failed to fetch PostsUserCreated  data");       
       } else {
         const data = await response.json();
         setPostsCreated(data);
       }
     } catch (error) {
-      console.error("Error fetching PostsUserCreated data:", error.message);
-      setError(true);
+      console.error("Error fetching PostsUserCreated data:", error.message);     
     }
   }
 };

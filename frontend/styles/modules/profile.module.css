@@ -46,18 +46,23 @@
 .photoCovert div div p {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
-.photoCovert div div p span {
+.photoCovert div div p span:first-of-type {
   font-size: 18px;
   text-transform: capitalize;
 }
 
-.photoCovert div div p a {
+.photoCovert div div p .profileTypes span{
   text-transform: lowercase;
+}
+.profileTypes i{
+  margin-right: 5px;
+}
+.profileTypes span:last-of-type{
   color: gray;
-  cursor: pointer;
+
 }
 
 .menu {

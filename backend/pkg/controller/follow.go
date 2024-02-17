@@ -17,28 +17,28 @@ type Follow struct {
 }
 
 func FollowUser(db *sql.DB, followerID string, followingID string) error {
-    // Vérifier si l'utilisateur suivant est public
-    var isPublic bool
-    err := db.QueryRow("SELECT ispublic FROM users WHERE id = ?", followingID).Scan(&isPublic)
-    if err != nil {
-        log.Println("Error checking user's public status:", err)
-        return fmt.Errorf("failed to check user's public status: %w", err)
-    }
+	// Vérifier si l'utilisateur suivant est public
+	var isPublic bool
+	err := db.QueryRow("SELECT ispublic FROM users WHERE id = ?", followingID).Scan(&isPublic)
+	if err != nil {
+		log.Println("Error checking user's public status:", err)
+		return fmt.Errorf("failed to check user's public status: %w", err)
+	}
 
-    // Déterminer le statut du suivi en fonction de la valeur de ispublic
-    status := "waiting"
-    if isPublic {
-        status = "accepted"
-    }
+	// Déterminer le statut du suivi en fonction de la valeur de ispublic
+	status := "waiting"
+	if isPublic {
+		status = "accepted"
+	}
 
-    // Insérer le suivi avec le statut déterminé
-    query := `INSERT INTO followers (follower_id, following_id, status, created_at) VALUES (?, ?, ?, ?)`
-    _, err = db.Exec(query, followerID, followingID, status, time.Now())
-    if err != nil {
-        log.Println("Error inserting follow:", err)
-        return fmt.Errorf("failed to follow user: %w", err)
-    }
-    return nil
+	// Insérer le suivi avec le statut déterminé
+	query := `INSERT INTO followers (follower_id, following_id, status, created_at) VALUES (?, ?, ?, ?)`
+	_, err = db.Exec(query, followerID, followingID, status, time.Now())
+	if err != nil {
+		log.Println("Error inserting follow:", err)
+		return fmt.Errorf("failed to follow user: %w", err)
+	}
+	return nil
 }
 
 func AccepRequestFollow(db *sql.DB, followerID string, followingID string) error {
@@ -65,6 +65,7 @@ func Decline(db *sql.DB, followerID string, followingID string) error {
 		WHERE follower_id = ? AND following_id = ?;
 	`
 	// Exécutez la requête avec les IDs de follower et follow comme paramètres
+	log.Println(followerID, "ing", followingID)
 	_, err := db.Exec(query, followerID, followingID)
 	if err != nil {
 		log.Println("Error Declining follower request", err.Error())

@@ -3,19 +3,16 @@ import { getPostsUser } from "../../handler/getPostsUser";
 import { useEffect, useState } from "react";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { truncateText } from "../../utils/helper";
-import { askForFriends } from "../../handler/follower";
+import { askForFriends, UnfollowUser } from "../../handler/follower";
+import { likeDislikePost } from "../../handler/likeDislikePost";
 
 export default function MidlleBloc() {
 
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
-    if (posts === null) {
-      getPostsUser(setPosts);
-    }
+    getPostsUser(setPosts);
   }, []);
-
-  console.log(posts && posts);
 
   return (
     <div className="menu-middle">
@@ -27,15 +24,18 @@ export default function MidlleBloc() {
             image={item.user.avatarpath}
             isfollowed={item.is_followed}
             time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
+            setPosts={setPosts}
           />
           <PostMiddle
             content={item.post.content}
             image={item.post.image_path}
           />
           <PostFooter
-            numberLike={"15k"}
-            numberComment={"6k"}
+            numberLike={item.nbr_likes}
+            numberComment={item.nbr_comments}
+            userid={item.user.id}
             postid={item.post.id}
+            setPosts={setPosts}
           />
         </div>
       ))
@@ -44,23 +44,27 @@ export default function MidlleBloc() {
   );
 }
 
-export function PostHeader({ iduser, user, image,isfollowed, time }) {
-  const handlerFollower = () => {
-    askForFriends(iduser);
+export function PostHeader({ iduser, user, image, isfollowed, time, setPosts }) {
+  const handlerFollower = (stateFollow) => {
+    if (stateFollow == "Follow") {
+      askForFriends(iduser, setPosts);
+    } else if ((stateFollow == "Unfollow" || stateFollow == "Delete")) {
+      UnfollowUser(iduser, setPosts);
+    }
   };
-  // console.log("image:",image);
+
   return (
     <div className="profileuser">
       <div className="left-side">
         <div className="profile-pic">
-            <Link href={`./profileuser?userid=${iduser}`}>           
-              <img src={image && image!=="" ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />           
+          <Link href={`./profileuser?userid=${iduser}`}>
+            <img src={image && image !== "" ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />
           </Link>
         </div>
         <span>
           <h3>
             {user} .
-            <span onClick={handlerFollower} className="follow" title="follow">
+            <span onClick={() => handlerFollower(isfollowed)} className="follow" title="follow">
               {isfollowed}
             </span>
           </h3>
@@ -95,11 +99,17 @@ export function PostMiddle({ content, image }) {
   );
 }
 
-export function PostFooter({ numberLike, numberComment, postid }) {
+export function PostFooter({ numberLike, numberComment, userid, postid, setPosts, setPostsCreated }) {
+
+  const handlerLikeDislikePost = () => {
+    likeDislikePost(userid, postid, setPosts, setPostsCreated);
+  }
+
   return (
     <div className="liked">
-      <div className="liked-icon">
-        <i className="far fa-thumbs-up"></i> <span>{numberLike}</span>
+      <div onClick={handlerLikeDislikePost} className={`liked-icon ${true && 'liked-yes'}`}>
+        {true ? <i className="far fa-thumbs-up"></i> : <i className="fa-solid fa-thumbs-up liked-yes"></i>}
+        <span className={`${false && 'liked-yes'}`}>{numberLike}</span>
       </div>
       <Link href={`./comment?postid=${postid}`}>
         <div className="liked-icon">

@@ -12,8 +12,11 @@ export const api = {
   ShowPosts: `${domain}/show_posts`,
   userPosts: `${domain}/userposts`,
   Followuser: `${domain}/followuser`,
+  Unfollowuser: `${domain}/unfollowuser`,
   Requestfollow: `${domain}/requestfollow`,
   users_follows: `${domain}/users_follows`,
   addcomment:`${domain}/addcomment`,
-  show_comments_post: `${domain}/show_comments_post`
+  show_comments_post: `${domain}/show_comments_post`,
+  oldestrequestfollow: `${domain}/oldestrequestfollow`,
+  likeDslikepost:`${domain}/likepost`,
 };
