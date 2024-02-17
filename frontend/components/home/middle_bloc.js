@@ -3,7 +3,7 @@ import { getPostsUser } from "../../handler/getPostsUser";
 import { useEffect, useState } from "react";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { truncateText } from "../../utils/helper";
-import { DeleteAskForFriends, askForFriends } from "../../handler/follower";
+import { askForFriends, UnfollowUser } from "../../handler/follower";
 
 export default function MidlleBloc() {
 
@@ -43,10 +43,12 @@ export default function MidlleBloc() {
 
 export function PostHeader({ iduser, user, image, isfollowed, time, setPosts }) {
   const handlerFollower = (stateFollow) => {
-    if (stateFollow !== "Follow") {
-      DeleteAskForFriends(iduser, setPosts);
-    } else {
+    if (stateFollow == "Follow") {
       askForFriends(iduser, setPosts);
+    } else if ((stateFollow == "Unfollow")) {
+      UnfollowUser(iduser, setPosts);
+    }else if (stateFollow == "Delete"){
+      UnfollowUser(iduser, setPosts);
     }
   };
 
