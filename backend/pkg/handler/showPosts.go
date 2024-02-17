@@ -1,14 +1,15 @@
 package handler
 
 import (
-	"backend/pkg/controller"
-	"backend/pkg/helper"
-	"backend/pkg/models"
-	"backend/pkg/utils"
 	"database/sql"
 	"log"
 	"net/http"
 	"strings"
+
+	"backend/pkg/controller"
+	"backend/pkg/helper"
+	"backend/pkg/models"
+	"backend/pkg/utils"
 )
 
 func ShowPosts(db *sql.DB) http.HandlerFunc {
@@ -65,11 +66,37 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 				}
 				Post.User = user
 				// Check if the user is followed
-				isfollowed, _ := controller.IsFollowed(db, sess.UserID.String(), user.ID)
+				isfollowed, err := controller.IsFollowed(db, sess.UserID.String(), user.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error checking if the user is followed:", err.Error())
+					return
+				}
+
 				Post.IsFollowed = isfollowed
 
-				nbrLikes, _ := controller.CountPostLikes(db, post.ID)
-				nbrComments, _ := controller.CountCommentsByPostID(db, post.ID)
+				// Itère sur chaque post et récupère le statut du like
+				isLiked, err := controller.IsPostLikedByUser(db, sess.UserID.String(), post.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error checking if the post is liked:", err.Error())
+					return
+				}
+				Post.IsLiked = isLiked
+
+				nbrLikes, err := controller.CountPostLikes(db, post.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error counting post likes:", err.Error())
+					return
+				}
+
+				nbrComments, err := controller.CountCommentsByPostID(db, post.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error counting comments for the post:", err.Error())
+					return
+				}
 
 				Post.NbrLikes = nbrLikes
 				Post.NbrComments = nbrComments

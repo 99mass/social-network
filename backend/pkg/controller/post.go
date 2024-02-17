@@ -131,3 +131,25 @@ func GetPostsByUserID(db *sql.DB, userID string) ([]models.Post, error) {
 
 	return posts, nil
 }
+
+// IsPostLikedByUser vérifie si un post est aimé par un utilisateur.
+func IsPostLikedByUser(db *sql.DB, userID, postID string) (bool, error) {
+	query := `
+		SELECT COUNT(*) 
+		FROM post_likes 
+		WHERE user_id = ? AND post_id = ? AND is_liked = true
+	`
+
+	var count int
+	err := db.QueryRow(query, userID, postID).Scan(&count)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// Aucun like trouvé
+			return false, nil
+		}
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
