@@ -19,7 +19,7 @@ export default function RightBloc({ datasUser }) {
   }
   return (
     <div className="menu-rigth">
-      <LastFrienRequest oldFriend={oldFriend} userId={userId}/>
+     {oldFriend && <LastFrienRequest oldFriend={oldFriend} userId={userId}/>}
       <hr className="menu-rigth-hr" />
       <FriendOnLine FriendsList={FriendsList} />
     </div>
