@@ -12,7 +12,6 @@ export default function MidlleBloc({posts, setPosts}) {
     getPostsUser(setPosts);
   }, []);
 
-  console.log(posts && posts);
 
   return (
     <div className="menu-middle">
