@@ -42,7 +42,7 @@ export const getOlrequestFriend = async (setoldFriend) => {
     if (response.ok) {
       const data = await response.json();
       setoldFriend(data);
-    }else{
+    } else {
       setoldFriend(null)
     }
   } catch (error) {
@@ -99,33 +99,10 @@ export const askForFriends = async (userid, setPosts) => {
     }
   }
 };
-export const DeleteAskForFriends = async (userid, setPosts) => {
-  if (userid) {
-   
-    try {
-      const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Unfollowuser + `?userid=${userid}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionId,
-        },
-      });
-
-      // Vérifier le statut de la réponse
-      if (response.ok) {
-        getPostsUser(setPosts);
-      }
-
-    } catch (error) {
-      console.error("Error fetching profile data:", error.message);
-    }
-  }
-};
 export const UnfollowUser = async (userid, setPosts) => {
   if (userid) {
-   
+
     try {
       const sessionId = getSessionCookie();
 
