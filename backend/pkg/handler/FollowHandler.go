@@ -181,6 +181,18 @@ func GetFollowerInfos(db *sql.DB) http.HandlerFunc {
 				helper.SendResponse(w, nil, http.StatusOK)
 				return
 			}
+
+			for i, follower := range followers {
+				if follower.UserAvatarPath != "" {
+					img, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
+					if err != nil {
+						log.Println("error encoding avatar image: ", err, follower.UserAvatarPath)
+						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
+						return
+					}
+					followers[i].UserAvatarPath = img
+				}
+			}
 			helper.SendResponse(w, followers, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
@@ -207,6 +219,16 @@ func GetFollowingInfos(db *sql.DB) http.HandlerFunc {
 				}
 				helper.SendResponse(w, nil, http.StatusOK)
 				return
+			}
+			for i, follower := range followers {
+				if follower.UserAvatarPath != "" {
+					img, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
+					if err != nil {
+						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
+						return
+					}
+					followers[i].UserAvatarPath = img
+				}
 			}
 			helper.SendResponse(w, followers, http.StatusOK)
 		default:
