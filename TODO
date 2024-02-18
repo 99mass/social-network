@@ -34,12 +34,12 @@ WHERE (
 	v-  Update user infos
 	v-	follow a user
 	v-	creat post -> 
-		x	Comment, 
-		x	like
-	x	accept a follow request (if the profile is private)
+		v	Comment, 
+		v	like
+	v	accept a follow request (if the profile is private)
 	v-	decline a follow request
-	x	unfollow a user
-	x   delete a follower
+	v	unfollow a user
+	v   delete a follower
 
 	v	Create a group
 	x	send invitation to other users to join a group where hi is a memeber
@@ -65,8 +65,8 @@ Query For Display
 	v	Get all users that send a request to follow a user
 	v	Get the oldest following request
 	Post
-		Get all posts done by a user
-		get all posts a user can see
+	v	Get all posts done by a user
+	v	get all posts a user can see
 		gel all posts created in a group
 	Group
 		Get all groups

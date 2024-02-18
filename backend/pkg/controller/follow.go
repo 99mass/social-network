@@ -74,7 +74,6 @@ func Decline(db *sql.DB, followerID string, followingID string) error {
 
 	return nil
 }
-
 // Get all follow requests that are on waiting state
 // datas are follower_id, following_id, created_at, first_name, last_name, useravatar
 func GetFollowRequestInfos(db *sql.DB, user string) ([]Follow, error) {

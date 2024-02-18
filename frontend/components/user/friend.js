@@ -1,17 +1,24 @@
 import Link from "next/link";
 import styles from "../../styles/modules/profile.module.css";
 import { useEffect, useState } from "react";
-import { UnfollowUser, getFriendsLists } from "../../handler/follower";
+import { UnfollowUser, getFollowers, getFollowingUsers } from "../../handler/follower";
 
 export default function Friends({idUser}) {
 
-  const [FriendsList, setFriendsList] = useState(null);
+  const [FollowersList, setFollowerList] = useState(null);
+  const [FolloweingUsersList, setFollowingUsersList] = useState(null);
+
   const [friend, setFriend] = useState(true);
 
   useEffect(() => {
-      getFriendsLists(idUser, setFriendsList);
+    getFollowers(idUser, setFollowerList);
   }, []);
-  console.log(FriendsList && FriendsList);
+  useEffect(() => {
+    getFollowingUsers(idUser, setFollowingUsersList);
+  }, []);
+  
+  
+  console.log(FollowersList && FollowersList);
 
   const handleSetFriend = () => {
     if (!friend) {
@@ -38,26 +45,47 @@ export default function Friends({idUser}) {
             <i className="fa-solid fa-person-arrow-up-from-line"></i>Following
           </span>
         </div>
-        {friend && <FollowerFriends FriendsList={FriendsList} setFriendsList={setFriendsList} userConId={idUser} />}
-        {/* {!friend && <FollowingFriends FriendsList={FriendsList} />} */}
+        {friend && <FollowerFriends FollowersList={FollowersList} setFollowerList={setFollowerList} userConId={idUser} />}
+        {!friend && <FollowingFriends FolloweingUsersList={FolloweingUsersList} setFollowingUsersList={setFollowingUsersList} />}
       </div>
     </div>
   );
 }
 
-export function FollowerFriends({ FriendsList,setFriendsList,userConId }) {
+export function FollowerFriends({ FollowersList,setFollowerList,userConId }) {
   const handlerFollower = (iduser) => {
-      UnfollowUser(iduser, null,setFriendsList,userConId);
+      UnfollowUser(iduser, null,setFollowerList,userConId);
     }
   return (
     <div className={styles.contentListFriend}>
-      {FriendsList && FriendsList.map((user) =>
-          <div key={user.id} className={styles.bloc}>
+      {FollowersList && FollowersList.map((user) =>
+          <div key={user.follower_id} className={styles.bloc}>
               <img src={user.avatarpath ? `data:image/png;base64,${user.avatarpath}` : "../images/user-circle.png"} alt="" />
          
             <div className={styles.conteUnfollow}>
               <h4>{`${user.firstname} ${user.lastname}`}</h4>
-              <span onClick={()=>handlerFollower(user.id)} className={styles.unfollowBtn}>
+              <span onClick={()=>handlerFollower(user.follower_id)} className={styles.unfollowBtn}>
+                <i className="fa-solid fa-rectangle-xmark"></i>unfollow
+              </span>
+            </div>
+          </div>
+      )}
+    </div>
+  );
+}
+export function FollowingFriends({ FolloweingUsersList,setFollowingUsersList,userConId }) {
+  const handlerFollower = (iduser) => {
+      UnfollowUser(iduser, null,setFollowingUsersList,userConId);
+    }
+  return (
+    <div className={styles.contentListFriend}>
+      {FolloweingUsersList && FolloweingUsersList.map((user) =>
+          <div key={user.follower_id} className={styles.bloc}>
+              <img src={user.avatarpath ? `data:image/png;base64,${user.avatarpath}` : "../images/user-circle.png"} alt="" />
+         
+            <div className={styles.conteUnfollow}>
+              <h4>{`${user.firstname} ${user.lastname}`}</h4>
+              <span onClick={()=>handlerFollower(user.follower_id)} className={styles.unfollowBtn}>
                 <i className="fa-solid fa-rectangle-xmark"></i>unfollow
               </span>
             </div>
@@ -67,26 +95,26 @@ export function FollowerFriends({ FriendsList,setFriendsList,userConId }) {
   );
 }
 
-export function FollowingFriends({ FriendsList }) {
-  return (
-    <div className={styles.contentListFriend}>
-      {data.map((item, index) =>
-        item.type === "following" ? (
-          <div key={index} className={styles.bloc}>
-            <Link href={`./profileuser?userid=`}>
-              <img src={item.image} alt="" />
-            </Link>
-            <div className={styles.conteUnfollow}>
-              <h4>{item.name}</h4>
-              <span className={styles.unfollowBtn}>
-                <i className="fa-solid fa-rectangle-xmark"></i>unfollow
-              </span>
-            </div>
-          </div>
-        ) : (
-          "No user Found"
-        )
-      )}
-    </div>
-  );
-}
+// export function FollowingFriends({ FolloweingUsersList }) {
+//   return (
+//     <div className={styles.contentListFriend}>
+//       {FolloweingUsersList.map((item, index) =>
+//         item.type === "following" ? (
+//           <div key={index} className={styles.bloc}>
+//             <Link href={`./profileuser?userid=`}>
+//               <img src={item.image} alt="" />
+//             </Link>
+//             <div className={styles.conteUnfollow}>
+//               <h4>{item.name}</h4>
+//               <span className={styles.unfollowBtn}>
+//                 <i className="fa-solid fa-rectangle-xmark"></i>unfollow
+//               </span>
+//             </div>
+//           </div>
+//         ) : (
+//           "No user Found"
+//         )
+//       )}
+//     </div>
+//   );
+// }

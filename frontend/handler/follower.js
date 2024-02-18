@@ -67,11 +67,56 @@ export const getFriendsLists = async (userid, setDatas) => {
       // Vérifier le statut de la réponse
       if (response.ok) {
         const data = await response.json();
-        console.log('oooo');
         setDatas(data);
       }
     } catch (error) {
       console.error("Error fetching Friends data:", error.message);
+    }
+  }
+};
+export const getFollowers = async (userid, setDatas) => {
+  if (userid) {
+    try {
+      const sessionId = getSessionCookie();
+
+      const response = await fetch(api.getFollowers, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      });
+
+      // Vérifier le statut de la réponse
+      if (response.ok) {
+        const data = await response.json();
+        setDatas(data);
+      }
+    } catch (error) {
+      console.error("Error fetching Followers data:", error.message);
+    }
+  }
+};
+export const getFollowingUsers = async (userid, setDatas) => {
+  if (userid) {
+    try {
+      const sessionId = getSessionCookie();
+
+      const response = await fetch(api.getFollingUsers, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      });
+
+      // Vérifier le statut de la réponse
+      if (response.ok) {
+        const data = await response.json();
+        setDatas(data);
+      }
+    } catch (error) {
+      console.error("Error fetching Followers data:", error.message);
     }
   }
 };
