@@ -16,7 +16,7 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodGet:
 			var Comments []models.Comment_Request
-			sess, err := utils.CheckAuthorization(db, w, r)
+			_, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				log.Println("not authorized", err)
@@ -24,14 +24,6 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 			}
 
 			postID := r.URL.Query().Get("post_id")
-
-			// Iterate over each post and get the like status
-			isLiked, err := controller.IsPostLikedByUser(db, sess.UserID.String(), postID)
-			if err != nil {
-				helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
-				log.Println("error checking if the post is liked:", err.Error())
-				return
-			}
 
 			// check user id format
 			comments, err := controller.GetCommentsByPostID(db, postID)
@@ -69,8 +61,6 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 					}
 				}
 				Comment.User = user
-
-				Comment.Post.IsLiked = isLiked
 
 				Comments = append(Comments, Comment)
 

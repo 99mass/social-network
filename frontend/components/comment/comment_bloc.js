@@ -43,7 +43,7 @@ export default function Comment() {
             image={posData.post.image_path}
           />
           <PostFooterComment
-            is_liked={posData.post.is_liked}
+            is_liked={posData.is_liked}
             numberLike={posData.nbr_likes}
             numberComment={posData.nbr_comments}
           />
