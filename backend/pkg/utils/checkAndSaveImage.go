@@ -16,7 +16,7 @@ func ReadAndSaveImage(base64img, directory string) (string, error) {
 	if base64img != "" {
 		mimeType := strings.Split(base64img, ";")[0]
 		mimeType = strings.TrimPrefix(mimeType, "data:")
-		if mimeType != "image/jpeg" && mimeType != "image/png" {
+		if mimeType != "image/jpeg" && mimeType != "image/png" && mimeType != "image/gif" &&  mimeType != "image/jpg"{
 			return "", errors.New("file format is not valid")
 		}
 		base64Data := base64img[strings.IndexByte(base64img, ',')+1:]
@@ -37,6 +37,12 @@ func ReadAndSaveImage(base64img, directory string) (string, error) {
 		}
 		if mimeType == "image/png" {
 			base64img = name + ".png"
+		}
+		if mimeType == "image/gif" {
+			base64img = name + ".gif"
+		}
+		if mimeType == "image/jpg" {
+			base64img = name + ".jpg"
 		}
 
 		_, err = os.Stat(directory)
@@ -63,7 +69,7 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 	if base64img != "" {
 		mimeType := strings.Split(base64img, ";")[0]
 		mimeType = strings.TrimPrefix(mimeType, "data:")
-		if mimeType != "image/jpeg" && mimeType != "image/png" {
+		if mimeType != "image/jpeg" && mimeType != "image/png" && mimeType != "image/gif" &&  mimeType != "image/jpg"{
 			return "", errors.New("file format is not valid")
 		}
 		base64Data := base64img[strings.IndexByte(base64img, ',')+1:]
@@ -87,6 +93,12 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 			base64img = name + ".png"
 		}
 
+		if mimeType == "image/gif" {
+			base64img = name + ".gif"
+		}
+		if mimeType == "image/jpg" {
+			base64img = name + ".jpg"
+		}
 		_, err = os.Stat(directory)
 		if os.IsNotExist(err) {
 			errDir := os.MkdirAll(directory, 0755)
