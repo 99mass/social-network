@@ -8,9 +8,11 @@ import { getDatasProfilUser } from "../../handler/user_profile";
 import { getPostsUserCreated } from "../../handler/getPostsUser";
 import { ErrorProfile } from "../errors/error_profiles";
 import { UnfollowUser, askForFriends } from "../../handler/follower";
+import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function Profile_user() {
   const [datas, setDatas] = useState(null);
+  const [datasUserConnected, setDatasUserConnected] = useState(null);
   const [postsCreated, setPostsCreated] = useState(null);
   const [error, setError] = useState(false);
 
@@ -29,6 +31,7 @@ export default function Profile_user() {
       getDatasProfilUser(setDatas, userid);
     }
     getPostsUserCreated(userid, setPostsCreated);
+    getUserBySession(setDatasUserConnected);
   }, [userid, datas]);
   console.log(datas && datas);
 
@@ -90,6 +93,7 @@ export function ContentCovertPhoto({
   setDatas,
 }) {
   const handlerFollower = () => {
+    console.log(iduser);
     askForFriends(iduser, null, setDatas);
   };
 

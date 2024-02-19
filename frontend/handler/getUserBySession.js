@@ -25,6 +25,7 @@ export const getUserBySession = async (setDatasUser) => {
     if (response.ok) {
       const datas = await response.json();
       setDatasUser(datas);
+      console.log("aa");
     } else {
       const errorData = await response.json();
       console.error("Error Data:", errorData.message);
