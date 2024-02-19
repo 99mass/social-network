@@ -8,6 +8,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	"backend/pkg/utils"
 )
 
 func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
@@ -15,8 +16,22 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodGet:
 			var Comments []models.Comment_Request
-			
+			sess, err := utils.CheckAuthorization(db, w, r)
+			if err != nil {
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+				log.Println("not authorized", err)
+				return
+			}
+
 			postID := r.URL.Query().Get("post_id")
+
+			// Iterate over each post and get the like status
+			isLiked, err := controller.IsPostLikedByUser(db, sess.UserID.String(), postID)
+			if err != nil {
+				helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+				log.Println("error checking if the post is liked:", err.Error())
+				return
+			}
 
 			// check user id format
 			comments, err := controller.GetCommentsByPostID(db, postID)
@@ -55,21 +70,14 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 				}
 				Comment.User = user
 
-				// Iterate over each post and get the like status
-				isLiked, err := controller.IsPostLikedByUser(db, user.ID, postID)
-				if err != nil {
-					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
-					log.Println("error checking if the post is liked:", err.Error())
-					return
-				}
-
-				Comment.Post.IsLiked = isLiked
-
 				Comments = append(Comments, Comment)
 
 			}
 
-			helper.SendResponse(w, Comments, http.StatusOK)
+			helper.SendResponse(w, struct {
+				Comments []models.Comment_Request
+				IsLiked  bool
+			}{Comments, isLiked}, http.StatusOK)
 		default:
 
 			helper.SendResponse(w, models.ErrorResponse{
