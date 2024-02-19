@@ -24,6 +24,7 @@ export default function Comment() {
       getCommentPost(setComment, postid);
     }
   }, [postid]);
+ console.log(posData && posData);
 
   return (
     <div className={`${styles.middleBloc} middle`}>
@@ -33,14 +34,24 @@ export default function Comment() {
             iduser={posData.user.id}
             user={posData.user.firstname}
             image={posData.user.avatarpath}
-            time={`${getElapsedTime(posData.post.created_at).value} ${getElapsedTime(posData.post.created_at).unit}`}
+            time={`${getElapsedTime(posData.post.created_at).value} ${
+              getElapsedTime(posData.post.created_at).unit
+            }`}
           />
           <PostMiddle
             content={posData.post.content}
             image={posData.post.image_path}
           />
-          <PostFooterComment like={posData.nbr_likes} comment={posData.nbr_comments} />
-          <FormComment postid={posData.post.id} setComment={setComment} setPostData={setPostData} />
+          <PostFooterComment
+            is_liked={posData.is_liked}
+            numberLike={posData.nbr_likes}
+            numberComment={posData.nbr_comments}
+          />
+          <FormComment
+            postid={posData.post.id}
+            setComment={setComment}
+            setPostData={setPostData}
+          />
         </>
       )}
       {posData && comment && <CommentPost data={comment} />}
@@ -49,58 +60,63 @@ export default function Comment() {
   );
 }
 
-export function PostFooterComment({ like, comment }) {
+export function PostFooterComment({is_liked, numberLike, numberComment }) {
   return (
     <div className="liked">
       <div className="liked-icon">
-        <i className="far fa-thumbs-up"></i> <span>{like}</span>
+        {is_liked ? <i className="fa-solid fa-thumbs-up liked-yes"></i> : <i className="far fa-thumbs-up"></i>  }
+        <span className={`${is_liked && 'liked-yes'}`}>{numberLike}</span>
       </div>
       <div className="liked-icon">
-        <i className="far fa-comment"></i> <span>{comment}</span>
+        <i className="far fa-comment"></i> <span>{numberComment}</span>
       </div>
     </div>
   );
 }
 
 export function CommentPost({ data }) {
+  
   return (
-    (data && <div className={styles.contentAllComments}>
-      <div className={styles.containerCommentsMessage}>
-        {data && data.map((item, index) => (
-          <div key={index} className={styles.contentMessage}>
-            <div>
-              <div>
-                <Link href={`./profileuser?userid=${item && item.user.id}`}>
-                  {item.comment.image_path && (
-                    <img
-                      src={`data:image/png;base64,${item.user.avatarpath}`}
-                      alt=""
-                    />
-                  )}
-                  {item.comment.image_path === '' && (
-                    <img src={`../images/user-circle.png`} alt="" />
-                  )}
-                </Link>
-                <pre className={styles.message}>{item.comment.content}</pre>
+    data && (
+      <div className={styles.contentAllComments}>
+        <div className={styles.containerCommentsMessage}>
+          {data &&
+            data.map((item) => (
+              <div key={item.user.id} className={styles.contentMessage}>
+                <div>
+                  <div>
+                    <Link href={`./profileuser?userid=${item && item.user.id}`}>
+                      {item.user.avatarpath ? (
+                        <img
+                          src={`data:image/png;base64,${item.user.avatarpath}`}
+                          alt=""
+                        />
+                      ) : (
+                        <img src={`../images/user-circle.png`} alt="" />
+                      )}
+                    </Link>
+                    <pre className={styles.message}>{item.comment.content}</pre>
+                  </div>
+                  <div className={styles.containerImageComment}>
+                    {item.comment.image_path && (
+                      <img
+                        src={`data:image/png;base64,${item.comment.image_path}`}
+                        alt=""
+                      />
+                    )}
+                  </div>
+                </div>
+                <p>
+                  <span>by {item.user.firstname}</span>
+                  {`${getElapsedTime(item.comment.created_at).value} ${
+                    getElapsedTime(item.comment.created_at).unit
+                  } ago`}
+                </p>
               </div>
-              <div className={styles.containerImageComment}>
-                {item.comment.image_path && (
-                  <img
-                    src={`data:image/png;base64,${item.comment.image_path}`}
-                    alt=""
-                  />
-                )}
-              </div>
-            </div>
-            <p>
-              <span>by {item.user.firstname}</span>
-              {`${getElapsedTime(item.comment.created_at).value} ${getElapsedTime(item.comment.created_at).unit
-                } ago`}
-            </p>
-          </div>
-        ))}
+            ))}
+        </div>
       </div>
-    </div>)
+    )
   );
 }
 

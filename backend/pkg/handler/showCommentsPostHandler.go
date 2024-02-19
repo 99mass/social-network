@@ -8,6 +8,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	"backend/pkg/utils"
 )
 
 func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
@@ -15,7 +16,13 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodGet:
 			var Comments []models.Comment_Request
-			
+			_, err := utils.CheckAuthorization(db, w, r)
+			if err != nil {
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+				log.Println("not authorized", err)
+				return
+			}
+
 			postID := r.URL.Query().Get("post_id")
 
 			// check user id format
