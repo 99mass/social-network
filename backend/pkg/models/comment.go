@@ -10,6 +10,7 @@ type Comment struct {
 }
 
 type Comment_Request struct {
-	Comment Comment `json:"comment"`
-	User    User    `json:"user"`
+	Comment Comment      `json:"comment"`
+	User    User         `json:"user"`
+	Post    Post_Request `json:"post"`
 }

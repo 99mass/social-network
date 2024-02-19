@@ -55,6 +55,16 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 				}
 				Comment.User = user
 
+				// Iterate over each post and get the like status
+				isLiked, err := controller.IsPostLikedByUser(db, user.ID, postID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error checking if the post is liked:", err.Error())
+					return
+				}
+
+				Comment.Post.IsLiked = isLiked
+
 				Comments = append(Comments, Comment)
 
 			}
