@@ -66,7 +66,7 @@ func PostToShow(db *sql.DB, userID string) ([]models.Post, error) {
             p.privacy = 'public' OR
             (p.privacy = 'private' AND (f.follower_id IS NOT NULL OR f.following_id IS NOT NULL)) OR
             (p.privacy = 'almost' AND au.user_id IS NOT NULL)
-        );
+        ) ORDER BY p.created_at DESC;
     `
 
 	// Prepare the statement
@@ -124,7 +124,7 @@ func GetPostsByUserID(db *sql.DB, userID string) ([]models.Post, error) {
 		}
 		posts = append(posts, post)
 	}
-	
+
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -152,4 +152,3 @@ func IsPostLikedByUser(db *sql.DB, userID, postID string) (bool, error) {
 
 	return count > 0, nil
 }
-
