@@ -68,6 +68,10 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 						profil.IsFriend = false
 						helper.SendResponse(w, profil, http.StatusOK)
 					}
+				} else {
+					profil.User = user
+					profil.IsOwner = false
+					helper.SendResponse(w, profil, http.StatusOK)
 				}
 
 			}
