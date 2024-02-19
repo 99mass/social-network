@@ -276,3 +276,23 @@ func IsFollowed(db *sql.DB, followerid, followingid string) (string, error) {
 	}
 	return status, nil
 }
+
+
+func AreUsersFriends(db *sql.DB, userID1 string, userID2 string) (bool, error) {
+	// Check if userID1 is following userID2
+	var status1 string
+	err := db.QueryRow("SELECT status FROM followers WHERE follower_id = ? AND following_id = ?", userID1, userID2).Scan(&status1)
+	if err != nil && err != sql.ErrNoRows {
+		return false, fmt.Errorf("failed to check if user1 is following user2: %w", err)
+	}
+
+	// Check if userID2 is following userID1
+	var status2 string
+	err = db.QueryRow("SELECT status FROM followers WHERE follower_id = ? AND following_id = ?", userID2, userID1).Scan(&status2)
+	if err != nil && err != sql.ErrNoRows {
+		return false, fmt.Errorf("failed to check if user2 is following user1: %w", err)
+	}
+
+	// If both users are following each other and the status is "accepted", they are friends
+	return status1 == "accepted" || status2 == "accepted", nil
+}
