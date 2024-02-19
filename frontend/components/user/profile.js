@@ -31,7 +31,7 @@ export default function Profile_user() {
       getDatasProfilUser(setDatas, userid);
     }
     getPostsUserCreated(userid, setPostsCreated);
-    getUserBySession(setDatasUserConnected);
+    // getUserBySession(setDatasUserConnected);
   }, [userid, datas]);
   console.log(datas && datas);
 
@@ -48,12 +48,12 @@ export default function Profile_user() {
     <>
       {datas ? (
         <ContentCovertPhoto
-          iduser={datas && datas.user.id}
-          userPicture={datas && datas.user.avatarpath}
-          firstname={datas && datas.user.firstname}
-          lastname={datas && datas.user.lastname}
-          ispublic={datas && datas.user.ispublic}
-          isowner={datas && datas.isowner}
+          iduser={datas.user.id}
+          userPicture={datas.user.avatarpath}
+          firstname={datas.user.firstname}
+          lastname={datas.user.lastname}
+          ispublic={datas.user.ispublic}
+          isowner={datas.isowner}
           editButton={editButton}
           handleButtonClick={handleButtonClick}
           setDatas={setDatas}
@@ -62,7 +62,7 @@ export default function Profile_user() {
         <ErrorProfile />
       )}
 
-      {editButton.button1 && (
+      {editButton.button1 && (datas?.isowner || !datas?.isowner && (datas?.user.ispublic || (!datas?.user.ispublic && datas?.isfriend))) && (
         <Posts_user
           postsCreated={postsCreated && postsCreated}
           setPostsCreated={setPostsCreated}
@@ -77,7 +77,7 @@ export default function Profile_user() {
           setDatas={setDatas}
         />
       )}
-      {editButton.button3 && <Friends idUser={userid} />}
+      {editButton.button3 && (datas && datas?.isOwner) && <Friends idUser={userid} />}
     </>
   );
 }
@@ -92,8 +92,7 @@ export function ContentCovertPhoto({
   handleButtonClick,
   setDatas,
 }) {
-  const handlerFollower = () => {
-    console.log(iduser);
+  const handlerFollower = () => {    
     askForFriends(iduser, null, setDatas);
   };
 
@@ -125,19 +124,16 @@ export function ContentCovertPhoto({
             <div className={styles.blocFlow}>
               <span
                 onClick={handlerFollower}
-                className={true ? styles.active : styles.default}
+                className={styles.active}
               >
-                <i className="fa-solid fa-square-plus"></i>Follow
-              </span>
-              <span className={false ? styles.active : styles.default}>
-                <i className="fa-solid fa-square-xmark"></i>UnFollow
+                <i className={`fa-solid ${true ? 'fa-square-plus' : "fa-square-xmark"}`}></i>Follow
               </span>
             </div>
           )}
         </div>
         <NavMenu
-          isowner
           isOwner={isowner}
+          ispublic={ispublic}
           editButton={editButton}
           handleButtonClick={handleButtonClick}
         />
@@ -146,7 +142,7 @@ export function ContentCovertPhoto({
   );
 }
 
-export function NavMenu({ isOwner, editButton, handleButtonClick }) {
+export function NavMenu({ isOwner, ispublic, editButton, handleButtonClick }) {
   return (
     <div className={styles.menu}>
       <span
