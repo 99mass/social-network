@@ -26,8 +26,6 @@ export default function Comment() {
   }, [postid]);
 
 
-  console.log(posData && posData);
-
   return (
     <div className={`${styles.middleBloc} middle`}>
       {posData && (

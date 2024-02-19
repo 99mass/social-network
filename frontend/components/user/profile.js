@@ -19,17 +19,9 @@ export default function Profile_user() {
     button3: false,
     button4: false,
   });
-  const handleButtonClick = (buttonNumber) => {
-    setEditButton({
-      button1: buttonNumber === 1,
-      button2: buttonNumber === 2,
-      button3: buttonNumber === 3,
-      button4: buttonNumber === 4,
-    });
-  };
   const router = useRouter();
   const { userid } = router.query;
-
+  
   // recuperer les information du user
   useEffect(() => {
     if (!datas) {
@@ -38,6 +30,16 @@ export default function Profile_user() {
     getPostsUserCreated(userid, setPostsCreated);
   }, [userid, datas]);
 
+  
+  const handleButtonClick = (buttonNumber) => {
+    setEditButton({
+      button1: buttonNumber === 1,
+      button2: buttonNumber === 2,
+      button3: buttonNumber === 3,
+      button4: buttonNumber === 4,
+    });
+  };
+  
   return (
     <>
       {datas ? (
@@ -87,7 +89,7 @@ export function ContentCovertPhoto({
 }) {
 
     const handlerFollower=()=>{
-      
+
     }
 
   return (
