@@ -24,7 +24,7 @@ export default function Comment() {
       getCommentPost(setComment, postid);
     }
   }, [postid]);
-
+ console.log(comment && comment);
 
   return (
     <div className={`${styles.middleBloc} middle`}>
