@@ -7,6 +7,7 @@ import Friends from "./friend";
 import { getDatasProfilUser } from "../../handler/user_profile";
 import { getPostsUserCreated } from "../../handler/getPostsUser";
 import { ErrorProfile } from "../errors/error_profiles";
+import { UnfollowUser, askForFriends } from "../../handler/follower";
 
 export default function Profile_user() {
   const [datas, setDatas] = useState(null);
@@ -21,7 +22,7 @@ export default function Profile_user() {
   });
   const router = useRouter();
   const { userid } = router.query;
-  
+
   // recuperer les information du user
   useEffect(() => {
     if (!datas) {
@@ -29,8 +30,8 @@ export default function Profile_user() {
     }
     getPostsUserCreated(userid, setPostsCreated);
   }, [userid, datas]);
+  console.log(datas && datas);
 
-  
   const handleButtonClick = (buttonNumber) => {
     setEditButton({
       button1: buttonNumber === 1,
@@ -39,11 +40,12 @@ export default function Profile_user() {
       button4: buttonNumber === 4,
     });
   };
-  
+
   return (
     <>
       {datas ? (
         <ContentCovertPhoto
+          iduser={datas && datas.user.id}
           userPicture={datas && datas.user.avatarpath}
           firstname={datas && datas.user.firstname}
           lastname={datas && datas.user.lastname}
@@ -52,7 +54,6 @@ export default function Profile_user() {
           editButton={editButton}
           handleButtonClick={handleButtonClick}
           setDatas={setDatas}
-          
         />
       ) : (
         <ErrorProfile />
@@ -78,6 +79,7 @@ export default function Profile_user() {
   );
 }
 export function ContentCovertPhoto({
+  iduser,
   userPicture,
   firstname,
   lastname,
@@ -85,12 +87,11 @@ export function ContentCovertPhoto({
   isowner,
   editButton,
   handleButtonClick,
-  setDatas
+  setDatas,
 }) {
-
-    const handlerFollower=()=>{
-
-    }
+  const handlerFollower = () => {
+    askForFriends(iduser, null, setDatas);
+  };
 
   return (
     <div className={styles.photoCovert}>
@@ -99,8 +100,8 @@ export function ContentCovertPhoto({
       </div>
 
       <div className={styles.userDetails}>
-        <div  className={styles.userDetailsPart01}>
-          <div >
+        <div className={styles.userDetailsPart01}>
+          <div>
             {userPicture && (
               <img src={`data:image/png;base64,${userPicture}`} alt="" />
             )}
@@ -116,14 +117,19 @@ export function ContentCovertPhoto({
               </span>
             </p>
           </div>
-          <div className={styles.blocFlow}>
-            <span className={true ? styles.active : styles.default} >
-              <i className="fa-solid fa-square-plus"></i>Follow
-            </span>
-            <span className={false ? styles.active : styles.default} >
-              <i className="fa-solid fa-square-xmark"></i>UnFollow
-            </span>
-          </div>
+          {!isowner && (
+            <div className={styles.blocFlow}>
+              <span
+                onClick={handlerFollower}
+                className={true ? styles.active : styles.default}
+              >
+                <i className="fa-solid fa-square-plus"></i>Follow
+              </span>
+              <span className={false ? styles.active : styles.default}>
+                <i className="fa-solid fa-square-xmark"></i>UnFollow
+              </span>
+            </div>
+          )}
         </div>
         <NavMenu
           isowner
