@@ -17,14 +17,8 @@
   height: auto;
   display: block;
 }
-.userDetails{
-  background-color: red;
-  width: 100%;
-}
-
 
 .photoCovert div {
-
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -32,18 +26,31 @@
   top: -15px;
   margin-left: 10px;
 }
-.userDetails div{
-  width: 100%;
+.photoCovert .userDetails{
+  display: flex;
+  justify-content: space-between;
 }
-.userDetails div div:first-of-type{
-  width: fit-content;
-  background-color: green;
+
+.photoCovert .userDetails .userDetailsPart01{
+  width: 100%;
+ 
 }
 .userDetails div .blocFlow{
-  width: 100%;
   display: flex;
   justify-content: flex-end;
-  background-color: blue;
+  padding-right: 10px;
+}
+.photoCovert .userDetails div .blocFlow span{
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.photoCovert .userDetails div .blocFlow span i{
+  margin-right: 5px;
 }
 
 .photoCovert div div {
@@ -116,7 +123,6 @@
   height: fit-content;
   padding: 15px;
   border-radius: 10px;
-
   background: var(--secondary-bg);
 }
 

@@ -45,13 +45,6 @@ export default function MidlleBloc({posts, setPosts}) {
 }
 
 export function PostHeader({ iduser, user, image, isfollowed, time, setPosts }) {
-  const handlerFollower = (stateFollow) => {
-    if (stateFollow == "Follow") {
-      askForFriends(iduser, setPosts);
-    } else if ((stateFollow == "Unfollow" || stateFollow == "Delete")) {
-      UnfollowUser(iduser, setPosts);
-    }
-  };
 
   return (
     <div className="profileuser">
@@ -119,3 +112,12 @@ export function PostFooter({ is_liked,numberLike, numberComment, userid, postid,
     </div>
   );
 }
+
+
+export const handlerFollower = (stateFollow) => {
+  if (stateFollow == "Follow") {
+    askForFriends(iduser, setPosts);
+  } else if ((stateFollow == "Unfollow" || stateFollow == "Delete")) {
+    UnfollowUser(iduser, setPosts);
+  }
+};

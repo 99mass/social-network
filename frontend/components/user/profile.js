@@ -49,6 +49,8 @@ export default function Profile_user() {
           isowner={datas && datas.isowner}
           editButton={editButton}
           handleButtonClick={handleButtonClick}
+          setDatas={setDatas}
+          
         />
       ) : (
         <ErrorProfile />
@@ -81,7 +83,13 @@ export function ContentCovertPhoto({
   isowner,
   editButton,
   handleButtonClick,
+  setDatas
 }) {
+
+    const handlerFollower=()=>{
+      
+    }
+
   return (
     <div className={styles.photoCovert}>
       <div className={styles.firstImg}>
@@ -90,7 +98,7 @@ export function ContentCovertPhoto({
 
       <div className={styles.userDetails}>
         <div  className={styles.userDetailsPart01}>
-          <div className={styles.userDetailsPart0}>
+          <div >
             {userPicture && (
               <img src={`data:image/png;base64,${userPicture}`} alt="" />
             )}
@@ -107,15 +115,11 @@ export function ContentCovertPhoto({
             </p>
           </div>
           <div className={styles.blocFlow}>
-            <span
-              className={editButton.button4 ? styles.active : styles.default}
-            >
+            <span className={true ? styles.active : styles.default} >
               <i className="fa-solid fa-square-plus"></i>Follow
             </span>
-            <span
-              className={editButton.button4 ? styles.active : styles.default}
-            >
-              <i class="fa-solid fa-square-xmark"></i>UnFollow
+            <span className={false ? styles.active : styles.default} >
+              <i className="fa-solid fa-square-xmark"></i>UnFollow
             </span>
           </div>
         </div>
@@ -143,6 +147,7 @@ export function NavMenu({ isOwner, editButton, handleButtonClick }) {
         <span
           onClick={() => handleButtonClick(2)}
           className={editButton.button2 ? styles.active : styles.default}
+          title="Click to follow user"
         >
           <i className="fa-solid fa-pen"></i>Edit profile
         </span>
@@ -150,6 +155,7 @@ export function NavMenu({ isOwner, editButton, handleButtonClick }) {
       <span
         onClick={() => handleButtonClick(3)}
         className={editButton.button3 ? styles.active : styles.default}
+        title="Click to follow user"
       >
         <i className="fa-solid fa-user-group"></i>Friends
       </span>

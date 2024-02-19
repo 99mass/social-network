@@ -16,7 +16,7 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodGet:
 			var Posts []models.Post_Request
-			_, err := utils.CheckAuthorization(db, w, r)
+			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				log.Println("default")
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
@@ -68,12 +68,37 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 				Post.User = user
 
 				// Check if the user is followed
-				isfollowed, _ := controller.IsFollowed(db, userID, user.ID)
-				Post.IsFollowed = isfollowed
-				log.Println("isfollowed", isfollowed)
+				isfollowed, err := controller.IsFollowed(db, sess.UserID.String(), user.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error checking if the user is followed:", err.Error())
+					return
+				}
 
-				nbrLikes, _ := controller.CountPostLikes(db, post.ID)
-				nbrComments, _ := controller.CountCommentsByPostID(db, post.ID)
+				Post.IsFollowed = isfollowed
+
+				// Itère sur chaque post et récupère le statut du like
+				isLiked, err := controller.IsPostLikedByUser(db, sess.UserID.String(), post.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error checking if the post is liked:", err.Error())
+					return
+				}
+				Post.IsLiked = isLiked
+
+				nbrLikes, err := controller.CountPostLikes(db, post.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error counting post likes:", err.Error())
+					return
+				}
+
+				nbrComments, err := controller.CountCommentsByPostID(db, post.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+					log.Println("error counting comments for the post:", err.Error())
+					return
+				}
 
 				Post.NbrLikes = nbrLikes
 				Post.NbrComments = nbrComments
