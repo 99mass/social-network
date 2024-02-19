@@ -8,7 +8,7 @@ export default function Edit_Profile({
   datas,
   userid,
   setDatas,
-  CloseEditForm,
+  handleButtonClick,
 }) {
   const [errorMessage, setErrorMessage] = useState(null);
   const [privacy, setPrivacy] = useState(null);
@@ -76,7 +76,7 @@ export default function Edit_Profile({
           userid,
           setDatas,
           setErrorMessage,
-          CloseEditForm
+          handleButtonClick
         );
       };
       reader.readAsDataURL(file);
@@ -94,7 +94,7 @@ export default function Edit_Profile({
         userid,
         setDatas,
         setErrorMessage,
-        CloseEditForm
+        handleButtonClick
       );
     }
   };
@@ -106,7 +106,7 @@ export default function Edit_Profile({
         <i
           className="fa-regular fa-circle-xmark"
           title="Close form"
-          onClick={CloseEditForm}
+          onClick={() => handleButtonClick(1)}
         ></i>
       </h1>
       <hr />
@@ -119,7 +119,10 @@ export default function Edit_Profile({
       )}
       <form method="put" onSubmit={handleSubmit} encType="multipart/form-data">
         {datas && (
-          <Picture fileInputRef={fileInputRef} picture={datas.user.avatarpath} />
+          <Picture
+            fileInputRef={fileInputRef}
+            picture={datas.user.avatarpath}
+          />
         )}
         <hr />
         {datas && (

@@ -48,6 +48,7 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 			if sess.UserID == userid {
 				profil.User = user
 				profil.IsOwner = true
+
 				helper.SendResponse(w, profil, http.StatusOK)
 			} else {
 				if !user.IsPublic {
@@ -71,6 +72,7 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 				} else {
 					profil.User = user
 					profil.IsOwner = false
+					profil.IsFriend = false
 					helper.SendResponse(w, profil, http.StatusOK)
 				}
 
