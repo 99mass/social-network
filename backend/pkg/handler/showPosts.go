@@ -153,8 +153,28 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 						}
 					}
 					postToShow.User = user
-					nbrLikes, _ := controller.CountPostLikes(db, post.ID)
-					nbrComments, _ := controller.CountCommentsByPostID(db, post.ID)
+					// Itère sur chaque post et récupère le statut du like
+					isLiked, err := controller.IsPostLikedByUser(db, sess.UserID.String(), post.ID)
+					if err != nil {
+						helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+						log.Println("error checking if the post is liked:", err.Error())
+						return
+					}
+					postToShow.IsLiked = isLiked
+
+					nbrLikes, err := controller.CountPostLikes(db, post.ID)
+					if err != nil {
+						helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+						log.Println("error counting post likes:", err.Error())
+						return
+					}
+
+					nbrComments, err := controller.CountCommentsByPostID(db, post.ID)
+					if err != nil {
+						helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+						log.Println("error counting comments for the post:", err.Error())
+						return
+					}
 
 					postToShow.NbrLikes = nbrLikes
 					postToShow.NbrComments = nbrComments
