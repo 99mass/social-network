@@ -35,7 +35,7 @@ export default function Header() {
         <div className={styles.fixed}>
           <div className={styles.mainHeader}>
             <div className={styles.topContent}>
-              <Link href="/"><h2>social-network</h2></Link>
+              <Link href="/home"><h2>social-network</h2></Link>
               <MidlleNAvForBigScreen />
               <ToggleButton
                 togglePostForm={togglePostForm}

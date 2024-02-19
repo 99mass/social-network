@@ -122,7 +122,7 @@ export const getFollowingUsers = async (userid, setDatas) => {
 };
 
 // fonctions cote user qui demades amie
-export const askForFriends = async (userid, setPosts) => {
+export const askForFriends = async (userid, setPosts,setDatas) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -137,7 +137,8 @@ export const askForFriends = async (userid, setPosts) => {
 
       // Vérifier le statut de la réponse
       if (response.ok) {
-        getPostsUser(setPosts);
+        if(setPosts) getPostsUser(setPosts);
+        if(setDatas) getDatasProfilUser(setDatas, userid);
       }
 
     } catch (error) {
