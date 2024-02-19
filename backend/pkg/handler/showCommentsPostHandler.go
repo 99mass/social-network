@@ -70,14 +70,13 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 				}
 				Comment.User = user
 
+				Comment.Post.IsLiked = isLiked
+
 				Comments = append(Comments, Comment)
 
 			}
 
-			helper.SendResponse(w, struct {
-				Comments []models.Comment_Request
-				IsLiked  bool
-			}{Comments, isLiked}, http.StatusOK)
+			helper.SendResponse(w, Comments, http.StatusOK)
 		default:
 
 			helper.SendResponse(w, models.ErrorResponse{

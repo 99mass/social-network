@@ -24,7 +24,7 @@ export default function Comment() {
       getCommentPost(setComment, postid);
     }
   }, [postid]);
- console.log(comment && comment);
+ console.log(posData && posData);
 
   return (
     <div className={`${styles.middleBloc} middle`}>
@@ -43,7 +43,7 @@ export default function Comment() {
             image={posData.post.image_path}
           />
           <PostFooterComment
-            is_liked={posData.is_liked}
+            is_liked={posData.post.is_liked}
             numberLike={posData.nbr_likes}
             numberComment={posData.nbr_comments}
           />
