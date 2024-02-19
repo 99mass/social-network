@@ -37,7 +37,7 @@ export default function Edit_Profile({
     }
 
     let dontSend = true;
-    if (!hasValue && (privacy === datas.ispublic || privacy === null)) {
+    if (!hasValue && (privacy === datas.user.ispublic || privacy === null)) {
       dontSend = false;
     }
 
@@ -48,15 +48,15 @@ export default function Edit_Profile({
     }
 
     const defaultValues = {
-      FirstName: datas.firstname,
-      LastName: datas.lastname,
-      Nickname: datas.nickname,
-      DateOfBirth: datas.dateofbirth,
-      Email: datas.email,
-      AboutMe: datas.aboutme,
+      FirstName: datas.user.firstname,
+      LastName: datas.user.lastname,
+      Nickname: datas.user.nickname,
+      DateOfBirth: datas.user.dateofbirth,
+      Email: datas.user.email,
+      AboutMe: datas.user.aboutme,
       NewPassword: "",
       Password: "",
-      IsPublic: privacy === null ? datas.ispublic : privacy,
+      IsPublic: privacy === null ? datas.user.ispublic : privacy,
     };
 
     for (const key in defaultValues) {
@@ -88,7 +88,7 @@ export default function Edit_Profile({
         return;
       }
 
-      jsonData.Avatarpath = `data:image/png;base64,${datas.avatarpath}`;
+      jsonData.Avatarpath = `data:image/png;base64,${datas.user.avatarpath}`;
       updateDataProfile(
         jsonData,
         userid,
@@ -119,21 +119,21 @@ export default function Edit_Profile({
       )}
       <form method="put" onSubmit={handleSubmit} encType="multipart/form-data">
         {datas && (
-          <Picture fileInputRef={fileInputRef} picture={datas.avatarpath} />
+          <Picture fileInputRef={fileInputRef} picture={datas.user.avatarpath} />
         )}
         <hr />
         {datas && (
-          <TypeProfile ispublic={datas.ispublic} setPrivacy={setPrivacy} />
+          <TypeProfile ispublic={datas.user.ispublic} setPrivacy={setPrivacy} />
         )}
         <hr />
         {datas && (
           <BasicInfons
-            lastname={datas.lastname}
-            firstname={datas.firstname}
-            nickname={datas.nickname}
-            dateofbirth={datas.dateofbirth}
-            email={datas.email}
-            aboutme={datas.aboutme}
+            lastname={datas.user.lastname}
+            firstname={datas.user.firstname}
+            nickname={datas.user.nickname}
+            dateofbirth={datas.user.dateofbirth}
+            email={datas.user.email}
+            aboutme={datas.user.aboutme}
           />
         )}
       </form>

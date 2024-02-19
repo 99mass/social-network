@@ -41,10 +41,11 @@ export default function Profile_user() {
     <>
       {datas ? (
         <ContentCovertPhoto
-          userPicture={datas && datas.avatarpath}
-          firstname={datas && datas.firstname}
-          lastname={datas && datas.lastname}
-          ispublic={datas && datas.ispublic}
+          userPicture={datas && datas.user.avatarpath}
+          firstname={datas && datas.user.firstname}
+          lastname={datas && datas.user.lastname}
+          ispublic={datas && datas.user.ispublic}
+          isowner={datas && datas.isowner}
           handleEditForm={handleEditForm}
           setViewfriend={handleSetViewfriend}
           edit={edit}
@@ -58,9 +59,8 @@ export default function Profile_user() {
         <Posts_user
           postsCreated={postsCreated && postsCreated}
           setPostsCreated={setPostsCreated}
-          about={datas && datas.aboutme}
+          about={datas && datas.user.aboutme}
         />
-
       )}
       {edit && (
         <Edit_Profile
@@ -79,6 +79,7 @@ export function ContentCovertPhoto({
   firstname,
   lastname,
   ispublic,
+  isowner,
   handleEditForm,
   setViewfriend,
   edit,
@@ -100,7 +101,8 @@ export function ContentCovertPhoto({
             <span>{firstname && `${firstname} ${lastname}`}</span>
             <span className={styles.profileTypes}>
               <span>
-                <i className="fas fa-globe-africa"></i>{ispublic ? `Public` : `Private`} profile ·
+                <i className="fas fa-globe-africa"></i>
+                {ispublic ? `Public` : `Private`} profile ·
               </span>
               <span> 25k friends</span>
             </span>
@@ -110,6 +112,8 @@ export function ContentCovertPhoto({
           handleEditForm={handleEditForm}
           setViewfriend={setViewfriend}
           edit={edit}
+          isowner
+          isOwner={isowner}
           viewfriend={viewfriend}
         />
       </div>
@@ -117,7 +121,13 @@ export function ContentCovertPhoto({
   );
 }
 
-export function NavMenu({ handleEditForm, setViewfriend, edit, viewfriend }) {
+export function NavMenu({
+  handleEditForm,
+  setViewfriend,
+  edit,
+  isOwner,
+  viewfriend,
+}) {
   return (
     <div className={styles.menu}>
       <span
@@ -126,12 +136,14 @@ export function NavMenu({ handleEditForm, setViewfriend, edit, viewfriend }) {
       >
         <i className="fa-solid fa-signs-post"></i>Post
       </span>
-      <span
-        onClick={handleEditForm}
-        className={edit ? styles.active : styles.default}
-      >
-        <i className="fa-solid fa-pen"></i>Edit profile
-      </span>
+      {isOwner && (
+        <span
+          onClick={handleEditForm}
+          className={edit ? styles.active : styles.default}
+        >
+          <i className="fa-solid fa-pen"></i>Edit profile
+        </span>
+      )}
       <span
         onClick={() => setViewfriend(false)}
         className={!viewfriend ? styles.active : styles.default}

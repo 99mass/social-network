@@ -3,16 +3,22 @@ package handler
 import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
+	"backend/pkg/models"
 	"backend/pkg/utils"
 	"database/sql"
 	"net/http"
 )
 
+type ProfilToSend struct{
+	User models.User `json:"user"`
+	IsOwner 	bool `json:"isowner"`
+}
+
 func ProfilHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			_, err := utils.CheckAuthorization(db, w, r)
+			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				helper.SendResponseError(w, "error","you're not authorized",http.StatusBadRequest)
 				return
@@ -23,7 +29,6 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
 			}
-
 			// get the user
 			user, err := controller.GetUserByID(db, userid)
 			if err != nil {
@@ -37,7 +42,17 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 					return
 				}
 			}
-			helper.SendResponse(w, user, http.StatusOK)
+			var profil ProfilToSend
+			if sess.UserID == userid{
+				profil.User = user
+				profil.IsOwner = true
+				helper.SendResponse(w, profil, http.StatusOK)
+			}else {
+				profil.User = user
+				profil.IsOwner = false
+				helper.SendResponse(w, profil, http.StatusOK)
+			}
+			
 
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
