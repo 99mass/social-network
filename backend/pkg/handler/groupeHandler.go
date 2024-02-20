@@ -26,13 +26,13 @@ func GetMyGroupsHandler(db *sql.DB) http.HandlerFunc {
 
 		// Encode avatar images
 		for i, group := range groups {
-			if group.AvataImage != "" {
-				encodedImage, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + group.AvataImage)
+			if group.AvatarPath != "" {
+				encodedImage, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + group.AvatarPath)
 				if err != nil {
 					log.Println("error", "unable to encode avatar image", http.StatusInternalServerError)
 					return
 				}
-				groups[i].AvataImage = encodedImage
+				groups[i].AvatarPath = encodedImage
 			}
 		}
 
@@ -56,12 +56,12 @@ func GroupsIManageHandler(db *sql.DB) http.HandlerFunc {
 
 		// Encode avatar images
 		for i, group := range groups {
-			if group.AvataImage != "" {
-				encodedImage, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + group.AvataImage)
+			if group.AvatarPath != "" {
+				encodedImage, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + group.AvatarPath)
 				if err != nil {
 					log.Println("error", "unable to encode avatar image", http.StatusInternalServerError)
 				}
-				groups[i].AvataImage = encodedImage
+				groups[i].AvatarPath = encodedImage
 			}
 		}
 
@@ -85,13 +85,13 @@ func GroupsToDiscoverHandler(db *sql.DB) http.HandlerFunc {
 
 		// Encode avatar images
 		for i, group := range groups {
-			if group.AvataImage != "" {
-				encodedImage, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + group.AvataImage)
+			if group.AvatarPath != "" {
+				encodedImage, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + group.AvatarPath)
 				if err != nil {
 					log.Println("error", "unable to encode avatar image", http.StatusInternalServerError)
 
 				}
-				groups[i].AvataImage = encodedImage
+				groups[i].AvatarPath = encodedImage
 			}
 		}
 
