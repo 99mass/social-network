@@ -18,6 +18,7 @@ import (
 type GroupRequest struct {
 	Title             string   `json:"title"`
 	Description       string   `json:"description"`
+	AvatarPath        string   `json:"avatarpath"`
 	AddedUsersToGroup []string `json:"addedUsersToGroup"`
 }
 
@@ -51,6 +52,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+
 			groupReq.Title = strings.TrimSpace(groupReq.Title)
 			groupReq.Description = strings.TrimSpace(groupReq.Description)
 			checkGroup, err := utils.CheckGroup(groupReq.Title, groupReq.Description)
@@ -63,10 +65,22 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
+			dir := "./pkg/static/postImage/"
+			groupImage, _err := utils.ReadAndSaveImage(groupReq.AvatarPath, dir)
+			if _err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: _err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+
+
 			group := models.Group{
 				Title:       groupReq.Title,
 				Description: groupReq.Description,
 				CreatorID:   sess.UserID.String(),
+				AvatarPath: groupImage,
 			}
 
 			result, err := controller.CreateGroup(db, group)

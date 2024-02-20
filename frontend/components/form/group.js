@@ -1,12 +1,29 @@
 import { getFriendsLists } from '../../handler/follower';
 import { getUserBySession } from '../../handler/getUserBySession';
 import styles from '../../styles/modules/CreateGroup.module.css'
-import { useState} from "react";
+import { useState, useRef} from "react";
 import { errorNotification } from "../../utils/sweeAlert";
 import { AddGroup } from '../../handler/sendGroup';
+import EmojiForm from "../emoji/emoji";
+import { EncodeImage } from '../../utils/encodeImage';
 
 
 export default function Group({ toggleGroupForm }) {
+  const [emoji, setEmoji] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState("");
+  const [imgeName, setImageName] = useState("");
+  const fileInputRef = useRef(null);
+
+  const toggleImageName = () => {
+    const _file = fileInputRef.current.files[0];
+    if (_file) setImageName(_file.name);
+  };
+
+  const handleFileIconClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const toggleEmojicon = () => setEmoji(!emoji);
 
   const handlerFromGroup = (e) => {
     e.preventDefault();
@@ -19,8 +36,7 @@ export default function Group({ toggleGroupForm }) {
       return;
     }
 
-    const description = dataFrom.get("Description");
-   
+    const description = dataFrom.get("Description"); 
     if (description.trim() == "") {
       errorNotification("Description can not be empty.");
       return;
@@ -30,15 +46,39 @@ export default function Group({ toggleGroupForm }) {
       document.querySelectorAll('input[type="checkbox"]:checked')
     ).map((checkbox) => checkbox.value);
    
+    
+     // if not image
+     if (!fileInputRef.current.files[0]) {
+      const data = {
+        title:title,
+        image_path:"",
+        description: description,
+        addedUsersToGroup: checkedValues,
+      };
+      AddGroup(data)  
+      return;
+    }
 
-    const data = {
-      title:title,
-      description: description,
-      addedUsersToGroup: checkedValues,
-    };
+    // if image
+    async function someFunc() {
+      try {
+        const encodedFile = await EncodeImage(fileInputRef);
+        const data = {
+          title:title,
+          image_path: encodedFile,
+          description: description,
+          addedUsersToGroup: checkedValues,
+        };
+        AddGroup(data)  
+       
+      } catch (error) {
+        errorNotification(error);
+      }
+    }
+    someFunc();
 
-    AddGroup(data)  
-  };
+
+     };
 
 
   return (
@@ -53,9 +93,50 @@ export default function Group({ toggleGroupForm }) {
         onSubmit={handlerFromGroup}
         encType="multipart/form-data"
       >
-        <div className={styles.groupContent}>
+        
+        {/* <div className={styles.groupContent}>
           <input type="text" className={styles.titleGroup} name='Title' placeholder="Title of the group" />
           <textarea name="Description" placeholder="Decription of the group" id="" ></textarea>
+        </div> */}
+
+      <div className={styles.groupContent}>
+         <input type="text" className={styles.titleGroup} name='Title' placeholder="Title of the group" />
+
+          <textarea
+            value={selectedEmoji}
+            name="Description"
+            onChange={(e) => setSelectedEmoji(e.target.value)}  
+            placeholder="Decription of the group" 
+          />
+          <div className={styles.contentAssets}>
+            <span>{imgeName}</span>
+            <i
+              className="fa-regular fa-file-image"
+              title="Choose image"
+              onClick={handleFileIconClick}
+            >
+              <input
+                onChange={toggleImageName}
+                type="file"
+                className={styles.filesPost}
+                ref={fileInputRef}
+              />
+            </i>
+            <span
+              onClick={toggleEmojicon}
+              className="emoji"
+              title="Choose emoji"
+            >
+              😄
+            </span>
+            {/* emoji form */}
+            {emoji && (
+              <EmojiForm
+                toggleEmojicon={toggleEmojicon}
+                setSelectedEmoji={setSelectedEmoji}
+              />
+            )}
+          </div>
         </div>
         <ListFriend />
         <button className={styles.btnGroup}>Create</button>

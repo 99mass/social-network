@@ -18,7 +18,8 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/unfollowuser", helper.Middleware(handler.UnfollowUser(db))) // unfollow user
 	http.HandleFunc("/addpost", helper.Middleware(handler.AddPostHandler(db)))
 	http.HandleFunc("/create_group", helper.Middleware(handler.AddGroupHandler(db)))
-	http.HandleFunc("/add_members", helper.Middleware(handler.AddMember(db)))
+	http.HandleFunc("add_members", helper.Middleware(handler.AddMember(db)))
+	http.HandleFunc("/show_group_invitation", helper.Middleware(handler.ShowGroupInvitation(db)))
 	http.HandleFunc("/accept_group_invitation", helper.Middleware(handler.AccepGrpInvitation(db)))
 	http.HandleFunc("/decline_group_invitation", helper.Middleware(handler.DeclineGrpInvitaton(db)))
 	http.HandleFunc("/addcomment", helper.Middleware(handler.AddCommentHandler(db)))
@@ -38,5 +39,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/getfollowers", helper.Middleware(handler.GetFollowerInfos(db)))
 	http.HandleFunc("/getfollowingusers", helper.Middleware(handler.GetFollowingInfos(db)))
 	http.HandleFunc("/CountFollower", helper.Middleware(handler.CountFollower(db)))
+	http.HandleFunc("/mygroups", helper.Middleware(handler.GetMyGroupsHandler(db)))
+	http.HandleFunc("/groupsimanage", helper.Middleware(handler.GroupsIManageHandler(db)))
 
 }

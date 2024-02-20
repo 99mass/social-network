@@ -149,8 +149,8 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 					if user.AvatarPath != "" {
 						user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
 						if err != nil {
-							helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
-							return
+							log.Println("enable to encode image user", err)
+							
 						}
 					}
 					postToShow.User = user
