@@ -42,3 +42,17 @@ func GetGroupByID(db *sql.DB, groupID string) (models.Group, error) {
 	}
 	return group, nil
 }
+
+func IsMember(db *sql.DB, userID, groupID string) (bool, error) {
+    query := `
+        SELECT COUNT(*)
+        FROM group_members
+        WHERE user_id = ? AND group_id = ?
+    `
+    var count int
+    err := db.QueryRow(query, userID, groupID).Scan(&count)
+    if err != nil {
+        return false, err
+    }
+    return count >  0, nil
+}
