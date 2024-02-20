@@ -51,6 +51,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+
 			groupReq.Title = strings.TrimSpace(groupReq.Title)
 			groupReq.Description = strings.TrimSpace(groupReq.Description)
 			checkGroup, err := utils.CheckGroup(groupReq.Title, groupReq.Description)

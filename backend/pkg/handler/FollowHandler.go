@@ -115,8 +115,8 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 				if follower.UserAvatarPath != "" {
 					followers[i].UserAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
 					if err != nil {
-						helper.SendResponseError(w, "error", "enable to encode image avatar", http.StatusInternalServerError)
-						return
+						log.Println("enable to encode image avatar",err.Error())
+						
 					}
 				}
 			}
@@ -148,8 +148,8 @@ func OldestPendingRequestFollow(db *sql.DB) http.HandlerFunc {
 			if follower.UserAvatarPath != "" {
 				follower.UserAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
 				if err != nil {
-					helper.SendResponseError(w, "error", "enable to encode image avatar", http.StatusInternalServerError)
-					return
+					log.Println("enable to encode image avatar",err.Error())
+					
 				}
 			}
 			helper.SendResponse(w, follower, http.StatusOK)
@@ -187,8 +187,6 @@ func GetFollowerInfos(db *sql.DB) http.HandlerFunc {
 					img, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
 					if err != nil {
 						log.Println("error encoding avatar image: ", err, follower.UserAvatarPath)
-						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
-						return
 					}
 					followers[i].UserAvatarPath = img
 				}
@@ -224,13 +222,37 @@ func GetFollowingInfos(db *sql.DB) http.HandlerFunc {
 				if follower.UserAvatarPath != "" {
 					img, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
 					if err != nil {
-						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
-						return
+						log.Println("enable to encode image",err.Error())
+						
 					}
 					followers[i].UserAvatarPath = img
 				}
 			}
 			helper.SendResponse(w, followers, http.StatusOK)
+		default:
+			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	}
+}
+
+func CountFollower(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Assurez-vous que l'utilisateur est authentifié et récupérez son ID
+		sess, err := utils.CheckAuthorization(db, w, r)
+		if err != nil {
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+			return
+		}
+
+		switch r.Method {
+		case http.MethodGet:
+			count, err := controller.CountFollowerReq(db, sess.UserID.String())
+			if err != nil {
+				log.Println("error counting followers: ", err)
+				helper.SendResponseError(w, "error", "unable to count followers", http.StatusInternalServerError)
+				return
+			}
+			helper.SendResponse(w, count, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
 		}
