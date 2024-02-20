@@ -87,3 +87,17 @@ func GetGroupsInvitation(db *sql.DB, userID string) ([]models.Group, error) {
 
     return groups, nil
 }
+
+func GetNumberOfMember(db *sql.DB, groupID string) (int, error) {
+    query := `
+        SELECT COUNT(*)
+        FROM group_members
+        WHERE group_id = ?
+    `
+    var count int
+    err := db.QueryRow(query, groupID).Scan(&count)
+    if err != nil {
+        return  0, err
+    }
+    return count, nil
+}

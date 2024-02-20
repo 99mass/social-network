@@ -37,15 +37,29 @@ func ShowGroupInvitation(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "we got an issue", http.StatusInternalServerError)
 				return
 			}
-			for i, g := range group {
+			var groupInf []models.GroupInfos
+			for _, g := range group {
+				var gInf models.GroupInfos
+				numberOfMember, err := controller.GetNumberOfMember(db, g.ID)
+				if err != nil {
+					log.Println("error while getting the number of member for a group ")
+					helper.SendResponseError(w, "error", "we got an issue", http.StatusInternalServerError)
+					return
+				}
 				if g.AvatarPath != "" {
-					group[i].AvatarPath, err = helper.EncodeImageToBase64(g.AvatarPath)
+					g.AvatarPath, err = helper.EncodeImageToBase64(g.AvatarPath)
 					if err != nil {
 						log.Println("enable to encode avatar image for group")
 					}
 				}
+				gInf.ID = g.ID
+				gInf.AvatarPath = g.AvatarPath
+				gInf.Title = g.Title
+				gInf.NbrMembers = numberOfMember
+				groupInf = append(groupInf, gInf)
 			}
-			helper.SendResponse(w, group, http.StatusOK)
+
+			helper.SendResponse(w, groupInf, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
 		}
