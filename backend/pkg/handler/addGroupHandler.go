@@ -65,7 +65,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			dir := "./pkg/static/postImage/"
+			dir := "./pkg/static/avatarImage/"
 			groupImage, _err := utils.ReadAndSaveImage(groupReq.AvatarPath, dir)
 			if _err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
@@ -74,7 +74,6 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-
 
 			group := models.Group{
 				Title:       groupReq.Title,
