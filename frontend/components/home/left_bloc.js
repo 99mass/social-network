@@ -15,13 +15,8 @@ export default function LeftBloc({setPosts}) {
     getUserBySession(setDatasUser);
   }, []);
 
-  const togglePostForm = () => {
-    setPostForm(!postForm);
-  };
-
-  const toggleGroupForm = () => {
-    setGroupForm(!groupForm);
-  };
+  const togglePostForm = () => setPostForm((prevState) => !prevState);
+  const toggleGroupForm = () => setGroupForm((prevState) => !prevState);
 
   return (
     <>
@@ -60,8 +55,8 @@ export default function LeftBloc({setPosts}) {
           </Link>
         </div>
       </div>
-      {postForm && <Post PostForm={togglePostForm} setPostForm={setPostForm} setPosts={setPosts} />}
-      {groupForm && <Group GroupForm={toggleGroupForm} />}
+      {postForm && <Post togglePostForm={togglePostForm} setPostForm={setPostForm} setPosts={setPosts} />}
+      {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
     </>
   );
 }

@@ -8,7 +8,7 @@ import EmojiForm from "../emoji/emoji";
 import { EncodeImage } from '../../utils/encodeImage';
 
 
-export default function Group({ GroupForm }) {
+export default function Group({ toggleGroupForm }) {
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [imgeName, setImageName] = useState("");
@@ -85,7 +85,7 @@ export default function Group({ GroupForm }) {
     <div className={styles.contentFormGroup}>
       <div className={styles.groupHeader}>
         <h1>Create group</h1>
-        <i className="fa-regular fa-circle-xmark close-form-group-btn" onClick={GroupForm} title="Close form"></i>
+        <i className="fa-regular fa-circle-xmark close-form-group-btn" onClick={toggleGroupForm} title="Close form"></i>
       </div>
       <hr />
       <form 
