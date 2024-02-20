@@ -43,8 +43,8 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			var groupReq GroupRequest
-			_err := json.NewDecoder(r.Body).Decode(&groupReq)
-			if _err != nil {
+			err = json.NewDecoder(r.Body).Decode(&groupReq)
+			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
 					Message: "incorrect request",
@@ -80,9 +80,9 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 			}
 			if groupReq.AddedUsersToGroup != nil {
 				for _, userAdd := range groupReq.AddedUsersToGroup {
-					var _groupInvitations models.Group_Invitations
+					var groupInvitations models.Group_Invitations
 
-					_userId, err := controller.GetUserByNickName(db, userAdd)
+					userId, err := controller.GetUserByNickName(db, userAdd)
 					if err != nil {
 						helper.SendResponse(w, models.ErrorResponse{
 							Status:  "error",
@@ -91,12 +91,12 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 						log.Println("internal ERROR from database: ", err.Error())
 						return
 					}
-					_groupInvitations.UserID = _userId.String()
-					_groupInvitations.GroupID = result.String()
-					_groupInvitations.SenderID = sess.UserID.String()
-					_groupInvitations.Status = "false"
+					groupInvitations.UserID = userId.String()
+					groupInvitations.GroupID = result.String()
+					groupInvitations.SenderID = sess.UserID.String()
+					groupInvitations.Status = "pending"
 
-					err = controller.CreateGroupInvitations(db, _groupInvitations)
+					err = controller.CreateGroupInvitations(db, groupInvitations)
 					if err != nil {
 						helper.SendResponse(w, models.ErrorResponse{
 							Status:  "error",
