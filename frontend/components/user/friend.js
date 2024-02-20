@@ -1,6 +1,7 @@
 import styles from "../../styles/modules/profile.module.css";
 import { useEffect, useState } from "react";
 import {
+  UnfollowUser,
   deleteAskingFriends,
   getFollowers,
   getFollowingUsers,
@@ -82,9 +83,10 @@ export function FollowingFriends() {
     getFollowingUsers(setFollowingUsersList);
   }, []);
 
+  console.log(FolloweingUsersList && FolloweingUsersList);
+
   const handlerFollower = (iduser) => {
-    // deleteAskingFriends(iduser, null, null, null, setFollowingUsersList);
-    // UnfollowUser(iduser,null,setFollowingUsersList);
+    UnfollowUser(iduser, null, setFollowingUsersList);
   };
   return (
     <div className={styles.contentListFriend}>
@@ -103,7 +105,7 @@ export function FollowingFriends() {
             <div className={styles.conteUnfollow}>
               <h4>{`${user.firstname} ${user.lastname}`}</h4>
               <span
-                onClick={() => handlerFollower(user.follower_id)}
+                onClick={() => handlerFollower(user.following_id)}
                 className={styles.unfollowBtn}
               >
                 <i className="fa-solid fa-rectangle-xmark"></i>unfollow
