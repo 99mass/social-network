@@ -14,11 +14,11 @@ export default function YourGroup() {
     
     getUserBySession(setuser)
     if (userid?.id) {
-      
+    
       getMygroups(userid?.id,setGroups)
     }
 
-  })
+  },[])
   // const data = [
   //   {
   //     image:
@@ -41,16 +41,17 @@ export default function YourGroup() {
   //     gName: "group-name",
   //   },
   // ];
-
-  return (
-    <div className={`${styles.menuMiddle} ${styles.YourGroups}`}>
-      <div className={styles.contentListYourGroups}>
-        {data.map((item, index) => (
-          <BuilElementGroup key={index} image={item.image} gName={item.gName} />
-        ))}
-      </div>
-    </div>
-  );
+console.log(userid?.id && userid?.id);
+  // return (
+  //   // <div className={`${styles.menuMiddle} ${styles.YourGroups}`}>
+  //   //   <div className={styles.contentListYourGroups}>
+  //   //     {groups.map((item, index) => (
+  //   //       <BuilElementGroup key={index} image={item.image} gName={item.gName} />
+  //   //     ))}
+  //   //   </div>
+  //   // </div>
+  //   console.log("grr",groups);
+  // );
 }
 
 export function BuilElementGroup({ image, gName }) {

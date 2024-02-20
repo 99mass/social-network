@@ -18,6 +18,7 @@ export const getGroupFollow = async (userid, setGroupFollow) => {
         console.error("Failed to fetch PostsUserCreated  data");
       } else {
         const data = await response.json();
+   
         setGroupFollow(data);
       }
     } catch (error) {
@@ -31,15 +32,18 @@ export async function getMygroups(userid, setDatas) {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Mygroups + "?user_id=${userid", {
+      const response = await fetch(api.Mygroups , {
         method: "GET",
         headers: {
-          Content_type: "application/json",
+          "Content-Type": "application/json",
           Authorization: sessionId,
         },
       });
+      console.log("Response status:", response.status); // Ajout d'un log pour le statut de la réponse
+
       if (response.ok) {
         const data = await response.json();
+        console.log("Response data:", data); // Ajout d'un log pour les données de la réponse
 
         setDatas(data);
         console.log(data, "mygroups");
