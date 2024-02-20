@@ -78,10 +78,7 @@ export default function Group({ GroupForm }) {
     someFunc();
 
 
-   
-    
-
-  };
+     };
 
 
   return (

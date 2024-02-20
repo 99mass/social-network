@@ -5,6 +5,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/utils"
 	"database/sql"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -29,8 +30,8 @@ func ConnectedUser(db *sql.DB) http.HandlerFunc {
 
 				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + strings.TrimSpace(user.AvatarPath))
 				if err != nil {
-					helper.SendResponseError(w, "error", "enable to encode image avatar", http.StatusInternalServerError)
-					return
+					log.Println("enable to encode image avatar "+err.Error())
+					
 				}
 			}
 

@@ -74,6 +74,7 @@ func Decline(db *sql.DB, followerID string, followingID string) error {
 
 	return nil
 }
+
 // Get all follow requests that are on waiting state
 // datas are follower_id, following_id, created_at, first_name, last_name, useravatar
 func GetFollowRequestInfos(db *sql.DB, user string) ([]Follow, error) {
@@ -277,7 +278,6 @@ func IsFollowed(db *sql.DB, followerid, followingid string) (string, error) {
 	return status, nil
 }
 
-
 func AreUsersFriends(db *sql.DB, userID1 string, userID2 string) (bool, error) {
 	// Check if userID1 is following userID2
 	var status1 string
@@ -295,4 +295,15 @@ func AreUsersFriends(db *sql.DB, userID1 string, userID2 string) (bool, error) {
 
 	// If both users are following each other and the status is "accepted", they are friends
 	return status1 == "accepted" || status2 == "accepted", nil
+}
+
+// CountFollower compte le nombre de followers pour un utilisateur donné.
+func CountFollowerReq(db *sql.DB, userID string) (int, error) {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM followers WHERE following_id = $1 AND status = 'accepted'", userID).Scan(&count)
+	if err != nil {
+		log.Println("Error counting followers:", err)
+		return  0, err
+	}
+	return count, nil
 }

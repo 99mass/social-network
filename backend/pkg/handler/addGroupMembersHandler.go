@@ -55,8 +55,21 @@ func AddMember(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
+			_, err = controller.GetGroupByID(db, addMember.GroupID)
+			if err != nil {
+				helper.SendResponseError(w, "error", "this group doesn't exit", http.StatusBadRequest)
+				log.Println("the user try to add member in a group that doesn't exist")
+				return
+			}
+
 			if addMember.Members != nil {
 				for _, userId := range addMember.Members {
+					ok, err := controller.IsMember(db, userId, addMember.GroupID)
+					if !ok {
+						//helper.SendResponseError(w, "error", "there is member who is also present in the group", http.StatusBadRequest)
+						log.Println("this user is a member who is also present in the group" + err.Error())
+						continue
+					}
 					var groupInvitations models.Group_Invitations
 					groupInvitations.UserID = userId
 					groupInvitations.GroupID = addMember.GroupID

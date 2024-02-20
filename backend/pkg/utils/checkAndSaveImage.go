@@ -3,7 +3,6 @@ package utils
 import (
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -115,14 +114,14 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 		}
 
 		// Supprimer l'ancienne image si elle existe
-		if oldImagePath != "" {
-			fmt.Println("older image: ", oldImagePath)
-			err = os.Remove("./pkg/static/avatarImage/" + oldImagePath)
-			if err != nil {
-				log.Println("error removing the older avatar image: ", err.Error())
-				return "", errors.New("failed to remove avatar image")
-			}
-		}
+		// if oldImagePath != "" {
+		// 	fmt.Println("older image: ", oldImagePath)
+		// 	err = os.Remove("./pkg/static/avatarImage/" + oldImagePath)
+		// 	if err != nil {
+		// 		log.Println("error removing the older avatar image: ", err.Error())
+		// 		return "", errors.New("failed to remove avatar image")
+		// 	}
+		// }
 
 		return base64img, nil
 	}
