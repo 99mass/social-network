@@ -57,3 +57,33 @@ func DeclineGroupInvitaton(db *sql.DB, userID, groupID string) error {
 
 	return nil
 }
+
+func GetGroupsInvitation(db *sql.DB, userID string) ([]models.Group, error) {
+    query := `
+        SELECT g.*
+        FROM groups g
+        JOIN group_invitations gi ON g.id = gi.group_id
+        WHERE gi.user_id = ?
+    `
+    rows, err := db.Query(query, userID)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var groups []models.Group
+    for rows.Next() {
+        var group models.Group
+        err := rows.Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &AvatarPath, &group.CreatedAt)
+        if err != nil {
+            return nil, err
+        }
+        groups = append(groups, group)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return groups, nil
+}
