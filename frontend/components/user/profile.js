@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import styles from "../../styles/modules/profile.module.css";
 import Posts_user from "./posts";
 import Edit_Profile from "./edit_profile";
@@ -7,7 +7,7 @@ import Friends from "./friend";
 import { getDatasProfilUser } from "../../handler/user_profile";
 import { getPostsUserCreated } from "../../handler/getPostsUser";
 import { ErrorProfile } from "../errors/error_profiles";
-import { UnfollowUser, askForFriends } from "../../handler/follower";
+import { CountFollower, UnfollowUser, askForFriends } from "../../handler/follower";
 import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function Profile_user() {
@@ -92,10 +92,20 @@ export function ContentCovertPhoto({
   handleButtonClick,
   setDatas,
 }) {
+
+  
   const handlerFollower = () => {    
     askForFriends(iduser, null, setDatas);
   };
+  const [count , setcountFollower]= useState()
 
+  useEffect(() => {
+    if (iduser) {
+      
+      CountFollower(iduser,setcountFollower)
+    }
+
+  },[iduser])
   return (
     <div className={styles.photoCovert}>
       <div className={styles.firstImg}>
@@ -116,7 +126,7 @@ export function ContentCovertPhoto({
                   <i className="fas fa-globe-africa"></i>
                   {ispublic ? `Public` : `Private`} profile ·
                 </span>
-                <span> 25k friends</span>
+                <span> {count && count} follower</span>
               </span>
             </p>
           </div>
