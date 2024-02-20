@@ -18,6 +18,9 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/unfollowuser", helper.Middleware(handler.UnfollowUser(db))) // unfollow user
 	http.HandleFunc("/addpost", helper.Middleware(handler.AddPostHandler(db)))
 	http.HandleFunc("/create_group", helper.Middleware(handler.AddGroupHandler(db)))
+	http.HandleFunc("add_members", helper.Middleware(handler.AddMember(db)))
+	http.HandleFunc("/accept_group_invitation", helper.Middleware(handler.AccepGrpInvitation(db)))
+	http.HandleFunc("/decline_group_invitation", helper.Middleware(handler.DeclineGrpInvitaton(db)))
 	http.HandleFunc("/addcomment", helper.Middleware(handler.AddCommentHandler(db)))
 	http.HandleFunc("/show_comments_post", helper.Middleware(handler.ShowCommentsByPost(db)))
 	http.HandleFunc("/likepost", helper.Middleware(handler.LikePostHandler(db)))

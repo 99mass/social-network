@@ -21,6 +21,7 @@ export const api = {
   likeDslikepost:`${domain}/likepost`,
   getFollowers:`${domain}/getfollowers`,
   getFollingUsers:`${domain}/getfollowingusers`,
+  AddGroup: `${domain}/create_group`
   CountFollower:`${domain}/CountFollower`,
 
 

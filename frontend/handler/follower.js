@@ -43,14 +43,14 @@ export const getOlrequestFriend = async (setoldFriend) => {
       const data = await response.json();
       setoldFriend(data);
     } else {
-      setoldFriend(null)
+      setoldFriend(null);
     }
   } catch (error) {
-    setoldFriend(null)
+    setoldFriend(null);
   }
 };
 
-// liste amies 
+// liste amies
 export const getFriendsLists = async (userid, setDatas) => {
   if (userid) {
     try {
@@ -74,27 +74,25 @@ export const getFriendsLists = async (userid, setDatas) => {
     }
   }
 };
-export const getFollowers = async (userid, setDatas) => {
-  if (userid) {
-    try {
-      const sessionId = getSessionCookie();
+export const getFollowers = async (setFollowerList) => {
+  try {
+    const sessionId = getSessionCookie();
 
-      const response = await fetch(api.getFollowers, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionId,
-        },
-      });
+    const response = await fetch(api.getFollowers, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionId,
+      },
+    });
 
-      // Vérifier le statut de la réponse
-      if (response.ok) {
-        const data = await response.json();
-        setDatas(data);
-      }
-    } catch (error) {
-      console.error("Error fetching Followers data:", error.message);
+    // Vérifier le statut de la réponse
+    if (response.ok) {
+      const data = await response.json();
+      setFollowerList(data);
     }
+  } catch (error) {
+    console.error("Error fetching Followers data:", error.message);
   }
 };
 
@@ -128,27 +126,26 @@ export const getFollowingUsers = async (userid, setDatas) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.getFollingUsers, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: sessionId,
-        },
-      });
+    const response = await fetch(api.getFollingUsers, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionId,
+      },
+    });
 
-      // Vérifier le statut de la réponse
-      if (response.ok) {
-        const data = await response.json();
-        setDatas(data);
-      }
-    } catch (error) {
-      console.error("Error fetching Followers data:", error.message);
+    // Vérifier le statut de la réponse
+    if (response.ok) {
+      const data = await response.json();
+      setFollowingUsersList(data);
     }
+  } catch (error) {
+    console.error("Error fetching Followers data:", error.message);
   }
 };
 
 // fonctions cote user qui demades amie
-export const askForFriends = async (userid, setPosts,setDatas) => {
+export const askForFriends = async (userid, setPosts, setDatas) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -163,19 +160,21 @@ export const askForFriends = async (userid, setPosts,setDatas) => {
 
       // Vérifier le statut de la réponse
       if (response.ok) {
-        if(setPosts) getPostsUser(setPosts);
-        if(setDatas) getDatasProfilUser(setDatas, userid);
+        if (setPosts) getPostsUser(setPosts);
+        if (setDatas) getDatasProfilUser(setDatas, userid);
       }
-
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
     }
   }
 };
 
-export const UnfollowUser = async (userid, setPosts,setFriendsList,idUserConnected) => {
+export const UnfollowUser = async (
+  userid,
+  setPosts,
+  setFollowingUsersList
+) => {
   if (userid) {
-
     try {
       const sessionId = getSessionCookie();
 
@@ -189,10 +188,9 @@ export const UnfollowUser = async (userid, setPosts,setFriendsList,idUserConnect
 
       // Vérifier le statut de la réponse
       if (response.ok) {
-        if(setPosts)  getPostsUser(setPosts);
-        if(setFriendsList)  getFriendsLists(idUserConnected, setFriendsList);
+        if (setPosts) getPostsUser(setPosts);
+        if (setFollowingUsersList) getFollowingUsers(setFollowingUsersList);
       }
-
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
     }
@@ -216,18 +214,22 @@ export const confirmFriends = async (userid, setDatas, setoldFriend) => {
       if (!response.ok) {
         console.error("Failed to fetch profile data");
       } else {
-
         if (setDatas) getAskForFriendLists(setDatas);
         if (setoldFriend) getOlrequestFriend(setoldFriend);
       }
-
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
     }
   }
 };
 
-export const deleteAskingFriends = async (userid, setDatas, setoldFriend) => {
+export const deleteAskingFriends = async (
+  userid,
+  setDatas,
+  setoldFriend,
+  setFollowerList,
+  setFollowingUsersList
+) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -244,11 +246,11 @@ export const deleteAskingFriends = async (userid, setDatas, setoldFriend) => {
       if (!response.ok) {
         console.error("Failed to fetch profile data");
       } else {
-
         if (setDatas) getAskForFriendLists(setDatas);
         if (setoldFriend) getOlrequestFriend(setoldFriend);
+        if (setFollowerList) getFollowers(setFollowerList);
+        if (setFollowingUsersList) getFollowingUsers(setFollowingUsersList);
       }
-
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
     }

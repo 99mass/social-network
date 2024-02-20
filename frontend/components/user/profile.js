@@ -7,12 +7,13 @@ import Friends from "./friend";
 import { getDatasProfilUser } from "../../handler/user_profile";
 import { getPostsUserCreated } from "../../handler/getPostsUser";
 import { ErrorProfile } from "../errors/error_profiles";
+import { UnfollowUser, askForFriends } from "../../handler/follower";
+import { errorNotification } from "../../utils/sweeAlert";
 import { CountFollower, UnfollowUser, askForFriends } from "../../handler/follower";
 import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function Profile_user() {
   const [datas, setDatas] = useState(null);
-  const [datasUserConnected, setDatasUserConnected] = useState(null);
   const [postsCreated, setPostsCreated] = useState(null);
   const [error, setError] = useState(false);
 
@@ -31,10 +32,11 @@ export default function Profile_user() {
       getDatasProfilUser(setDatas, userid);
     }
     getPostsUserCreated(userid, setPostsCreated);
-    // getUserBySession(setDatasUserConnected);
   }, [userid, datas]);
-  console.log(datas && datas);
 
+console.log(datas && datas);
+  const condition=(datas?.isowner || !datas?.isowner && (datas?.user.ispublic || (!datas?.user.ispublic && datas?.isfriend)));
+  
   const handleButtonClick = (buttonNumber) => {
     setEditButton({
       button1: buttonNumber === 1,
@@ -42,6 +44,9 @@ export default function Profile_user() {
       button3: buttonNumber === 3,
       button4: buttonNumber === 4,
     });
+    if ((buttonNumber===1 || buttonNumber==3) && !condition) {
+      errorNotification("you can't see some information because you're not friends");
+    }
   };
 
   return (
@@ -54,6 +59,7 @@ export default function Profile_user() {
           lastname={datas.user.lastname}
           ispublic={datas.user.ispublic}
           isowner={datas.isowner}
+          isfriend={datas.isfriend}
           editButton={editButton}
           handleButtonClick={handleButtonClick}
           setDatas={setDatas}
@@ -62,7 +68,7 @@ export default function Profile_user() {
         <ErrorProfile />
       )}
 
-      {editButton.button1 && (datas?.isowner || !datas?.isowner && (datas?.user.ispublic || (!datas?.user.ispublic && datas?.isfriend))) && (
+      {editButton.button1 && condition && (
         <Posts_user
           postsCreated={postsCreated && postsCreated}
           setPostsCreated={setPostsCreated}
@@ -77,7 +83,7 @@ export default function Profile_user() {
           setDatas={setDatas}
         />
       )}
-      {editButton.button3 && (datas && datas?.isOwner) && <Friends idUser={userid} />}
+      {editButton.button3 && condition  && <Friends idUser={userid} />}
     </>
   );
 }
@@ -88,6 +94,7 @@ export function ContentCovertPhoto({
   lastname,
   ispublic,
   isowner,
+  isfriend,
   editButton,
   handleButtonClick,
   setDatas,
@@ -95,7 +102,9 @@ export function ContentCovertPhoto({
 
   
   const handlerFollower = () => {    
-    askForFriends(iduser, null, setDatas);
+    if (!isfriend ) {
+      askForFriends(iduser, null, setDatas);
+    }
   };
   const [count , setcountFollower]= useState()
 
@@ -134,9 +143,9 @@ export function ContentCovertPhoto({
             <div className={styles.blocFlow}>
               <span
                 onClick={handlerFollower}
-                className={styles.active}
+                className={!isfriend ?  styles.active: styles.default2}
               >
-                <i className={`fa-solid ${true ? 'fa-square-plus' : "fa-square-xmark"}`}></i>Follow
+                <i className={`fa-solid ${!isfriend ? 'fa-square-plus' : "fa-square-xmark"}`}></i>Follow
               </span>
             </div>
           )}
@@ -172,7 +181,7 @@ export function NavMenu({ isOwner, ispublic, editButton, handleButtonClick }) {
       )}
       <span
         onClick={() => handleButtonClick(3)}
-        className={editButton.button3 ? styles.active : styles.default}
+        className={editButton.button3 ? styles.active : styles.default2}
         title="Click to follow user"
       >
         <i className="fa-solid fa-user-group"></i>Friends
