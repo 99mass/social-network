@@ -10,10 +10,15 @@ import styles from "../../styles/modules/auth.module.css";
 export default function Sign_up() {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState(null);
+  const [imgeName, setImageName] = useState("Click to upload image");
   const fileInputRef = useRef(null);
 
   const handleFileIconClick = () => {
     fileInputRef.current.click();
+  };
+  const toggleImageName = () => {
+    const _file = fileInputRef.current.files[0];
+    if (_file) setImageName(_file.name);
   };
 
   const handleSubmit = async (event) => {
@@ -41,13 +46,13 @@ export default function Sign_up() {
         const base64File = reader.result;
         jsonData.Avatarpath = base64File;
         console.log(jsonData);
-        sendData(api.Registre, jsonData, router,"", setErrorMessage,false);
+        sendData(api.Registre, jsonData, router, "", setErrorMessage, false);
       };
 
       reader.readAsDataURL(file);
     } else {
       jsonData.Avatarpath = "";
-      sendData(api.Registre, jsonData, router,"", setErrorMessage,false);
+      sendData(api.Registre, jsonData, router, "", setErrorMessage, false);
     }
   };
 
@@ -175,9 +180,10 @@ export default function Sign_up() {
               </svg>
             </div>
             <div className={styles.text}>
-              <span>Click to upload image</span>
+              <span>{imgeName}</span>
             </div>
             <input
+              onChange={toggleImageName}
               // name="AvatarPath"
               id={styles.file}
               type="file"

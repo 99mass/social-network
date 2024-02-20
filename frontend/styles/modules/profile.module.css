@@ -331,6 +331,9 @@
 .default {
   background: var(--secondary-bg);
 }
+.default2{
+  background: var(--primary-bg);
+}
 
 .active {
   background: var(--second-blue);

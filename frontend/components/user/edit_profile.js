@@ -10,9 +10,15 @@ export default function Edit_Profile({
   setDatas,
   handleButtonClick,
 }) {
+  const [imgeName, setImageName] = useState("Click to upload image");
   const [errorMessage, setErrorMessage] = useState(null);
   const [privacy, setPrivacy] = useState(null);
   const fileInputRef = useRef(null);
+
+  const toggleImageName = () => {
+    const _file = fileInputRef.current.files[0];
+    if (_file) setImageName(_file.name);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -122,6 +128,8 @@ export default function Edit_Profile({
           <Picture
             fileInputRef={fileInputRef}
             picture={datas.user.avatarpath}
+            toggleImageName={toggleImageName}
+            imgeName={imgeName}
           />
         )}
         <hr />
@@ -144,7 +152,7 @@ export default function Edit_Profile({
   );
 }
 
-export function Picture({ fileInputRef, picture }) {
+export function Picture({ fileInputRef, picture, toggleImageName, imgeName }) {
   const handleFileIconClick = () => {
     fileInputRef.current.click();
   };
@@ -177,9 +185,14 @@ export function Picture({ fileInputRef, picture }) {
           </svg>
         </div>
         <div className={styles.text}>
-          <span>Click to upload image</span>
+          <span>{imgeName}</span>
         </div>
-        <input id={styles.file} type="file" ref={fileInputRef} />
+        <input
+          onChange={toggleImageName}
+          id={styles.file}
+          type="file"
+          ref={fileInputRef}
+        />
       </label>
     </div>
   );

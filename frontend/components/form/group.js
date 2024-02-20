@@ -1,7 +1,84 @@
+import { getFriendsLists } from '../../handler/follower';
+import { getUserBySession } from '../../handler/getUserBySession';
 import styles from '../../styles/modules/CreateGroup.module.css'
+import { useState, useRef} from "react";
+import { errorNotification } from "../../utils/sweeAlert";
+import { AddGroup } from '../../handler/sendGroup';
+import EmojiForm from "../emoji/emoji";
+import { EncodeImage } from '../../utils/encodeImage';
+
 
 export default function Group({ GroupForm }) {
+  const [emoji, setEmoji] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState("");
+  const [imgeName, setImageName] = useState("");
+  const fileInputRef = useRef(null);
 
+  const toggleImageName = () => {
+    const _file = fileInputRef.current.files[0];
+    if (_file) setImageName(_file.name);
+  };
+
+  const handleFileIconClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const toggleEmojicon = () => setEmoji(!emoji);
+
+  const handlerFromGroup = (e) => {
+    e.preventDefault();
+    const dataFrom = new FormData(e.target);
+  
+    const title = dataFrom.get("Title");
+   
+    if (title.trim() == "") {
+      errorNotification("Title can not be empty.");
+      return;
+    }
+
+    const description = dataFrom.get("Description"); 
+    if (description.trim() == "") {
+      errorNotification("Description can not be empty.");
+      return;
+    }
+
+    const checkedValues = Array.from(
+      document.querySelectorAll('input[type="checkbox"]:checked')
+    ).map((checkbox) => checkbox.value);
+   
+    
+     // if not image
+     if (!fileInputRef.current.files[0]) {
+      const data = {
+        title:title,
+        image_path:"",
+        description: description,
+        addedUsersToGroup: checkedValues,
+      };
+      AddGroup(data)  
+      return;
+    }
+
+    // if image
+    async function someFunc() {
+      try {
+        const encodedFile = await EncodeImage(fileInputRef);
+        const data = {
+          title:title,
+          image_path: encodedFile,
+          description: description,
+          addedUsersToGroup: checkedValues,
+        };
+        AddGroup(data)  
+       
+      } catch (error) {
+        errorNotification(error);
+      }
+    }
+    someFunc();
+
+
+     };
 
 
   return (
@@ -11,15 +88,55 @@ export default function Group({ GroupForm }) {
         <i className="fa-regular fa-circle-xmark close-form-group-btn" onClick={GroupForm} title="Close form"></i>
       </div>
       <hr />
-      <form action="">
-        <div className={styles.groupContent}>
-          <input type="text" className={styles.titleGroup} placeholder="Title of the group" />
-          <select className={styles.selectInput} name="" id="">
-            <option value="">Choose privacy</option>
-            <option value="">Public</option>
-            <option value="">Private</option>
-          </select>
-          <textarea name="" placeholder="Decription of the group" id="" ></textarea>
+      <form 
+        method="post"
+        onSubmit={handlerFromGroup}
+        encType="multipart/form-data"
+      >
+        
+        {/* <div className={styles.groupContent}>
+          <input type="text" className={styles.titleGroup} name='Title' placeholder="Title of the group" />
+          <textarea name="Description" placeholder="Decription of the group" id="" ></textarea>
+        </div> */}
+
+      <div className={styles.groupContent}>
+         <input type="text" className={styles.titleGroup} name='Title' placeholder="Title of the group" />
+
+          <textarea
+            value={selectedEmoji}
+            name="Description"
+            onChange={(e) => setSelectedEmoji(e.target.value)}  
+            placeholder="Decription of the group" 
+          />
+          <div className={styles.contentAssets}>
+            <span>{imgeName}</span>
+            <i
+              className="fa-regular fa-file-image"
+              title="Choose image"
+              onClick={handleFileIconClick}
+            >
+              <input
+                onChange={toggleImageName}
+                type="file"
+                className={styles.filesPost}
+                ref={fileInputRef}
+              />
+            </i>
+            <span
+              onClick={toggleEmojicon}
+              className="emoji"
+              title="Choose emoji"
+            >
+              😄
+            </span>
+            {/* emoji form */}
+            {emoji && (
+              <EmojiForm
+                toggleEmojicon={toggleEmojicon}
+                setSelectedEmoji={setSelectedEmoji}
+              />
+            )}
+          </div>
         </div>
         <ListFriend />
         <button className={styles.btnGroup}>Create</button>
@@ -30,40 +147,40 @@ export default function Group({ GroupForm }) {
 }
 
 
+
+
 export function ListFriend() {
-  const data = [
-    {
-      name: "alice doe",
-      image: "https://media.istockphoto.com/id/1385118964/fr/photo/photo-dune-jeune-femme-utilisant-une-tablette-num%C3%A9rique-alors-quelle-travaillait-dans-un.webp?b=1&s=170667a&w=0&k=20&c=sIJx9U2Smx7siiAS4ZkJ0bzAsjeBdk4vvKsuW2xNrPY="
-    },
-    {
-      name: "michel doe",
-      image: "https://media.istockphoto.com/id/1413765605/fr/photo/portrait-dune-femme-daffaires-afro-am%C3%A9ricaine-prosp%C3%A8re.webp?b=1&s=170667a&w=0&k=20&c=T8Aiogu4Y9EnlE3sNKP_L6H5sHrYv4ttFMfzNgcUmwI="
-    },
-    {
-      name: "jack doe",
-      image: "https://media.istockphoto.com/id/1369508766/fr/photo/belle-femme-latine-%C3%A0-succ%C3%A8s-souriante.webp?b=1&s=170667a&w=0&k=20&c=hYzjJHP1DkGQIbtSjqwB87c2hplYO1Mn9cgheKr0M7o="
-    },
-    {
-      name: "christin doe",
-      image: "https://media.istockphoto.com/id/1511315040/fr/photo/souriez-tablette-et-recherchez-avec-une-femme-noire-au-bureau-pour-la-technologie.webp?b=1&s=170667a&w=0&k=20&c=D9yNSpTwRSf2Iw2xeOxFKnSxqD2xijYXsU4B6vxt-ys="
-    }
-  ];
-  return (
-    <div className={styles.listFriend}>
-      <h3> <span>select friends</span></h3>
-      {data.map((item, index) => (
+      const [datasUser, setDatasUser] = useState(null);
 
-        <div className={styles.userBloc} key={index}>
-          <div>
-            <img src={"" + item.image} alt="" />
-            <span>{item.name}</span>
-          </div>
-          <input type="checkbox" name="" id="" />
-        </div>
+      const [FriendsList, setFriendsList] = useState(null);
 
-      ))
+      if (datasUser == null) {
+        getUserBySession(setDatasUser);
       }
-    </div>
-  )
+
+      let userId = datasUser && datasUser.id;
+
+      if (FriendsList === null && userId !== null) {
+        getFriendsLists(userId, setFriendsList);
+      }
+
+
+      return (
+        <div className={styles.listFriend}>
+          <h3>
+            <span>select friends</span>
+          </h3>
+          {FriendsList && FriendsList.map((item) => (
+            <div className={styles.userBloc} key={item.id}>
+              <div>
+                {item.avatarpath !== '' && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />}
+                {!item.avatarpath && <img src={`../images/user-circle.png`} alt="" />}
+
+                <span>{item.firstname + ' ' + item.lastname}</span>
+              </div>
+              <input defaultValue={item.id} name={item.id} type="checkbox" id="" />
+            </div>
+          ))}
+        </div>
+      );
 }

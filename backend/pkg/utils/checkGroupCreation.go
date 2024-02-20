@@ -24,7 +24,7 @@ func CheckGroup(title, description string) (bool, error) {
 func CheckTitle(title string) (bool, error) {
 
 	// on exige que le title ait entre 5 et 20 caractères alphanumériques.
-	match := (len(title) >= 5 && len(title) <= 20)
+	match := (len(title) >= 2 && len(title) <= 50)
 
 	if !match {
 		return false, errors.New("invalid title format")
@@ -36,7 +36,7 @@ func CheckTitle(title string) (bool, error) {
 
 func checkDescription(description string) (bool, error) {
 
-	match := (len(description) >= 5 && len(description) <= 40)
+	match := (len(description) >= 5 && len(description) <= 300)
 	if !match {
 		return false, errors.New("invalid description format")
 	}

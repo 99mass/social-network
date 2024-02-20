@@ -5,19 +5,18 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/utils"
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 )
 
 func GetUsersHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("start")
+		//log.Println("start")
 		switch r.Method {
 		case http.MethodGet:
 			_, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
-				helper.SendResponseError(w, "error","you're not authorized",http.StatusBadRequest)
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				log.Println("not auth")
 				return
 			}
@@ -30,7 +29,7 @@ func GetUsersHandler(db *sql.DB) http.HandlerFunc {
 
 			// get the user
 			users, err := controller.GetMyFriends(db, userid)
-			fmt.Println("users", users)
+			//fmt.Println("users", users)
 			if err != nil {
 				helper.SendResponseError(w, "error", "user doesn't exist", http.StatusBadRequest)
 				log.Println("err:", err)
@@ -40,8 +39,8 @@ func GetUsersHandler(db *sql.DB) http.HandlerFunc {
 				if user.AvatarPath != "" {
 					users[i].AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
 					if err != nil {
-						helper.SendResponseError(w, "error", "enable to encode image avatar", http.StatusInternalServerError)
-						return
+						log.Println("enable to encode image avatar", err.Error())
+						
 					}
 				}
 

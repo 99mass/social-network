@@ -70,12 +70,13 @@
 
 .listGroupManaged {
     width: 90%;
+    min-height: fit-content;
+    max-height: 350px;
     display: flex;
     flex-direction: column;
     gap: 5px;
     padding-bottom: 10rem;
     overflow-y: scroll;
-    height: 100vh;
 }
 
 
