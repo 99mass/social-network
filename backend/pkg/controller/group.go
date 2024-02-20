@@ -44,15 +44,144 @@ func GetGroupByID(db *sql.DB, groupID string) (models.Group, error) {
 }
 
 func IsMember(db *sql.DB, userID, groupID string) (bool, error) {
-    query := `
+	query := `
         SELECT COUNT(*)
         FROM group_members
         WHERE user_id = ? AND group_id = ?
     `
-    var count int
-    err := db.QueryRow(query, userID, groupID).Scan(&count)
-    if err != nil {
-        return false, err
-    }
-    return count >  0, nil
+	var count int
+	err := db.QueryRow(query, userID, groupID).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
+func GetMyGroups(db *sql.DB, userID string) ([]models.GroupInfos, error) {
+	// SQL query to get all groups a user is a member of
+	query := `
+        SELECT g.id, g.title, g.avata_image, COUNT(m.user_id) as nbr_members
+        FROM groups g
+        INNER JOIN group_members m ON g.id = m.group_id
+        WHERE m.user_id = ?
+        GROUP BY g.id
+    `
+
+	// Prepare the statement
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	// Execute the query
+	rows, err := stmt.Query(userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Scan the results into a slice of GroupInfos
+	var groups []models.GroupInfos
+	for rows.Next() {
+		var group models.GroupInfos
+		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
+		if err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
+
+	// Check for errors from iterating over rows.
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return groups, nil
+}
+
+func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
+	// SQL query to get all groups a user manages
+	query := `
+        SELECT g.id, g.title, g.avata_image, COUNT(m.user_id) as nbr_members
+        FROM groups g
+        LEFT JOIN group_members m ON g.id = m.group_id
+        WHERE g.creator_id = ?
+        GROUP BY g.id
+    `
+
+	// Prepare the statement
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	// Execute the query
+	rows, err := stmt.Query(userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Scan the results into a slice of GroupInfos
+	var groups []models.GroupInfos
+	for rows.Next() {
+		var group models.GroupInfos
+		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
+		if err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
+
+	// Check for errors from iterating over rows.
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return groups, nil
+}
+
+func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
+	// SQL query to get all groups that a user is not a member of
+	query := `
+        SELECT g.id, g.title, g.avata_image, COUNT(m.user_id) as nbr_members
+        FROM groups g
+        LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
+        WHERE m.user_id IS NULL
+        GROUP BY g.id
+    `
+
+	// Prepare the statement
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	// Execute the query
+	rows, err := stmt.Query(userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Scan the results into a slice of GroupInfos
+	var groups []models.GroupInfos
+	for rows.Next() {
+		var group models.GroupInfos
+		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
+		if err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
+
+	// Check for errors from iterating over rows.
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return groups, nil
 }

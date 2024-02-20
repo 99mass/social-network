@@ -74,7 +74,7 @@ func GetGroupsInvitation(db *sql.DB, userID string) ([]models.Group, error) {
     var groups []models.Group
     for rows.Next() {
         var group models.Group
-        err := rows.Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &AvatarPath, &group.CreatedAt)
+        err := rows.Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &group.AvatarPath, &group.CreatedAt)
         if err != nil {
             return nil, err
         }

@@ -17,7 +17,7 @@ export const AddGroup = async (data, setGroupFrom, setGroups) => {
 
     if (response.ok) {
       successNotification("Group added successful you can see it in the home  or  profile page.");
-       
+ 
     //   setPostForm(false);
     //   getPostsUser(setPosts);
     } else {

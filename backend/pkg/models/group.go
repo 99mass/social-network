@@ -6,4 +6,12 @@ type Group struct {
 	Description string `db:"description" json:"description"`
 	CreatorID   string `db:"creator_id" json:"creator_id"`
 	CreatedAt   string `db:"created_at" json:"created_at"`
+	AvatarPath  string `db:"avatarpath" json:"avatarpath"`
+}
+
+type GroupInfos struct {
+	ID         string `json:"id"`
+	Title      string `json:"title"`
+	AvatarPath string `json:"avatarpath"`
+	NbrMembers int    `json:"nbr_members"`
 }
