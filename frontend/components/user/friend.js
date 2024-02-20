@@ -69,7 +69,7 @@ export function FollowerFriends() {
                 onClick={() => handlerFollower(user.follower_id)}
                 className={styles.unfollowBtn}
               >
-                <i className="fa-solid fa-rectangle-xmark"></i>unfollow
+                <i className="fa-solid fa-rectangle-xmark"></i>Banner
               </span>
             </div>
           </div>

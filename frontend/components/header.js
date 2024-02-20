@@ -35,7 +35,9 @@ export default function Header() {
         <div className={styles.fixed}>
           <div className={styles.mainHeader}>
             <div className={styles.topContent}>
-              <Link href="/home"><h2>social-network</h2></Link>
+              <Link href="/home">
+                <h2>social-network</h2>
+              </Link>
               <MidlleNAvForBigScreen />
               <ToggleButton
                 togglePostForm={togglePostForm}
@@ -50,8 +52,10 @@ export default function Header() {
           </div>
         </div>
       </nav>
-      {postForm && <Post PostForm={togglePostForm} setPostForm={setPostFrom} />}
-      {groupForm && <Group GroupForm={toggleGroupForm} />}
+      {postForm && (
+        <Post togglePostForm={togglePostForm} setPostForm={setPostFrom} />
+      )}
+      {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
     </>
   );
 }
@@ -80,7 +84,6 @@ export function MidlleNAvForBigScreen() {
         </i>
       </Link>
       <Link href="/group" title="Groups">
-
         <i className="fas fa-users"></i>
       </Link>
     </div>
@@ -116,11 +119,15 @@ export function MidlleNAvFormSmallScreen() {
   );
 }
 
-export function ToggleButton({ togglePostForm, toggleGroupForm, handlerLogOut, firstname, lastname, userId }) {
-
+export function ToggleButton({
+  togglePostForm,
+  toggleGroupForm,
+  handlerLogOut,
+  firstname,
+  lastname,
+  userId,
+}) {
   const [isMenuOpen, setMenuOpen] = useState(false);
-
-
 
   const handleToggleClick = () => {
     setMenuOpen(!isMenuOpen);
@@ -136,14 +143,14 @@ export function ToggleButton({ togglePostForm, toggleGroupForm, handlerLogOut, f
           <ul>
             <li>
               <Link href={`./profileuser?userid=${userId}`}>
-                <i className="fa-regular fa-user"></i>{`${firstname} ${lastname}`}
+                <i className="fa-regular fa-user"></i>
+                {`${firstname} ${lastname}`}
               </Link>
             </li>
             <li onClick={togglePostForm}>
               <i className="fa-solid fa-pen-to-square"></i>Create post
             </li>
             <li onClick={toggleGroupForm}>
-
               <i className="fa-solid fa-users"></i>Create group
             </li>
             <li onClick={handlerLogOut}>
@@ -154,8 +161,6 @@ export function ToggleButton({ togglePostForm, toggleGroupForm, handlerLogOut, f
           </ul>
         </div>
       )}
-
-
     </>
   );
 }
