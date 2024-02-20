@@ -38,8 +38,6 @@ export default function Group({ GroupForm }) {
     };
 
     AddGroup(data)  
-    
-
   };
 
 

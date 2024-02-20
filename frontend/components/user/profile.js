@@ -7,10 +7,8 @@ import Friends from "./friend";
 import { getDatasProfilUser } from "../../handler/user_profile";
 import { getPostsUserCreated } from "../../handler/getPostsUser";
 import { ErrorProfile } from "../errors/error_profiles";
-import { UnfollowUser, askForFriends } from "../../handler/follower";
 import { errorNotification } from "../../utils/sweeAlert";
-import { CountFollower, UnfollowUser, askForFriends } from "../../handler/follower";
-import { getUserBySession } from "../../handler/getUserBySession";
+import { CountFollower, askForFriends } from "../../handler/follower";
 
 export default function Profile_user() {
   const [datas, setDatas] = useState(null);
@@ -34,9 +32,12 @@ export default function Profile_user() {
     getPostsUserCreated(userid, setPostsCreated);
   }, [userid, datas]);
 
-console.log(datas && datas);
-  const condition=(datas?.isowner || !datas?.isowner && (datas?.user.ispublic || (!datas?.user.ispublic && datas?.isfriend)));
-  
+  console.log(datas && datas);
+  const condition =
+    datas?.isowner ||
+    (!datas?.isowner &&
+      (datas?.user.ispublic || (!datas?.user.ispublic && datas?.isfriend)));
+
   const handleButtonClick = (buttonNumber) => {
     setEditButton({
       button1: buttonNumber === 1,
@@ -44,8 +45,10 @@ console.log(datas && datas);
       button3: buttonNumber === 3,
       button4: buttonNumber === 4,
     });
-    if ((buttonNumber===1 || buttonNumber==3) && !condition) {
-      errorNotification("you can't see some information because you're not friends");
+    if ((buttonNumber === 1 || buttonNumber == 3) && !condition) {
+      errorNotification(
+        "you can't see some information because you're not friends"
+      );
     }
   };
 
@@ -83,7 +86,7 @@ console.log(datas && datas);
           setDatas={setDatas}
         />
       )}
-      {editButton.button3 && condition  && <Friends idUser={userid} />}
+      {editButton.button3 && condition && <Friends idUser={userid} />}
     </>
   );
 }
@@ -99,22 +102,18 @@ export function ContentCovertPhoto({
   handleButtonClick,
   setDatas,
 }) {
-
-  
-  const handlerFollower = () => {    
-    if (!isfriend ) {
+  const handlerFollower = () => {
+    if (!isfriend) {
       askForFriends(iduser, null, setDatas);
     }
   };
-  const [count , setcountFollower]= useState()
+  const [count, setcountFollower] = useState();
 
   useEffect(() => {
     if (iduser) {
-      
-      CountFollower(iduser,setcountFollower)
+      CountFollower(iduser, setcountFollower);
     }
-
-  },[iduser])
+  }, [iduser]);
   return (
     <div className={styles.photoCovert}>
       <div className={styles.firstImg}>
@@ -143,9 +142,14 @@ export function ContentCovertPhoto({
             <div className={styles.blocFlow}>
               <span
                 onClick={handlerFollower}
-                className={!isfriend ?  styles.active: styles.default2}
+                className={!isfriend ? styles.active : styles.default2}
               >
-                <i className={`fa-solid ${!isfriend ? 'fa-square-plus' : "fa-square-xmark"}`}></i>Follow
+                <i
+                  className={`fa-solid ${
+                    !isfriend ? "fa-square-plus" : "fa-square-xmark"
+                  }`}
+                ></i>
+                Follow
               </span>
             </div>
           )}
