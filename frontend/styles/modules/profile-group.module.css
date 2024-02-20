@@ -235,7 +235,6 @@
      margin-bottom: 20px;
      padding-top: 10px;
      border-radius: 10px;
-     /* background: var(--primary-bg); */
      background: var(--secondary-bg);
 }
 .eventDetails h2{
@@ -257,6 +256,10 @@
 .eventDetails p span{
     margin-right: 10px;
     color: gray;
+}
+.eventDetails div{
+  display: flex;
+  justify-content: space-between;
 }
 .eventDetails button{
   width: fit-content;
@@ -580,7 +583,7 @@
   }
   .listFriend .goingLists,
   .listFriend .notGoingLists{
-    width: 50%;
+    min-width: 50%;
   }
   .listFriend .goingLists h2,
   .listFriend .notGoingLists h2{
@@ -588,11 +591,6 @@
     margin-bottom: 10px;
     text-transform: capitalize;
     font-weight: initial;
-  }
-  .listFriend .goingLists h2{
-    color: var(--second-blue);
-  }
-  .listFriend .notGoingLists h2{
     color:gray;
   }
   .listFriend div .userBloc {
@@ -601,6 +599,7 @@
   .listFriend .userBloc div {
     display: flex;
     align-items: center;
+
     gap: 10px;
   }
   .listFriend .userBloc div img {
@@ -609,15 +608,17 @@
     border-radius: 100%;
   }
   .listFriend .userBloc div span{
-    color: gray;
+    color: gray;    
   }
   .listFriend .goingLists .userBloc div i{
         color: var(--teal60);
   }
   .listFriend .notGoingLists .userBloc div i{
-    color: var(--red60);
+    color: var(--red50);
   }
-
+.closeBtn{
+  cursor: pointer;
+}
   
   @media screen and (max-width:767px) {
     .contentListPeopleGoing {

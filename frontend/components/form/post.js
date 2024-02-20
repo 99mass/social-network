@@ -7,10 +7,16 @@ import { EncodeImage } from "../../utils/encodeImage";
 import { getFriendsLists } from "../../handler/follower";
 import { getUserBySession } from "../../handler/getUserBySession";
 
-export default function Post({ PostForm,setPostForm, setPosts }) {
+export default function Post({ PostForm, setPostForm, setPosts }) {
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
+  const [imgeName, setImageName] = useState("");
   const fileInputRef = useRef(null);
+  
+  const toggleImageName = () => {
+    const _file = fileInputRef.current.files[0];
+    if (_file) setImageName(_file.name);
+  };
 
   const handleFileIconClick = () => {
     fileInputRef.current.click();
@@ -53,7 +59,7 @@ export default function Post({ PostForm,setPostForm, setPosts }) {
         Authorize_User: checkedValues,
       };
       console.log(data);
-      AddPostUser(data,setPostForm, setPosts);
+      AddPostUser(data, setPostForm, setPosts);
       return;
     }
 
@@ -69,7 +75,7 @@ export default function Post({ PostForm,setPostForm, setPosts }) {
           Privacy: radioSelected,
           Authorize_User: checkedValues,
         };
-        AddPostUser(data,setPostForm, setPosts);
+        AddPostUser(data, setPostForm, setPosts);
       } catch (error) {
         errorNotification(error);
       }
@@ -103,12 +109,14 @@ export default function Post({ PostForm,setPostForm, setPosts }) {
             placeholder="What's on your mind ?"
           />
           <div className={styles.contentAssets}>
+            <span>{imgeName}</span>
             <i
               className="fa-regular fa-file-image"
               title="Choose image"
               onClick={handleFileIconClick}
             >
               <input
+                onChange={toggleImageName}
                 type="file"
                 className={styles.filesPost}
                 ref={fileInputRef}
@@ -122,7 +130,12 @@ export default function Post({ PostForm,setPostForm, setPosts }) {
               😄
             </span>
             {/* emoji form */}
-            {emoji && <EmojiForm toggleEmojicon={toggleEmojicon} setSelectedEmoji={setSelectedEmoji} />}
+            {emoji && (
+              <EmojiForm
+                toggleEmojicon={toggleEmojicon}
+                setSelectedEmoji={setSelectedEmoji}
+              />
+            )}
           </div>
         </div>
         <button type="submit" className={styles.btnPost}>
@@ -138,7 +151,6 @@ export function PrivacyBloc() {
   const showListF = (state) => {
     setListFriend(state);
   };
-  ;
   return (
     <div className={styles.blocPrivacyPost}>
       <p>
@@ -220,23 +232,32 @@ export function ListFriend() {
 
   // console.log(FriendsList && FriendsList)
 
-
   return (
     <div className={styles.listFriend}>
       <h3>
         <span>select friends</span>
       </h3>
-      {FriendsList && FriendsList.map((item) => (
-        <div className={styles.userBloc} key={item.id}>
-          <div>
-            {item.avatarpath !== '' && <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />}
-            {!item.avatarpath && <img src={`../images/user-circle.png`} alt="" />}
+      {FriendsList &&
+        FriendsList.map((item) => (
+          <div className={styles.userBloc} key={item.id}>
+            <div>
+              {item.avatarpath !== "" && (
+                <img src={`data:image/png;base64,${item.avatarpath}`} alt="" />
+              )}
+              {!item.avatarpath && (
+                <img src={`../images/user-circle.png`} alt="" />
+              )}
 
-            <span>{item.firstname + ' ' + item.lastname}</span>
+              <span>{item.firstname + " " + item.lastname}</span>
+            </div>
+            <input
+              defaultValue={item.id}
+              name={item.id}
+              type="checkbox"
+              id=""
+            />
           </div>
-          <input defaultValue={item.id} name={item.id} type="checkbox" id="" />
-        </div>
-      ))}
+        ))}
     </div>
   );
 }
