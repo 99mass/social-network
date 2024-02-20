@@ -27,15 +27,15 @@ func CreateGroupInvitations(db *sql.DB, groupInvitations models.Group_Invitation
 	return nil
 }
 
-func AcceptRequestInvitations(db *sql.DB, userID, senderID, groupID string) error {
+func AcceptRequestInvitations(db *sql.DB, userID, groupID string) error {
 	// Préparez la requête SQL pour mettre à jour la colonne status en 'accepted'
 	query := `
 		UPDATE group_invitations
 		SET status = 'accepted', updated_at = ?
-		WHERE user_id = ? AND sender_id = ? AND group_id = ? AND status = "waiting"
+		WHERE user_id = ? AND group_id = ? AND status = "pending"
 	`
 
-	_, err := db.Exec(query, time.Now(), userID, senderID, groupID)
+	_, err := db.Exec(query, time.Now(), userID, groupID)
 	if err != nil {
 		log.Println("Error accepting")
 		return fmt.Errorf("failed to accept follow request: %w", err)
@@ -43,13 +43,13 @@ func AcceptRequestInvitations(db *sql.DB, userID, senderID, groupID string) erro
 	return nil
 }
 
-func DeclineGroupInvitaton(db *sql.DB, userID, senderID, groupID string) error {
+func DeclineGroupInvitaton(db *sql.DB, userID, groupID string) error {
 	// Préparez la requête SQL pour supprimer la relation de suivi
 	query := `
 		DELETE FROM group_invitations
-		WHERE user_id = ? AND sender_id = ? AND group_id = ?
+		WHERE user_id = ? AND group_id = ?
 	`
-	_, err := db.Exec(query, userID, senderID, groupID)
+	_, err := db.Exec(query, userID, groupID)
 	if err != nil {
 		log.Println("Error Declining follower request", err.Error())
 		return fmt.Errorf("failed to unfollow user: %w", err)
