@@ -23,6 +23,7 @@ export const api = {
   getFollingUsers:`${domain}/getfollowingusers`,
   AddGroup: `${domain}/create_group`,
   CountFollower:`${domain}/CountFollower`,
+  Mygroups:`${domain}/mygroups`,
 
 
 };
