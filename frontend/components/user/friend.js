@@ -12,8 +12,6 @@ export default function Friends({idUser}) {
 
   useEffect(() => {
     getFollowers(idUser, setFollowerList);
-  }, []);
-  useEffect(() => {
     getFollowingUsers(idUser, setFollowingUsersList);
   }, []);
   
