@@ -38,5 +38,10 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/getfollowers", helper.Middleware(handler.GetFollowerInfos(db)))
 	http.HandleFunc("/getfollowingusers", helper.Middleware(handler.GetFollowingInfos(db)))
 	http.HandleFunc("/CountFollower", helper.Middleware(handler.CountFollower(db)))
+	http.HandleFunc("/mygroups", helper.Middleware(handler.GetMyGroupsHandler(db)))
+	http.HandleFunc("/groupsimanage", helper.Middleware(handler.GroupsIManageHandler(db)))
+	
+
+
 
 }

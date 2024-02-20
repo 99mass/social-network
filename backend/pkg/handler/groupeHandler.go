@@ -30,7 +30,6 @@ func GetMyGroupsHandler(db *sql.DB) http.HandlerFunc {
 				encodedImage, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + group.AvatarPath)
 				if err != nil {
 					log.Println("error", "unable to encode avatar image", http.StatusInternalServerError)
-					return
 				}
 				groups[i].AvatarPath = encodedImage
 			}
@@ -89,7 +88,6 @@ func GroupsToDiscoverHandler(db *sql.DB) http.HandlerFunc {
 				encodedImage, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + group.AvatarPath)
 				if err != nil {
 					log.Println("error", "unable to encode avatar image", http.StatusInternalServerError)
-
 				}
 				groups[i].AvatarPath = encodedImage
 			}
