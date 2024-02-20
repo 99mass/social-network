@@ -16,7 +16,7 @@ func ReadAndSaveImage(base64img, directory string) (string, error) {
 	if base64img != "" {
 		mimeType := strings.Split(base64img, ";")[0]
 		mimeType = strings.TrimPrefix(mimeType, "data:")
-		if mimeType != "image/jpeg" && mimeType != "image/png" && mimeType != "image/gif" &&  mimeType != "image/jpg"{
+		if mimeType != "image/jpeg" && mimeType != "image/png" && mimeType != "image/gif" && mimeType != "image/jpg" {
 			return "", errors.New("file format is not valid")
 		}
 		base64Data := base64img[strings.IndexByte(base64img, ',')+1:]
@@ -69,7 +69,7 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 	if base64img != "" {
 		mimeType := strings.Split(base64img, ";")[0]
 		mimeType = strings.TrimPrefix(mimeType, "data:")
-		if mimeType != "image/jpeg" && mimeType != "image/png" && mimeType != "image/gif" &&  mimeType != "image/jpg"{
+		if mimeType != "image/jpeg" && mimeType != "image/png" && mimeType != "image/gif" && mimeType != "image/jpg" {
 			return "", errors.New("file format is not valid")
 		}
 		base64Data := base64img[strings.IndexByte(base64img, ',')+1:]
@@ -83,8 +83,7 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 			return "", errors.New("the size of image is bigger than 20ko")
 		}
 
-		uniqueID := time.Now().Format("20060102150405")
-		name := helper.NewNameForImage() + "_" + uniqueID
+		name := helper.NewNameForImage()
 
 		if mimeType == "image/jpeg" {
 			base64img = name + ".jpeg"
@@ -109,6 +108,12 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 			return "", errors.New("we got an issue for avatar images")
 		}
 
+		err = os.WriteFile(directory+base64img, img, 0644)
+		if err != nil {
+			log.Println("error saving image: ", err.Error())
+			return "", errors.New("failed to save avatar image")
+		}
+
 		// Supprimer l'ancienne image si elle existe
 		if oldImagePath != "" {
 			fmt.Println("older image: ", oldImagePath)
@@ -118,11 +123,7 @@ func ReadAndSaveImageForUpdate(base64img, directory, oldImagePath string) (strin
 				return "", errors.New("failed to remove avatar image")
 			}
 		}
-		err = os.WriteFile(directory+base64img, img, 0644)
-		if err != nil {
-			log.Println("error saving image: ", err.Error())
-			return "", errors.New("failed to save avatar image")
-		}
+
 		return base64img, nil
 	}
 
