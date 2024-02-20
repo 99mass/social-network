@@ -33,6 +33,7 @@ export default function Events() {
       isGoing: false,
     },
   ];
+  const toggleListUsers = (state) => setListUserGoing(state);
 
   return (
     <div className={styles.contentPostAbout}>
@@ -45,12 +46,12 @@ export default function Events() {
             time={item.time}
             content={item.content}
             isGoing={item.isGoing}
-            setListUserGoing={setListUserGoing}
+            toggleListUsers={toggleListUsers}
           />
         ))}
       </div>
       <AboutGroup />
-      {listUserGoing && <ListUserAcceptedEvent />}
+      {listUserGoing && <ListUserAcceptedEvent  toggleListUsers={toggleListUsers} setListUserGoing={setListUserGoing} />}
     </div>
   );
 }
@@ -61,13 +62,13 @@ export function EventBloc({
   time,
   content,
   isGoing,
-  setListUserGoing,
+  toggleListUsers
 }) {
-  const toggleListUsers = () => setListUserGoing(true);
+ 
   return (
     <div className={styles.eventDetails}>
       <h2>{nameGroup}</h2>
-      <p onClick={toggleListUsers}>
+      <p >
         <i className="fa-solid fa-user-group"></i>
         {numberPerson} person responded Going
       </p>
@@ -81,16 +82,20 @@ export function EventBloc({
         {time}
       </p>
       <pre>{content}</pre>
-      {isGoing ? (
-        <button>
-          <i className="fa-solid fa-circle-check"></i>Going
+      <div>
+        {isGoing ? (
+          <button>
+            <i className="fa-solid fa-circle-check"></i>Going
+          </button>
+        ) : (
+          <button className={styles.btnNotGoing}>
+            <i className="fa-solid fa-circle-check"></i>Not going
+          </button>
+        )}
+        <button onClick={()=>toggleListUsers(true)} className={styles.btnNotGoing}>
+          <i class="fa-solid fa-list-check"></i>Guest List
         </button>
-      ) : (
-        <button className={styles.btnNotGoing}>
-          <i className="fa-solid fa-circle-check"></i>Not going
-        </button>
-      )}
-
+      </div>
     </div>
   );
 }
@@ -148,7 +153,7 @@ export function FromCreateEvent({ setSection }) {
   );
 }
 
-export function ListUserAcceptedEvent() {
+export function ListUserAcceptedEvent({toggleListUsers}) {
   const data = [
     {
       image: "../images/default-image.svg",
@@ -166,14 +171,13 @@ export function ListUserAcceptedEvent() {
       image: "../images/default-image.svg",
       user: "userName",
     },
-
   ];
   return (
     <div className={styles.contentListPeopleGoing}>
       <div className={styles.listHeader}>
         <h1>
           <span>Listes Users</span>
-          <i className="fa-regular fa-circle-xmark" title="Close lists"></i>
+          <i  onClick={()=>toggleListUsers(false)} className={`fa-regular fa-circle-xmark ${styles.closeBtn}`} title="Close lists"></i>
         </h1>
       </div>
       <hr />
@@ -198,7 +202,7 @@ export function ListUserAcceptedEvent() {
               <div>
                 <img src={item.image} alt="" />
                 <span>{item.user}</span>
-                <i class="fa-solid fa-xmark"></i>
+                <i class="fa-regular fa-circle-xmark"></i>
               </div>
             </div>
           ))}

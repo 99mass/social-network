@@ -183,6 +183,10 @@
 .contentAssets {
   text-align: right;
 }
+.contentAssets span:first-of-type {
+  margin-right: 5px;
+  font-size: smaller;
+}
 .contentAssets i,
 .contentAssets span {
   font-size: 20px;
