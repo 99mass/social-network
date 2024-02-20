@@ -24,7 +24,6 @@ export default function Comment() {
       getCommentPost(setComment, postid);
     }
   }, [postid]);
- console.log(posData && posData);
 
   return (
     <div className={`${styles.middleBloc} middle`}>
@@ -81,8 +80,8 @@ export function CommentPost({ data }) {
       <div className={styles.contentAllComments}>
         <div className={styles.containerCommentsMessage}>
           {data &&
-            data.map((item) => (
-              <div key={item.user.id} className={styles.contentMessage}>
+            data.map((item,index) => (
+              <div key={`${item.user.id}${index}`} className={styles.contentMessage}>
                 <div>
                   <div>
                     <Link href={`./profileuser?userid=${item && item.user.id}`}>
