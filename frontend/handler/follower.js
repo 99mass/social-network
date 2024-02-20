@@ -95,6 +95,29 @@ export const getFollowers = async (setFollowerList) => {
     console.error("Error fetching Followers data:", error.message);
   }
 };
+
+export async function CountFollower(userid, setDatas) {
+  if (userid) {
+    try {
+      const sessionId = getSessionCookie();
+
+      const response = await fetch(api.CountFollower + `?userid=${userid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setDatas(data);
+      }
+    } catch (error) {
+      console.error("error fetching count Followr", error.message);
+    }
+  }
+}
 export const getFollowingUsers = async (setFollowingUsersList) => {
   try {
     const sessionId = getSessionCookie();

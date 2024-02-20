@@ -37,5 +37,6 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/oldestrequestfollow", helper.Middleware(handler.OldestPendingRequestFollow(db)))
 	http.HandleFunc("/getfollowers", helper.Middleware(handler.GetFollowerInfos(db)))
 	http.HandleFunc("/getfollowingusers", helper.Middleware(handler.GetFollowingInfos(db)))
+	http.HandleFunc("/CountFollower", helper.Middleware(handler.CountFollower(db)))
 
 }

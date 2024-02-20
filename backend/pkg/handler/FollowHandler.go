@@ -236,3 +236,27 @@ func GetFollowingInfos(db *sql.DB) http.HandlerFunc {
 		}
 	}
 }
+
+func CountFollower(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Assurez-vous que l'utilisateur est authentifié et récupérez son ID
+		sess, err := utils.CheckAuthorization(db, w, r)
+		if err != nil {
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+			return
+		}
+
+		switch r.Method {
+		case http.MethodGet:
+			count, err := controller.CountFollowerReq(db, sess.UserID.String())
+			if err != nil {
+				log.Println("error counting followers: ", err)
+				helper.SendResponseError(w, "error", "unable to count followers", http.StatusInternalServerError)
+				return
+			}
+			helper.SendResponse(w, count, http.StatusOK)
+		default:
+			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	}
+}
