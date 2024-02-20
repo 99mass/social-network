@@ -36,12 +36,12 @@ WHERE (
 	v-	creat post -> 
 		v	Comment, 
 		v	like
-	v	accept a follow request (if the profile is private)
+	v-	accept a follow request (if the profile is private)
 	v-	decline a follow request
-	v	unfollow a user
-	v   delete a follower
+	v-	unfollow a user
+	v-  delete a follower
 
-	v	Create a group
+	v-	Create a group
 	x	send invitation to other users to join a group where hi is a memeber
 	x	Accept invitation to join a group
 	x	Decline invitaion to join a group
@@ -51,6 +51,9 @@ WHERE (
 	x	make an event available
 	x   choose to go or not go to an event
 
+	Notification
+
+
 		Send Private message (to following or followers users)
 
 		
@@ -58,15 +61,15 @@ Avoid heavy picture on create post, user, and send message.
 
 Query For Display
 	user
-	v	Get all following and followers users (Ordered as real time forum)
+	v-	Get all following and followers users (Ordered as real time forum)
 		Get all following users
 		Get all followers users
 		Get all users of a group (doesn't need order)
-	v	Get all users that send a request to follow a user
-	v	Get the oldest following request
+	v-	Get all users that send a request to follow a user
+	v-	Get the oldest following request
 	Post
-	v	Get all posts done by a user
-	v	get all posts a user can see
+	v-	Get all posts done by a user
+	v-	get all posts a user can see
 		gel all posts created in a group
 	Group
 		Get all groups
@@ -82,23 +85,4 @@ Query For Display
 		Get 10 first messages of a groups
 		Load 10 more messages of a group
 		Load 10 more messages between two users
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 */
