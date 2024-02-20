@@ -5,6 +5,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"database/sql"
+	"log"
 	"net/http"
 
 	"github.com/gofrs/uuid"
@@ -31,6 +32,23 @@ func ShowGroupInvitation(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+			group, err := controller.GetGroupsInvitation(db, sess.UserID.String())
+			if err != nil {
+				helper.SendResponseError(w, "error", "we got an issue", http.StatusInternalServerError)
+				return
+			}
+			for i, g := range group {
+				if g.AvatarPath != "" {
+					group[i].AvatarPath, err = helper.EncodeImageToBase64(g.AvatarPath)
+					if err != nil {
+						log.Println("enable to encode avatar image for group")
+					}
+				}
+			}
+			helper.SendResponse(w, group, http.StatusOK)
+		default:
+			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
 		}
+
 	}
 }
