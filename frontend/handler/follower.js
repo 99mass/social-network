@@ -169,11 +169,7 @@ export const askForFriends = async (userid, setPosts, setDatas) => {
   }
 };
 
-export const UnfollowUser = async (
-  userid,
-  setPosts,
-  setFollowingUsersList
-) => {
+export const UnfollowUser = async (userid, setPosts, setFollowingUsersList) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
