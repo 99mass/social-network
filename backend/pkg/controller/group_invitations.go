@@ -14,7 +14,7 @@ import (
 func CreateGroupInvitations(db *sql.DB, groupInvitations models.Group_Invitations) error {
 	query := `
         INSERT INTO group_invitations (id, user_id, group_id, sender_id, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?,?,?);
     `
 	newUUID, err := uuid.NewV4()
 	if err != nil {

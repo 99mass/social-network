@@ -79,19 +79,9 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			if groupReq.AddedUsersToGroup != nil {
-				for _, userAdd := range groupReq.AddedUsersToGroup {
+				for _, userId := range groupReq.AddedUsersToGroup {
 					var groupInvitations models.Group_Invitations
-
-					userId, err := controller.GetUserByNickName(db, userAdd)
-					if err != nil {
-						helper.SendResponse(w, models.ErrorResponse{
-							Status:  "error",
-							Message: "we got an issue",
-						}, http.StatusInternalServerError)
-						log.Println("internal ERROR from database: ", err.Error())
-						return
-					}
-					groupInvitations.UserID = userId.String()
+					groupInvitations.UserID = userId
 					groupInvitations.GroupID = result.String()
 					groupInvitations.SenderID = sess.UserID.String()
 					groupInvitations.Status = "pending"
