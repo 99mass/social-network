@@ -161,7 +161,6 @@ export const UnfollowUser = async (
 
       // Vérifier le statut de la réponse
       if (response.ok) {
-        console.log("yess");
         if (setPosts) getPostsUser(setPosts);
         if (setFollowingUsersList) getFollowingUsers(setFollowingUsersList);
       }

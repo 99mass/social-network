@@ -31,8 +31,8 @@ export default function Profile_user() {
     }
     getPostsUserCreated(userid, setPostsCreated);
   }, [userid, datas]);
-  
 
+console.log(datas && datas);
   const condition=(datas?.isowner || !datas?.isowner && (datas?.user.ispublic || (!datas?.user.ispublic && datas?.isfriend)));
   
   const handleButtonClick = (buttonNumber) => {
@@ -131,7 +131,7 @@ export function ContentCovertPhoto({
             <div className={styles.blocFlow}>
               <span
                 onClick={handlerFollower}
-                className={styles.active}
+                className={!isfriend ?  styles.active: styles.default2}
               >
                 <i className={`fa-solid ${!isfriend ? 'fa-square-plus' : "fa-square-xmark"}`}></i>Follow
               </span>
@@ -169,7 +169,7 @@ export function NavMenu({ isOwner, ispublic, editButton, handleButtonClick }) {
       )}
       <span
         onClick={() => handleButtonClick(3)}
-        className={editButton.button3 ? styles.active : styles.default}
+        className={editButton.button3 ? styles.active : styles.default2}
         title="Click to follow user"
       >
         <i className="fa-solid fa-user-group"></i>Friends

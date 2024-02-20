@@ -1,8 +1,6 @@
-import Link from "next/link";
 import styles from "../../styles/modules/profile.module.css";
 import { useEffect, useState } from "react";
 import {
-  UnfollowUser,
   deleteAskingFriends,
   getFollowers,
   getFollowingUsers,
@@ -47,7 +45,6 @@ export function FollowerFriends() {
   }, []);
 
   const handlerFollower = (iduser) => {
-    // UnfollowUser(iduser, null, setFollowerList, null);
     deleteAskingFriends(iduser, null, null, setFollowerList);
   };
 
