@@ -12,14 +12,14 @@ import (
 
 func CreateGroup(db *sql.DB, group models.Group) (uuid.UUID, error) {
 	query := `
-        INSERT INTO groups (id, title, description, creator_id, created_at)
-        VALUES (?, ?, ?, ?, ?);
+        INSERT INTO groups (id, title, description, creator_id, avartarpath, created_at)
+        VALUES (?, ?, ?, ?, ?, ?);
     `
 	newUUID, err := uuid.NewV4()
 	if err != nil {
 		return uuid.UUID{}, err
 	}
-	_, err = db.Exec(query, newUUID.String(), group.Title, group.Description, group.CreatorID, time.Now())
+	_, err = db.Exec(query, newUUID.String(), group.Title, group.Description, group.CreatorID, group.AvatarPath, time.Now())
 	if err != nil {
 		return uuid.UUID{}, err
 	}
@@ -33,7 +33,7 @@ func GetGroupByID(db *sql.DB, groupID string) (models.Group, error) {
         FROM groups
         WHERE id = ?
     `
-	err := db.QueryRow(query, group).Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &group.CreatedAt)
+	err := db.QueryRow(query, group).Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &group.AvatarPath, &group.CreatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return models.Group{}, errors.New("no group found with the provided ID")
@@ -60,7 +60,7 @@ func IsMember(db *sql.DB, userID, groupID string) (bool, error) {
 func GetMyGroups(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	// SQL query to get all groups a user is a member of
 	query := `
-        SELECT g.id, g.title, g.avata_image, COUNT(m.user_id) as nbr_members
+        SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
         FROM groups g
         INNER JOIN group_members m ON g.id = m.group_id
         WHERE m.user_id = ?
@@ -103,7 +103,7 @@ func GetMyGroups(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	// SQL query to get all groups a user manages
 	query := `
-        SELECT g.id, g.title, g.avata_image, COUNT(m.user_id) as nbr_members
+        SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
         FROM groups g
         LEFT JOIN group_members m ON g.id = m.group_id
         WHERE g.creator_id = ?
@@ -146,7 +146,7 @@ func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	// SQL query to get all groups that a user is not a member of
 	query := `
-        SELECT g.id, g.title, g.avata_image, COUNT(m.user_id) as nbr_members
+        SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
         FROM groups g
         LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
         WHERE m.user_id IS NULL
