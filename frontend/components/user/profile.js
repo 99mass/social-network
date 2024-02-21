@@ -8,11 +8,16 @@ import { getDatasProfilUser } from "../../handler/user_profile";
 import { getPostsUserCreated } from "../../handler/getPostsUser";
 import { ErrorProfile } from "../errors/error_profiles";
 import { errorNotification } from "../../utils/sweeAlert";
-import { CountFollower, askForFriends } from "../../handler/follower";
+import {
+  CountFollower,
+  UnfollowUser,
+  askForFriends,
+  deleteAskingFriends,
+} from "../../handler/follower";
 import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function Profile_user() {
-  const [datas, setDatas] = useState(null);
+  const [datas, setDatasProfile] = useState(null);
   const [postsCreated, setPostsCreated] = useState(null);
   const [error, setError] = useState(false);
 
@@ -28,12 +33,11 @@ export default function Profile_user() {
   // recuperer les information du user
   useEffect(() => {
     if (!datas) {
-      getDatasProfilUser(setDatas, userid);
+      getDatasProfilUser(setDatasProfile, userid);
     }
     getPostsUserCreated(userid, setPostsCreated);
   }, [userid, datas]);
 
-  console.log(datas && datas);
   const condition =
     datas?.isowner ||
     (!datas?.isowner &&
@@ -67,7 +71,7 @@ export default function Profile_user() {
           isffollowed={datas.isffollowed}
           editButton={editButton}
           handleButtonClick={handleButtonClick}
-          setDatas={setDatas}
+          setDatasProfile={setDatasProfile}
         />
       ) : (
         <ErrorProfile />
@@ -85,7 +89,7 @@ export default function Profile_user() {
           handleButtonClick={handleButtonClick}
           datas={datas}
           userid={userid}
-          setDatas={setDatas}
+          setDatasProfile={setDatasProfile}
         />
       )}
       {editButton.button3 && condition && (
@@ -105,16 +109,13 @@ export function ContentCovertPhoto({
   isffollowed,
   editButton,
   handleButtonClick,
-  setDatas,
+  setDatasProfile,
 }) {
-  const [dataUser, setDatasUser] = useState(null);
-  getUserBySession(setDatasUser);
   const handlerFollower = () => {
-    if (!isowner) {
-      if (dataUser?.id) iduser = dataUser.id;
-    }
-    if (!isfriend) {
-      askForFriends(iduser, null, setDatas);
+    if (!isfriend && isffollowed === "Follow") {
+      askForFriends(iduser, null, setDatasProfile);
+    } else {
+      UnfollowUser(iduser, null, null, setDatasProfile);
     }
   };
   const [count, setcountFollower] = useState();
