@@ -6,7 +6,7 @@ export const getGroupFollow = async (userid, setGroupFollow) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(`${api.userPosts}?user_id=${userid}`, {
+      const response = await fetch(`${api.UserPosts}?user_id=${userid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

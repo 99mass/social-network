@@ -3,7 +3,7 @@ import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 // import { getPostsUser } from "./getPostsUser";
 
-export const AddGroup = async (data, setGroupFrom, setGroups) => {
+export const AddGroup = async (data) => {
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.AddGroup, {
@@ -18,8 +18,6 @@ export const AddGroup = async (data, setGroupFrom, setGroups) => {
     if (response.ok) {
       successNotification("Group added successful you can see it in the home  or  profile page.");
  
-    //   setPostForm(false);
-    //   getPostsUser(setPosts);
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);

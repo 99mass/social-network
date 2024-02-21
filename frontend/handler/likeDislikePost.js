@@ -11,7 +11,7 @@ export const likeDislikePost = async (userid,postid,is_liked, setPosts,setPostsC
     try {
         const sessionId = getSessionCookie();
 
-        const response = await fetch(api.likeDslikepost, {
+        const response = await fetch(api.LikeDslikepost, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
