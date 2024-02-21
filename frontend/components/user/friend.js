@@ -7,7 +7,7 @@ import {
   getFollowingUsers,
 } from "../../handler/follower";
 
-export default function Friends({ idUser }) {
+export default function Friends({ idUser,isowner }) {
   const [toggleList, setToggleList] = useState(true);
 
   const handleToggleList = () => {
@@ -32,14 +32,14 @@ export default function Friends({ idUser }) {
             <i className="fa-solid fa-person-arrow-up-from-line"></i>Following
           </span>
         </div>
-        {toggleList && <FollowerFriends />}
-        {!toggleList && <FollowingFriends />}
+        {toggleList && <FollowerFriends isowner={isowner} />}
+        {!toggleList && <FollowingFriends isowner={isowner} />}
       </div>
     </div>
   );
 }
 
-export function FollowerFriends() {
+export function FollowerFriends({isowner}) {
   const [FollowersList, setFollowerList] = useState(null);
   useEffect(() => {
     getFollowers(setFollowerList);
@@ -65,19 +65,19 @@ export function FollowerFriends() {
 
             <div className={styles.conteUnfollow}>
               <h4>{`${user.firstname} ${user.lastname}`}</h4>
-              <span
+             {isowner &&  <span
                 onClick={() => handlerFollower(user.follower_id)}
                 className={styles.unfollowBtn}
               >
                 <i className="fa-solid fa-rectangle-xmark"></i>Banner
-              </span>
+              </span>}
             </div>
           </div>
         ))}
     </div>
   );
 }
-export function FollowingFriends() {
+export function FollowingFriends({isowner}) {
   const [FolloweingUsersList, setFollowingUsersList] = useState(null);
   useEffect(() => {
     getFollowingUsers(setFollowingUsersList);
@@ -104,12 +104,12 @@ export function FollowingFriends() {
 
             <div className={styles.conteUnfollow}>
               <h4>{`${user.firstname} ${user.lastname}`}</h4>
-              <span
+             {isowner && <span
                 onClick={() => handlerFollower(user.following_id)}
                 className={styles.unfollowBtn}
               >
                 <i className="fa-solid fa-rectangle-xmark"></i>unfollow
-              </span>
+              </span>}
             </div>
           </div>
         ))}

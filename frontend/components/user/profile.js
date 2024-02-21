@@ -85,7 +85,7 @@ export default function Profile_user() {
           setDatas={setDatas}
         />
       )}
-      {editButton.button3 && condition && <Friends idUser={userid} />}
+      {editButton.button3 && condition && <Friends idUser={userid} isowner={datas?.isowner} />}
     </>
   );
 }

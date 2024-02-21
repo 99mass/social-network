@@ -93,11 +93,6 @@ export default function Group({ toggleGroupForm }) {
         onSubmit={handlerFromGroup}
         encType="multipart/form-data"
       >
-        
-        {/* <div className={styles.groupContent}>
-          <input type="text" className={styles.titleGroup} name='Title' placeholder="Title of the group" />
-          <textarea name="Description" placeholder="Decription of the group" id="" ></textarea>
-        </div> */}
 
       <div className={styles.groupContent}>
          <input type="text" className={styles.titleGroup} name='Title' placeholder="Title of the group" />
