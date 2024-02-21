@@ -2,7 +2,6 @@ package controller
 
 import (
 	"database/sql"
-	"errors"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -26,21 +25,18 @@ func CreateGroup(db *sql.DB, group models.Group) (uuid.UUID, error) {
 	return newUUID, nil
 }
 
-func GetGroupByID(db *sql.DB, groupID string) (models.Group, error) {
-	var group models.Group
+func GetGroupByID(db *sql.DB, groupID string) (bool, error) {
 	query := `
-        SELECT *
-        FROM groups
-        WHERE id = ?
-    `
-	err := db.QueryRow(query, group).Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &group.AvatarPath, &group.CreatedAt)
+		SELECT COUNT(*)
+		FROM groups
+		WHERE id = ?
+	`
+	var count int
+	err := db.QueryRow(query, groupID).Scan(&count)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return models.Group{}, errors.New("no group found with the provided ID")
-		}
-		return models.Group{}, err
+		return false, err
 	}
-	return group, nil
+	return count > 0, nil
 }
 
 func IsMember(db *sql.DB, userID, groupID string) (bool, error) {
