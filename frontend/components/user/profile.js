@@ -9,6 +9,7 @@ import { getPostsUserCreated } from "../../handler/getPostsUser";
 import { ErrorProfile } from "../errors/error_profiles";
 import { errorNotification } from "../../utils/sweeAlert";
 import { CountFollower, askForFriends } from "../../handler/follower";
+import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function Profile_user() {
   const [datas, setDatas] = useState(null);
@@ -63,6 +64,7 @@ export default function Profile_user() {
           ispublic={datas.user.ispublic}
           isowner={datas.isowner}
           isfriend={datas.isfriend}
+          isffollowed={datas.isffollowed}
           editButton={editButton}
           handleButtonClick={handleButtonClick}
           setDatas={setDatas}
@@ -100,11 +102,17 @@ export function ContentCovertPhoto({
   ispublic,
   isowner,
   isfriend,
+  isffollowed,
   editButton,
   handleButtonClick,
   setDatas,
 }) {
+  const [dataUser, setDatasUser] = useState(null);
+  getUserBySession(setDatasUser);
   const handlerFollower = () => {
+    if (!isowner) {
+      if (dataUser?.id) iduser = dataUser.id;
+    }
     if (!isfriend) {
       askForFriends(iduser, null, setDatas);
     }
@@ -144,14 +152,18 @@ export function ContentCovertPhoto({
             <div className={styles.blocFlow}>
               <span
                 onClick={handlerFollower}
-                className={!isfriend ? styles.active : styles.default2}
+                className={
+                  isffollowed === "Follow" ? styles.active : styles.default2
+                }
               >
                 <i
                   className={`fa-solid ${
-                    !isfriend ? "fa-square-plus" : "fa-square-xmark"
+                    isffollowed === "Follow"
+                      ? "fa-square-plus"
+                      : "fa-square-xmark"
                   }`}
                 ></i>
-                Follow
+                {isffollowed}
               </span>
             </div>
           )}

@@ -11,21 +11,6 @@
 // les tables posts followers et almost users pour sortir les bonnes postes à montrer à l'utilisateur
 
 /*
-like this below :
-
-SELECT p.*
-FROM posts p
-LEFT JOIN followers f ON p.user_id = f.following_id AND f.follower_id = "userID of user who want to see the post"
-LEFT JOIN almost_users au ON p.id = au.post_id AND au.authorize_users = "userID of user who want to see the post"
-WHERE (
-    p.privacy = 'public' OR
-    (p.privacy = 'private' AND (f.follower_id IS NOT NULL OR f.following_id IS NOT NULL)) OR
-    (p.privacy = 'almost' AND au.user_id IS NOT NULL)
-);
-
-
-*/
-/*
 
 -User
 	Action 
@@ -42,8 +27,8 @@ WHERE (
 	v-  delete a follower
 
 	v-	Create a group
-	x	send invitation to other users to join a group where hi is a memeber
-	x	Accept invitation to join a group
+	v	send invitation to other users to join a group where hi is a memeber
+	v	Accept invitation to join a group
 	x	Decline invitaion to join a group
 	x	Send a Request to join a group (only the creator of a groupe can accepte un invitation)
 	
@@ -62,9 +47,9 @@ Avoid heavy picture on create post, user, and send message.
 Query For Display
 	user
 	v-	Get all following and followers users (Ordered as real time forum)
-		Get all following users
-		Get all followers users
-		Get all users of a group (doesn't need order)
+	v-	Get all following users
+	v-	Get all followers users
+	x	Get all users of a group (doesn't need order)
 	v-	Get all users that send a request to follow a user
 	v-	Get the oldest following request
 	Post
@@ -73,9 +58,9 @@ Query For Display
 		gel all posts created in a group
 	Group
 		Get all groups
-		Get all groups a user has joined
-		Get all groups managed by a user
-		get all groups that the user is not a member
+	v-	Get all groups a user has joined
+	v-	Get all groups managed by a user
+	v-	get all groups that the user is not a member
 	Events
 		Get all events of a groups
 	Notification
