@@ -15,14 +15,8 @@ export default function LeftBlocGroupPage({ state, handleState }) {
     handleState(newState);
   };
 
-  const [groupForm, setGroupFrom] = useState(false);
-  const GroupForm = () => {
-    if (!groupForm) {
-      setGroupFrom(true);
-    } else {
-      setGroupFrom(false);
-    }
-  };
+  const [groupForm, setGroupForm] = useState(false);
+  const toggleGroupForm = () => setGroupForm((prevState) => !prevState);
 
   return (
     <div className={styles.menuLeft}>
@@ -53,14 +47,14 @@ export default function LeftBlocGroupPage({ state, handleState }) {
           <i className="fa-solid fa-wand-sparkles"></i>request groups
         </h4>
       </div>
-      <Link href="" onClick={GroupForm} className={styles.btnNewGroup}>
+      <Link href="" onClick={toggleGroupForm} className={styles.btnNewGroup}>
         <i className="fa-solid fa-plus"></i>create new group
       </Link>
       <hr />
       <h4 className={styles.h4ListGroupManaged}>Groups you manage</h4>
       <ListGroupManaged />
       {/* create group form */}
-      {groupForm && <Group GroupForm={GroupForm} />}
+      {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
     </div>
   );
 }

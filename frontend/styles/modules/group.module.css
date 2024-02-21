@@ -170,14 +170,14 @@
 
 .postSugess {
     width: 250px;
-    height: 350px;
+    height: 300px;
     background: var(--secondary-bg);
     border-radius: 10px;
 }
 
 .postSugess a img {
     width: 100%;
-    height: 50%;
+    height: 40%;
     border-radius: 10px 10px 0px 0px;
 }
 
@@ -193,6 +193,7 @@
 
 .postSugess div .nameGroupMembres {
     padding: 0px;
+    padding-bottom: 20px;
     margin: 0px;
 }
 
@@ -221,6 +222,9 @@
     background: var(--primary-bg);
     border: none;
     cursor: pointer;
+}
+.postSugess div button:first-of-type {
+ background: var(--hsl-color-1);
 }
 .declineBtn{
     margin-top: 10px;

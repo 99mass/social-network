@@ -107,7 +107,7 @@ export function PostFooter({ is_liked,numberLike, numberComment, userid, postid,
 
   return (
     <div className="liked">
-      <div onClick={()=>handlerLikeDislikePost(is_liked)} className={`liked-icon ${true && 'liked-yes'}`}>
+      <div onClick={()=>handlerLikeDislikePost(is_liked)} className={`liked-icon ${is_liked && 'liked-yes'}`}>
         {is_liked ? <i className="fa-solid fa-thumbs-up liked-yes"></i> : <i className="far fa-thumbs-up"></i>  }
         <span className={`${is_liked && 'liked-yes'}`}>{numberLike}</span>
       </div>
