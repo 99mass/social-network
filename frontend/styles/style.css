@@ -162,6 +162,25 @@
 .liked .liked-yes {
   color: var(--second-blue);
 }
+
+.noResults {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.noResults img {
+  width: 100px;
+  height: 100px;
+}
+.noResults p{
+  width: 80%;
+  text-align: center;
+}
+
+
 @media screen and (min-width: 768px) {
   .section-index {
     display: flex;

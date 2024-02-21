@@ -51,7 +51,7 @@ export function FollowerFriends({ isowner }) {
 
   return (
     <div className={styles.contentListFriend}>
-      {FollowersList &&
+      {FollowersList ? (
         FollowersList.map((user, index) => (
           <div key={`${user.follower_id}${index}`} className={styles.bloc}>
             <img
@@ -75,7 +75,13 @@ export function FollowerFriends({ isowner }) {
               )}
             </div>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="noResults">
+          <img src="../images/no-result.png" alt="no result found" />
+          <p>you have nofollower </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -90,7 +96,7 @@ export function FollowingFriends({ isowner }) {
   };
   return (
     <div className={styles.contentListFriend}>
-      {FolloweingUsersList &&
+      {FolloweingUsersList ? (
         FolloweingUsersList.map((user, index) => (
           <div key={`${user.follower_id}${index}`} className={styles.bloc}>
             <img
@@ -114,7 +120,13 @@ export function FollowingFriends({ isowner }) {
               )}
             </div>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="noResults">
+          <img src="../images/no-result.png" alt="no result found" />
+          <p>you haven't followed anyone</p>
+        </div>
+      )}
     </div>
   );
 }

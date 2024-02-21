@@ -282,7 +282,10 @@
   width: 100px;
   height: 100px;
 }
-
+.noResults p{
+  width: 80%;
+  text-align: center;
+}
 @media screen and (min-width: 768px) and (max-width: 979px) {
   .menuMiddle {
     border: none;

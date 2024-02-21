@@ -6,49 +6,64 @@ import { truncateText } from "../../utils/helper";
 import { askForFriends, UnfollowUser } from "../../handler/follower";
 import { likeDislikePost } from "../../handler/likeDislikePost";
 
-export default function MidlleBloc({posts, setPosts}) {
-
+export default function MidlleBloc({ posts, setPosts }) {
   useEffect(() => {
     getPostsUser(setPosts);
   }, []);
 
-
   return (
     <div className="menu-middle">
-      {posts && posts.map((item) => (
-        <div className="post" key={item.post.id}>
-          <PostHeader
-            iduser={item.user.id}
-            user={item.user.firstname}
-            image={item.user.avatarpath}
-            isfollowed={item.is_followed}
-            time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit}`}
-            setPosts={setPosts}
-          />
-          <PostMiddle
-            content={item.post.content}
-            image={item.post.image_path}
-          />
-          <PostFooter
-          is_liked={item.is_liked}
-            numberLike={item.nbr_likes}
-            numberComment={item.nbr_comments}
-            userid={item.user.id}
-            postid={item.post.id}
-            setPosts={setPosts}
-          />
+      {posts ? (
+        posts.map((item) => (
+          <div className="post" key={item.post.id}>
+            <PostHeader
+              iduser={item.user.id}
+              user={item.user.firstname}
+              image={item.user.avatarpath}
+              isfollowed={item.is_followed}
+              time={`${getElapsedTime(item.post.created_at).value} ${
+                getElapsedTime(item.post.created_at).unit
+              }`}
+              setPosts={setPosts}
+            />
+            <PostMiddle
+              content={item.post.content}
+              image={item.post.image_path}
+            />
+            <PostFooter
+              is_liked={item.is_liked}
+              numberLike={item.nbr_likes}
+              numberComment={item.nbr_comments}
+              userid={item.user.id}
+              postid={item.post.id}
+              setPosts={setPosts}
+            />
+          </div>
+        ))
+      ) : (
+        <div className="noResults">
+          <img src="../images/no-result.png" alt="no result found" />
+          <p>
+            there are no publications yet be the first to create a publication
+          </p>
         </div>
-      ))
-      }
+      )}
     </div>
   );
 }
 
-export function PostHeader({ iduser, user, image, isfollowed, time, setPosts }) {
+export function PostHeader({
+  iduser,
+  user,
+  image,
+  isfollowed,
+  time,
+  setPosts,
+}) {
   const handlerFollower = (stateFollow) => {
     if (stateFollow == "Follow") {
       askForFriends(iduser, setPosts);
-    } else if ((stateFollow == "Unfollow" || stateFollow == "Delete")) {
+    } else if (stateFollow == "Unfollow" || stateFollow == "Delete") {
       UnfollowUser(iduser, setPosts);
     }
   };
@@ -58,18 +73,30 @@ export function PostHeader({ iduser, user, image, isfollowed, time, setPosts }) 
       <div className="left-side">
         <div className="profile-pic">
           <Link href={`./profileuser?userid=${iduser}`}>
-            <img src={image && image !== "" ? `data:image/png;base64,${image}` : "../images/user-circle.png"} alt="" />
+            <img
+              src={
+                image && image !== ""
+                  ? `data:image/png;base64,${image}`
+                  : "../images/user-circle.png"
+              }
+              alt=""
+            />
           </Link>
         </div>
         <span>
           <h3>
             {user} .
-            <span onClick={() => handlerFollower(isfollowed)} className={`${isfollowed}`} title="follow">
+            <span
+              onClick={() => handlerFollower(isfollowed)}
+              className={`${isfollowed}`}
+              title="follow"
+            >
               {isfollowed}
             </span>
           </h3>
           <p>
-            {time} <sup>.</sup> <i className="fas fa-globe-africa"></i>{}
+            {time} <sup>.</sup> <i className="fas fa-globe-africa"></i>
+            {}
           </p>
         </span>
       </div>
@@ -99,17 +126,31 @@ export function PostMiddle({ content, image }) {
   );
 }
 
-export function PostFooter({ is_liked,numberLike, numberComment, userid, postid, setPosts, setPostsCreated }) {
-
+export function PostFooter({
+  is_liked,
+  numberLike,
+  numberComment,
+  userid,
+  postid,
+  setPosts,
+  setPostsCreated,
+}) {
   const handlerLikeDislikePost = (is_liked) => {
-    likeDislikePost(userid, postid,is_liked, setPosts, setPostsCreated);
-  }
+    likeDislikePost(userid, postid, is_liked, setPosts, setPostsCreated);
+  };
 
   return (
     <div className="liked">
-      <div onClick={()=>handlerLikeDislikePost(is_liked)} className={`liked-icon ${is_liked && 'liked-yes'}`}>
-        {is_liked ? <i className="fa-solid fa-thumbs-up liked-yes"></i> : <i className="far fa-thumbs-up"></i>  }
-        <span className={`${is_liked && 'liked-yes'}`}>{numberLike}</span>
+      <div
+        onClick={() => handlerLikeDislikePost(is_liked)}
+        className={`liked-icon ${is_liked && "liked-yes"}`}
+      >
+        {is_liked ? (
+          <i className="fa-solid fa-thumbs-up liked-yes"></i>
+        ) : (
+          <i className="far fa-thumbs-up"></i>
+        )}
+        <span className={`${is_liked && "liked-yes"}`}>{numberLike}</span>
       </div>
       <Link href={`./comment?postid=${postid}`}>
         <div className="liked-icon">
