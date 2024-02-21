@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/modules/group.module.css";
 import Group from "../form/group";
+import { getMygroups } from "../../handler/getGroup";
 
 export default function LeftBlocGroupPage({ state, handleState }) {
   const handleClick = (clickedState) => {
@@ -15,7 +16,12 @@ export default function LeftBlocGroupPage({ state, handleState }) {
     handleState(newState);
   };
 
+  const [groups, setGroups] = useState();
   const [groupForm, setGroupForm] = useState(false);
+  useEffect(() => {
+    getMygroups(setGroups);
+  }, []);
+
   const toggleGroupForm = () => setGroupForm((prevState) => !prevState);
 
   return (
@@ -52,44 +58,22 @@ export default function LeftBlocGroupPage({ state, handleState }) {
       </Link>
       <hr />
       <h4 className={styles.h4ListGroupManaged}>Groups you manage</h4>
-      <ListGroupManaged />
+      {groups && <ListGroupManaged group={groups} />}
       {/* create group form */}
       {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
     </div>
   );
 }
 
-export function ListGroupManaged() {
-  const data = [
-    {
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpx77UG-o7dCcbr3e3t_iqiEY6MwI28q9_Gg&usqp=CAU",
-      gName: "barca",
-    },
-    {
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0xEBCSrW9PyJyQTzxjlBuhHhTak7QdS-X4A&usqp=CAU",
-      gName: "manchester city",
-    },
-    {
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB3g58f-FGw6oXxofzNe_d_w7bX6W4k3rgVw&usqp=CAU",
-      gName: "manchester united",
-    },
-    {
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnlwZFL-qK8R17sDADAGn6aEu940Rwj31H0g&usqp=CAU",
-      gName: "chelsea",
-    },
-  ];
+export function ListGroupManaged({ group }) {
 
   return (
     <div className={styles.listGroupManaged}>
-      {data.map((item, index) => (
+      {group.map((item, index) => (
         <div key={index} className={styles.group}>
           <Link href="./profilegroup">
-            <img src={item.image} alt="" />
-            <span>{item.gName}</span>
+            <img src={`data:image/png;base64,${item.avatarpath} `} alt="" />
+            <span>{item.title}</span>
           </Link>
         </div>
       ))}
