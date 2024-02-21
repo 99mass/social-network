@@ -30,7 +30,7 @@ export const getOlrequestFriend = async (setoldFriend) => {
   try {
     const sessionId = getSessionCookie();
 
-    const response = await fetch(api.oldestrequestfollow, {
+    const response = await fetch(api.Oldestrequestfollow, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export const getFriendsLists = async (userid, setDatas) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.users_follows + `?userid=${userid}`, {
+      const response = await fetch(api.Users_follows + `?userid=${userid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export const getFollowers = async (setFollowerList) => {
   try {
     const sessionId = getSessionCookie();
 
-    const response = await fetch(api.getFollowers, {
+    const response = await fetch(api.GetFollowers, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -122,7 +122,7 @@ export const getFollowingUsers = async (setFollowingUsersList) => {
   try {
     const sessionId = getSessionCookie();
 
-    const response = await fetch(api.getFollingUsers, {
+    const response = await fetch(api.GetFolliwgUsers, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

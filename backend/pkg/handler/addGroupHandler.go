@@ -79,7 +79,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				Title:       groupReq.Title,
 				Description: groupReq.Description,
 				CreatorID:   sess.UserID.String(),
-				AvatarPath: groupImage,
+				AvatarPath:  groupImage,
 			}
 
 			result, err := controller.CreateGroup(db, group)
