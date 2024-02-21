@@ -28,19 +28,40 @@ func CreateGroupInvitations(db *sql.DB, groupInvitations models.Group_Invitation
 }
 
 func AcceptRequestInvitations(db *sql.DB, userID, groupID string) error {
-	// Préparez la requête SQL pour mettre à jour la colonne status en 'accepted'
-	query := `
-		UPDATE group_invitations
-		SET status = 'accepted', updated_at = ?
-		WHERE user_id = ? AND group_id = ? AND status = "waiting"
-	`
+    // Start a transaction
+    tx, err := db.Begin()
+    if err != nil {
+        return err
+    }
+    defer tx.Rollback() // Ensure the transaction is rolled back if an error occurs
 
-	_, err := db.Exec(query, time.Now(), userID, groupID)
-	if err != nil {
-		log.Println("Error accepting")
-		return fmt.Errorf("failed to accept follow request: %w", err)
-	}
-	return nil
+    // SQL query to delete the invitation
+    deleteQuery := `
+        DELETE FROM group_invitations
+        WHERE user_id = ? AND group_id = ? AND status = 'waiting'
+    `
+    _, err = tx.Exec(deleteQuery, userID, groupID)
+    if err != nil {
+        return err
+    }
+
+    // SQL query to add the user to the group_members table
+    addMemberQuery := `
+        INSERT INTO group_members (user_id, group_id)
+        VALUES (?, ?)
+    `
+    _, err = tx.Exec(addMemberQuery, userID, groupID)
+    if err != nil {
+        return err
+    }
+
+    // Commit the transaction
+    err = tx.Commit()
+    if err != nil {
+        return err
+    }
+
+    return nil
 }
 
 func DeclineGroupInvitaton(db *sql.DB, userID, groupID string) error {

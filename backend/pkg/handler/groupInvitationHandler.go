@@ -21,23 +21,6 @@ func AccepGrpInvitation(db *sql.DB) http.HandlerFunc {
 
 		switch r.Method {
 		case http.MethodPost:
-			// session := r.Header.Get("Authorization")
-			// sessId, err := uuid.FromString(session)
-			// if err != nil {
-			// 	helper.SendResponse(w, models.ErrorResponse{
-			// 		Status:  "error",
-			// 		Message: "format value session incorrect",
-			// 	}, http.StatusBadRequest)
-			// 	return
-			// }
-			// sess, err := controller.GetSessionByID(db, sessId)
-			// if err != nil {
-			// 	helper.SendResponse(w, models.ErrorResponse{
-			// 		Status:  "error",
-			// 		Message: "you're not authorized",
-			// 	}, http.StatusBadRequest)
-			// 	return
-			// }
 			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				log.Println("default")
