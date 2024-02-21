@@ -1,19 +1,21 @@
 package handler
 
 import (
+	"database/sql"
+	"log"
+	"net/http"
+
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"backend/pkg/utils"
-	"database/sql"
-	"log"
-	"net/http"
 )
 
 type ProfilToSend struct {
-	User     models.User `json:"user"`
-	IsOwner  bool        `json:"isowner"`
-	IsFriend bool        `json:"isfriend"`
+	User       models.User `json:"user"`
+	IsOwner    bool        `json:"isowner"`
+	IsFriend   bool        `json:"isfriend"`
+	IsFollowed string      `json:"isffollowed"`
 }
 
 func ProfilHandler(db *sql.DB) http.HandlerFunc {
@@ -40,15 +42,22 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 			if user.AvatarPath != "" {
 				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
 				if err != nil {
-					log.Println("enable to encode image avatar",err.Error())
-				
+					log.Println("enable to encode image avatar", err.Error())
+
 				}
+			}
+
+			isfollowed, err := controller.IsFollowed(db, sess.UserID.String(), user.ID)
+			if err != nil {
+				helper.SendResponseError(w, "error", err.Error(), http.StatusInternalServerError)
+				log.Println("error checking if the user is followed:", err.Error())
+				return
 			}
 			var profil ProfilToSend
 			if sess.UserID == userid {
 				profil.User = user
 				profil.IsOwner = true
-
+				profil.IsFollowed = isfollowed
 				helper.SendResponse(w, profil, http.StatusOK)
 			} else {
 				if !user.IsPublic {
@@ -62,17 +71,20 @@ func ProfilHandler(db *sql.DB) http.HandlerFunc {
 						profil.User = user
 						profil.IsOwner = false
 						profil.IsFriend = true
+						profil.IsFollowed = isfollowed
 						helper.SendResponse(w, profil, http.StatusOK)
 					} else {
 						profil.User = user
 						profil.IsOwner = false
 						profil.IsFriend = false
+						profil.IsFollowed = isfollowed
 						helper.SendResponse(w, profil, http.StatusOK)
 					}
 				} else {
 					profil.User = user
 					profil.IsOwner = false
 					profil.IsFriend = false
+					profil.IsFollowed = isfollowed
 					helper.SendResponse(w, profil, http.StatusOK)
 				}
 
