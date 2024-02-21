@@ -1,4 +1,4 @@
-.section-index{
+.section-index {
   margin-top: 120px;
 }
 .menu-left,
@@ -18,7 +18,7 @@
   margin-bottom: 3px;
 }
 
- .post .profileuser {
+.post .profileuser {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -53,18 +53,22 @@
   width: 100%;
 }
 
-.follow,
-.follow-up {
+.Follow,
+.Unfollow,
+.Delete {
   padding-left: 5px;
   cursor: pointer;
 }
 
-.follow {
+.Follow {
   color: #3155f1;
 }
 
-.follow-up {
-  color: #bcc0c4;
+.Unfollow {
+  color: gray;
+}
+.Delete {
+  color: palevioletred;
 }
 
 .post-content-text {
@@ -155,11 +159,10 @@
   transform-origin: center;
   transform: rotateY(180deg);
 }
-.liked  .liked-yes {
-   color: var(--second-blue);
+.liked .liked-yes {
+  color: var(--second-blue);
 }
 @media screen and (min-width: 768px) {
-
   .section-index {
     display: flex;
     justify-content: flex-start;
@@ -246,7 +249,7 @@
   }
   .menu-left a:hover {
     width: 80%;
-   
+
     background: var(--secondary-bg);
     border-radius: 10px;
   }
@@ -259,7 +262,7 @@
     color: gray;
     text-transform: capitalize;
   }
-  .new-post-content{
+  .new-post-content {
     display: flex;
     flex-direction: column;
   }
@@ -365,21 +368,21 @@
   }
 }
 
-@media screen and (min-width: 768px) and (max-width:1024px){    
-    .menu-rigth{
-        display: none;
-    }
-    .menu-left{
-        width: 35%;
-    }
-    .menu-middle{
-        width: 60%;
-    }
-    .menu-left hr {
-        width: 80%;
-    }
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .menu-rigth {
+    display: none;
+  }
+  .menu-left {
+    width: 35%;
+  }
+  .menu-middle {
+    width: 60%;
+  }
+  .menu-left hr {
+    width: 80%;
+  }
 }
 
-body header .content-form-post{
+body header .content-form-post {
   overflow-y: scroll;
 }

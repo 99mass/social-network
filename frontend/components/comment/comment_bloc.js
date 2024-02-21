@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { getSpecificPostsUser } from "../../handler/getPostsUser";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { ErrorComment } from "../errors/error_profiles";
+import { likeDislikePost } from "../../handler/likeDislikePost";
 
 export default function Comment() {
   const router = useRouter();
@@ -42,9 +43,12 @@ export default function Comment() {
             image={posData.post.image_path}
           />
           <PostFooterComment
+            userid={posData.user.id}
+            postid={posData.post.id}
             is_liked={posData.is_liked}
             numberLike={posData.nbr_likes}
             numberComment={posData.nbr_comments}
+            setPostData={setPostData}
           />
           <FormComment
             postid={posData.post.id}
@@ -59,12 +63,27 @@ export default function Comment() {
   );
 }
 
-export function PostFooterComment({is_liked, numberLike, numberComment }) {
+export function PostFooterComment({
+  userid,
+  postid,
+  is_liked,
+  numberLike,
+  numberComment,
+  setPostData,
+}) {
+  const handlerLikeDislikePost = () => {
+    likeDislikePost(userid, postid, is_liked, null, null, setPostData);
+  };
+
   return (
     <div className="liked">
-      <div className="liked-icon">
-        {is_liked ? <i className="fa-solid fa-thumbs-up liked-yes"></i> : <i className="far fa-thumbs-up"></i>  }
-        <span className={`${is_liked && 'liked-yes'}`}>{numberLike}</span>
+      <div className="liked-icon" onClick={handlerLikeDislikePost}>
+        {is_liked ? (
+          <i className="fa-solid fa-thumbs-up liked-yes"></i>
+        ) : (
+          <i className="far fa-thumbs-up"></i>
+        )}
+        <span className={`${is_liked && "liked-yes"}`}>{numberLike}</span>
       </div>
       <div className="liked-icon">
         <i className="far fa-comment"></i> <span>{numberComment}</span>
@@ -74,14 +93,16 @@ export function PostFooterComment({is_liked, numberLike, numberComment }) {
 }
 
 export function CommentPost({ data }) {
-  
   return (
     data && (
       <div className={styles.contentAllComments}>
         <div className={styles.containerCommentsMessage}>
           {data &&
-            data.map((item,index) => (
-              <div key={`${item.user.id}${index}`} className={styles.contentMessage}>
+            data.map((item, index) => (
+              <div
+                key={`${item.user.id}${index}`}
+                className={styles.contentMessage}
+              >
                 <div>
                   <div>
                     <Link href={`./profileuser?userid=${item && item.user.id}`}>

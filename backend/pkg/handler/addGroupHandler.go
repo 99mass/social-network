@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gofrs/uuid"
-
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
@@ -26,23 +24,14 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:
-			session := r.Header.Get("Authorization")
-			sessId, err := uuid.FromString(session)
+			// Authorization
+			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "format value session incorrect",
-				}, http.StatusBadRequest)
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
 			}
-			sess, err := controller.GetSessionByID(db, sessId)
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "you're not authorized",
-				}, http.StatusBadRequest)
-				return
-			}
+
+			// Validate and save groups informations
 			var groupReq GroupRequest
 			err = json.NewDecoder(r.Body).Decode(&groupReq)
 			if err != nil {
@@ -58,10 +47,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 			checkGroup, err := utils.CheckGroup(groupReq.Title, groupReq.Description)
 
 			if !checkGroup {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: err.Error(),
-				}, http.StatusBadRequest)
+				helper.SendResponseError(w, "erro", "invalid request", http.StatusBadRequest)
 				return
 			}
 
@@ -72,6 +58,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 					Status:  "error",
 					Message: _err.Error(),
 				}, http.StatusBadRequest)
+				helper.SendResponseError(w, "error", "Error saving image", http.StatusBadRequest)
 				return
 			}
 
@@ -81,8 +68,8 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				CreatorID:   sess.UserID.String(),
 				AvatarPath:  groupImage,
 			}
-
-			result, err := controller.CreateGroup(db, group)
+			// Create the groupe
+			groupID, err := controller.CreateGroup(db, group)
 			if err != nil {
 				log.Println("Unable to create the post: ", err)
 				helper.SendResponse(w, models.ErrorResponse{
@@ -91,20 +78,29 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusInternalServerError)
 				return
 			}
+			//Add the groupe creator to the groupe members
+			creator := models.Group_Members{
+				GroupID:   groupID.String(),
+				UserID:    sess.ID.String(),
+				IsCreator: true,
+			}
+			err = controller.CreateGroupMembers(db, creator)
+			if err != nil {
+				helper.SendResponseError(w, "error", "Can't add the creator to the groupe members", http.StatusBadRequest)
+				return
+			}
+			//Add request invitation to users invitated
 			if groupReq.AddedUsersToGroup != nil {
 				for _, userId := range groupReq.AddedUsersToGroup {
 					var groupInvitations models.Group_Invitations
 					groupInvitations.UserID = userId
-					groupInvitations.GroupID = result.String()
+					groupInvitations.GroupID = groupID.String()
 					groupInvitations.SenderID = sess.UserID.String()
-					groupInvitations.Status = "pending"
+					groupInvitations.Status = "waiting"
 
 					err = controller.CreateGroupInvitations(db, groupInvitations)
 					if err != nil {
-						helper.SendResponse(w, models.ErrorResponse{
-							Status:  "error",
-							Message: "we got an issue",
-						}, http.StatusInternalServerError)
+						helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
 						log.Println("internal ERROR from database: ", err.Error())
 						return
 					}
@@ -115,10 +111,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 			log.Println("group created successfully")
 
 		default:
-			helper.SendResponse(w, models.ErrorResponse{
-				Status:  "error",
-				Message: "Method not allowed",
-			}, http.StatusMethodNotAllowed)
+			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")
 		}
 	}

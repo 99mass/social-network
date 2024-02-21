@@ -64,12 +64,12 @@ export function PostHeader({ iduser, user, image, isfollowed, time, setPosts }) 
         <span>
           <h3>
             {user} .
-            <span onClick={() => handlerFollower(isfollowed)} className="follow" title="follow">
+            <span onClick={() => handlerFollower(isfollowed)} className={`${isfollowed}`} title="follow">
               {isfollowed}
             </span>
           </h3>
           <p>
-            {time} <sup>.</sup> <i className="fas fa-globe-africa"></i>
+            {time} <sup>.</sup> <i className="fas fa-globe-africa"></i>{}
           </p>
         </span>
       </div>
@@ -107,7 +107,7 @@ export function PostFooter({ is_liked,numberLike, numberComment, userid, postid,
 
   return (
     <div className="liked">
-      <div onClick={()=>handlerLikeDislikePost(is_liked)} className={`liked-icon ${true && 'liked-yes'}`}>
+      <div onClick={()=>handlerLikeDislikePost(is_liked)} className={`liked-icon ${is_liked && 'liked-yes'}`}>
         {is_liked ? <i className="fa-solid fa-thumbs-up liked-yes"></i> : <i className="far fa-thumbs-up"></i>  }
         <span className={`${is_liked && 'liked-yes'}`}>{numberLike}</span>
       </div>

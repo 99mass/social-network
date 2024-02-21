@@ -1,73 +1,91 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import styles from "../../styles/modules/group.module.css";
+import {
+  AcceptGroupInvitation,
+  DeclineGroupInvitation,
+  ShowGroupInvitation,
+} from "../../handler/groupAction";
 
 export default function RequestGroup() {
-  const data = [
-    {
-      image:
-        "https://images.unsplash.com/photo-1611393972804-1b38bddd4e40?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9ydW18ZW58MHx8MHx8fDA%3D",
-      gName: "group-name",
-      nMembres: "721k membres",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1652688731647-dd5a21a88465?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8",
-      gName: "group-name",
-      nMembres: "71k membres",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1620924049153-4d32fcbe88fe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3fGVufDB8fDB8fHww",
-      gName: "group-name",
-      nMembres: "1k membres",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Z3JvdXB8ZW58MHx8MHx8fDA%3D",
-      gName: "group-name",
-      nMembres: "7k membres",
-    },
-  ];
+  const [requeLists, setRequestLists] = useState(null);
 
-  const [requeLists, setRequestLst] = useState(null);
+  useEffect(() => {
+    ShowGroupInvitation(setRequestLists);
+  }, []);
 
-  useEffect(()=>{
-
-  },[])
+  const handlerAcceptInvitationGroup = (group_id) => {
+    AcceptGroupInvitation(group_id, setRequestLists);
+  };
+  const handlerDeclineInvitaionGroup = (group_id) => {
+    DeclineGroupInvitation(group_id, setRequestLists);
+  };
 
   return (
     <div className={`${styles.menuMiddle} ${styles.discover}`}>
       <div className={styles.contentDicover}>
-        <h3>Suggested for you</h3>
+        <h3>Request groups List</h3>
         <div className={styles.listPostSugession}>
-          {data.map((item, index) => (
-            <GoupName
-              key={index}
-              image={item.image}
-              gName={item.gName}
-              nMembres={item.nMembres}
-            />
-          ))}
+          {requeLists ? (
+            requeLists.map((item, index) => (
+              <GoupName
+                key={`${item.id}${index}`}
+                group_id={item.id}
+                image={item.avatarpath}
+                gName={item.title}
+                nMembres={item.nbr_members}
+                handlerAcceptInvitationGroup={handlerAcceptInvitationGroup}
+                handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}
+              />
+            ))
+          ) : (
+            <div className={styles.noResults}>
+              <img src="../images/no-result.png" alt="no result found" />
+              <p>no request found</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export function GoupName({ image, gName, nMembres }) {
+export function GoupName({
+  group_id,
+  image,
+  gName,
+  nMembres,
+  handlerAcceptInvitationGroup,
+  handlerDeclineInvitaionGroup,
+}) {
   return (
     <div className={styles.postSugess}>
-      <a href="./profilegroup">
-        <img src={image} alt="" />
-      </a>
+      <Link href={`./profilegroup?groupid=${group_id}`}>
+        <img
+          src={
+            image
+              ? `data:image/png;base64,${image}`
+              : "../images/groups-defaul.png"
+          }
+          alt=""
+        />
+      </Link>
       <div>
         <div className={styles.nameGroupMembres}>
-          <a href="./profilegroup">
+          <Link href={`./profilegroup?groupid=${group_id}`}>
             <span>{gName}</span>
-            <span>{nMembres}</span>
-          </a>
+            <span>{nMembres} membres</span>
+          </Link>
         </div>
-        <button type="submit">join group</button>
+        <button onClick={() => handlerAcceptInvitationGroup(group_id)}>
+          join group
+        </button>
+        <button
+          className={styles.declineBtn}
+          onClick={() => handlerDeclineInvitaionGroup(group_id)}
+        >
+          decline group
+        </button>
       </div>
     </div>
   );

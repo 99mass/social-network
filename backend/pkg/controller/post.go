@@ -152,3 +152,45 @@ func IsPostLikedByUser(db *sql.DB, userID, postID string) (bool, error) {
 
 	return count > 0, nil
 }
+
+func GetGroupPosts(db *sql.DB, userID, groupID string) ([]models.Post, error) {
+    // SQL query to get all posts for a specific group if the user is a member
+    query := `
+        SELECT p.*
+        FROM posts p
+        INNER JOIN group_members gm ON p.group_id = gm.group_id
+        WHERE p.group_id = ? AND gm.user_id = ?
+    `
+
+    // Prepare the statement
+    stmt, err := db.Prepare(query)
+    if err != nil {
+        return nil, err
+    }
+    defer stmt.Close()
+
+    // Execute the query
+    rows, err := stmt.Query(groupID, userID)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    // Scan the results into a slice of Posts
+    var posts []models.Post
+    for rows.Next() {
+        var post models.Post
+        err := rows.Scan(&post.ID, &post.UserID, &post.GroupID, &post.Content, &post.ImagePath, &post.Privacy, &post.CreatedAt)
+        if err != nil {
+            return nil, err
+        }
+        posts = append(posts, post)
+    }
+
+    // Check for errors from iterating over rows.
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return posts, nil
+}

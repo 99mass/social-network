@@ -12,7 +12,7 @@ export default function Post({ togglePostForm, setPostForm, setPosts }) {
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [imgeName, setImageName] = useState("");
   const fileInputRef = useRef(null);
-  
+
   const toggleImageName = () => {
     const _file = fileInputRef.current.files[0];
     if (_file) setImageName(_file.name);
