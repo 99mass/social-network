@@ -23,8 +23,10 @@ export const api = {
   GetFolliwgUsers: `${domain}/getfollowingusers`,
   AddGroup: `${domain}/create_group`,
   CountFollower: `${domain}/CountFollower`,
-  Mygroups: `${domain}/groupsimanage`,
+  Groupsimanage: `${domain}/groupsimanage`,
+  Groupstodiscover:`${domain}/groupstodiscover`,
   Show_group_invitation: `${domain}/show_group_invitation`,
   Accept_group_invitation: `${domain}/accept_group_invitation`,
   Decline_group_invitation: `${domain}/decline_group_invitation`,
+
 };

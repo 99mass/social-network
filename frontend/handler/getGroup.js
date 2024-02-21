@@ -5,7 +5,7 @@ export async function getMygroups(setDatas) {
   try {
     const sessionId = getSessionCookie();
 
-    const response = await fetch(api.Mygroups, {
+    const response = await fetch(api.Groupsimanage, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -20,4 +20,29 @@ export async function getMygroups(setDatas) {
   } catch (error) {
     console.error("error fetching groupe", error.message);
   }
+}
+
+
+export async function Groupstodiscover(setDatas) {
+
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(api.Groupstodiscover, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionId,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log("data", data);
+      setDatas(data);
+    }
+  } catch (error) {
+    console.error("error fetching groupe", error.message);
+  }
+
 }

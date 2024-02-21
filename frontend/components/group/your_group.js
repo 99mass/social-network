@@ -3,6 +3,8 @@ import styles from "../../styles/modules/group.module.css";
 import { getMygroups } from "../../handler/getGroup";
 import{getUserBySession} from "../../handler/getUserBySession"
 
+
+
 export default function YourGroup() {
 
 
