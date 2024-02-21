@@ -7,7 +7,7 @@ import {
   getFollowingUsers,
 } from "../../handler/follower";
 
-export default function Friends({ idUser,isowner }) {
+export default function Friends({ idUser, isowner }) {
   const [toggleList, setToggleList] = useState(true);
 
   const handleToggleList = () => {
@@ -39,7 +39,7 @@ export default function Friends({ idUser,isowner }) {
   );
 }
 
-export function FollowerFriends({isowner}) {
+export function FollowerFriends({ isowner }) {
   const [FollowersList, setFollowerList] = useState(null);
   useEffect(() => {
     getFollowers(setFollowerList);
@@ -65,19 +65,21 @@ export function FollowerFriends({isowner}) {
 
             <div className={styles.conteUnfollow}>
               <h4>{`${user.firstname} ${user.lastname}`}</h4>
-             {isowner &&  <span
-                onClick={() => handlerFollower(user.follower_id)}
-                className={styles.unfollowBtn}
-              >
-                <i className="fa-solid fa-rectangle-xmark"></i>Banner
-              </span>}
+              {isowner && (
+                <span
+                  onClick={() => handlerFollower(user.follower_id)}
+                  className={styles.unfollowBtn}
+                >
+                  <i className="fa-solid fa-rectangle-xmark"></i>Banner
+                </span>
+              )}
             </div>
           </div>
         ))}
     </div>
   );
 }
-export function FollowingFriends({isowner}) {
+export function FollowingFriends({ isowner }) {
   const [FolloweingUsersList, setFollowingUsersList] = useState(null);
   useEffect(() => {
     getFollowingUsers(setFollowingUsersList);
@@ -104,12 +106,14 @@ export function FollowingFriends({isowner}) {
 
             <div className={styles.conteUnfollow}>
               <h4>{`${user.firstname} ${user.lastname}`}</h4>
-             {isowner && <span
-                onClick={() => handlerFollower(user.following_id)}
-                className={styles.unfollowBtn}
-              >
-                <i className="fa-solid fa-rectangle-xmark"></i>unfollow
-              </span>}
+              {isowner && (
+                <span
+                  onClick={() => handlerFollower(user.following_id)}
+                  className={styles.unfollowBtn}
+                >
+                  <i className="fa-solid fa-rectangle-xmark"></i>unfollow
+                </span>
+              )}
             </div>
           </div>
         ))}

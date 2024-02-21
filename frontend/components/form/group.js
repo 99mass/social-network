@@ -51,10 +51,11 @@ export default function Group({ toggleGroupForm }) {
      if (!fileInputRef.current.files[0]) {
       const data = {
         title:title,
-        image_path:"",
+        avatarpath:"",
         description: description,
         addedUsersToGroup: checkedValues,
       };
+      console.log(data);
       AddGroup(data)  
       return;
     }
@@ -65,10 +66,11 @@ export default function Group({ toggleGroupForm }) {
         const encodedFile = await EncodeImage(fileInputRef);
         const data = {
           title:title,
-          image_path: encodedFile,
+          avatarpath: encodedFile,
           description: description,
           addedUsersToGroup: checkedValues,
         };
+        console.log(data);
         AddGroup(data)  
        
       } catch (error) {

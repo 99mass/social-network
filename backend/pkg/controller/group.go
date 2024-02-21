@@ -12,7 +12,7 @@ import (
 
 func CreateGroup(db *sql.DB, group models.Group) (uuid.UUID, error) {
 	query := `
-        INSERT INTO groups (id, title, description, creator_id, avartarpath, created_at)
+        INSERT INTO groups (id, title, description, creator_id, avatarpath, created_at)
         VALUES (?, ?, ?, ?, ?, ?);
     `
 	newUUID, err := uuid.NewV4()
