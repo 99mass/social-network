@@ -170,7 +170,7 @@
 
 .postSugess {
     width: 250px;
-    height: 300px;
+    height: 350px;
     background: var(--secondary-bg);
     border-radius: 10px;
 }
@@ -221,6 +221,9 @@
     background: var(--primary-bg);
     border: none;
     cursor: pointer;
+}
+.declineBtn{
+    margin-top: 10px;
 }
 
 .contentListYourGroups {
@@ -275,6 +278,20 @@
     background: var(--fds-blue-80);
     text-align: center;
 }
+
+.noResults{
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20%;
+}
+.noResults img{
+   width: 100px;
+   height: 100px;
+}
+
 
 @media screen and (min-width: 768px) and (max-width: 979px) {
     .menuMiddle {
@@ -408,7 +425,7 @@
     .postSugess div button {
         display: none;
     }
-
+ 
 
 
     .menuLeft .blocNav h4 span {

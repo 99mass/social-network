@@ -46,6 +46,7 @@ func ShowGroupInvitation(db *sql.DB) http.HandlerFunc {
 					helper.SendResponseError(w, "error", "we got an issue", http.StatusInternalServerError)
 					return
 				}
+				log.Println("avatar group:", g.AvatarPath)
 				if g.AvatarPath != "" {
 					g.AvatarPath, err = helper.EncodeImageToBase64(g.AvatarPath)
 					if err != nil {

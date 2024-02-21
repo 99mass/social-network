@@ -4,6 +4,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	"backend/pkg/utils"
 	"database/sql"
 	"log"
 	"net/http"
@@ -20,38 +21,47 @@ func AccepGrpInvitation(db *sql.DB) http.HandlerFunc {
 
 		switch r.Method {
 		case http.MethodPost:
-			session := r.Header.Get("Authorization")
-			sessId, err := uuid.FromString(session)
+			// session := r.Header.Get("Authorization")
+			// sessId, err := uuid.FromString(session)
+			// if err != nil {
+			// 	helper.SendResponse(w, models.ErrorResponse{
+			// 		Status:  "error",
+			// 		Message: "format value session incorrect",
+			// 	}, http.StatusBadRequest)
+			// 	return
+			// }
+			// sess, err := controller.GetSessionByID(db, sessId)
+			// if err != nil {
+			// 	helper.SendResponse(w, models.ErrorResponse{
+			// 		Status:  "error",
+			// 		Message: "you're not authorized",
+			// 	}, http.StatusBadRequest)
+			// 	return
+			// }
+			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "format value session incorrect",
-				}, http.StatusBadRequest)
+				log.Println("default")
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
 			}
-			sess, err := controller.GetSessionByID(db, sessId)
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "you're not authorized",
-				}, http.StatusBadRequest)
-				return
-			}
-			var invitationReq InvitationRequest
-			_, err = controller.GetGroupByID(db, invitationReq.GroupID)
+
+			groupeID := r.URL.Query().Get("groupid")
+			log.Println("grid:",groupeID)
+			// var invitationReq InvitationRequest
+			_, err = controller.GetGroupByID(db, groupeID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "this group doesn't exit", http.StatusBadRequest)
 				log.Println("the user try to add member in a group that doesn't exist")
 				return
 			}
-			err = controller.AcceptRequestInvitations(db,sess.UserID.String(),invitationReq.GroupID)
+			err = controller.AcceptRequestInvitations(db, sess.UserID.String(), groupeID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "enable to accept this invitation", http.StatusBadRequest)
-				log.Println("the request invitation can't be accepted due to"+err.Error())
+				log.Println("the request invitation can't be accepted due to" + err.Error())
 				return
 			}
 
-			helper.SendResponse(w,nil,http.StatusOK)
+			helper.SendResponse(w, nil, http.StatusOK)
 
 		}
 
@@ -87,14 +97,14 @@ func DeclineGrpInvitaton(db *sql.DB) http.HandlerFunc {
 				log.Println("the user try to add member in a group that doesn't exist")
 				return
 			}
-			err = controller.DeclineGroupInvitaton(db,sess.UserID.String(),invitationReq.GroupID)
+			err = controller.DeclineGroupInvitaton(db, sess.UserID.String(), invitationReq.GroupID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "enable to accept this invitation", http.StatusBadRequest)
-				log.Println("the request invitation can't be accepted due to"+err.Error())
+				log.Println("the request invitation can't be accepted due to" + err.Error())
 				return
 			}
 
-			helper.SendResponse(w,nil,http.StatusOK)
+			helper.SendResponse(w, nil, http.StatusOK)
 
 		}
 

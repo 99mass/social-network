@@ -85,8 +85,6 @@ export function FollowingFriends({ isowner }) {
     getFollowingUsers(setFollowingUsersList);
   }, []);
 
-  console.log(FolloweingUsersList && FolloweingUsersList);
-
   const handlerFollower = (iduser) => {
     UnfollowUser(iduser, null, setFollowingUsersList);
   };

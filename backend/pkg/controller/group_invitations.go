@@ -32,7 +32,7 @@ func AcceptRequestInvitations(db *sql.DB, userID, groupID string) error {
 	query := `
 		UPDATE group_invitations
 		SET status = 'accepted', updated_at = ?
-		WHERE user_id = ? AND group_id = ? AND status = "pending"
+		WHERE user_id = ? AND group_id = ? AND status = "waiting"
 	`
 
 	_, err := db.Exec(query, time.Now(), userID, groupID)
