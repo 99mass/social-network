@@ -43,7 +43,7 @@ export async function getMygroups(userid, setDatas) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Response data:", data); // Ajout d'un log pour les données de la réponse
+        // console.log("Response data:", data); // Ajout d'un log pour les données de la réponse
 
         setDatas(data);
         console.log(data, "mygroups");
