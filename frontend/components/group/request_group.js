@@ -3,6 +3,7 @@ import Link from "next/link";
 import styles from "../../styles/modules/group.module.css";
 import {
   AcceptGroupInvitation,
+  DeclineGroupInvitation,
   ShowGroupInvitation,
 } from "../../handler/groupAction";
 
@@ -13,9 +14,11 @@ export default function RequestGroup() {
     ShowGroupInvitation(setRequestLists);
   }, []);
 
-  const handlerAcceptatinGroup = (group_id) => {
-    console.log(group_id);
+  const handlerAcceptInvitationGroup = (group_id) => {
     AcceptGroupInvitation(group_id, setRequestLists);
+  };
+  const handlerDeclineInvitaionGroup = (group_id) => {
+    DeclineGroupInvitation(group_id, setRequestLists);
   };
 
   return (
@@ -31,9 +34,9 @@ export default function RequestGroup() {
                 image={item.avatarpath}
                 gName={item.title}
                 nMembres={item.nbr_members}
-                handlerAcceptatinGroup={handlerAcceptatinGroup}
+                handlerAcceptInvitationGroup={handlerAcceptInvitationGroup}
+                handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}
               />
-              
             ))
           ) : (
             <div className={styles.noResults}>
@@ -52,7 +55,8 @@ export function GoupName({
   image,
   gName,
   nMembres,
-  handlerAcceptatinGroup,
+  handlerAcceptInvitationGroup,
+  handlerDeclineInvitaionGroup,
 }) {
   return (
     <div className={styles.postSugess}>
@@ -73,10 +77,13 @@ export function GoupName({
             <span>{nMembres} membres</span>
           </Link>
         </div>
-        <button onClick={() => handlerAcceptatinGroup(group_id)}>
+        <button onClick={() => handlerAcceptInvitationGroup(group_id)}>
           join group
         </button>
-        <button className={styles.declineBtn} onClick={() => handlerAcceptatinGroup(group_id)}>
+        <button
+          className={styles.declineBtn}
+          onClick={() => handlerDeclineInvitaionGroup(group_id)}
+        >
           decline group
         </button>
       </div>

@@ -64,12 +64,12 @@ export function PostHeader({ iduser, user, image, isfollowed, time, setPosts }) 
         <span>
           <h3>
             {user} .
-            <span onClick={() => handlerFollower(isfollowed)} className="follow" title="follow">
+            <span onClick={() => handlerFollower(isfollowed)} className={`${isfollowed}`} title="follow">
               {isfollowed}
             </span>
           </h3>
           <p>
-            {time} <sup>.</sup> <i className="fas fa-globe-africa"></i>
+            {time} <sup>.</sup> <i className="fas fa-globe-africa"></i>{}
           </p>
         </span>
       </div>
