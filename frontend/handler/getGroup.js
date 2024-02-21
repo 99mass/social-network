@@ -16,7 +16,6 @@ export async function getMygroups(setDatas) {
     if (response.ok) {
       const data = await response.json();
       setDatas(data);
-      console.log(data, "mygroups");
     }
   } catch (error) {
     console.error("error fetching groupe", error.message);

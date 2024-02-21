@@ -47,7 +47,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 			checkGroup, err := utils.CheckGroup(groupReq.Title, groupReq.Description)
 
 			if !checkGroup {
-				helper.SendResponseError(w, "erro", "invalid request", http.StatusBadRequest)
+				helper.SendResponseError(w, "erro", err.Error(), http.StatusBadRequest)
 				return
 			}
 

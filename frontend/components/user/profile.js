@@ -32,6 +32,7 @@ export default function Profile_user() {
     getPostsUserCreated(userid, setPostsCreated);
   }, [userid, datas]);
 
+  console.log(datas && datas);
   const condition =
     datas?.isowner ||
     (!datas?.isowner &&

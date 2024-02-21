@@ -27,7 +27,7 @@ func CheckTitle(title string) (bool, error) {
 	match := (len(title) >= 2 && len(title) <= 50)
 
 	if !match {
-		return false, errors.New("invalid title format")
+		return false, errors.New("invalid title format: inférieur à 2 ou supérieur à 50 caractères")
 	}
 
 	return match, nil
@@ -38,7 +38,7 @@ func checkDescription(description string) (bool, error) {
 
 	match := (len(description) >= 5 && len(description) <= 300)
 	if !match {
-		return false, errors.New("invalid description format")
+		return false, errors.New("invalid description format: inférieur à 5 ou supérieur à 300 caractères")
 	}
 	return match, nil
 }
