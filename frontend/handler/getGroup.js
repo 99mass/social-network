@@ -38,11 +38,36 @@ export async function Groupstodiscover(setDatas) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("data", data);
+      // console.log("data", data);
       setDatas(data);
     }
   } catch (error) {
     console.error("error fetching groupe", error.message);
   }
 
+}
+
+export async function MygroupsParticep(setDatas) {
+
+
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(api.MygroupsParticep, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionId,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      // console.log("datay", data);
+      setDatas(data);
+    }
+  } catch (error) {
+    console.error("error fetching groupe", error.message);
+  }
+  
 }
