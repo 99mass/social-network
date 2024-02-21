@@ -48,7 +48,7 @@ func ShowGroupInvitation(db *sql.DB) http.HandlerFunc {
 				}
 				log.Println("avatar group:", g.AvatarPath)
 				if g.AvatarPath != "" {
-					g.AvatarPath, err = helper.EncodeImageToBase64(g.AvatarPath)
+					g.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + g.AvatarPath)
 					if err != nil {
 						log.Println("enable to encode avatar image for group")
 					}

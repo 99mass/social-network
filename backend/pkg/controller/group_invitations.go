@@ -28,40 +28,40 @@ func CreateGroupInvitations(db *sql.DB, groupInvitations models.Group_Invitation
 }
 
 func AcceptRequestInvitations(db *sql.DB, userID, groupID string) error {
-    // Start a transaction
-    tx, err := db.Begin()
-    if err != nil {
-        return err
-    }
-    defer tx.Rollback() // Ensure the transaction is rolled back if an error occurs
+	// Start a transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback() // Ensure the transaction is rolled back if an error occurs
 
-    // SQL query to delete the invitation
-    deleteQuery := `
+	// SQL query to delete the invitation
+	deleteQuery := `
         DELETE FROM group_invitations
         WHERE user_id = ? AND group_id = ? AND status = 'waiting'
     `
-    _, err = tx.Exec(deleteQuery, userID, groupID)
-    if err != nil {
-        return err
-    }
+	_, err = tx.Exec(deleteQuery, userID, groupID)
+	if err != nil {
+		return err
+	}
 
-    // SQL query to add the user to the group_members table
-    addMemberQuery := `
+	// SQL query to add the user to the group_members table
+	addMemberQuery := `
         INSERT INTO group_members (user_id, group_id)
         VALUES (?, ?)
     `
-    _, err = tx.Exec(addMemberQuery, userID, groupID)
-    if err != nil {
-        return err
-    }
+	_, err = tx.Exec(addMemberQuery, userID, groupID)
+	if err != nil {
+		return err
+	}
 
-    // Commit the transaction
-    err = tx.Commit()
-    if err != nil {
-        return err
-    }
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func DeclineGroupInvitaton(db *sql.DB, userID, groupID string) error {
@@ -80,45 +80,45 @@ func DeclineGroupInvitaton(db *sql.DB, userID, groupID string) error {
 }
 
 func GetGroupsInvitation(db *sql.DB, userID string) ([]models.Group, error) {
-    query := `
+	query := `
         SELECT g.*
         FROM groups g
         JOIN group_invitations gi ON g.id = gi.group_id
         WHERE gi.user_id = ?
     `
-    rows, err := db.Query(query, userID)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+	rows, err := db.Query(query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-    var groups []models.Group
-    for rows.Next() {
-        var group models.Group
-        err := rows.Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &group.AvatarPath, &group.CreatedAt)
-        if err != nil {
-            return nil, err
-        }
-        groups = append(groups, group)
-    }
+	var groups []models.Group
+	for rows.Next() {
+		var group models.Group
+		err := rows.Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &group.CreatedAt, &group.AvatarPath)
+		if err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
 
-    if err := rows.Err(); err != nil {
-        return nil, err
-    }
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 
-    return groups, nil
+	return groups, nil
 }
 
 func GetNumberOfMember(db *sql.DB, groupID string) (int, error) {
-    query := `
+	query := `
         SELECT COUNT(*)
         FROM group_members
         WHERE group_id = ?
     `
-    var count int
-    err := db.QueryRow(query, groupID).Scan(&count)
-    if err != nil {
-        return  0, err
-    }
-    return count, nil
+	var count int
+	err := db.QueryRow(query, groupID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }
