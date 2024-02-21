@@ -32,7 +32,6 @@ export default function Profile_user() {
     getPostsUserCreated(userid, setPostsCreated);
   }, [userid, datas]);
 
-  console.log(datas && datas);
   const condition =
     datas?.isowner ||
     (!datas?.isowner &&
@@ -86,7 +85,9 @@ export default function Profile_user() {
           setDatas={setDatas}
         />
       )}
-      {editButton.button3 && condition && <Friends idUser={userid} />}
+      {editButton.button3 && condition && (
+        <Friends idUser={userid} isowner={datas?.isowner} />
+      )}
     </>
   );
 }

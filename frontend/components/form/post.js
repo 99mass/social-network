@@ -7,7 +7,7 @@ import { EncodeImage } from "../../utils/encodeImage";
 import { getFriendsLists } from "../../handler/follower";
 import { getUserBySession } from "../../handler/getUserBySession";
 
-export default function Post({ PostForm, setPostForm, setPosts }) {
+export default function Post({ togglePostForm, setPostForm, setPosts }) {
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [imgeName, setImageName] = useState("");
@@ -89,7 +89,7 @@ export default function Post({ PostForm, setPostForm, setPosts }) {
         <h1>create post</h1>
         <i
           className="fa-regular fa-circle-xmark close-form-btn"
-          onClick={PostForm}
+          onClick={togglePostForm}
           title="Close form"
         ></i>
       </div>

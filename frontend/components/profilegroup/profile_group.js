@@ -50,10 +50,14 @@ export default function Profile_group() {
 
 export function ContentCovertPhotoGroup({ section, handleSection }) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
+  const [friend, setFriend] = useState(false);
+  const [membre, setMembre] = useState(false);
 
   const handleStateBtnJoinGroup = (state) => {
     setStateBtnJoinGroup(state);
   };
+  const toggleFriend = () => setFriend(!friend);
+  const toggleMembres = () => setMembre(!membre);
 
   return (
     <div className={styles.photoCovert}>
@@ -64,7 +68,7 @@ export function ContentCovertPhotoGroup({ section, handleSection }) {
           <span>
             <i className="fas fa-globe-africa"></i>Public group ·
           </span>
-          <span> 30.9K members</span>
+          <span className={styles.membre} onClick={toggleMembres}> 30.9K members</span>
         </div>
         <div className={styles.action}>
           {!stateBtnJoinGroup && (
@@ -80,12 +84,14 @@ export function ContentCovertPhotoGroup({ section, handleSection }) {
               <i className="fa-solid fa-trash"></i>Leave group
             </button>
           )}
-          <button>
+          <button onClick={toggleFriend}>
             <i className="fa-solid fa-plus"></i>Invite
           </button>
         </div>
       </div>
       <NavMenuGroup section={section} handleSection={handleSection} />
+      {membre && <ListMembreGroup toggleMembres={toggleMembres} />}
+      {friend && <ListFriend toggleFriend={toggleFriend} />}
     </div>
   );
 }
@@ -135,6 +141,101 @@ export function NavMenuGroup({ section, handleSection }) {
       >
         <i className="fa-solid fa-comment"></i>chat
       </button>
+    </div>
+  );
+}
+
+export function ListMembreGroup({ toggleMembres }) {
+  const data = [
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+  ];
+  return (
+    <div className={styles.contentListPeopleGoing}>
+      <div className={styles.listHeader}>
+        <h1>
+          <span>Lists Membres</span>
+          <i
+            onClick={toggleMembres}
+            className={`fa-regular fa-circle-xmark ${styles.closeBtn}`}
+            title="Close lists"
+          ></i>
+        </h1>
+      </div>
+      <hr />
+      <div className={styles.listMenmbres}>
+        {data.map((item, index) => (
+          <div key={index} className={styles.userBloc}>
+            <div>
+              <img src={item.image} alt="" />
+              <span>{item.user}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function ListFriend({ toggleFriend }) {
+  const data = [
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+    {
+      image: "../images/default-image.svg",
+      user: "userName",
+    },
+  ];
+  return (
+    <div className={styles.contentListPeopleGoing}>
+      <div className={styles.listHeader}>
+        <h1>
+          <span>Lists Friends</span>
+          <i
+            onClick={toggleFriend}
+            className={`fa-regular fa-circle-xmark ${styles.closeBtn}`}
+            title="Close lists"
+          ></i>
+        </h1>
+      </div>
+      <hr />
+      <div className={styles.listMenmbres}>
+        {data.map((item, index) => (
+          <div key={index} className={styles.userBloc}>
+            <div>
+              <img src={item.image} alt="" />
+              <span>{item.user}</span>
+            </div>
+            <button>
+              <i class="fa-solid fa-share"></i>Invite
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

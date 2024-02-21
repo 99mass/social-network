@@ -77,6 +77,27 @@
   color: white;
 }
 
+.contentAssets {
+  text-align: right;
+}
+.contentAssets span:first-of-type {
+  margin-right: 5px;
+  font-size: smaller;
+}
+.contentAssets i,
+.contentAssets span {
+  font-size: 20px;
+  cursor: pointer;
+}
+.contentAssets i {
+  margin-right: 10px;
+  color: var(--teal60);
+
+}
+.filesPost{
+  display: none;
+}
+
 
 .listFriend {
   width: 100%;

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styles from "../../styles/modules/group.module.css";
 
 export default function RequestGroup() {
@@ -27,6 +28,12 @@ export default function RequestGroup() {
       nMembres: "7k membres",
     },
   ];
+
+  const [requeLists, setRequestLst] = useState(null);
+
+  useEffect(()=>{
+
+  },[])
 
   return (
     <div className={`${styles.menuMiddle} ${styles.discover}`}>
