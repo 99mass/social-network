@@ -117,15 +117,15 @@ func GetUserByCommentID(db *sql.DB, commentID string) (models.User, error) {
 }
 
 func CountCommentsByPostID(db *sql.DB, postID string) (int, error) {
-    var count int
-    query := `
+	var count int
+	query := `
         SELECT COUNT(*)
         FROM comments
         WHERE post_id = ?
     `
-    err := db.QueryRow(query, postID).Scan(&count)
-    if err != nil {
-        return  0, err
-    }
-    return count, nil
+	err := db.QueryRow(query, postID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }
