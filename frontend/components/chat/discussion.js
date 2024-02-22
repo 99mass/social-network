@@ -27,13 +27,13 @@ export default function DiscussionPage() {
     //   setMessages((prevMessages) => [...prevMessages, event.data]);
     // };
     //   socket fermer
-    ws.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
+    // ws.onclose = () => {
+    //   console.log("WebSocket connection closed");
+    // };
 
-    return () => {
-      ws.close();
-    };
+    // return () => {
+    //   ws.close();
+    // };
   }, []);
   
   const userIdConnect = datasUser?.id;
