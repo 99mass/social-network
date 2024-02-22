@@ -12,32 +12,27 @@ import { errorNotification } from "../../utils/sweeAlert";
 import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function DiscussionPage() {
+
   const [datasUser, setDatasUser] = useState(null);
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [socket, setSocket] = useState(null);
   const [socketDiscussion, setSocketDiscussion] = useState(null);
-  const [userIdConnect, setUserIdConnect] = useState("");
-
   const [messages, setMessages] = useState(null);
   const [discussions, setDiscussions] = useState([]);
 
   const router = useRouter();
   const { userid } = router.query;
+  const userIdConnect = datasUser?.id;
 
   useEffect(() => {
     getUserBySession(setDatasUser);
     globalSocket(setSocket);
-    
     allDiscussionPrivateSocket(setSocketDiscussion);
-    if (datasUser) {
-      setUserIdConnect(datasUser.id);
-    }
   }, []);
 
   useEffect(() => {
     if (!socket) return;
-
     socket.onopen = () => {
       console.log("WebSocket privateMessage connection opened from chatpage ");
     };
@@ -45,31 +40,29 @@ export default function DiscussionPage() {
       const _message = JSON.parse(event.data);
       if (_message.type === "message") {
         setMessages(_message.content);
+        allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les ancienne messages
+        console.log(messages);
+        alert('new message');
       }
     };
-      console.log("Received message:", messages);
   }, [socket]);
+
   useEffect(() => {
     if (!socketDiscussion) return;
 
     socketDiscussion.onopen = () => {
       console.log("WebSocket discussion connection opened from chatpage ");
-
-      if (userIdConnect) {
-        socketDiscussion.send(
-          JSON.stringify({ User2: userid.trim() })
-        );
+      if (userid) {
+        socketDiscussion.send(JSON.stringify({ User2: userid && userid.trim() }));
       }
     };
-    
 
     socketDiscussion.onmessage = (event) => {
       const _discussions = JSON.parse(event.data);
-      console.log(_discussions);
       setDiscussions(_discussions);
     };
-    console.log("Received message:", discussions);
-  }, [socketDiscussion]);
+  }, [socketDiscussion, userIdConnect, userid]);
+
 
   const handlerSendMessage = (e) => {
     e.preventDefault();
@@ -91,6 +84,7 @@ export default function DiscussionPage() {
     };
 
     socket.send(JSON.stringify(data));
+    allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les ancienne messages
   };
 
   const toggleEmojicon = () => setEmoji(!emoji);
@@ -118,9 +112,7 @@ export default function DiscussionPage() {
         <ContentMessage
           discussions={discussions}
           senderId={userIdConnect}
-          recipientId={userid}
           userImage={datasUser?.avatarpath}
-          messageTempReel={messages}
         />
 
         <div className={styles.contentFromChat}>
@@ -154,36 +146,9 @@ export default function DiscussionPage() {
 export function ContentMessage({
   discussions,
   senderId,
-  recipientId,
   userImage,
-  messageTempReel,
 }) {
-  const data = [
-    {
-      sender_id: "66a27f55-eb08-48ab-9a84-5988bb89d117",
-      recipient_id: "2fa8be74-d97f-4063-98b6-13eb226b4e9b",
-      content: "test1",
-      created_at: "2024-02-22 16:45:38",
-    },
-    {
-      sender_id: "66a27f55-eb08-48ab-9a84-5988bb89d117",
-      recipient_id: "2fa8be74-d97f-4063-98b6-13eb226b4e9b",
-      content: "test2",
-      created_at: "2024-02-22 16:45:38",
-    },
-    {
-      recipient_id: "66a27f55-eb08-48ab-9a84-5988bb89d117",
-      sender_id: "2fa8be74-d97f-4063-98b6-13eb226b4e9b",
-      content: "test3",
-      created_at: "2024-02-22 16:45:38",
-    },
-    {
-      recipient_id: "66a27f55-eb08-48ab-9a84-5988bb89d117",
-      sender_id: "2fa8be74-d97f-4063-98b6-13eb226b4e9b",
-      content: "test4",
-      created_at: "2024-02-22 16:45:38",
-    },
-  ];
+
   return (
     <div className={styles.containerChatMessage}>
       {discussions &&
@@ -203,19 +168,6 @@ export function ContentMessage({
             />
           )
         )}
-      {/* {messageTempReel && messageTempReel.sender_id == senderId && (
-        <MessageReceiver
-          userImage={userImage}
-          text={messageTempReel.content}
-          time={messageTempReel.created_at}
-        />
-      )}
-      {messageTempReel && messageTempReel.sender_id == recipientId && (
-        <MessageSender
-          text={messageTempReel.content}
-          time={messageTempReel.created_at}
-        />
-      )} */}
     </div>
   );
 }
