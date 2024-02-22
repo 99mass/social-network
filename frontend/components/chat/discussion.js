@@ -3,43 +3,67 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/discussion.module.css";
 import { getUserBySession } from "../../handler/getUserBySession";
-import { globalSocket } from "../websocket/globalSocket";
+import {
+  globalSocket,
+  allDiscussionPrivateSocket,
+} from "../websocket/globalSocket";
 import EmojiForm from "../emoji/emoji";
 import { errorNotification } from "../../utils/sweeAlert";
 import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function DiscussionPage() {
-
   const [datasUser, setDatasUser] = useState(null);
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [socket, setSocket] = useState(null);
+  const [socketDiscussion, setSocketDiscussion] = useState(null);
+
   const [messages, setMessages] = useState(null);
+  const [discussions, setDiscussions] = useState([]);
+
   const router = useRouter();
   const { userid } = router.query;
 
   useEffect(() => {
     getUserBySession(setDatasUser);
     globalSocket(setSocket);
+    allDiscussionPrivateSocket(setSocketDiscussion);
   }, []);
 
   const userIdConnect = datasUser?.id;
 
   useEffect(() => {
     if (!socket) return;
-    if (socket) {
-      socket.onopen = () => {
-        console.log("WebSocket connection opened from chatpage ");
-      };
-      socket.onmessage = (event) => {
-        const _message = JSON.parse(event.data);
-        if (_message.type === "message") {
-          setMessages(_message.content);
-        }
-      };
-      console.log("Received message:", messages);
-    }
+
+    socket.onopen = () => {
+      console.log("WebSocket privateMessage connection opened from chatpage ");
+    };
+    socket.onmessage = (event) => {
+      const _message = JSON.parse(event.data);
+      if (_message.type === "message") {
+        setMessages(_message.content);
+      }
+    };
+    //   console.log("Received message:", messages);
   }, [socket]);
+  useEffect(() => {
+    if (!socketDiscussion) return;
+
+    socketDiscussion.onopen = () => {
+      console.log("WebSocket discussion connection opened from chatpage ");
+
+      if (userIdConnect)
+        socketDiscussion.send(
+          JSON.stringify({ User1: userIdConnect.trim(), User2: userid.trim() })
+        );
+    };
+
+    socketDiscussion.onmessage = (event) => {
+      const _discussions = JSON.parse(event.data);
+      setDiscussions(_discussions);
+    };
+    console.log("Received message:", discussions);
+  }, [socketDiscussion]);
 
   const handlerSendMessage = (e) => {
     e.preventDefault();
@@ -47,7 +71,7 @@ export default function DiscussionPage() {
       console.error("WebSocket connection not open.");
       return;
     }
-   
+
     const dataFrom = new FormData(e.target);
     const content = dataFrom.get("content");
     if (content.trim() == "") {
@@ -61,7 +85,6 @@ export default function DiscussionPage() {
     };
 
     socket.send(JSON.stringify(data));
- 
   };
 
   const toggleEmojicon = () => setEmoji(!emoji);
@@ -87,6 +110,7 @@ export default function DiscussionPage() {
         </div>
 
         <ContentMessage
+          discussions={discussions}
           senderId={userIdConnect}
           recipientId={userid}
           userImage={datasUser?.avatarpath}
@@ -122,6 +146,7 @@ export default function DiscussionPage() {
 }
 
 export function ContentMessage({
+    discussions,
   senderId,
   recipientId,
   userImage,
@@ -155,19 +180,19 @@ export function ContentMessage({
   ];
   return (
     <div className={styles.containerChatMessage}>
-      {data.map((item, index) =>
-        item.sender_id === senderId ? (
+      {discussions && discussions.map((item, index) =>
+        item.Sender === senderId ? (
           <MessageReceiver
             key={index}
             userImage={userImage}
-            text={item.content}
-            time={item.created_at}
+            text={item.Message}
+            time={item.Created}
           />
         ) : (
           <MessageSender
             key={index}
-            text={item.content}
-            time={item.created_at}
+            text={item.Message}
+            time={item.Created}
           />
         )
       )}

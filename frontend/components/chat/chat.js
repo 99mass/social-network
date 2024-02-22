@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from "../../styles/modules/Chat.module.css";
 import { useEffect, useState } from "react";
 import { getUserBySession } from "../../handler/getUserBySession";
-import { globalSocket } from "../websocket/privateMessage";
+import { globalSocket } from "../websocket/globalSocket";
 
 export default function ListUser() {
 
@@ -14,23 +14,39 @@ export default function ListUser() {
     globalSocket(setSocket);
 }, []);
 
-if (socket) {
+// if (socket) {
+
+//   socket.onopen= ()=>{
+//     console.log("socket open chat ");
+//   }
+  
+//   socket.onmessage =(event)=>{
+//     console.log("onmessage");
+//     const data = JSON.parse(event.data)
+//     console.log(data);
+//     if (data.type === "users_list") {
+//       setFriendsList(data.content.IsOnline);
+//     }
+//   }
+// }
+
+useEffect(() => {
+  if (!socket) return;
 
   socket.onopen= ()=>{
     console.log("socket open chat ");
   }
   
   socket.onmessage =(event)=>{
-    console.log("onmessage");
     const data = JSON.parse(event.data)
-    console.log(data);
     if (data.type === "users_list") {
       setFriendsList(data.content.IsOnline);
     }
   }
-}
+    console.log("Received List:", FriendsList);
+}, [socket]);
 
-console.log(FriendsList&&FriendsList,"fr");
+// console.log(FriendsList&&FriendsList,"fr");
   const data = [
     {
       image:

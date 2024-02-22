@@ -7,6 +7,13 @@ export function globalSocket(setSocket) {
      setSocket(private_message)
 }
 
+export function allDiscussionPrivateSocket(setSocketDiscussion) {
+    const sessionId = getSessionCookie();
+     const discussions=  new WebSocket(`${domainSocket}/discussion?Authorization=${sessionId}`);
+     setSocketDiscussion(discussions)
+}
+
+
 
     // const ws = new WebSocket(`${domainSocket}/private_message?Authorization=${sessionId}`);
     // // socket ouvert
