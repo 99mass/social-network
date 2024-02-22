@@ -14,6 +14,7 @@ type User struct {
 	AboutMe     string `db:"aboutme" json:"aboutme"`
 	IsPublic    bool   `db:"ispublic" json:"ispublic"`
 	CreatedAt   string `db:"createdat" json:"createdat"`
+	IsOnline	bool
 }
 
 type UserConnected struct {
