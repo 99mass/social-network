@@ -12,14 +12,11 @@ import {
   CountFollower,
   UnfollowUser,
   askForFriends,
-  deleteAskingFriends,
 } from "../../handler/follower";
-import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function Profile_user() {
   const [datas, setDatasProfile] = useState(null);
   const [postsCreated, setPostsCreated] = useState(null);
-  const [error, setError] = useState(false);
 
   const [editButton, setEditButton] = useState({
     button1: true,
