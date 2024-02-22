@@ -82,7 +82,7 @@ export function Friends({ FriendsList }) {
         {FriendsList &&
           FriendsList.map((item) => (
             <div key={item.id}>
-              <Link href="./chatpage">
+              <Link href={`./chatpage?userid=${item.id}`}>
                 {item && item.avatarpath && (
                   <img
                     src={`data:image/png;base64,${item && item.avatarpath}`}
