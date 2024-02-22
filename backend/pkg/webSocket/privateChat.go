@@ -82,6 +82,7 @@ func HandleMessages(db *sql.DB, conn *websocket.Conn, userID string) {
 				SendGenResponse("error", conn, err.Error())
 				continue
 			}
+			NotificationMessage(message)
 		}
 
 	}
