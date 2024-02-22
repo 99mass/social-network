@@ -67,7 +67,6 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 		conn.WriteJSON(goodDiscuss)
-		conn.Close()
 
 	}
 }
