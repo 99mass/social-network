@@ -3,41 +3,27 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/discussion.module.css";
 import { getUserBySession } from "../../handler/getUserBySession";
-import { domainSocket } from "../../utils/api";
-import { getSessionCookie } from "../../utils/cookies";
+import { socketPrivateMessage } from "../websocket/privateMessage";
 
 export default function DiscussionPage() {
   const [datasUser, setDatasUser] = useState(null);
+  const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const router = useRouter();
   const { userid } = router.query;
-  const sessionId = getSessionCookie();
 
   useEffect(() => {
     getUserBySession(setDatasUser);
-
-    const ws = new WebSocket(`${domainSocket}/private_message?Authorization=${sessionId}`);
-    // socket ouvert
-    ws.onopen = () => {
-      console.log("WebSocket connection opened");
-    };
-    // socket message
-    // ws.onmessage = (event) => {
-    //   console.log("Received message:", event.data);
-    //   setMessages((prevMessages) => [...prevMessages, event.data]);
-    // };
-    //   socket fermer
-    // ws.onclose = () => {
-    //   console.log("WebSocket connection closed");
-    // };
-
-    // return () => {
-    //   ws.close();
-    // };
+    socketPrivateMessage(setSocket);
   }, []);
-  
+
   const userIdConnect = datasUser?.id;
 
+  if (socket) {
+    socket.onopen = () => {
+      console.log("WebSocket connection opened from chatpage ");
+    };
+  }
   return (
     <div className={styles.middleBloc}>
       <div className={styles.receiver}>

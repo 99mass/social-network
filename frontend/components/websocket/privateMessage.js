@@ -1,0 +1,26 @@
+import { domainSocket } from "../../utils/api";
+import { getSessionCookie } from "../../utils/cookies";
+
+export function socketPrivateMessage(setSocket) {
+    const sessionId = getSessionCookie();
+     const private_message=  new WebSocket(`${domainSocket}/private_message?Authorization=${sessionId}`);
+     setSocket(private_message)
+}
+
+
+    // const ws = new WebSocket(`${domainSocket}/private_message?Authorization=${sessionId}`);
+    // // socket ouvert
+
+    // socket message
+    // ws.onmessage = (event) => {
+    //   console.log("Received message:", event.data);
+    //   setMessages((prevMessages) => [...prevMessages, event.data]);
+    // };
+    //   socket fermer
+    // ws.onclose = () => {
+    //   console.log("WebSocket connection closed");
+    // };
+
+    // return () => {
+    //   ws.close();
+    // };
