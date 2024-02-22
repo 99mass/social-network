@@ -28,6 +28,7 @@ export default function DiscussionPage() {
   useEffect(() => {
     getUserBySession(setDatasUser);
     globalSocket(setSocket);
+    
     allDiscussionPrivateSocket(setSocketDiscussion);
     if (datasUser) {
       setUserIdConnect(datasUser.id);
@@ -46,21 +47,21 @@ export default function DiscussionPage() {
         setMessages(_message.content);
       }
     };
-    //   console.log("Received message:", messages);
+      console.log("Received message:", messages);
   }, [socket]);
-  console.log("user 2", userid && userid);
   useEffect(() => {
     if (!socketDiscussion) return;
+
     socketDiscussion.onopen = () => {
       console.log("WebSocket discussion connection opened from chatpage ");
 
       if (userIdConnect) {
         socketDiscussion.send(
-          JSON.stringify({  User2: userid.trim() })
+          JSON.stringify({ User2: userid.trim() })
         );
-        console.log("user 1", userIdConnect && userIdConnect.trim());
       }
     };
+    
 
     socketDiscussion.onmessage = (event) => {
       const _discussions = JSON.parse(event.data);
