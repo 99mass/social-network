@@ -54,11 +54,9 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 			fmt.Println(err)
 			return
 		}
-		// fmt.Println(request.User1)
-		// fmt.Println(request.User2)
 		discuss, err := GetCommunication(db, request.User1, request.User2)
 		if err != nil {
-			fmt.Println(err)
+			log.Println("enable to get discussion",err)
 			conn.Close()
 			return
 		}
@@ -69,7 +67,6 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 			conn.Close()
 			return
 		}
-		//fmt.Println(goodDiscuss)
 		conn.WriteJSON(goodDiscuss)
 		conn.Close()
 
