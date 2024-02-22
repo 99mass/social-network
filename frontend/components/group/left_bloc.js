@@ -3,6 +3,7 @@ import Link from "next/link";
 import styles from "../../styles/modules/group.module.css";
 import Group from "../form/group";
 import { getMygroups } from "../../handler/getGroup";
+import { defaultImage } from "./group_page";
 
 export default function LeftBlocGroupPage({ state, handleState }) {
   const handleClick = (clickedState) => {
@@ -66,13 +67,14 @@ export default function LeftBlocGroupPage({ state, handleState }) {
 }
 
 export function ListGroupManaged({ group }) {
+  // const defaultImage = "../images/groups-defaul.png"; 
 
   return (
     <div className={styles.listGroupManaged}>
       {group.map((item, index) => (
         <div key={index} className={styles.group}>
           <Link href={`./profilegroup?groupid=${item.id}`}>
-            <img src={`data:image/png;base64,${item.avatarpath} `} alt="" />
+            <img src={item.avatarpath?`data:image/png;base64,${item.avatarpath} `: defaultImage} alt="" />
             <span>{item.title}</span>
           </Link>
         </div>

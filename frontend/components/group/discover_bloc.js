@@ -1,66 +1,51 @@
+import { useEffect, useState } from "react";
+import { Groupstodiscover } from "../../handler/getGroup";
 import styles from "../../styles/modules/group.module.css";
+import { defaultImage } from "./group_page";
 
 export default function DiscoverBloc() {
-  const data = [
-    {
-      image:
-        "https://images.unsplash.com/photo-1611393972804-1b38bddd4e40?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9ydW18ZW58MHx8MHx8fDA%3D",
-      gName: "group-name",
-      nMembres: "721k membres",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1652688731647-dd5a21a88465?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8",
-      gName: "group-name",
-      nMembres: "71k membres",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1620924049153-4d32fcbe88fe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3fGVufDB8fDB8fHww",
-      gName: "group-name",
-      nMembres: "1k membres",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Z3JvdXB8ZW58MHx8MHx8fDA%3D",
-      gName: "group-name",
-      nMembres: "7k membres",
-    },
-  ];
-
+  const [groupDiscover, setGroupDiscover] = useState();
+  useEffect(() => {
+    Groupstodiscover(setGroupDiscover);
+  }, []);
   return (
     <div className={`${styles.menuMiddle} ${styles.discover}`}>
       <div className={styles.contentDicover}>
         <h3>Suggested for you</h3>
         <div className={styles.listPostSugession}>
-          {data.map((item, index) => (
-            <GoupFace
-              key={index}
-              image={item.image}
-              gName={item.gName}
-              nMembres={item.nMembres}
-            />
-          ))}
+          {groupDiscover &&
+            groupDiscover.map((item, index) => (
+              <GoupFace
+                key={index}
+                id={item.id}
+                image={item.avatarpath}
+                gName={item.title}
+                nMembres={item.nMembres}
+              />
+            ))}
         </div>
       </div>
     </div>
   );
 }
 
-export function GoupFace({ image, gName, nMembres }) {
+export function GoupFace({id, image, gName, nMembres }) {
   return (
     <div className={styles.postSugess}>
-      <a href="./profilegroup">
-        <img src={image} alt="" />
+      <a href={`./profilegroup?groupid=${id}`}>
+        <img
+          src={image ? `data:image/png;base64,${image}` : defaultImage}
+          alt=""
+        />
       </a>
       <div>
         <div className={styles.nameGroupMembres}>
-          <a href="./profilegroup">
+          <a href={`./profilegroup?groupid=${id}`}>
             <span>{gName}</span>
             <span>{nMembres}</span>
           </a>
         </div>
-        <button type="submit">join group</button>
+        <button >join group</button>
       </div>
     </div>
   );

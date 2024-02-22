@@ -191,7 +191,7 @@ func GetMyFriends(db *sql.DB, userId uuid.UUID) ([]models.User, error) {
 	var users []models.User
 	for rows.Next() {
 		var user models.User
-		var lastMessageTimestamp sql.NullTime
+		var lastMessageTimestamp sql.NullString
 		err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt, &lastMessageTimestamp)
 		if err != nil {
 			log.Println("Error scanning row:", err)

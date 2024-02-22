@@ -32,7 +32,6 @@ export const sendSession = async () => {
       createSessionCookie(cookieDatas.value, cookieDatas.expiration);
       return true;
     } else {
-      const errorData = await response.json();
       deleteSessionCookie();
       return false;
     }
