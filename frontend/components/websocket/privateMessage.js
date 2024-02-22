@@ -1,9 +1,9 @@
 import { domainSocket } from "../../utils/api";
 import { getSessionCookie } from "../../utils/cookies";
 
-export function socketPrivateMessage(setSocket) {
+export function globalSocket(setSocket) {
     const sessionId = getSessionCookie();
-     const private_message=  new WebSocket(`${domainSocket}/private_message?Authorization=${sessionId}`);
+     const private_message=  new WebSocket(`${domainSocket}/global_socket?Authorization=${sessionId}`);
      setSocket(private_message)
 }
 
