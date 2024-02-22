@@ -26,10 +26,14 @@ var ConnectedUsersList map[string]*models.UserConnected = make(map[string]*model
 
 func ChatHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		sess, err := utils.CheckAuthorization(db, w, r)
+		sessid, err := utils.TextToUUID(r.URL.Query().Get("Authorization"))
 		if err != nil {
 			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
-			log.Println("not auth")
+			return
+		}
+		sess, err := controller.GetSessionByID(db, sessid)
+		if err != nil {
+			helper.SendResponseError(w, "error", "invalid session", http.StatusBadRequest)
 			return
 		}
 		upgrader := websocket.Upgrader{
@@ -49,7 +53,7 @@ func ChatHandler(db *sql.DB) http.HandlerFunc {
 			ConnectedUsersList[sess.UserID.String()] = &models.UserConnected{Conn: conn, UserID: sess.UserID.String()}
 		}
 		log.Println("list of connected users: ", ConnectedUsersList)
-		GetUsersConnected(db,sess,conn)
+		//BroadcastUserList(db)
 		go HandleMessages(db, conn, sess.UserID.String())
 	}
 }
@@ -138,10 +142,10 @@ func SendGenResponse(name string, conn *websocket.Conn, message interface{}) err
 }
 
 func GetConnectedUsersList() map[string]*models.UserConnected {
-    // Créez une copie de la liste pour éviter que les modifications externes n'affectent la liste originale.
-    copy := make(map[string]*models.UserConnected)
-    for k, v := range ConnectedUsersList {
-        copy[k] = v
-    }
-    return copy
+	// Créez une copie de la liste pour éviter que les modifications externes n'affectent la liste originale.
+	copy := make(map[string]*models.UserConnected)
+	for k, v := range ConnectedUsersList {
+		copy[k] = v
+	}
+	return copy
 }

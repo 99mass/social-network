@@ -40,7 +40,7 @@ func GetUsersConnected(db *sql.DB, sess models.Session, conn *websocket.Conn) {
 			return
 		}
 	}
-	BroadcastUserList(db)
+	//BroadcastUserList(db)
 
 }
 
