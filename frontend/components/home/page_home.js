@@ -3,7 +3,7 @@ import LeftBloc from "./left_bloc";
 import MidlleBloc from "./middle_bloc";
 import RightBloc from "./rigthB_bloc";
 import { getUserBySession } from "../../handler/getUserBySession";
-import { globalSocket } from "../websocket/privateMessage";
+import { globalSocket } from "../websocket/globalSocket";
 
 export default function PageHome() {
   const [datasUser, setDatasUser] = useState(null);

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/discussion.module.css";
 import { getUserBySession } from "../../handler/getUserBySession";
-import { globalSocket } from "../websocket/privateMessage";
+import { globalSocket } from "../websocket/globalSocket";
 
 export default function DiscussionPage() {
   const [datasUser, setDatasUser] = useState(null);
