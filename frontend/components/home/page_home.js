@@ -10,6 +10,9 @@ export default function PageHome() {
   const [posts, setPosts] = useState(null);
   const [socket, setSocket] = useState(null);
 
+  const [FriendsList, setFriendsList] = useState(null);
+
+
   useEffect(() => {
       getUserBySession(setDatasUser);
       globalSocket(setSocket);
@@ -19,13 +22,22 @@ export default function PageHome() {
     socket.onopen = () => {
       console.log("WebSocket connection opened from Home page");
     };
+
+    socket.onmessage =(event)=>{
+      console.log("onmessage");
+      const data = JSON.parse(event.data)
+      console.log(data);
+      if (data.type === "users_list") {
+        setFriendsList(data.content);
+      }
+    }
   }
 
   return (
     <>
       <LeftBloc setPosts={setPosts} />
       <MidlleBloc posts={posts} setPosts={setPosts} />
-      <RightBloc datasUser={datasUser && datasUser} />
+      <RightBloc datasUser={datasUser && datasUser} FriendsList={FriendsList}/>
     </>
   );
 }
