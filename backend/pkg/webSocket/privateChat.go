@@ -20,7 +20,7 @@ type GenResponse struct {
 	Content interface{} `json:"content"`
 }
 
-var users map[string]*models.UserConnected = make(map[string]*models.UserConnected)
+var ConnectedUsersList map[string]*models.UserConnected = make(map[string]*models.UserConnected)
 
 // var userList []models.UserConnected
 
@@ -41,14 +41,15 @@ func ChatHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		if user, ok := users[sess.UserID.String()]; ok {
+		if user, ok := ConnectedUsersList[sess.UserID.String()]; ok {
 			// Si l'utilisateur existe déjà, mettez à jour la connexion
 			user.Conn = conn
 		} else {
 			// Sinon, créez un nouvel utilisateur
-			users[sess.UserID.String()] = &models.UserConnected{Conn: conn, UserID: sess.UserID.String()}
+			ConnectedUsersList[sess.UserID.String()] = &models.UserConnected{Conn: conn, UserID: sess.UserID.String()}
 		}
-		log.Println("list of connected users: ", users)
+		log.Println("list of connected users: ", ConnectedUsersList)
+		GetUsersConnected(db,sess,conn)
 		go HandleMessages(db, conn, sess.UserID.String())
 	}
 }
@@ -94,7 +95,7 @@ func SendMessage(db *sql.DB, message models.PrivateMessages) error {
 		return errors.New("you must be friend first")
 	}
 	message.CreatedAt = time.Now().Format("2006-01-02 15:04:05")
-	if user, ok := users[message.RecipientID]; ok {
+	if user, ok := ConnectedUsersList[message.RecipientID]; ok {
 		err := SendGenResponse("message", user.Conn, message)
 		if err != nil {
 			log.Println("Private Message was not sent")
@@ -134,4 +135,13 @@ func SendGenResponse(name string, conn *websocket.Conn, message interface{}) err
 	}
 	return nil
 
+}
+
+func GetConnectedUsersList() map[string]*models.UserConnected {
+    // Créez une copie de la liste pour éviter que les modifications externes n'affectent la liste originale.
+    copy := make(map[string]*models.UserConnected)
+    for k, v := range ConnectedUsersList {
+        copy[k] = v
+    }
+    return copy
 }
