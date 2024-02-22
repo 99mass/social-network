@@ -6,14 +6,12 @@ import { getElapsedTime } from "../../utils/convert_dates";
 
 
 export default function RightBloc({ datasUser,FriendsList }) {
-  // const [FriendsList, setFriendsList] = useState(null);
   const [oldFriend, setoldFriend] = useState(null);
 
   const userId = datasUser?.id;
 
   useEffect(() => {
     if (userId) {
-      // getFriendsLists(userId, setFriendsList);
       getOlrequestFriend(setoldFriend);
     }
   }, [userId]);
