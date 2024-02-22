@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "../../styles/modules/group.module.css";
-import { MygroupsParticep, getMygroups } from "../../handler/getGroup";
-import{getUserBySession} from "../../handler/getUserBySession"
+import { MygroupsParticep } from "../../handler/getGroup";
 import { defaultImage } from "./group_page";
 import Link from "next/link";
 
@@ -13,7 +12,6 @@ export default function YourGroup() {
   const [groupDiscover, setGroupDiscover] = useState();
   useEffect(() => {
     MygroupsParticep(setGroupDiscover);
-    // console.log("setGroupDiscover",groupDiscover);
   }, []);
   
 

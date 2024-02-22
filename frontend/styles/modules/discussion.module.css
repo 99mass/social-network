@@ -59,6 +59,8 @@
  }
 
  .contentMesSender pre {
+  word-wrap: break-word;
+  text-wrap: wrap;
    background: var(--second-blue);
  }
 

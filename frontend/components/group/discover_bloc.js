@@ -5,7 +5,6 @@ import { defaultImage } from "./group_page";
 import Link from "next/link";
 
 export default function DiscoverBloc() {
-
   const [groupDiscover, setGroupDiscover] = useState();
   useEffect(() => {
     Groupstodiscover(setGroupDiscover);
@@ -46,7 +45,7 @@ export function GoupFace({ image, gName, nMembres, groudId }) {
             <span>{nMembres} memebers</span>
         </Link>
         </div>
-        <button type="submit">join group</button>
+        <button >join group</button>
       </div>
     </div>
   );
