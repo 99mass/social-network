@@ -3,7 +3,7 @@ import LeftBloc from "./left_bloc";
 import MidlleBloc from "./middle_bloc";
 import RightBloc from "./rigthB_bloc";
 import { getUserBySession } from "../../handler/getUserBySession";
-import { socketPrivateMessage } from "../websocket/privateMessage";
+import { globalSocket } from "../websocket/privateMessage";
 
 export default function PageHome() {
   const [datasUser, setDatasUser] = useState(null);
@@ -12,9 +12,9 @@ export default function PageHome() {
 
   useEffect(() => {
       getUserBySession(setDatasUser);
-      socketPrivateMessage(setSocket);
+      globalSocket(setSocket);
   }, []);
-  
+
   if (socket) {
     socket.onopen = () => {
       console.log("WebSocket connection opened from Home page");

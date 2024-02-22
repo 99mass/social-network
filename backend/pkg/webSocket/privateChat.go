@@ -53,7 +53,7 @@ func ChatHandler(db *sql.DB) http.HandlerFunc {
 			ConnectedUsersList[sess.UserID.String()] = &models.UserConnected{Conn: conn, UserID: sess.UserID.String()}
 		}
 		log.Println("list of connected users: ", ConnectedUsersList)
-		//BroadcastUserList(db)
+		BroadcastUserList(db)
 		go HandleMessages(db, conn, sess.UserID.String())
 	}
 }

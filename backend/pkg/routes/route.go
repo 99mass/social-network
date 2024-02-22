@@ -12,7 +12,7 @@ import (
 func Route(db *sql.DB) {
 
 	//WebSockets
-	http.HandleFunc("/private_message", websocket.ChatHandler(db))
+	http.HandleFunc("/global_socket", websocket.ChatHandler(db))
 
 	//User Actions
 	http.HandleFunc("/register", helper.Middleware(handler.RegisterHandler(db)))
