@@ -38,7 +38,6 @@ export async function Groupstodiscover(setDatas) {
 
     if (response.ok) {
       const data = await response.json();
-      // console.log("data", data);
       setDatas(data);
     }
   } catch (error) {
@@ -63,7 +62,6 @@ export async function MygroupsParticep(setDatas) {
 
     if (response.ok) {
       const data = await response.json();
-      // console.log("datay", data);
       setDatas(data);
     }
   } catch (error) {
