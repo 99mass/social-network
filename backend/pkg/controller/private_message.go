@@ -56,11 +56,6 @@ func GetDiscussion(db *sql.DB, user1 uuid.UUID, user2 uuid.UUID) []models.Privat
 		return nil
 	}
 
-	// // Sort messages by creation date
-	// sort.Slice(messages, func(i, j int) bool {
-	// 	return messages[i].CreatedAt.Before(messages[j].CreatedAt)
-	// })
-
 	return messages
 }
 
