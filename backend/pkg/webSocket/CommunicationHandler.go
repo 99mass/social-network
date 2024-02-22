@@ -29,7 +29,7 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 			return
 		}
-		_, err = controller.GetSessionByID(db, sessid)
+		sess, err := controller.GetSessionByID(db, sessid)
 		if err != nil {
 			helper.SendResponseError(w, "error", "invalid session", http.StatusBadRequest)
 			return
@@ -53,6 +53,7 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 			fmt.Println(err)
 			return
 		}
+		request.User1 = sess.UserID.String()
 		discuss, err := GetCommunication(db, request.User1, request.User2)
 		if err != nil {
 			log.Println("enable to get discussion", err)
