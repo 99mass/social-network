@@ -17,6 +17,7 @@ export default function DiscussionPage() {
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [socket, setSocket] = useState(null);
   const [socketDiscussion, setSocketDiscussion] = useState(null);
+  const [userIdConnect, setUserIdConnect] = useState("");
 
   const [messages, setMessages] = useState(null);
   const [discussions, setDiscussions] = useState([]);
@@ -28,9 +29,10 @@ export default function DiscussionPage() {
     getUserBySession(setDatasUser);
     globalSocket(setSocket);
     allDiscussionPrivateSocket(setSocketDiscussion);
+    if (datasUser) {
+      setUserIdConnect(datasUser.id);
+    }
   }, []);
-
-  const userIdConnect = datasUser?.id;
 
   useEffect(() => {
     if (!socket) return;
@@ -46,16 +48,18 @@ export default function DiscussionPage() {
     };
     //   console.log("Received message:", messages);
   }, [socket]);
+  console.log("user 2", userid && userid);
   useEffect(() => {
     if (!socketDiscussion) return;
-
     socketDiscussion.onopen = () => {
       console.log("WebSocket discussion connection opened from chatpage ");
 
-      if (userIdConnect)
+      if (userIdConnect) {
         socketDiscussion.send(
-          JSON.stringify({ User1: userIdConnect.trim(), User2: userid.trim() })
+          JSON.stringify({  User2: userid.trim() })
         );
+        console.log("user 1", userIdConnect && userIdConnect.trim());
+      }
     };
 
     socketDiscussion.onmessage = (event) => {
@@ -64,7 +68,7 @@ export default function DiscussionPage() {
       setDiscussions(_discussions);
     };
     console.log("Received message:", discussions);
-  }, []);
+  }, [socketDiscussion]);
 
   const handlerSendMessage = (e) => {
     e.preventDefault();
@@ -147,7 +151,7 @@ export default function DiscussionPage() {
 }
 
 export function ContentMessage({
-    discussions,
+  discussions,
   senderId,
   recipientId,
   userImage,
@@ -181,22 +185,23 @@ export function ContentMessage({
   ];
   return (
     <div className={styles.containerChatMessage}>
-      {discussions && discussions.map((item, index) =>
-        item.Sender === senderId ? (
-          <MessageReceiver
-            key={index}
-            userImage={userImage}
-            text={item.Message}
-            time={item.Created}
-          />
-        ) : (
-          <MessageSender
-            key={index}
-            text={item.Message}
-            time={item.Created}
-          />
-        )
-      )}
+      {discussions &&
+        discussions.map((item, index) =>
+          item.Sender === senderId ? (
+            <MessageReceiver
+              key={index}
+              userImage={userImage}
+              text={item.Message}
+              time={item.Created}
+            />
+          ) : (
+            <MessageSender
+              key={index}
+              text={item.Message}
+              time={item.Created}
+            />
+          )
+        )}
       {/* {messageTempReel && messageTempReel.sender_id == senderId && (
         <MessageReceiver
           userImage={userImage}
