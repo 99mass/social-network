@@ -31,7 +31,13 @@ export default function PageHome() {
         setFriendsList(data.content);
       }
     }
+    
+      
+    
+
   }
+
+    
 
   return (
     <>
