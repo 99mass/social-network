@@ -2,6 +2,7 @@ package controller
 
 import (
 	"database/sql"
+	"log"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -85,6 +86,7 @@ func GetMyGroups(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 		if err != nil {
 			return nil, err
 		}
+		log.Println("group:", group)
 		groups = append(groups, group)
 	}
 
@@ -145,7 +147,7 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
         SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
         FROM groups g
         LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
-        WHERE m.user_id IS NULL
+        WHERE m.user_id IS NULL AND g.creator_id <> ?
         GROUP BY g.id
     `
 
@@ -157,7 +159,7 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	defer stmt.Close()
 
 	// Execute the query
-	rows, err := stmt.Query(userID)
+	rows, err := stmt.Query(userID, userID)
 	if err != nil {
 		return nil, err
 	}
