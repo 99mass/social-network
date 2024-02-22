@@ -82,7 +82,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 			//Add the groupe creator to the groupe members
 			creator := models.Group_Members{
 				GroupID:   groupID.String(),
-				UserID:    sess.ID.String(),
+				UserID:    sess.UserID.String(),
 				IsCreator: true,
 			}
 			err = controller.CreateGroupMembers(db, creator)
@@ -105,7 +105,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 						log.Println("internal ERROR from database: ", err.Error())
 						return
 					}
-					websocket.NotificationGroupInvitation(sess.UserID.String(),group.Title,userId)
+					websocket.NotificationGroupInvitation(sess.UserID.String(), group.Title, userId)
 				}
 			}
 
