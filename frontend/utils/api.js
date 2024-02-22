@@ -1,5 +1,13 @@
+import { getSessionCookie } from "./cookies";
+
  const domain = "http://localhost:8080";
-export const domainSocket = "ws://localhost:8080";
+ const domainSocket = "ws://localhost:8080";
+  const sessionId = getSessionCookie();
+ export const socketPrivateMessage=  new WebSocket(`${domainSocket}/private_message?Authorization=${sessionId}`);
+ // socket ouvert
+//  socketPrivateMessage.onopen = () => {
+//    console.log("WebSocket connection opened");
+//  };
 
 
 export const api = {

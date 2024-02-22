@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/discussion.module.css";
 import { getUserBySession } from "../../handler/getUserBySession";
-import { domainSocket } from "../../utils/api";
 import { getSessionCookie } from "../../utils/cookies";
 
 export default function DiscussionPage() {
@@ -11,14 +10,14 @@ export default function DiscussionPage() {
   const [messages, setMessages] = useState([]);
   const router = useRouter();
   const { userid } = router.query;
-  const sessionId = getSessionCookie();
+  
 
   useEffect(() => {
     getUserBySession(setDatasUser);
 
-    const ws = new WebSocket(`${domainSocket}/private_message?Authorization=${sessionId}`);
-    // socket ouvert
-    ws.onopen = () => {
+    // const ws = new WebSocket(`${domainSocket}/private_message?Authorization=${sessionId}`);
+    // // socket ouvert
+    socketPrivateMessage.onopen = () => {
       console.log("WebSocket connection opened");
     };
     // socket message
@@ -27,13 +26,13 @@ export default function DiscussionPage() {
     //   setMessages((prevMessages) => [...prevMessages, event.data]);
     // };
     //   socket fermer
-    ws.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
+    // ws.onclose = () => {
+    //   console.log("WebSocket connection closed");
+    // };
 
-    return () => {
-      ws.close();
-    };
+    // return () => {
+    //   ws.close();
+    // };
   }, []);
   
   const userIdConnect = datasUser?.id;
