@@ -49,7 +49,7 @@ func ChatHandler(db *sql.DB) http.HandlerFunc {
 			ConnectedUsersList[sess.UserID.String()] = &models.UserConnected{Conn: conn, UserID: sess.UserID.String()}
 		}
 		log.Println("list of connected users: ", ConnectedUsersList)
-		GetUsersConnected(db,sess,conn)
+		BroadcastUserList(db)
 		go HandleMessages(db, conn, sess.UserID.String())
 	}
 }
@@ -138,10 +138,10 @@ func SendGenResponse(name string, conn *websocket.Conn, message interface{}) err
 }
 
 func GetConnectedUsersList() map[string]*models.UserConnected {
-    // Créez une copie de la liste pour éviter que les modifications externes n'affectent la liste originale.
-    copy := make(map[string]*models.UserConnected)
-    for k, v := range ConnectedUsersList {
-        copy[k] = v
-    }
-    return copy
+	// Créez une copie de la liste pour éviter que les modifications externes n'affectent la liste originale.
+	copy := make(map[string]*models.UserConnected)
+	for k, v := range ConnectedUsersList {
+		copy[k] = v
+	}
+	return copy
 }
