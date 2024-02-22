@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { Groupstodiscover } from "../../handler/getGroup";
 import styles from "../../styles/modules/group.module.css";
 import { defaultImage } from "./group_page";
+import Link from "next/link";
 
 export default function DiscoverBloc() {
 
   const [groupDiscover, setGroupDiscover] = useState();
   useEffect(() => {
     Groupstodiscover(setGroupDiscover);
-    console.log("setGroupDiscover",groupDiscover);
+   
   }, []);
-console.log("groupDiscover: " , groupDiscover);
+
   return (
     <div className={`${styles.menuMiddle} ${styles.discover}`}>
       <div className={styles.contentDicover}>
@@ -22,6 +23,7 @@ console.log("groupDiscover: " , groupDiscover);
               image={item.avatarpath}
               gName={item.title}
               nMembres={item.nMembres}
+              groudId={item.id}
             />
           ))}
         </div>
@@ -30,21 +32,19 @@ console.log("groupDiscover: " , groupDiscover);
   );
 }
 
-export function GoupFace({ image, gName, nMembres }) {
-  // const defaultImage = "../images/groups-defaul.png"; 
-  
-
+export function GoupFace({ image, gName, nMembres, groudId }) {
+ 
   return (
     <div className={styles.postSugess}>
-      <a href="./profilegroup">
-        <img src={image?`data:image/png;base64,${image}`:defaultImage} alt="" />
-      </a>
+      <Link href={`./profilegroup/?id=${groudId}`}>
+            <img src={image?`data:image/png;base64,${image}`:defaultImage} alt="" />
+      </Link>
       <div>
         <div className={styles.nameGroupMembres}>
-          <a href="./profilegroup">
-            <span>{gName}</span>
-            <span>{nMembres}</span>
-          </a>
+        <Link href={`./profilegroup/?id=${groudId}`}>
+             <span>{gName}</span>
+            <span>{nMembres} memebers</span>
+        </Link>
         </div>
         <button type="submit">join group</button>
       </div>

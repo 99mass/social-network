@@ -122,3 +122,33 @@ func GetNumberOfMember(db *sql.DB, groupID string) (int, error) {
 	}
 	return count, nil
 }
+
+func GetGroupsInvitationsSend(db *sql.DB, groupId string) ([]models.Group_Invitations, error) {
+	query := `
+        SELECT gi.*
+        FROM groups g
+        JOIN group_invitations gi ON g.id = gi.group_id
+        WHERE g.id = ?
+    `
+	rows, err := db.Query(query, groupId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var groups []models.Group_Invitations
+	for rows.Next() {
+		var group models.Group_Invitations
+		err := rows.Scan(&group.ID, &group.UserID, &group.GroupID, &group.SenderID, &group.Status, &group.CreatedAt, &group.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return groups, nil
+}

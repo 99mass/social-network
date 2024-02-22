@@ -73,7 +73,7 @@ export function ListGroupManaged({ group }) {
     <div className={styles.listGroupManaged}>
       {group.map((item, index) => (
         <div key={index} className={styles.group}>
-          <Link href={`./profilegroup?groupid=${item.id}`}>
+          <Link href={`./profilegroup?id=${item.id}`}>
             <img src={item.avatarpath?`data:image/png;base64,${item.avatarpath} `: defaultImage} alt="" />
             <span>{item.title}</span>
           </Link>
