@@ -2,7 +2,9 @@ package websocket
 
 import (
 	"backend/pkg/controller"
+	"backend/pkg/helper"
 	"backend/pkg/models"
+	"backend/pkg/utils"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -13,8 +15,27 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+type messageToSend struct {
+	Sender    string
+	Recipient string
+	Message   string
+	Created   string
+}
+
+
 func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		sessid, err := utils.TextToUUID(r.URL.Query().Get("Authorization"))
+		if err != nil {
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+			return
+		}
+		_, err = controller.GetSessionByID(db, sessid)
+		if err != nil {
+			helper.SendResponseError(w, "error", "invalid session", http.StatusBadRequest)
+			return
+		}
+
 		upgrader := websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool { return true },
 		}
@@ -24,8 +45,8 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 		type requestUSer struct {
-			User1 string `json:"User1"`
-			User2 string `json:"User2"`
+			User1 string `json:"user1"`
+			User2 string `json:"user2"`
 		}
 		var request requestUSer
 		err = conn.ReadJSON(&request)
@@ -70,12 +91,6 @@ func GetCommunication(db *sql.DB, user1 string, user2 string) ([]models.PrivateM
 	return discussion, nil
 }
 
-type messageToSend struct {
-	Sender    string
-	Recipient string
-	Message   string
-	Created   string
-}
 
 func GoodToSend(db *sql.DB, discuss []models.PrivateMessages) ([]messageToSend, error) {
 
