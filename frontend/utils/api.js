@@ -1,6 +1,5 @@
- const domain = "http://localhost:8080";
+const domain = "http://localhost:8080";
 export const domainSocket = "ws://localhost:8080";
-
 
 export const api = {
   Registre: `${domain}/register`,
@@ -9,6 +8,7 @@ export const api = {
   Logout: `${domain}/logout`,
   User: `${domain}/user`,
   Profil: `${domain}/profil`,
+  ProfilGroup: `${domain}/profilegroup`,
   UpdateProfilUser: `${domain}/update_profil`,
   Addpost: `${domain}/addpost`,
   ShowPosts: `${domain}/show_posts`,
@@ -26,10 +26,9 @@ export const api = {
   AddGroup: `${domain}/create_group`,
   CountFollower: `${domain}/CountFollower`,
   Groupsimanage: `${domain}/groupsimanage`,
-  MygroupsParticep:`${domain}/mygroups`,
-  Groupstodiscover:`${domain}/groupstodiscover`,
+  MygroupsParticep: `${domain}/mygroups`,
+  Groupstodiscover: `${domain}/groupstodiscover`,
   Show_group_invitation: `${domain}/show_group_invitation`,
   Accept_group_invitation: `${domain}/accept_group_invitation`,
   Decline_group_invitation: `${domain}/decline_group_invitation`,
-
 };

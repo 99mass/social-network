@@ -11,6 +11,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"backend/pkg/utils"
+	websocket "backend/pkg/webSocket"
 )
 
 type GroupRequest struct {
@@ -104,6 +105,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 						log.Println("internal ERROR from database: ", err.Error())
 						return
 					}
+					websocket.NotificationGroupInvitation(sess.UserID.String(),group.Title,userId)
 				}
 			}
 

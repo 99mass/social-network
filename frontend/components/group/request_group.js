@@ -60,7 +60,7 @@ export function GoupName({
 }) {
   return (
     <div className={styles.postSugess}>
-      <Link href={`./profilegroup?groupid=${group_id}`}>
+      <Link href={`./profilegroup?id=${group_id}`}>
         <img
           src={
             image
@@ -72,7 +72,7 @@ export function GoupName({
       </Link>
       <div>
         <div className={styles.nameGroupMembres}>
-          <Link href={`./profilegroup?groupid=${group_id}`}>
+          <Link href={`./profilegroup?id=${group_id}`}>
             <span>{gName}</span>
             <span>{nMembres} membres</span>
           </Link>

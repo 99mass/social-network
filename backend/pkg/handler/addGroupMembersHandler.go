@@ -74,7 +74,7 @@ func AddMember(db *sql.DB) http.HandlerFunc {
 					groupInvitations.UserID = userId
 					groupInvitations.GroupID = addMember.GroupID
 					groupInvitations.SenderID = sess.UserID.String()
-					groupInvitations.Status = "pending"
+					groupInvitations.Status = "waiting"
 
 					err = controller.CreateGroupInvitations(db, groupInvitations)
 					if err != nil {

@@ -29,7 +29,7 @@ export const getDatasProfilUser = async (setDatas, userid) => {
 export const updateDataProfile = async (
   data,
   userid,
-  setDatas,
+  setDatas, 
   setErrorMessage,
   handleButtonClick
 ) => {
