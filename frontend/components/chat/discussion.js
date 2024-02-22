@@ -60,10 +60,11 @@ export default function DiscussionPage() {
 
     socketDiscussion.onmessage = (event) => {
       const _discussions = JSON.parse(event.data);
+      console.log(_discussions);
       setDiscussions(_discussions);
     };
     console.log("Received message:", discussions);
-  }, [socketDiscussion]);
+  }, []);
 
   const handlerSendMessage = (e) => {
     e.preventDefault();

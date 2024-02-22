@@ -3,6 +3,8 @@ package controller
 import (
 	"backend/pkg/models"
 	"database/sql"
+	"log"
+	"sort"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -48,12 +50,34 @@ func GetDiscussion(db *sql.DB, user1 uuid.UUID, user2 uuid.UUID) []models.Privat
 		}
 	}
 
-	// // Sort messages by creation date
-	// sort.Slice(messages, func(i, j int) bool {
-	// 	return messages[i].CreatedAt.Before(messages[j].CreatedAt)
-	// })
+	err := sortMessagesByCreatedAt(messages)
+	if err!= nil {
+		log.Println("error lors du filtrage:",err.Error())
+		return nil
+	}
 
 	return messages
+}
+
+func parseCreatedAt(createdAt string) (time.Time, error) {
+	return time.Parse(time.RFC3339, createdAt)
+}
+
+// Trie le tableau de messages par CreatedAt
+func sortMessagesByCreatedAt(messages []models.PrivateMessages) error {
+	// Convertir et trier
+	sort.Slice(messages, func(i, j int) bool {
+		createdAtI, err := parseCreatedAt(messages[i].CreatedAt)
+		if err != nil {
+			return false
+		}
+		createdAtJ, err := parseCreatedAt(messages[j].CreatedAt)
+		if err != nil {
+			return false
+		}
+		return createdAtI.Before(createdAtJ)
+	})
+	return nil
 }
 
 func getMessagesForUser(db *sql.DB, userID uuid.UUID) []models.PrivateMessages {
