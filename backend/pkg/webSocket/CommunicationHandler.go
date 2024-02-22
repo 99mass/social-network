@@ -22,7 +22,6 @@ type messageToSend struct {
 	Created   string
 }
 
-
 func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sessid, err := utils.TextToUUID(r.URL.Query().Get("Authorization"))
@@ -56,7 +55,7 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 		}
 		discuss, err := GetCommunication(db, request.User1, request.User2)
 		if err != nil {
-			log.Println("enable to get discussion",err)
+			log.Println("enable to get discussion", err)
 			conn.Close()
 			return
 		}
@@ -88,36 +87,20 @@ func GetCommunication(db *sql.DB, user1 string, user2 string) ([]models.PrivateM
 	return discussion, nil
 }
 
-
 func GoodToSend(db *sql.DB, discuss []models.PrivateMessages) ([]messageToSend, error) {
 
 	var messToSend []messageToSend
 	for _, m := range discuss {
-		//fmt.Println(m.Message)
+		
 		var mes messageToSend
-		senderID, err := uuid.FromString(m.SenderID)
-		if err != nil {
-			return nil, err
-		}
-		send, err := GetUsername(db, senderID)
-		if err != nil {
-			return nil, err
-		}
-		mes.Sender = send
-		recipientID, err := uuid.FromString(m.RecipientID)
-		if err != nil {
-			return nil, err
-		}
-		recep, err := GetUsername(db, recipientID)
-		if err != nil {
-			return nil, err
-		}
-		mes.Recipient = recep
+	
+		mes.Sender = m.SenderID
+		mes.Recipient = m.RecipientID
 		mes.Message = m.Content
 		mes.Created = m.CreatedAt
 		messToSend = append(messToSend, mes)
 	}
-	//fmt.Println(messToSend)
+
 	return messToSend, nil
 }
 func GetUsername(db *sql.DB, user uuid.UUID) (string, error) {
