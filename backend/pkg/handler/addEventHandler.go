@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"backend/pkg/controller"
 	"backend/pkg/helper"
@@ -14,9 +15,10 @@ import (
 )
 
 type GroupEnventRequest struct {
-	GroupID     string `json:"group_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	GroupID     string    `json:"group_id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	DayTime     time.Time `json:"day_time"`
 }
 
 func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
@@ -47,6 +49,7 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 				GroupID:     eventReq.GroupID,
 				Title:       eventReq.Title,
 				Description: eventReq.Description,
+				DayTime:     eventReq.DayTime,
 			}
 
 			// Create the group event
