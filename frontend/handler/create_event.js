@@ -6,7 +6,7 @@ export const AddEvent = async (data) => {
  
   try {
     const sessionId = getSessionCookie();
-    const response = await fetch(api.AddGroup, {
+    const response = await fetch(api.Create_events, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

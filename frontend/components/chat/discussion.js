@@ -119,7 +119,7 @@ export default function DiscussionPage() {
       ) : (
         <div className={styles.middleBloc}>
           <div className={styles.receiver}>
-            <Link href="">
+            <Link href="/chat">
               <i className="fa-solid fa-arrow-left"></i>
             </Link>
             <Link href={`./profileuser?userid=${datasUser2?.id}`}>
