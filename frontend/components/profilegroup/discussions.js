@@ -1,6 +1,6 @@
 import styles from "../../styles/modules/profile-group.module.css";
 import { PostFooter, PostHeader, PostMiddle } from "../home/middle_bloc";
-export default function Discussion() {
+export default function Discussion({description}) {
   const data = [
     {
       user: "Lions M ",
@@ -32,20 +32,17 @@ export default function Discussion() {
           </div>
         ))}
       </div>
-      <AboutGroup />
+      <AboutGroup description={description}  />
     </div>
   );
 }
 
-export function AboutGroup() {
+export function AboutGroup({description}) {
+  
   return (
     <div className={styles.aboutBloc}>
-      Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
-      Lorem ipsum dolor Lorem ipsum dolor
-      Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
-      Lorem ipsum dolor Lorem ipsum dolor
-      Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
-      Lorem ipsum dolor Lorem ipsum dolor
+      {description}
+     
     </div>
   )
 }

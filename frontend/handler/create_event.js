@@ -2,11 +2,11 @@ import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 
-export const AddGroup = async (data) => {
+export const AddEvent = async (data) => {
  
   try {
     const sessionId = getSessionCookie();
-    const response = await fetch(api.AddGroup, {
+    const response = await fetch(api.Create_events, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,7 +17,7 @@ export const AddGroup = async (data) => {
 
     if (response.ok) {
       successNotification(
-        "Group added successful you can see it in the home  or  profile page."
+        "Event added successful."
       );
       
     } else {

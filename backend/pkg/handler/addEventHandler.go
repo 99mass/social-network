@@ -17,6 +17,7 @@ type GroupEnventRequest struct {
 	GroupID     string `json:"group_id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
+	DayTime     string `json:"day_time"`
 }
 
 func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
@@ -41,12 +42,15 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			eventReq.Title = strings.TrimSpace(eventReq.Title)
+			eventReq.Description = utils.TruncateCommentContent(eventReq.Description)
 			eventReq.Description = strings.TrimSpace(eventReq.Description)
+			eventReq.DayTime = strings.TrimSpace(eventReq.DayTime)
 
 			event := models.GroupEvent{
 				GroupID:     eventReq.GroupID,
 				Title:       eventReq.Title,
 				Description: eventReq.Description,
+				DayTime:     eventReq.DayTime,
 			}
 
 			// Create the group event

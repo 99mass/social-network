@@ -14,10 +14,12 @@ import (
 type ProfilGroupToSend struct {
 	GroupInfos      models.GroupInfos `json:"GroupInfos"`
 	UsersNotInGroup []models.User     `json:"usersNotInGroup"`
+	ListMembreGroup []models.User     `json:"listMembreGroup"`
 	AllPost         []models.Post     `json:"allPost"`
 }
 
 func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
@@ -53,8 +55,37 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "follower problems", http.StatusBadRequest)
 				return
 			}
+
+			for i, userNot := range userNotInGroup {
+				if userNot.AvatarPath != "" {
+					encodedAvatar, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + userNot.AvatarPath)
+					if err != nil {
+						log.Println("enable to encode image avatar", err.Error())
+						continue
+					}
+					userNotInGroup[i].AvatarPath = encodedAvatar
+				}
+			}
+
+			listMember, err := controller.GetGroupMembers(db, groupId.String())
+			if err != nil {
+				helper.SendResponseError(w, "error", "Don't get group Members", http.StatusBadRequest)
+				return
+			}
+
+			for i, member := range listMember {
+				if member.AvatarPath != "" {
+					encodedAvatar, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + member.AvatarPath)
+					if err != nil {
+						log.Println("enable to encode image avatar", err.Error())
+						continue
+					}
+					listMember[i].AvatarPath = encodedAvatar
+				}
+			}
 			profilGroup.GroupInfos = groupInfo
 			profilGroup.UsersNotInGroup = userNotInGroup
+			profilGroup.ListMembreGroup = listMember
 
 			helper.SendResponse(w, profilGroup, http.StatusOK)
 

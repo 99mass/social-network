@@ -1,6 +1,9 @@
 import { useState } from "react";
 import styles from "../../styles/modules/profile-group.module.css";
 import { AboutGroup } from "./discussions";
+import { errorNotification } from "../../utils/sweeAlert";
+import { convertAge } from "../../utils/convert_dates";
+import { AddEvent } from "../../handler/create_event";
 
 export default function Events() {
   const [listUserGoing, setListUserGoing] = useState(false);
@@ -99,7 +102,9 @@ export function EventBloc({
     </div>
   );
 }
-export function FromCreateEvent({ setSection }) {
+export function FromCreateEvent({ setSection ,groupId }) {
+
+
   const toggleForm = () =>
     setSection({
       section1: true,
@@ -108,6 +113,33 @@ export function FromCreateEvent({ setSection }) {
       section4: false,
       section5: false,
     });
+
+    const handlerEvent=(e)=>{
+      e.preventDefault();
+      const dataFrom=new FormData(e.target);
+      const title=dataFrom.get("title");
+      const description=dataFrom.get('description') 
+      let date=dataFrom.get('date');
+      let  hours=dataFrom.get('hours')
+      if (title.trim()=="" || description.trim()=="" || !date || !hours) {
+        errorNotification("all fields must be completed")
+        return
+      }
+      date=new Date(date)
+      date=convertAge(date)
+      hours=hours.toString()
+      const dayTime=`${date} ${hours}`
+
+      const data={
+        group_id:groupId,
+        title:title,
+        description:description,
+        day_time:dayTime
+      }
+      console.log(data);
+      AddEvent(data)
+
+    }
 
   return (
     <div className={styles.contentFormEvent}>
@@ -120,17 +152,18 @@ export function FromCreateEvent({ setSection }) {
         ></i>
       </div>
       <hr />
-      <form method="post">
+      <form method="post"  onSubmit={handlerEvent} >
         <div className={styles.eventContent}>
           <input
             type="text"
+            name="title"
             className={styles.titleEvent}
             placeholder="Title of the event"
             required
           />
           <hr />
           <textarea
-            name=""
+            name="description"
             placeholder="Add description for event..."
             id=""
             required
@@ -139,15 +172,15 @@ export function FromCreateEvent({ setSection }) {
           <div className={styles.contentDateTime}>
             <div>
               <span>Start date</span>
-              <input type="date" />
+              <input type="date" name="date" />
             </div>
             <div>
               <span>Start time</span>
-              <input type="time" />
+              <input type="time" name="hours" />
             </div>
           </div>
         </div>
-        <button className={styles.btnEvent}>Create event</button>
+        <button type="submit" className={styles.btnEvent}>Create event</button>
       </form>
     </div>
   );
