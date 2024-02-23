@@ -34,3 +34,4 @@ func CountGroupMembers(db *sql.DB, groupID string) (nbr int, err error) {
 	}
 	return nbr, nil
 }
+

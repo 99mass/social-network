@@ -143,8 +143,8 @@ func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 
 func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	// SQL query to get all groups that a user is not a member of
-	
-	query := 
+
+	query :=
 		`SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
 		FROM groups g
 		LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
@@ -174,7 +174,7 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 			return nil, err
 		}
 		log.Println("nbr:", group.NbrMembers)
-		group.NbrMembers,err = CountGroupMembers(db,group.ID)
+		group.NbrMembers, err = CountGroupMembers(db, group.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -212,7 +212,7 @@ func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]model
 	return unfollowuser, nil
 }
 
-func GetGroupInfosById(db *sql.DB, groupID uuid.UUID) (models.GroupInfos, error) {
+func GetGroupInfosById(db *sql.DB, userID, groupID uuid.UUID) (models.GroupInfos, error) {
 	// SQL query to get group information by ID
 	query := `
 		SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
@@ -245,6 +245,11 @@ func GetGroupInfosById(db *sql.DB, groupID uuid.UUID) (models.GroupInfos, error)
 		}
 
 	}
+	ismember, errs := IsMember(db, userID.String(), group.ID)
+	if errs != nil {
+		return models.GroupInfos{}, errs
+	}
+	group.IsMembers = ismember
 
 	// Check for errors from iterating over rows.
 	if err := rows.Err(); err != nil {

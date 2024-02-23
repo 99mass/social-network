@@ -34,7 +34,7 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			// get the user
-			groupInfo, err := controller.GetGroupInfosById(db, groupId)
+			groupInfo, err := controller.GetGroupInfosById(db, sess.UserID, groupId)
 			if err != nil {
 				helper.SendResponseError(w, "error", "group doesn't exist", http.StatusBadRequest)
 				return

@@ -14,4 +14,5 @@ type GroupInfos struct {
 	Title      string `json:"title"`
 	AvatarPath string `json:"avatarpath"`
 	NbrMembers int    `db:"nbr_members" json:"nbr_members"`
+	IsMembers  bool   `json:"is_member"`
 }
