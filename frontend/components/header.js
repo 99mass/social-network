@@ -24,11 +24,11 @@ export default function Header() {
       router.push("/");
     }
   };
-
+  console.log(router.route);
   useEffect(() => {
     getUserBySession(setDatasUser);
     const timer = setTimeout(() => {
-      globalSocket(setSocket);
+     if(router.route!=="/chatpage") globalSocket(setSocket);
     }, 800);
 
     return () => clearTimeout(timer);
