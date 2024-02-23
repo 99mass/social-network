@@ -105,7 +105,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 						log.Println("internal ERROR from database: ", err.Error())
 						return
 					}
-					websocket.NotificationGroupInvitation(sess.UserID.String(), group.Title, userId)
+					websocket.NotificationGroupInvitation(db,sess.UserID.String(), groupID.String(), userId)
 				}
 			}
 

@@ -42,7 +42,16 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			eventReq.Title = strings.TrimSpace(eventReq.Title)
-			eventReq.Description = utils.TruncateCommentContent(eventReq.Description)
+			// Truncate the comment content to   150 characters
+			truncatedDescription, err := utils.TruncateCommentContent(eventReq.Description)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+			eventReq.Description = truncatedDescription
 			eventReq.Description = strings.TrimSpace(eventReq.Description)
 			eventReq.DayTime = strings.TrimSpace(eventReq.DayTime)
 

@@ -13,4 +13,5 @@ type EventRequest struct {
 	Group               Group      `json:"group"`
 	User                User       `json:"user"`
 	ParticipationStatus string     `json:"participation_status"`
+	GoingCount          int        `json:"going_count"`
 }

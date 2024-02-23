@@ -3,17 +3,27 @@ package controller
 import (
 	"backend/pkg/models"
 	"database/sql"
+	"time"
 
 	"github.com/gofrs/uuid"
 )
 
 func CreateNotification(db *sql.DB, notification models.Notification) error {
-	query := `INSERT INTO notifications (id, user_id, type, source_id, is_read, created_at) VALUES (?, ?, ?, ?, ?, ?)`
-	_, err := db.Exec(query, notification.ID, notification.UserID, notification.Type, notification.SourceID, notification.IsRead, notification.CreatedAt)
+	// Generate a UUID v4 for the new notification
+	newUUID, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+
+	query := `INSERT INTO notifications 
+			(id, user_id, type, source_id, is_read, created_at)
+			 VALUES (?, ?, ?, ?, ?, ?)`
+	_, err = db.Exec(query, newUUID, notification.UserID, notification.Type, notification.SourceID, notification.IsRead, time.Now())
+
 	return err
 }
 
-func GetNotificationByID(db *sql.DB, id uuid.UUID) (*models.Notification, error) {
+func GetNotificationByID(db *sql.DB, id string) (*models.Notification, error) {
 	query := `SELECT id, user_id, type, source_id, is_read, created_at FROM notifications WHERE id = ?`
 	row := db.QueryRow(query, id)
 
@@ -26,7 +36,7 @@ func GetNotificationByID(db *sql.DB, id uuid.UUID) (*models.Notification, error)
 	return &notification, nil
 }
 
-func GetNotificationsByUserID(db *sql.DB, userID uuid.UUID) ([]models.Notification, error) {
+func GetNotificationsByUserID(db *sql.DB, userID string) ([]models.Notification, error) {
 	query := `SELECT id, user_id, type, source_id, is_read, created_at FROM notifications WHERE user_id = ?`
 	rows, err := db.Query(query, userID)
 	if err != nil {
@@ -47,14 +57,20 @@ func GetNotificationsByUserID(db *sql.DB, userID uuid.UUID) ([]models.Notificati
 	return notifications, nil
 }
 
-func UpdateNotificationAsRead(db *sql.DB, id uuid.UUID) error {
+func UpdateNotificationAsRead(db *sql.DB, id string) error {
 	query := `UPDATE notifications SET is_read = true WHERE id = ?`
 	_, err := db.Exec(query, id)
 	return err
 }
 
-func DeleteNotification(db *sql.DB, id uuid.UUID) error {
+func DeleteNotificationByID(db *sql.DB, id string) error {
 	query := `DELETE FROM notifications WHERE id = ?`
 	_, err := db.Exec(query, id)
+	return err
+}
+
+func DeleteNotificationByUserID(db *sql.DB, userID,typeNotif string) error {
+	query := `DELETE FROM notifications WHERE user_id = ? AND type = ?`
+	_, err := db.Exec(query, userID,typeNotif)
 	return err
 }

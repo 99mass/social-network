@@ -61,6 +61,10 @@ func ShowGroupInvitation(db *sql.DB) http.HandlerFunc {
 			}
 
 			helper.SendResponse(w, groupInf, http.StatusOK)
+			err = controller.DeleteNotificationByUserID(db, sess.UserID.String(), "group_invitation")
+			if err != nil {
+				log.Println("error:", err.Error())
+			}
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
 		}

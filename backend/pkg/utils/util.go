@@ -11,10 +11,10 @@ func ValidateContent(content string) error {
 }
 
 // TruncateCommentContent limite la taille du contenu du commentaire à  150 caractères.
-func TruncateCommentContent(content string) string {
-	const maxLength =  150
+func TruncateCommentContent(content string) (string, error ){
+	const maxLength = 150
 	if len(content) > maxLength {
-		return content[:maxLength]
+		return content[:maxLength], errors.New("comment content exceeds maximum length")
 	}
-	return content
+	return content, nil
 }

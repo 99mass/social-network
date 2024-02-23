@@ -4,6 +4,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	websocket "backend/pkg/webSocket"
 	"database/sql"
 	"encoding/json"
 	"log"
@@ -85,6 +86,7 @@ func AddMember(db *sql.DB) http.HandlerFunc {
 						log.Println("internal ERROR from database: ", err.Error())
 						return
 					}
+					websocket.NotificationGroupInvitation(db, sess.UserID.String(), addMember.GroupID, userId)
 				}
 			}
 		default:

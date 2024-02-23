@@ -1,7 +1,9 @@
 package websocket
 
 import (
+	"backend/pkg/controller"
 	"backend/pkg/models"
+	"database/sql"
 	"log"
 )
 
@@ -28,14 +30,32 @@ func NotificationMessage(mess models.PrivateMessages) {
 }
 
 //this one is for sending a notification while someone invite a user to join a group
-func NotificationGroupInvitation(sender, group, userID string) {
+func NotificationGroupInvitation(db *sql.DB,sender, groupID, userID string) {
 	var notif notif_group_invitation
-	notif.Group = group
+	notif.Group = groupID
 	notif.Sender = sender
+	
+	CreateGeneralNotif(db,userID,sender,groupID,"group_invitation")
+
 	if user, ok := ConnectedUsersList[userID]; ok {
 		err := SendGenResponse("notif_group_join_request", user.Conn, notif)
 		if err != nil {
 			log.Println("enable to send a notification to the user that you sent the message")
 		}
 	}
+}
+
+
+
+func CreateGeneralNotif(db *sql.DB, userID, senderID ,sourceID, typeNotif string)error{
+	var notif models.Notification
+	notif.UserID = userID
+	notif.SourceID = sourceID
+	notif.SenderID = senderID
+	notif.Type = typeNotif
+	err := controller.CreateNotification(db,notif)
+	if err != nil {
+		return err
+	}
+	return nil
 }
