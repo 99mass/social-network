@@ -38,8 +38,17 @@ func AddCommentHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-
-			reqComment.Content = utils.TruncateCommentContent(reqComment.Content)
+			
+			// Truncate the comment content to   150 characters
+			truncatedContent, err := utils.TruncateCommentContent(reqComment.Content)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: err.Error(),
+				}, http.StatusBadRequest)
+				return
+			}
+			reqComment.Content = truncatedContent
 
 			dir := "./pkg/static/commentImage/"
 			commentImage, _err := utils.ReadAndSaveImage(reqComment.ImagePath, dir)
