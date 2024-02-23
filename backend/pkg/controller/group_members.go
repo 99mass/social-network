@@ -51,3 +51,21 @@ func GetGroupMembers(db *sql.DB, groupId string) ([]models.User, error) {
 
 	return users, nil
 }
+
+func CountGroupMembers(db *sql.DB, groupID string) (nbr int, err error) {
+	// Préparez la requête SQL pour compter les membres du groupe
+	query := `
+        SELECT COUNT(*)
+        FROM group_members
+        WHERE group_id = ?
+    `
+	// Exécutez la requête et récupérez le nombre de membres
+	err = db.QueryRow(query, groupID).Scan(&nbr)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return 0, err
+		}
+		return 0, err
+	}
+	return nbr, nil
+}
