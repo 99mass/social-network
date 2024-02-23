@@ -21,7 +21,7 @@ export default function DiscoverBloc() {
               key={index}
               image={item.avatarpath}
               gName={item.title}
-              nMembres={item.nMembres}
+              nMembres={item.nbr_members}
               groudId={item.id}
             />
           ))}
@@ -42,7 +42,7 @@ export function GoupFace({ image, gName, nMembres, groudId }) {
         <div className={styles.nameGroupMembres}>
         <Link href={`./profilegroup/?id=${groudId}`}>
              <span>{gName}</span>
-            <span>{nMembres} memebers</span>
+            <span>{nMembres} members</span>
         </Link>
         </div>
         <button >join group</button>

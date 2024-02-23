@@ -13,5 +13,5 @@ type GroupInfos struct {
 	ID         string `json:"id"`
 	Title      string `json:"title"`
 	AvatarPath string `json:"avatarpath"`
-	NbrMembers int    `json:"nbr_members"`
+	NbrMembers int    `db:"nbr_members" json:"nbr_members"`
 }
