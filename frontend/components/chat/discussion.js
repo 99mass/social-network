@@ -30,7 +30,7 @@ export default function DiscussionPage() {
       globalSocket(setSocket);
       allDiscussionPrivateSocket(setSocketDiscussion);
       console.log("aaaa");
-    }, 500);
+    }, 800);
 
     // Nettoyage du timer pour éviter les appels inutiles
     return () => clearTimeout(timer);
