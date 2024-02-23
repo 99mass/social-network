@@ -39,6 +39,8 @@ func AddCommentHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
+			reqComment.Content = utils.TruncateCommentContent(reqComment.Content)
+
 			dir := "./pkg/static/commentImage/"
 			commentImage, _err := utils.ReadAndSaveImage(reqComment.ImagePath, dir)
 			if _err != nil {
