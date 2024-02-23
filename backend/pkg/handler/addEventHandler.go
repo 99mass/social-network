@@ -42,6 +42,7 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			eventReq.Title = strings.TrimSpace(eventReq.Title)
+			eventReq.Description = utils.TruncateCommentContent(eventReq.Description)
 			eventReq.Description = strings.TrimSpace(eventReq.Description)
 			eventReq.DayTime = strings.TrimSpace(eventReq.DayTime)
 
