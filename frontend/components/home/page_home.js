@@ -24,21 +24,12 @@ export default function PageHome() {
     };
 
     socket.onmessage =(event)=>{
-      console.log("onmessage");
       const data = JSON.parse(event.data)
-      console.log(data);
       if (data.type === "users_list") {
         setFriendsList(data.content);
       }
     }
-    
-      
-    
-
   }
-
-    
-
   return (
     <>
       <LeftBloc setPosts={setPosts} />

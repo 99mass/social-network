@@ -7,6 +7,7 @@ export const api = {
   Session: `${domain}/session`,
   Logout: `${domain}/logout`,
   User: `${domain}/user`,
+  UserInfos: `${domain}/private_chat`,
   Profil: `${domain}/profil`,
   ProfilGroup: `${domain}/profilegroup`,
   UpdateProfilUser: `${domain}/update_profil`,
@@ -24,6 +25,7 @@ export const api = {
   GetFollowers: `${domain}/getfollowers`,
   GetFolliwgUsers: `${domain}/getfollowingusers`,
   AddGroup: `${domain}/create_group`,
+  AddPostGroup: `${domain}/addpost_group`,
   CountFollower: `${domain}/CountFollower`,
   Groupsimanage: `${domain}/groupsimanage`,
   MygroupsParticep: `${domain}/mygroups`,
@@ -31,4 +33,5 @@ export const api = {
   Show_group_invitation: `${domain}/show_group_invitation`,
   Accept_group_invitation: `${domain}/accept_group_invitation`,
   Decline_group_invitation: `${domain}/decline_group_invitation`,
+  Create_events: `${domain}/create_events`,
 };
