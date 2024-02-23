@@ -36,10 +36,12 @@
 	x	make an event available
 	x   choose to go or not go to an event
 
-	Notification
-
-
-		Send Private message (to following or followers users)
+	Notification : 
+		
+		x receives a group invitation
+		x has a private profile and some other user sends him/her a following request
+		x is the creator of a group and another user requests to join the group
+		x is member of a group and an event is created
 
 		
 Avoid heavy picture on create post, user, and send message.

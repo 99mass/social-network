@@ -45,6 +45,7 @@ func AccepGrpInvitation(db *sql.DB) http.HandlerFunc {
 			}
 
 			helper.SendResponse(w, nil, http.StatusOK)
+			controller.UpdateNotificationAsRead(db, groupeID)
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")
@@ -91,6 +92,10 @@ func DeclineGrpInvitaton(db *sql.DB) http.HandlerFunc {
 			}
 
 			helper.SendResponse(w, nil, http.StatusOK)
+			err = controller.UpdateNotificationAsRead(db, invitationReq.GroupID)
+			if err != nil {
+				 log.Println("error:",err.Error())
+			}
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")
