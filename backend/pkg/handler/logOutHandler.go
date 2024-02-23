@@ -4,6 +4,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	websocket "backend/pkg/webSocket"
 	"database/sql"
 	"encoding/json"
 	"net/http"
@@ -32,6 +33,15 @@ func LogOutHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+			sess,err := controller.GetSessionByID(db,id)
+				if err != nil {
+					helper.SendResponse(w, models.ErrorResponse{
+						Status:  "error",
+						Message: "we got an issue",
+					}, http.StatusInternalServerError)
+					return
+				}
+			
 			err = controller.DeleteSession(db, id)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
@@ -42,6 +52,8 @@ func LogOutHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			helper.SendResponse(w, nil, http.StatusOK)
+			websocket.RemoveUserFromConnectedList(sess.UserID.String())
+			websocket.BroadcastUserList(db)
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
 				Status:  "error",

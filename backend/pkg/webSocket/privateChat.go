@@ -70,7 +70,7 @@ func HandleMessages(db *sql.DB, conn *websocket.Conn, userID string) {
 		log.Println("this is the message to sent:", message)
 		if err == nil {
 			if len(message.Content) > 100 {
-				SendGenResponse("error", conn, "message is too long")
+				SendGenResponse("error", conn, "message is too long max 100 character")
 				continue
 			}
 			if message.SenderID == "" || message.RecipientID == "" || message.Content == "" {

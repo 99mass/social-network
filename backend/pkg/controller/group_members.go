@@ -19,35 +19,20 @@ func CreateGroupMembers(db *sql.DB, groupMembers models.Group_Members) error {
 	return err
 }
 
-func GetGroupMembers(db *sql.DB, groupId string) ([]models.User, error) {
-
+func CountGroupMembers(db *sql.DB, groupID string) (nbr int, err error) {
+	// Préparez la requête SQL pour compter les membres du groupe
 	query := `
-		SELECT u.*
-		FROM users AS u
-		JOIN group_members AS gm ON u.id = gm.user_id
-		WHERE gm.group_id = ?;	
-	`
-	rows, err := db.Query(query, groupId)
+        SELECT COUNT(*)
+        FROM group_members
+        WHERE group_id = ?
+    `
+	// Exécutez la requête et récupérez le nombre de membres
+	err = db.QueryRow(query, groupID).Scan(&nbr)
 	if err != nil {
-		return nil, fmt.Errorf("failed to execute query: %w", err)
-	}
-	defer rows.Close()
-
-	var users []models.User
-	for rows.Next() {
-		var user models.User
-
-		err := rows.Scan(&user.ID, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.DateOfBirth, &user.AvatarPath, &user.Nickname, &user.AboutMe, &user.IsPublic, &user.CreatedAt)
-		if err != nil {
-			log.Println("Error scanning row:", err)
-			continue
+		if err == sql.ErrNoRows {
+			return 0, err
 		}
-		users = append(users, user)
+		return 0, err
 	}
-
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error iterating over rows: %w", err)
-	}
-
-	return users, nil
+	return nbr, nil
 }

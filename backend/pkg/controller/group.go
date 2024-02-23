@@ -149,7 +149,6 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 		FROM groups g
 		LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
 		WHERE m.user_id IS NULL
-		
 		GROUP BY g.id`
 
 	// Prepare the statement
@@ -174,7 +173,10 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 		if err != nil {
 			return nil, err
 		}
-		log.Println("nbr:", group.NbrMembers)
+		group.NbrMembers,err = CountGroupMembers(db,group.ID)
+		if err != nil {
+			return nil, err
+		}
 		groups = append(groups, group)
 	}
 

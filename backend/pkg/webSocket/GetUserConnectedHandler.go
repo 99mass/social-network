@@ -37,8 +37,14 @@ func BroadcastUserList(db *sql.DB) {
 			err = SendGenResponse("users_list", user.Conn, usersList)
 			if err != nil {
 				// Handle the error (e.g., log it, remove the user from the map, etc.)
+				RemoveUserFromConnectedList(user.UserID)
 				log.Printf("Failed to send message to user %s: %v", user.UserID, err)
 			}
 		}
 	}
+}
+
+func RemoveUserFromConnectedList(userID string) {
+    // Assuming ConnectedUsersList is a global variable or accessible in this scope
+    delete(ConnectedUsersList, userID)
 }

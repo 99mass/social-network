@@ -64,6 +64,7 @@ func PostToShow(db *sql.DB, userID string) ([]models.Post, error) {
         WHERE (
 			p.user_id = ? OR
             p.privacy = 'public' OR
+			p.privacy = '' OR
             (p.privacy = 'private' AND (f.follower_id IS NOT NULL OR f.following_id IS NOT NULL)) OR
             (p.privacy = 'almost' AND au.user_id IS NOT NULL)
         ) ORDER BY p.created_at DESC;
