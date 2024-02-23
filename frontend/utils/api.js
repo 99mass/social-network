@@ -33,4 +33,5 @@ export const api = {
   Show_group_invitation: `${domain}/show_group_invitation`,
   Accept_group_invitation: `${domain}/accept_group_invitation`,
   Decline_group_invitation: `${domain}/decline_group_invitation`,
+  Create_events: `${domain}/create_events`,
 };

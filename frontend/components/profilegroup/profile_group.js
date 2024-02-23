@@ -67,7 +67,7 @@ export default function Profile_group() {
       {section.section2 && <PostGroup PostForm={togglePostForm} />}
       {section.section3 && <Events />}
       {section.section4 && <ChatGroup setSection={setSection} />}
-      {section.section5 && <FromCreateEvent setSection={setSection} />}
+      {section.section5 && <FromCreateEvent setSection={setSection} groupId={datas && datas.GroupInfos.id} />}
     </>
   );
 }
