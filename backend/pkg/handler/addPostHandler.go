@@ -52,7 +52,7 @@ func AddPostHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			if postReq.Privacy != "public" && postReq.Privacy != "private" && postReq.Privacy != "almost" {
+			if postReq.Privacy != "public" && postReq.Privacy != "private" && postReq.Privacy != "almost" && postReq.GroupID == "" {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
 					Message: "given value incorrect",
@@ -60,7 +60,7 @@ func AddPostHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			if postReq.Privacy == "almost" && postReq.Authorize_User == nil {
+			if postReq.Privacy == "almost" && postReq.Authorize_User == nil && postReq.GroupID == "" {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
 					Message: "you must take at least one user for almost",
@@ -95,7 +95,7 @@ func AddPostHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusInternalServerError)
 				return
 			}
-			if post.Privacy == "almost" && postReq.Authorize_User != nil {
+			if post.Privacy == "almost" && postReq.Authorize_User != nil && postReq.GroupID == "" {
 				for _, alm := range postReq.Authorize_User {
 					var almost models.Almost_Users
 					almost.Post_id = result.String()
