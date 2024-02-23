@@ -9,3 +9,10 @@ type GroupEvent struct {
 	Description string    `db:"description" json:"description"`
 	DayTime     time.Time `db:"day_time" json:"day_time"`
 }
+
+type EventRequest struct {
+	Event               GroupEvent `json:"event"`
+	Group               Group      `json:"group"`
+	User                User       `json:"user"`
+	ParticipationStatus string     `json:"participation_status"`
+}
