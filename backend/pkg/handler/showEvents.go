@@ -52,10 +52,24 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 					status = "Not Going"
 				}
 
+				// Get the count of participants who are going
+				participantsCountAndDetails, err := controller.GetParticipantsCountAndDetailsByEventID(db, event.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
+					log.Println("we got an issue", err.Error())
+					return
+				}
+
+				var goingCount int
+				if goingDetails, ok := participantsCountAndDetails[1]; ok {
+					goingCount = goingDetails.Count
+				}
+
 				// Create an EventRequest for each event
 				eventRequest := models.EventRequest{
 					Event:               event,
 					ParticipationStatus: status,
+					GoingCount:          goingCount,
 				}
 
 				eventRequests = append(eventRequests, eventRequest)
