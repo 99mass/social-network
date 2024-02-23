@@ -29,7 +29,7 @@ func AccepGrpInvitation(db *sql.DB) http.HandlerFunc {
 			}
 
 			groupeID := r.URL.Query().Get("groupid")
-			log.Println("grid:",groupeID)
+			log.Println("grid:", groupeID)
 			// var invitationReq InvitationRequest
 			_, err = controller.GetGroupByID(db, groupeID)
 			if err != nil {
@@ -45,6 +45,9 @@ func AccepGrpInvitation(db *sql.DB) http.HandlerFunc {
 			}
 
 			helper.SendResponse(w, nil, http.StatusOK)
+		default:
+			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
+			log.Println("methods not allowed")
 
 		}
 
@@ -88,6 +91,9 @@ func DeclineGrpInvitaton(db *sql.DB) http.HandlerFunc {
 			}
 
 			helper.SendResponse(w, nil, http.StatusOK)
+		default:
+			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
+			log.Println("methods not allowed")
 
 		}
 
