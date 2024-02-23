@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "../components/header";
 import LeftBloc from "../components/home/left_bloc";
-import ListUser from "../components/chat/chat";
+import styes from "../styles/modules/discussion.module.css"
 import DiscussionPage from "../components/chat/discussion";
 import { useAuthGuard } from "../controller/useAuthGuard";
 
@@ -18,7 +18,7 @@ export default function Chatpage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <section className="section-chat-page">
+      <section className={`section-chat-page ${styes.sectionChatPage}`}>
         <LeftBloc />
         <DiscussionPage />
       </section>

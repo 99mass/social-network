@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/discussion.module.css";
 import { getUserBySession } from "../../handler/getUserBySession";
@@ -29,7 +29,6 @@ export default function DiscussionPage() {
     const timer = setTimeout(() => {
       globalSocket(setSocket);
       allDiscussionPrivateSocket(setSocketDiscussion);
-      console.log("aaaa");
     }, 800);
 
     // Nettoyage du timer pour éviter les appels inutiles
@@ -45,7 +44,7 @@ export default function DiscussionPage() {
       const _message = JSON.parse(event.data);
       if (_message.type === "message") {
         setMessages(_message.content);
-        allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les ancienne messages
+        allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les anciennes messages
         console.log(messages);
       }
     };
@@ -89,7 +88,7 @@ export default function DiscussionPage() {
     };
 
     socket.send(JSON.stringify(data));
-    allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les ancienne messages
+    allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les anciennes messages
   };
 
   const toggleEmojicon = () => setEmoji(!emoji);
@@ -149,6 +148,12 @@ export default function DiscussionPage() {
 }
 
 export function ContentMessage({ discussions, senderId, userImage }) {
+  const endOfMessagesRef = useRef(null);
+  useEffect(() => {
+    if (endOfMessagesRef.current) {
+      endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [discussions]);
   return (
     <div className={styles.containerChatMessage}>
       {discussions &&
@@ -168,6 +173,7 @@ export function ContentMessage({ discussions, senderId, userImage }) {
             />
           )
         )}
+          <span ref={endOfMessagesRef} />
     </div>
   );
 }
