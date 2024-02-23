@@ -3,6 +3,9 @@ import styles from '../../styles/modules/CreatePost.module.css'
 import EmojiForm from "../emoji/emoji";
 import { AddPostGroup } from "../../handler/groupAction";
 import { useRouter } from "next/router";
+import { errorNotification } from "../../utils/sweeAlert";
+import { EncodeImage } from "../../utils/encodeImage";
+
 
 export default function PostGroup({ PostForm }) {
 
