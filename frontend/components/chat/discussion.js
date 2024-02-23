@@ -22,21 +22,25 @@ export default function DiscussionPage() {
   const [socketDiscussion, setSocketDiscussion] = useState(null);
   const [messages, setMessages] = useState(null);
   const [discussions, setDiscussions] = useState([]);
+  const [error, setError] = useState(false);
 
   const router = useRouter();
   const { userid } = router.query;
   const userIdConnect = datasUser?.id;
 
   useEffect(() => {
-    getUserBySession(setDatasUser);
-    getDatasAutherUserInfos(userid && userid, setDatasUser2);
+    const fetchUserData = async () => {
+      await getUserBySession(setDatasUser);
+      await getDatasAutherUserInfos(userid, setDatasUser2);
+    };
+    fetchUserData();
+
     const timer = setTimeout(() => {
       globalSocket(setSocket);
       allDiscussionPrivateSocket(setSocketDiscussion);
     }, 800);
 
-    // Nettoyage du timer pour éviter les appels inutiles
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer); // Nettoyage du timer pour éviter les appels inutiles
   }, []);
 
   // socket message
@@ -48,10 +52,10 @@ export default function DiscussionPage() {
 
     socket.onmessage = (event) => {
       const _message = JSON.parse(event.data);
-      if (_message.type === "error") {
+      if (_message && _message.type === "error") {
         errorNotification(_message.content);
       }
-      if (_message.type === "message") {
+      if (_message && _message.type === "message") {
         setMessages(_message.content);
         allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les anciennes messages
       }
@@ -73,12 +77,13 @@ export default function DiscussionPage() {
 
     socketDiscussion.onmessage = (event) => {
       const _discussions = JSON.parse(event.data);
-      if (_discussions.type === "error") {
-        errorNotification(_message.content);
+      if (_discussions && _discussions.type === "error") {
+        setError(true);
       } else {
+        getDatasAutherUserInfos(userid && userid, setDatasUser2);
         setDiscussions(_discussions);
+        setError(false);
       }
-      console.log(_discussions);
     };
   }, [socketDiscussion, userIdConnect, userid]);
 
@@ -109,47 +114,55 @@ export default function DiscussionPage() {
 
   return (
     <>
-      <div className={styles.middleBloc}>
-        <div className={styles.receiver}>
-          <Link href="./chat">
-            <i className="fa-solid fa-arrow-left"></i>
-          </Link>
-          <Link href={`./profileuser?userid=${datasUser2?.id}`}>
-            <img
-              src={
-                datasUser2?.avatarpath
-                  ? `data:image/png;base64,${datasUser2?.avatarpath}`
-                  : "../images/user-circle.png"
-              }
-              alt=""
-            />
-          </Link>
-          <p>{`${datasUser2?.firstname} ${datasUser2?.lastname}`}</p>
-        </div>
+      {error || !datasUser || !datasUser2 ? (
+        <Error />
+      ) : (
+        <div className={styles.middleBloc}>
+          <div className={styles.receiver}>
+            <Link href="">
+              <i className="fa-solid fa-arrow-left"></i>
+            </Link>
+            <Link href={`./profileuser?userid=${datasUser2?.id}`}>
+              <img
+                src={
+                  datasUser2?.avatarpath
+                    ? `data:image/png;base64,${datasUser2?.avatarpath}`
+                    : "../images/user-circle.png"
+                }
+                alt=""
+              />
+            </Link>
+            <p>{`${datasUser2?.firstname} ${datasUser2?.lastname}`}</p>
+          </div>
 
-        <ContentMessage
-          discussions={discussions}
-          senderId={userIdConnect}
-          userImage={datasUser2?.avatarpath}
-        />
-
-        <div className={styles.contentFromChat}>
-          <form method="post" onSubmit={handlerSendMessage}>
-            <textarea
-              value={selectedEmoji}
-              name="content"
-              onChange={(e) => setSelectedEmoji(e.target.value)}
-              placeholder="Type..."
+          {!error && (
+            <ContentMessage
+              discussions={discussions}
+              senderId={userIdConnect}
+              userImage={datasUser2?.avatarpath}
             />
-            <div onClick={toggleEmojicon} className={styles.emoji}>
-              😄
+          )}
+
+          {!error && (
+            <div className={styles.contentFromChat}>
+              <form method="post" onSubmit={handlerSendMessage}>
+                <textarea
+                  value={selectedEmoji}
+                  name="content"
+                  onChange={(e) => setSelectedEmoji(e.target.value)}
+                  placeholder="Type..."
+                />
+                <div onClick={toggleEmojicon} className={styles.emoji}>
+                  😄
+                </div>
+                <button type="submit">
+                  <i className="fa-solid fa-paper-plane"></i>
+                </button>
+              </form>
             </div>
-            <button type="submit">
-              <i className="fa-solid fa-paper-plane"></i>
-            </button>
-          </form>
+          )}
         </div>
-      </div>
+      )}
       {/* emoji form */}
       {emoji && (
         <EmojiForm
@@ -222,6 +235,18 @@ export function MessageSender({ text, time }) {
       <p>
         {`${getElapsedTime(time).value} ${getElapsedTime(time).unit} ago`}
         <i className="fa-solid fa-check-double"></i>
+      </p>
+    </div>
+  );
+}
+export function Error() {
+  return (
+    <div className="pemission-bloc">
+      <img src="../images/permissions_dark_mode.svg" alt="" />
+      <h3>This content isn't available right now</h3>
+      <p>
+        When this happens, it's usually because the user with you want to
+        discuss doesn't exist.
       </p>
     </div>
   );

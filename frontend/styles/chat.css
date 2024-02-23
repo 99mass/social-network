@@ -3,8 +3,3 @@
     padding: 10px;
     margin-top: 120px;
 }
-
-body .section-chat-page {
-    height:  100vh; /* Hauteur de la fenêtre de visualisation */
-    overflow-y: hidden; /* Désactive le défilement vertical */
-  }

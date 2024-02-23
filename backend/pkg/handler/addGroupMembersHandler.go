@@ -87,6 +87,9 @@ func AddMember(db *sql.DB) http.HandlerFunc {
 					}
 				}
 			}
+		default:
+			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
+			log.Println("methods not allowed")
 
 		}
 

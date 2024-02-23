@@ -10,6 +10,7 @@ export default function Chatpage() {
   // gerer l'acces a cette route 
   useAuthGuard();
 
+
   return (
     <>
       <Head>

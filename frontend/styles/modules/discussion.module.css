@@ -1,4 +1,8 @@
-
+body .sectionChatPage {
+  position: fixed;
+  width: 100%;
+  overflow-y: hidden;
+}
 .receiver {
   width: 100%;
   padding-bottom: 10px;
@@ -20,7 +24,6 @@
 
 .containerChatMessage {
   width: 100%;
-  height: 100vh;
   padding: 20px;
   overflow-x: hidden;
 }
@@ -73,7 +76,7 @@
 
 .middleBloc {
   width: 100%;
-  height: 100vh;
+  height: 85vh;
   display: flex;
   flex-direction: column;
   padding-bottom: 0rem;
@@ -137,10 +140,7 @@
 }
 
 @media screen and (min-width: 768px) {
-  body .sectionChatPage {
-    height: 100vh;
-    overflow-y: hidden;
-  }
+
   .sectionChat {
     width: 100%;
     display: flex;
@@ -297,7 +297,7 @@
     display: flex;
   }
   .containerChatMessage {
-    width: 90%;
+    width: 100%;
     height: fit-content;
     padding: 20px;
     padding-bottom: 60px;

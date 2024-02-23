@@ -7,11 +7,14 @@ import Post from "./form/post";
 import Group from "./form/group";
 import { logout } from "../handler/logout";
 import { getUserBySession } from "../handler/getUserBySession";
+import { globalSocket } from "./websocket/globalSocket";
 
 export default function Header() {
   const [datasUser, setDatasUser] = useState(null);
   const [postForm, setPostFrom] = useState(false);
   const [groupForm, setGroupFrom] = useState(false);
+  const [socket, setSocket] = useState(null);
+  const [notifMessages, setNotifMessages] = useState(false);
 
   const router = useRouter();
 
@@ -24,7 +27,27 @@ export default function Header() {
 
   useEffect(() => {
     getUserBySession(setDatasUser);
+    const timer = setTimeout(() => {
+      globalSocket(setSocket);
+    }, 800);
+
+    return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.onopen = () => {
+      console.log("WebSocket privateMessage opened");
+    };
+
+    socket.onmessage = (event) => {
+      const _message = JSON.parse(event.data);
+      console.log("mess",_message);
+      if (_message && _message.type === "notif_private_message") {
+        setNotifMessages(true);
+      }
+    };
+  }, [socket]);
 
   const togglePostForm = () => setPostFrom((prevState) => !prevState);
   const toggleGroupForm = () => setGroupFrom((prevState) => !prevState);
@@ -38,7 +61,7 @@ export default function Header() {
               <Link href="/home">
                 <h2>social-network</h2>
               </Link>
-              <MidlleNAvForBigScreen />
+              <MidlleNAvForBigScreen  notifMessages={notifMessages} />
               <ToggleButton
                 togglePostForm={togglePostForm}
                 toggleGroupForm={toggleGroupForm}
@@ -48,7 +71,7 @@ export default function Header() {
                 userId={datasUser?.id}
               />
             </div>
-            <MidlleNAvFormSmallScreen />
+            <MidlleNAvFormSmallScreen  notifMessages={notifMessages}/>
           </div>
         </div>
       </nav>
@@ -60,7 +83,7 @@ export default function Header() {
   );
 }
 
-export function MidlleNAvForBigScreen() {
+export function MidlleNAvForBigScreen({notifMessages}) {
   return (
     <div className={`${styles.middleContent} ${styles.middleContent0}`}>
       <Link href="/home">
@@ -80,7 +103,7 @@ export function MidlleNAvForBigScreen() {
       </Link>
       <Link href="/notification">
         <i className="fas fa-bell" title="Notification">
-          <span>22+</span>
+          {notifMessages && <span>22+</span>}
         </i>
       </Link>
       <Link href="/group" title="Groups">
@@ -89,7 +112,7 @@ export function MidlleNAvForBigScreen() {
     </div>
   );
 }
-export function MidlleNAvFormSmallScreen() {
+export function MidlleNAvFormSmallScreen({notifMessages}) {
   return (
     <div className={`${styles.middleContent} ${styles.middleContent1}`}>
       <Link href="/home">
@@ -104,7 +127,7 @@ export function MidlleNAvFormSmallScreen() {
       </Link>
       <Link href="/chat">
         <i className="fas fa-comment">
-          <span>42</span>
+        {notifMessages && <span>42</span>}
         </i>
       </Link>
       <Link href="/notification">

@@ -56,6 +56,7 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 		request.User1 = sess.UserID.String()
 		discuss, err := GetCommunication(db, request.User1, request.User2)
 		if err != nil {
+			SendGenResponse("error",conn,"incorrect userID")
 			log.Println("enable to get discussion", err)
 
 			return
@@ -68,7 +69,6 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 		conn.WriteJSON(goodDiscuss)
-		conn.Close()
 
 	}
 }
