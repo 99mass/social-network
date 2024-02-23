@@ -57,17 +57,18 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 		discuss, err := GetCommunication(db, request.User1, request.User2)
 		if err != nil {
 			log.Println("enable to get discussion", err)
-			conn.Close()
+
 			return
 		}
 
 		goodDiscuss, err := GoodToSend(db, discuss)
 		if err != nil {
 			log.Println(err)
-			conn.Close()
+
 			return
 		}
 		conn.WriteJSON(goodDiscuss)
+		conn.Close()
 
 	}
 }
@@ -91,9 +92,9 @@ func GoodToSend(db *sql.DB, discuss []models.PrivateMessages) ([]messageToSend, 
 
 	var messToSend []messageToSend
 	for _, m := range discuss {
-		
+
 		var mes messageToSend
-	
+
 		mes.Sender = m.SenderID
 		mes.Recipient = m.RecipientID
 		mes.Message = m.Content

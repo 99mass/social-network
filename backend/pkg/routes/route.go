@@ -13,7 +13,7 @@ func Route(db *sql.DB) {
 
 	//WebSockets
 	http.HandleFunc("/global_socket", websocket.ChatHandler(db))
-	http.HandleFunc("/discussion",websocket.CommunicationHandler(db))
+	http.HandleFunc("/discussion", websocket.CommunicationHandler(db))
 
 	//User Actions
 	http.HandleFunc("/register", helper.Middleware(handler.RegisterHandler(db)))
@@ -33,6 +33,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/likepost", helper.Middleware(handler.LikePostHandler(db)))
 
 	http.HandleFunc("/countpostliked", helper.Middleware(handler.GetPostLikesCountHandler(db)))
+	http.HandleFunc("/private_chat", helper.Middleware(handler.PrivateChatHandler(db)))
 
 	// Display Request
 	http.HandleFunc("/session", helper.Middleware(handler.CheckSessionHandler(db)))

@@ -12,6 +12,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"backend/pkg/utils"
+	websocket "backend/pkg/webSocket"
 )
 
 type UpdateRequest struct {
@@ -121,6 +122,7 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			helper.SendResponse(w, nil, http.StatusOK)
+			websocket.BroadcastUserList(db)
 
 		default:
 			helper.SendResponse(w, models.ErrorResponse{

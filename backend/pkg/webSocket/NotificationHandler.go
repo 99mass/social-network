@@ -14,6 +14,7 @@ type notif_group_invitation struct {
 	Group  string `json:"group"`
 }
 
+// this function handle the notification for private message
 func NotificationMessage(mess models.PrivateMessages) {
 	var notif notif_private_message
 	notif.Sender = mess.SenderID
@@ -21,11 +22,12 @@ func NotificationMessage(mess models.PrivateMessages) {
 	if user, ok := ConnectedUsersList[mess.RecipientID]; ok {
 		err := SendGenResponse("notif_private_message", user.Conn, notif)
 		if err != nil {
-			log.Println("enable to send a notification to the user that you sent the message")
+			log.Println("enable to send a notification to the user")
 		}
 	}
 }
 
+//this one is for sending a notification while someone invite a user to join a group
 func NotificationGroupInvitation(sender, group, userID string) {
 	var notif notif_group_invitation
 	notif.Group = group
