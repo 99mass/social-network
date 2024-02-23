@@ -35,7 +35,7 @@ func NotificationGroupInvitation(db *sql.DB,sender, groupID, userID string) {
 	notif.Group = groupID
 	notif.Sender = sender
 	
-	CreateGeneralNotif(db,userID,groupID,"group_invitation")
+	CreateGeneralNotif(db,userID,sender,groupID,"group_invitation")
 
 	if user, ok := ConnectedUsersList[userID]; ok {
 		err := SendGenResponse("notif_group_join_request", user.Conn, notif)
@@ -47,10 +47,11 @@ func NotificationGroupInvitation(db *sql.DB,sender, groupID, userID string) {
 
 
 
-func CreateGeneralNotif(db *sql.DB, userID ,sourceID, typeNotif string)error{
+func CreateGeneralNotif(db *sql.DB, userID, senderID ,sourceID, typeNotif string)error{
 	var notif models.Notification
 	notif.UserID = userID
 	notif.SourceID = sourceID
+	notif.SenderID = senderID
 	notif.Type = typeNotif
 	err := controller.CreateNotification(db,notif)
 	if err != nil {
