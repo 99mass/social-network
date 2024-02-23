@@ -173,7 +173,7 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 		if err != nil {
 			return nil, err
 		}
-		group.NbrMembers,err = CountGroupMembers(db,group.ID)
+		group.NbrMembers, err = CountGroupMembers(db, group.ID)
 		if err != nil {
 			return nil, err
 		}

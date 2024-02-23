@@ -9,7 +9,7 @@ export default function PostGroup({ PostForm }) {
 
   const router = useRouter();
   const query= router.query;
-  console.log(query.id, "mon id")
+ 
 
   const [emoji, setEmoji] = useState(false)
   const [selectedEmoji, setSelectedEmoji] = useState('');
@@ -37,19 +37,13 @@ export default function PostGroup({ PostForm }) {
         group_id: query.id,
         content: content,
         image_path: "",
-        // Privacy: "",
-        // Authorize_User: checkedValues,
+        
       };
-      console.log(data);
+     
       AddPostGroup(data)
       return;
     }
-    // `json:"group_id"`
-    // Content        string   `json:"content"`
-    // ImagePath      string   `json:"image_path"`
-    // Privacy        string   `json:"privacy"`
-    // Authorize_User []string `json:"authorize_user"`
-
+   
      // si on a une image
      async function someFunction() {
       try {

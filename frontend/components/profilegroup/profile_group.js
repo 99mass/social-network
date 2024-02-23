@@ -25,7 +25,7 @@ export default function Profile_group() {
     
   }, [query, datas]);
 
-  console.log(datas && datas, "les")
+
  
   
   const [section, setSection] = useState({
@@ -63,7 +63,7 @@ export default function Profile_group() {
         friendList={ datas && datas.usersNotInGroup} 
         listMembers={ datas && datas.listMembreGroup} 
       />
-      {section.section1 && <Discussion />}
+      {section.section1 && <Discussion description={ datas && datas.GroupInfos.description} />}
       {section.section2 && <PostGroup PostForm={togglePostForm} />}
       {section.section3 && <Events />}
       {section.section4 && <ChatGroup setSection={setSection} />}
