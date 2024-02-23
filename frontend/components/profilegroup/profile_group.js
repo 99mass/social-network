@@ -15,15 +15,15 @@ export default function Profile_group() {
   const [datas, setDatasProfileGroup] = useState(null);
 
   const router = useRouter();
-  const groupId= router.query;
+  const query= router.query;
  
   useEffect(() => {
     if (!datas) {
      
-      getDatasProfilGroup( setDatasProfileGroup, groupId.id);
+      getDatasProfilGroup( setDatasProfileGroup, query.id);
     }
     
-  }, [groupId, datas]);
+  }, [query, datas]);
 
   console.log(datas && datas, "les")
  
@@ -60,6 +60,8 @@ export default function Profile_group() {
         image={ datas && datas.GroupInfos.avatarpath}
         title={ datas && datas.GroupInfos.title}
         members={ datas && datas.GroupInfos.nbr_members}
+        friendList={ datas && datas.usersNotInGroup} 
+        listMembers={ datas && datas.listMembreGroup} 
       />
       {section.section1 && <Discussion />}
       {section.section2 && <PostGroup PostForm={togglePostForm} />}
@@ -70,7 +72,7 @@ export default function Profile_group() {
   );
 }
 
-export function ContentCovertPhotoGroup({ section, handleSection, image, title, members}) {
+export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers}) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
   const [friend, setFriend] = useState(false);
   const [membre, setMembre] = useState(false);
@@ -113,8 +115,8 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
         </div>
       </div>
       <NavMenuGroup section={section} handleSection={handleSection} />
-      {membre && <ListMembreGroup toggleMembres={toggleMembres} />}
-      {friend && <ListFriend toggleFriend={toggleFriend} />}
+      {membre && <ListMembreGroup toggleMembres={toggleMembres} listMembers={listMembers} />}
+      {friend && <ListFriend toggleFriend={toggleFriend} friendList={friendList} />}
     </div>
   );
 }
@@ -168,25 +170,8 @@ export function NavMenuGroup({ section, handleSection }) {
   );
 }
 
-export function ListMembreGroup({ toggleMembres }) {
-  const data = [
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-  ];
+export function ListMembreGroup({ toggleMembres, listMembers }) {
+ 
   return (
     <div className={styles.contentListPeopleGoing}>
       <div className={styles.listHeader}>
@@ -201,12 +186,19 @@ export function ListMembreGroup({ toggleMembres }) {
       </div>
       <hr />
       <div className={styles.listMenmbres}>
-        {data.map((item, index) => (
+        {listMembers.map((item, index) => (
           <div key={index} className={styles.userBloc}>
             <div>
-              <img src={item.image} alt="" />
-              <span>{item.user}</span>
+              <Link href={`./profileuser?userid=${item.id}`}>
+                <img src={item.avatarpath?`data:image/png;base64,${item.avatarpath}`:defaultImage} alt="" />
+               
+              </Link>
+              <Link href={`./profileuser?userid=${item.id}`}>
+                <span>{item.firstname} {item.lastname}</span>
+              </Link>
+             
             </div>
+            
           </div>
         ))}
       </div>
@@ -214,25 +206,7 @@ export function ListMembreGroup({ toggleMembres }) {
   );
 }
 
-export function ListFriend({ toggleFriend }) {
-  const data = [
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-  ];
+export function ListFriend({ toggleFriend, friendList }) {
   return (
     <div className={styles.contentListPeopleGoing}>
       <div className={styles.listHeader}>
@@ -247,14 +221,20 @@ export function ListFriend({ toggleFriend }) {
       </div>
       <hr />
       <div className={styles.listMenmbres}>
-        {data.map((item, index) => (
+        {friendList.map((item, index) => (
           <div key={index} className={styles.userBloc}>
             <div>
-              <img src={item.image} alt="" />
-              <span>{item.user}</span>
+              <Link href={`./profileuser?userid=${item.id}`}>
+                <img src={item.avatarpath?`data:image/png;base64,${item.avatarpath}`:defaultImage} alt="" />
+               
+              </Link>
+              <Link href={`./profileuser?userid=${item.id}`}>
+                <span>{item.firstname} {item.lastname}</span>
+              </Link>
+             
             </div>
             <button>
-              <i class="fa-solid fa-share"></i>Invite
+              <i className="fa-solid fa-share"></i>Invite
             </button>
           </div>
         ))}
@@ -262,3 +242,4 @@ export function ListFriend({ toggleFriend }) {
     </div>
   );
 }
+

@@ -3,7 +3,7 @@ import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 
 export const AddGroup = async (data) => {
-  console.log(data);
+ 
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.AddGroup, {

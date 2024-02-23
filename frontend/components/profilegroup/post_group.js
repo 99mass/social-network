@@ -1,8 +1,15 @@
 import { useState, useRef } from "react";
 import styles from '../../styles/modules/CreatePost.module.css'
 import EmojiForm from "../emoji/emoji";
+import { AddPostGroup } from "../../handler/groupAction";
+import { useRouter } from "next/router";
 
 export default function PostGroup({ PostForm }) {
+
+
+  const router = useRouter();
+  const query= router.query;
+  console.log(query.id, "mon id")
 
   const [emoji, setEmoji] = useState(false)
   const [selectedEmoji, setSelectedEmoji] = useState('');
@@ -14,6 +21,53 @@ export default function PostGroup({ PostForm }) {
 
   const toggleEmojicon = () => setEmoji(!emoji);
 
+  const handlerGroupFromPost = (e) => {
+    e.preventDefault();
+    const dataFrom = new FormData(e.target);
+
+    const content = dataFrom.get("content");
+    if (content.trim() == "") {
+      errorNotification("Content can not be empty.");
+      return;
+    }
+  
+    // si on n'a pas d'image
+    if (!fileInputRef.current.files[0]) {
+      const data = {
+        group_id: query.id,
+        content: content,
+        image_path: "",
+        // Privacy: "",
+        // Authorize_User: checkedValues,
+      };
+      console.log(data);
+      AddPostGroup(data)
+      return;
+    }
+    // `json:"group_id"`
+    // Content        string   `json:"content"`
+    // ImagePath      string   `json:"image_path"`
+    // Privacy        string   `json:"privacy"`
+    // Authorize_User []string `json:"authorize_user"`
+
+     // si on a une image
+     async function someFunction() {
+      try {
+        const encodedFile = await EncodeImage(fileInputRef);
+
+        const data = {
+          group_id: query.id,
+          content: content,
+          image_path: encodedFile,
+        };
+        AddPostGroup(data);
+      } catch (error) {
+        errorNotification(error);
+      }
+    }
+    someFunction();
+  }
+  
   return (
     <div className={`${styles.contentFormPost} content-form-post`}>
       <div className={styles.postHeader}>
@@ -21,7 +75,11 @@ export default function PostGroup({ PostForm }) {
         <i className="fa-regular fa-circle-xmark close-form-btn" onClick={PostForm} title="Close form"></i>
       </div>
       <hr />
-      <form action="">
+      <form 
+        method="post"
+        onSubmit={handlerGroupFromPost}
+        encType="multipart/form-data"
+      >
         <div className={styles.postContent}>
           <textarea
             value={selectedEmoji}

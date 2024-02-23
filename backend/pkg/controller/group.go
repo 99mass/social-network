@@ -143,8 +143,8 @@ func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 
 func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	// SQL query to get all groups that a user is not a member of
-	
-	query := 
+
+	query :=
 		`SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
 		FROM groups g
 		LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
@@ -197,12 +197,13 @@ func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]model
 	for _, user := range friends {
 
 		isInvitationSend, errr := IsInvitationSend(db, groupId, user.ID)
+		ismember, err := IsMember(db, user.ID, groupId)
 
 		if err != nil || errr != nil {
 			return nil, err
 		}
 
-		if !isInvitationSend {
+		if !isInvitationSend && !ismember {
 			unfollowuser = append(unfollowuser, user)
 		}
 	}
@@ -212,7 +213,7 @@ func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]model
 func GetGroupInfosById(db *sql.DB, groupID uuid.UUID) (models.GroupInfos, error) {
 	// SQL query to get group information by ID
 	query := `
-		SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
+		SELECT g.id, g.title, g.avatarpath, g.description, COUNT(m.user_id) as nbr_members
 		FROM groups g
 		LEFT JOIN group_members m ON g.id = m.group_id
 		WHERE g.id = ?
@@ -236,7 +237,7 @@ func GetGroupInfosById(db *sql.DB, groupID uuid.UUID) (models.GroupInfos, error)
 	var group models.GroupInfos
 	for rows.Next() {
 
-		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
+		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.Description, &group.NbrMembers)
 		if err != nil {
 			return models.GroupInfos{}, err
 		}
