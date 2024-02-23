@@ -3,128 +3,193 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/discussion.module.css";
 import { getUserBySession } from "../../handler/getUserBySession";
-import { globalSocket } from "../websocket/privateMessage";
+import {
+  globalSocket,
+  allDiscussionPrivateSocket,
+} from "../websocket/globalSocket";
+import EmojiForm from "../emoji/emoji";
+import { errorNotification } from "../../utils/sweeAlert";
+import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function DiscussionPage() {
   const [datasUser, setDatasUser] = useState(null);
+  const [emoji, setEmoji] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState("");
   const [socket, setSocket] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [socketDiscussion, setSocketDiscussion] = useState(null);
+  const [messages, setMessages] = useState(null);
+  const [discussions, setDiscussions] = useState([]);
+
   const router = useRouter();
   const { userid } = router.query;
+  const userIdConnect = datasUser?.id;
 
   useEffect(() => {
     getUserBySession(setDatasUser);
-    globalSocket(setSocket);
+    const timer = setTimeout(() => {
+      globalSocket(setSocket);
+      allDiscussionPrivateSocket(setSocketDiscussion);
+      console.log("aaaa");
+    }, 500);
+
+    // Nettoyage du timer pour éviter les appels inutiles
+    return () => clearTimeout(timer);
   }, []);
 
-  const userIdConnect = datasUser?.id;
-
-  if (socket) {
+  useEffect(() => {
+    if (!socket) return;
     socket.onopen = () => {
-      console.log("WebSocket connection opened from chatpage ");
+      console.log("WebSocket privateMessage connection opened from chatpage ");
     };
-  }
+    socket.onmessage = (event) => {
+      const _message = JSON.parse(event.data);
+      if (_message.type === "message") {
+        setMessages(_message.content);
+        allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les ancienne messages
+        console.log(messages);
+      }
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (!socketDiscussion) return;
+
+    socketDiscussion.onopen = () => {
+      console.log("WebSocket discussion connection opened from chatpage ");
+      if (userid) {
+        socketDiscussion.send(
+          JSON.stringify({ User2: userid && userid.trim() })
+        );
+      }
+    };
+
+    socketDiscussion.onmessage = (event) => {
+      const _discussions = JSON.parse(event.data);
+      setDiscussions(_discussions);
+    };
+  }, [socketDiscussion, userIdConnect, userid]);
+
+  const handlerSendMessage = (e) => {
+    e.preventDefault();
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      console.error("WebSocket connection not open.");
+      return;
+    }
+
+    const dataFrom = new FormData(e.target);
+    const content = dataFrom.get("content");
+    if (content.trim() == "") {
+      errorNotification("Content can not be empty.");
+      return;
+    }
+    const data = {
+      sender_id: userIdConnect,
+      recipient_id: userid,
+      content: content,
+    };
+
+    socket.send(JSON.stringify(data));
+    allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les ancienne messages
+  };
+
+  const toggleEmojicon = () => setEmoji(!emoji);
+
   return (
-    <div className={styles.middleBloc}>
-      <div className={styles.receiver}>
-        <Link href="./chat">
-          <i className="fa-solid fa-arrow-left"></i>
-        </Link>
-        <Link href={`./profileuser?userid=`}>
-          <img
-            src="https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM="
-            alt=""
-          />
-        </Link>
-        <p>breukh</p>
-      </div>
+    <>
+      <div className={styles.middleBloc}>
+        <div className={styles.receiver}>
+          <Link href="./chat">
+            <i className="fa-solid fa-arrow-left"></i>
+          </Link>
+          <Link href={`./profileuser?userid=${datasUser?.id}`}>
+            <img
+              src={
+                datasUser?.avatarpath
+                  ? `data:image/png;base64,${datasUser?.avatarpath}`
+                  : "../images/user-circle.png"
+              }
+              alt=""
+            />
+          </Link>
+          <p>{`${datasUser?.firstname} ${datasUser?.lastname}`}</p>
+        </div>
 
-      <ContentMessage />
+        <ContentMessage
+          discussions={discussions}
+          senderId={userIdConnect}
+          userImage={datasUser?.avatarpath}
+        />
 
-      <div className={styles.contentFromChat}>
-        <form action="#" method="post">
-          <textarea name="message" placeholder="Type..."></textarea>
-          <div className={styles.emoji}>😄</div>
-          <button type="submit">
-            <i className="fa-solid fa-paper-plane"></i>
-          </button>
-        </form>
+        <div className={styles.contentFromChat}>
+          <form method="post" onSubmit={handlerSendMessage}>
+            <textarea
+              value={selectedEmoji}
+              name="content"
+              onChange={(e) => setSelectedEmoji(e.target.value)}
+              placeholder="Type..."
+            />
+            <div onClick={toggleEmojicon} className={styles.emoji}>
+              😄
+            </div>
+            <button type="submit">
+              <i className="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+      {/* emoji form */}
+      {emoji && (
+        <EmojiForm
+          toggleEmojicon={toggleEmojicon}
+          setSelectedEmoji={setSelectedEmoji}
+        />
+      )}
+    </>
   );
 }
 
-export function ContentMessage() {
-  const data = [
-    {
-      image:
-        "https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=",
-      text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
-      time: "1days ago",
-    },
-    {
-      image: "",
-      text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
-      time: "1days ago",
-    },
-    {
-      image: "",
-      text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
-      time: "1days ago",
-    },
-    {
-      image:
-        "https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=",
-      text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
-      time: "1days ago",
-    },
-    {
-      image: "",
-      text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
-      time: "1days ago",
-    },
-    {
-      image:
-        "https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=",
-      text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
-      time: "1days ago",
-    },
-    {
-      image:
-        "https://media.istockphoto.com/id/1284284200/fr/photo/il-est-en-mission.webp?b=1&s=170667a&w=0&k=20&c=mZu_lKLMus2gBTFkRH2KQjsSsD70ycU-rRp9eP1MjsM=",
-      text: "Lorem ipsum dolor sit amet elit consectetur adipisicing.",
-      time: "1days ago",
-    },
-  ];
+export function ContentMessage({ discussions, senderId, userImage }) {
   return (
     <div className={styles.containerChatMessage}>
-      {data.map((item, index) =>
-        item.image != "" ? (
-          <MessageReceiver
-            key={index}
-            image={item.image}
-            text={item.text}
-            time={item.time}
-          />
-        ) : (
-          <MessageSender key={index} text={item.text} time={item.time} />
-        )
-      )}
+      {discussions &&
+        discussions.map((item, index) =>
+          item.Sender === senderId ? (
+            <MessageReceiver
+              key={index}
+              userImage={userImage}
+              text={item.Message}
+              time={item.Created}
+            />
+          ) : (
+            <MessageSender
+              key={index}
+              text={item.Message}
+              time={item.Created}
+            />
+          )
+        )}
     </div>
   );
 }
 
-export function MessageReceiver({ image, text, time }) {
+export function MessageReceiver({ userImage, text, time }) {
   return (
     <div className={styles.contentMesReceiver}>
       <div>
-        <Link href={`./profileuser?userid=`}>
-          <img src={"" + image} alt="" />
-        </Link>
+        <span>
+          <img
+            src={
+              userImage
+                ? `data:image/png;base64,${userImage}`
+                : "../images/user-circle.png"
+            }
+            alt=""
+          />
+        </span>
         <pre className={styles.messageReceiver}>{text}</pre>
       </div>
       <p>
-        {time}
+        {`${getElapsedTime(time).value} ${getElapsedTime(time).unit} ago`}
         <i className="fa-solid fa-check-double"></i>
       </p>
     </div>
@@ -135,7 +200,7 @@ export function MessageSender({ text, time }) {
     <div className={styles.contentMesSender}>
       <pre className={styles.messageSender}>{text}</pre>
       <p>
-        {time}
+        {`${getElapsedTime(time).value} ${getElapsedTime(time).unit} ago`}
         <i className="fa-solid fa-check-double"></i>
       </p>
     </div>

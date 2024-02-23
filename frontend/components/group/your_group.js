@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "../../styles/modules/group.module.css";
 import { MygroupsParticep } from "../../handler/getGroup";
 import { defaultImage } from "./group_page";
-
+import Link from "next/link";
 
 
 export default function YourGroup() {
@@ -19,25 +19,27 @@ export default function YourGroup() {
     <div className={`${styles.menuMiddle} ${styles.YourGroups}`}>
       <div className={styles.contentListYourGroups}>
         {groupDiscover && groupDiscover.map((item, index) => (
-          <BuilElementGroup key={index} id={item.id} image={item.avatarpath} gName={item.title} />
+          <BuilElementGroup key={index} image={item.avatarpath} gName={item.title} groudId={item.id} />
         ))}
       </div>
     </div>
   );
 }
 
-export function BuilElementGroup({id, image, gName }) {
+export function BuilElementGroup({ image, gName, groudId }) {
   return (
     <div className={styles.elementGroup}>
       <div className={styles.topElement}>
-        <a href={`./profilegroup?groupid=${id}`}>
-          <img src={image?`data:image/png;base64,${image}`:defaultImage} alt="" />
-          <span>{gName}</span>
-        </a>
+        <Link href={`./profilegroup/?id=${groudId}`}>
+            <img src={image?`data:image/png;base64,${image}`:defaultImage} alt="" />
+            <span>{gName}</span>
+        </Link>
+
       </div>
-      <a href={`./profilegroup?groupid=${id}`} className={styles.view}>
+      <Link href={`./profilegroup/?id=${groudId}`} className={styles.view}>
         View group
-      </a>
+      </Link>
+     
     </div>
   );
 }

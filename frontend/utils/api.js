@@ -8,6 +8,7 @@ export const api = {
   Logout: `${domain}/logout`,
   User: `${domain}/user`,
   Profil: `${domain}/profil`,
+  ProfilGroup: `${domain}/profilegroup`,
   UpdateProfilUser: `${domain}/update_profil`,
   Addpost: `${domain}/addpost`,
   ShowPosts: `${domain}/show_posts`,

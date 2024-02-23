@@ -1,14 +1,33 @@
 import Link from "next/link";
+import { useEffect, useId, useState } from "react";
+import { useRouter } from "next/router";
 import styles from "../../styles/modules/profile-group.module.css";
-import { useState } from "react";
 import Discussion from "./discussions";
 import Events, { FromCreateEvent } from "./events";
 import PostGroup from "./post_group";
 import ChatGroup from "./chat_group";
+import { getDatasProfilGroup } from "../../handler/group_profile";
+import { defaultImage } from "../group/group_page";
+
 
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
+  const [datas, setDatasProfileGroup] = useState(null);
 
+  const router = useRouter();
+  const groupId= router.query;
+ 
+  useEffect(() => {
+    if (!datas) {
+     
+      getDatasProfilGroup( setDatasProfileGroup, groupId.id);
+    }
+    
+  }, [groupId, datas]);
+
+  console.log(datas && datas, "les")
+ 
+  
   const [section, setSection] = useState({
     section1: true,
     section2: false,
@@ -38,6 +57,9 @@ export default function Profile_group() {
       <ContentCovertPhotoGroup
         section={section}
         handleSection={handleSection}
+        image={ datas && datas.GroupInfos.avatarpath}
+        title={ datas && datas.GroupInfos.title}
+        members={ datas && datas.GroupInfos.nbr_members}
       />
       {section.section1 && <Discussion />}
       {section.section2 && <PostGroup PostForm={togglePostForm} />}
@@ -48,7 +70,7 @@ export default function Profile_group() {
   );
 }
 
-export function ContentCovertPhotoGroup({ section, handleSection }) {
+export function ContentCovertPhotoGroup({ section, handleSection, image, title, members}) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
   const [friend, setFriend] = useState(false);
   const [membre, setMembre] = useState(false);
@@ -61,14 +83,15 @@ export function ContentCovertPhotoGroup({ section, handleSection }) {
 
   return (
     <div className={styles.photoCovert}>
-      <img src={"../images/groups-defaul.png"} alt="" />
-      <h1>Démarches Visa depuis le Sénégal</h1>
+      <img src={image?`data:image/png;base64,${image}`:defaultImage} alt="" />
+
+      <h1>{title}</h1>
       <div className={styles.blocActionGroupType}>
         <div className={styles.groupType}>
           <span>
             <i className="fas fa-globe-africa"></i>Public group ·
           </span>
-          <span className={styles.membre} onClick={toggleMembres}> 30.9K members</span>
+          <span className={styles.membre} onClick={toggleMembres}> {members} members</span>
         </div>
         <div className={styles.action}>
           {!stateBtnJoinGroup && (

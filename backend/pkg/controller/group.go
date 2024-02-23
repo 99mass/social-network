@@ -2,6 +2,7 @@ package controller
 
 import (
 	"database/sql"
+	"log"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -85,6 +86,7 @@ func GetMyGroups(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 		if err != nil {
 			return nil, err
 		}
+		log.Println("group:", group.NbrMembers)
 		groups = append(groups, group)
 	}
 
@@ -141,13 +143,13 @@ func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 
 func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	// SQL query to get all groups that a user is not a member of
-	query := `
-        SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
-        FROM groups g
-        LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
-        WHERE m.user_id IS NULL
-        GROUP BY g.id
-    `
+	
+	query := 
+		`SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
+		FROM groups g
+		LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
+		WHERE m.user_id IS NULL
+		GROUP BY g.id`
 
 	// Prepare the statement
 	stmt, err := db.Prepare(query)
@@ -171,6 +173,11 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 		if err != nil {
 			return nil, err
 		}
+		log.Println("nbr:", group.NbrMembers)
+		group.NbrMembers,err = CountGroupMembers(db,group.ID)
+		if err != nil {
+			return nil, err
+		}
 		groups = append(groups, group)
 	}
 
@@ -180,4 +187,85 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	}
 
 	return groups, nil
+}
+
+func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]models.User, error) {
+	friends, err := GetMyFriends(db, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	unfollowuser := []models.User{}
+
+	for _, user := range friends {
+
+		isInvitationSend, errr := IsInvitationSend(db, groupId, user.ID)
+
+		if err != nil || errr != nil {
+			return nil, err
+		}
+
+		if !isInvitationSend {
+			unfollowuser = append(unfollowuser, user)
+		}
+	}
+	return unfollowuser, nil
+}
+
+func GetGroupInfosById(db *sql.DB, groupID uuid.UUID) (models.GroupInfos, error) {
+	// SQL query to get group information by ID
+	query := `
+		SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
+		FROM groups g
+		LEFT JOIN group_members m ON g.id = m.group_id
+		WHERE g.id = ?
+		GROUP BY g.id
+	`
+
+	// Prepare the statement
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return models.GroupInfos{}, err
+	}
+	defer stmt.Close()
+
+	// Execute the query
+	rows, err := stmt.Query(groupID)
+	if err != nil {
+		return models.GroupInfos{}, err
+	}
+	defer rows.Close()
+
+	var group models.GroupInfos
+	for rows.Next() {
+
+		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
+		if err != nil {
+			return models.GroupInfos{}, err
+		}
+
+	}
+
+	// Check for errors from iterating over rows.
+	if err := rows.Err(); err != nil {
+		return models.GroupInfos{}, err
+	}
+
+	return group, nil
+}
+
+func IsInvitationSend(db *sql.DB, groupId string, userId string) (bool, error) {
+	invitationSend, err := GetGroupsInvitationsSend(db, groupId)
+
+	if err != nil {
+		return false, err
+	}
+
+	for _, invit := range invitationSend {
+		if invit.UserID == userId {
+			return true, nil
+		}
+	}
+	return false, nil
+
 }
