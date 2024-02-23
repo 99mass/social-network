@@ -52,4 +52,5 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/groupsimanage", helper.Middleware(handler.GroupsIManageHandler(db)))
 	http.HandleFunc("/groupstodiscover", helper.Middleware(handler.GroupsToDiscoverHandler(db)))
 	http.HandleFunc("/create_events", helper.Middleware(handler.AddGroupEventHandler(db)))
+	http.HandleFunc("/events", helper.Middleware(handler.GetEventsByGroupHandler(db)))
 }
