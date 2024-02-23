@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"errors"
+	"time"
 
 	"github.com/gofrs/uuid"
 
@@ -20,7 +21,7 @@ func CreateGroupEvent(db *sql.DB, event models.GroupEvent) (uuid.UUID, error) {
 		return uuid.UUID{}, err
 	}
 
-	_, err = db.Exec(query, newUUID.String(), event.GroupID, event.Title, event.Description, event.DayTime)
+	_, err = db.Exec(query, newUUID.String(), event.GroupID, event.Title, event.Description, time.Now())
 	if err != nil {
 		return uuid.UUID{}, err
 	}
