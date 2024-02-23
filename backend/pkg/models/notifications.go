@@ -5,6 +5,7 @@ type Notification struct {
 	UserID    string
 	Type      string
 	SourceID  string
+	SenderID  string
 	IsRead    bool
 	CreatedAt string
 }
