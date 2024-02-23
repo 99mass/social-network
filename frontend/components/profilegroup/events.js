@@ -2,6 +2,8 @@ import { useState } from "react";
 import styles from "../../styles/modules/profile-group.module.css";
 import { AboutGroup } from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
+import { convertAge } from "../../utils/convert_dates";
+import { AddEvent } from "../../handler/create_event";
 
 export default function Events() {
   const [listUserGoing, setListUserGoing] = useState(false);
@@ -117,16 +119,25 @@ export function FromCreateEvent({ setSection ,groupId }) {
       const dataFrom=new FormData(e.target);
       const title=dataFrom.get("title");
       const description=dataFrom.get('description') 
-      const date=dataFrom.get('date');
-      const  hours=dataFrom.get('hours')
+      let date=dataFrom.get('date');
+      let  hours=dataFrom.get('hours')
       if (title.trim()=="" || description.trim()=="" || !date || !hours) {
         errorNotification("all fields must be completed")
         return
       }
-      console.log(title);
-      console.log(description);
-      console.log(date);
-      console.log(hours);
+      date=new Date(date)
+      date=convertAge(date)
+      hours=hours.toString()
+      const dayTime=`${date} ${hours}`
+
+      const data={
+        group_id:groupId,
+        title:title,
+        description:description,
+        day_time:dayTime
+      }
+      console.log(data);
+      AddEvent(data)
 
     }
 
