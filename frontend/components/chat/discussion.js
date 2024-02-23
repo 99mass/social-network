@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/discussion.module.css";
 import { getUserBySession } from "../../handler/getUserBySession";
@@ -10,9 +10,12 @@ import {
 import EmojiForm from "../emoji/emoji";
 import { errorNotification } from "../../utils/sweeAlert";
 import { getElapsedTime } from "../../utils/convert_dates";
+import { getDatasAutherUserInfos } from "../../handler/getAutherUserInfos";
 
 export default function DiscussionPage() {
   const [datasUser, setDatasUser] = useState(null);
+  const [datasUser2, setDatasUser2] = useState(null);
+
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [socket, setSocket] = useState(null);
@@ -26,6 +29,7 @@ export default function DiscussionPage() {
 
   useEffect(() => {
     getUserBySession(setDatasUser);
+    getDatasAutherUserInfos(userid && userid, setDatasUser2);
     const timer = setTimeout(() => {
       globalSocket(setSocket);
       allDiscussionPrivateSocket(setSocketDiscussion);
@@ -35,26 +39,31 @@ export default function DiscussionPage() {
     return () => clearTimeout(timer);
   }, []);
 
+  // socket message
   useEffect(() => {
     if (!socket) return;
     socket.onopen = () => {
-      console.log("WebSocket privateMessage connection opened from chatpage ");
+      console.log("WebSocket privateMessage opened");
     };
+
     socket.onmessage = (event) => {
       const _message = JSON.parse(event.data);
+      if (_message.type === "error") {
+        errorNotification(_message.content);
+      }
       if (_message.type === "message") {
         setMessages(_message.content);
         allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les anciennes messages
-        console.log(messages);
       }
     };
   }, [socket]);
 
+  // socket old message
   useEffect(() => {
     if (!socketDiscussion) return;
 
     socketDiscussion.onopen = () => {
-      console.log("WebSocket discussion connection opened from chatpage ");
+      console.log("WebSocket discussion opened ");
       if (userid) {
         socketDiscussion.send(
           JSON.stringify({ User2: userid && userid.trim() })
@@ -64,7 +73,12 @@ export default function DiscussionPage() {
 
     socketDiscussion.onmessage = (event) => {
       const _discussions = JSON.parse(event.data);
-      setDiscussions(_discussions);
+      if (_discussions.type === "error") {
+        errorNotification(_message.content);
+      } else {
+        setDiscussions(_discussions);
+      }
+      console.log(_discussions);
     };
   }, [socketDiscussion, userIdConnect, userid]);
 
@@ -100,23 +114,23 @@ export default function DiscussionPage() {
           <Link href="./chat">
             <i className="fa-solid fa-arrow-left"></i>
           </Link>
-          <Link href={`./profileuser?userid=${datasUser?.id}`}>
+          <Link href={`./profileuser?userid=${datasUser2?.id}`}>
             <img
               src={
-                datasUser?.avatarpath
-                  ? `data:image/png;base64,${datasUser?.avatarpath}`
+                datasUser2?.avatarpath
+                  ? `data:image/png;base64,${datasUser2?.avatarpath}`
                   : "../images/user-circle.png"
               }
               alt=""
             />
           </Link>
-          <p>{`${datasUser?.firstname} ${datasUser?.lastname}`}</p>
+          <p>{`${datasUser2?.firstname} ${datasUser2?.lastname}`}</p>
         </div>
 
         <ContentMessage
           discussions={discussions}
           senderId={userIdConnect}
-          userImage={datasUser?.avatarpath}
+          userImage={datasUser2?.avatarpath}
         />
 
         <div className={styles.contentFromChat}>
@@ -158,7 +172,7 @@ export function ContentMessage({ discussions, senderId, userImage }) {
     <div className={styles.containerChatMessage}>
       {discussions &&
         discussions.map((item, index) =>
-          item.Sender === senderId ? (
+          item.Recipient === senderId ? (
             <MessageReceiver
               key={index}
               userImage={userImage}
@@ -173,7 +187,7 @@ export function ContentMessage({ discussions, senderId, userImage }) {
             />
           )
         )}
-          <span ref={endOfMessagesRef} />
+      <span ref={endOfMessagesRef} />
     </div>
   );
 }

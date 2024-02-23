@@ -7,6 +7,7 @@ export const api = {
   Session: `${domain}/session`,
   Logout: `${domain}/logout`,
   User: `${domain}/user`,
+  UserInfos: `${domain}/private_chat`,
   Profil: `${domain}/profil`,
   ProfilGroup: `${domain}/profilegroup`,
   UpdateProfilUser: `${domain}/update_profil`,
