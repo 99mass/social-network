@@ -1,14 +1,15 @@
 package handler
 
 import (
-	"backend/pkg/controller"
-	"backend/pkg/helper"
-	"backend/pkg/models"
 	"database/sql"
 	"encoding/json"
 	"net/http"
 
 	"github.com/gofrs/uuid"
+
+	"backend/pkg/controller"
+	"backend/pkg/helper"
+	"backend/pkg/models"
 )
 
 type sessionReq struct {

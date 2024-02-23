@@ -12,7 +12,6 @@ import { errorNotification } from "../../utils/sweeAlert";
 import { getElapsedTime } from "../../utils/convert_dates";
 
 export default function DiscussionPage() {
-
   const [datasUser, setDatasUser] = useState(null);
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
@@ -27,8 +26,14 @@ export default function DiscussionPage() {
 
   useEffect(() => {
     getUserBySession(setDatasUser);
-    globalSocket(setSocket);
-    allDiscussionPrivateSocket(setSocketDiscussion);
+    const timer = setTimeout(() => {
+      globalSocket(setSocket);
+      allDiscussionPrivateSocket(setSocketDiscussion);
+      console.log("aaaa");
+    }, 800);
+
+    // Nettoyage du timer pour éviter les appels inutiles
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -42,7 +47,6 @@ export default function DiscussionPage() {
         setMessages(_message.content);
         allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les ancienne messages
         console.log(messages);
-        alert('new message');
       }
     };
   }, [socket]);
@@ -53,7 +57,9 @@ export default function DiscussionPage() {
     socketDiscussion.onopen = () => {
       console.log("WebSocket discussion connection opened from chatpage ");
       if (userid) {
-        socketDiscussion.send(JSON.stringify({ User2: userid && userid.trim() }));
+        socketDiscussion.send(
+          JSON.stringify({ User2: userid && userid.trim() })
+        );
       }
     };
 
@@ -62,7 +68,6 @@ export default function DiscussionPage() {
       setDiscussions(_discussions);
     };
   }, [socketDiscussion, userIdConnect, userid]);
-
 
   const handlerSendMessage = (e) => {
     e.preventDefault();
@@ -143,12 +148,7 @@ export default function DiscussionPage() {
   );
 }
 
-export function ContentMessage({
-  discussions,
-  senderId,
-  userImage,
-}) {
-
+export function ContentMessage({ discussions, senderId, userImage }) {
   return (
     <div className={styles.containerChatMessage}>
       {discussions &&
