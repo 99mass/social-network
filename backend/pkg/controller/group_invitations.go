@@ -152,3 +152,18 @@ func GetGroupsInvitationsSend(db *sql.DB, groupId string) ([]models.Group_Invita
 
 	return groups, nil
 }
+
+//Return the number of group inviations waiting
+func GetNbrGroupInvitations(db *sql.DB, userID string) (int, error) {
+	query := `
+		SELECT COUNT(*)
+		FROM group_invitations
+		WHERE user_id = ? AND status = 'waiting'
+	`
+	var count int
+	err := db.QueryRow(query, userID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}

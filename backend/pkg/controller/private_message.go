@@ -51,8 +51,8 @@ func GetDiscussion(db *sql.DB, user1 uuid.UUID, user2 uuid.UUID) []models.Privat
 	}
 
 	err := sortMessagesByCreatedAt(messages)
-	if err!= nil {
-		log.Println("error lors du filtrage:",err.Error())
+	if err != nil {
+		log.Println("error lors du filtrage:", err.Error())
 		return nil
 	}
 
@@ -105,4 +105,18 @@ func getMessagesForUser(db *sql.DB, userID uuid.UUID) []models.PrivateMessages {
 	}
 
 	return messages
+}
+
+func getNbrUnreadMessage(db *sql.DB, userID, senderID string) (int, error) {
+	query := `
+		SELECT COUNT(*)
+		FROM private_messages
+		WHERE recipient_id = ? AND sender_id = ? AND read = false
+	`
+	var count int
+	err := db.QueryRow(query, userID, senderID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }
