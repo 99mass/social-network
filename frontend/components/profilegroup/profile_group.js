@@ -18,8 +18,7 @@ export default function Profile_group() {
   const query= router.query;
  
   useEffect(() => {
-    if (!datas) {
-     
+    if (!datas) {     
       getDatasProfilGroup( setDatasProfileGroup, query.id);
     }
     
