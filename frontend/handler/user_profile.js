@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
@@ -8,7 +7,7 @@ export const getDatasProfilUser = async (setDatas, userid) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Profil + `?userid=${userid}`, {
+      const response = await fetch(`${api.Profil}?userid=${userid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

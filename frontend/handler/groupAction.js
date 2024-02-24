@@ -72,7 +72,6 @@ export const DeclineGroupInvitation = async (group_id, setRequestLists) => {
     if (!response.ok) {
       console.error("Failed to send  data");
     } else {
-      console.log('okk');
       ShowGroupInvitation(setRequestLists);
     }
   } catch (error) {

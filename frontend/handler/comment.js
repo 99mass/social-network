@@ -3,7 +3,7 @@ import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 import { getSpecificPostsUser } from "./getPostsUser";
 
-export const AddComment = async (data,postid,setComment,setPostData) => {
+export const AddComment = async (data, postid, setComment, setPostData) => {
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.Addcomment, {
@@ -32,7 +32,7 @@ export const getCommentPost = async (setComment, post_id) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Show_comments_post + `?post_id=${post_id}`, {
+      const response = await fetch(`${api.Show_comments_post}?post_id=${post_id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

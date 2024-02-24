@@ -18,7 +18,6 @@ export default function RequestGroup() {
     AcceptGroupInvitation(group_id, setRequestLists);
   };
   const handlerDeclineInvitaionGroup = (group_id) => {
-    console.log(group_id);
     DeclineGroupInvitation(group_id, setRequestLists);
   };
 

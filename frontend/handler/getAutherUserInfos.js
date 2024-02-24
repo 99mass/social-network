@@ -6,7 +6,7 @@ export const getDatasAutherUserInfos = async (userid,setDatasUser2) => {
       try {
         const sessionId = getSessionCookie();
   
-        const response = await fetch(api.UserInfos + `?userid=${userid}`, {
+        const response = await fetch(`${api.UserInfos}?userid=${userid}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

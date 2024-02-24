@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../../styles/modules/profile-group.module.css";
 import { AboutGroup } from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
 import { convertAge } from "../../utils/convert_dates";
 import { AddEvent } from "../../handler/create_event";
+import { getAllEvents } from "../../handler/getAllEvents";
 
-export default function Events() {
+export default function Events({ group_id }) {
+  const [allevents, setAllEvents] = useState(null);
   const [listUserGoing, setListUserGoing] = useState(false);
+
+  useEffect(() => {
+    getAllEvents(group_id, setAllEvents);
+  }, [])
+
+  console.log('=====================');
+  console.log(allevents && allevents);
 
   const data = [
     {
@@ -54,7 +63,7 @@ export default function Events() {
         ))}
       </div>
       <AboutGroup />
-      {listUserGoing && <ListUserAcceptedEvent  toggleListUsers={toggleListUsers} setListUserGoing={setListUserGoing} />}
+      {listUserGoing && <ListUserAcceptedEvent toggleListUsers={toggleListUsers} setListUserGoing={setListUserGoing} />}
     </div>
   );
 }
@@ -67,7 +76,7 @@ export function EventBloc({
   isGoing,
   toggleListUsers
 }) {
- 
+
   return (
     <div className={styles.eventDetails}>
       <h2>{nameGroup}</h2>
@@ -95,14 +104,14 @@ export function EventBloc({
             <i className="fa-solid fa-circle-check"></i>Not going
           </button>
         )}
-        <button onClick={()=>toggleListUsers(true)} className={styles.btnNotGoing}>
-          <i class="fa-solid fa-list-check"></i>Guest List
+        <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
+          <i className="fa-solid fa-list-check"></i>Guest List
         </button>
       </div>
     </div>
   );
 }
-export function FromCreateEvent({ setSection ,groupId }) {
+export function FromCreateEvent({ setSection, groupId }) {
 
 
   const toggleForm = () =>
@@ -114,32 +123,32 @@ export function FromCreateEvent({ setSection ,groupId }) {
       section5: false,
     });
 
-    const handlerEvent=(e)=>{
-      e.preventDefault();
-      const dataFrom=new FormData(e.target);
-      const title=dataFrom.get("title");
-      const description=dataFrom.get('description') 
-      let date=dataFrom.get('date');
-      let  hours=dataFrom.get('hours')
-      if (title.trim()=="" || description.trim()=="" || !date || !hours) {
-        errorNotification("all fields must be completed")
-        return
-      }
-      date=new Date(date)
-      date=convertAge(date)
-      hours=hours.toString()
-      const dayTime=`${date} ${hours}`
-
-      const data={
-        group_id:groupId,
-        title:title,
-        description:description,
-        day_time:dayTime
-      }
-      console.log(data);
-      AddEvent(data)
-
+  const handlerEvent = (e) => {
+    e.preventDefault();
+    const dataFrom = new FormData(e.target);
+    const title = dataFrom.get("title");
+    const description = dataFrom.get('description')
+    let date = dataFrom.get('date');
+    let hours = dataFrom.get('hours')
+    if (title.trim() == "" || description.trim() == "" || !date || !hours) {
+      errorNotification("all fields must be completed")
+      return
     }
+    date = new Date(date)
+    date = convertAge(date)
+    hours = hours.toString()
+    const dayTime = `${date} ${hours}`
+
+    const data = {
+      group_id: groupId,
+      title: title,
+      description: description,
+      day_time: dayTime
+    }
+    console.log(data);
+    AddEvent(data)
+
+  }
 
   return (
     <div className={styles.contentFormEvent}>
@@ -152,7 +161,7 @@ export function FromCreateEvent({ setSection ,groupId }) {
         ></i>
       </div>
       <hr />
-      <form method="post"  onSubmit={handlerEvent} >
+      <form method="post" onSubmit={handlerEvent} >
         <div className={styles.eventContent}>
           <input
             type="text"
@@ -186,7 +195,7 @@ export function FromCreateEvent({ setSection ,groupId }) {
   );
 }
 
-export function ListUserAcceptedEvent({toggleListUsers}) {
+export function ListUserAcceptedEvent({ toggleListUsers }) {
   const data = [
     {
       image: "../images/default-image.svg",
@@ -210,7 +219,7 @@ export function ListUserAcceptedEvent({toggleListUsers}) {
       <div className={styles.listHeader}>
         <h1>
           <span>Listes Users</span>
-          <i  onClick={()=>toggleListUsers(false)} className={`fa-regular fa-circle-xmark ${styles.closeBtn}`} title="Close lists"></i>
+          <i onClick={() => toggleListUsers(false)} className={`fa-regular fa-circle-xmark ${styles.closeBtn}`} title="Close lists"></i>
         </h1>
       </div>
       <hr />
@@ -222,7 +231,7 @@ export function ListUserAcceptedEvent({toggleListUsers}) {
               <div>
                 <img src={item.image} alt="" />
                 <span>{item.user}</span>
-                <i class="fa-regular fa-circle-check"></i>
+                <i className="fa-regular fa-circle-check"></i>
               </div>
             </div>
           ))}
@@ -235,7 +244,7 @@ export function ListUserAcceptedEvent({toggleListUsers}) {
               <div>
                 <img src={item.image} alt="" />
                 <span>{item.user}</span>
-                <i class="fa-regular fa-circle-xmark"></i>
+                <i className="fa-regular fa-circle-xmark"></i>
               </div>
             </div>
           ))}

@@ -57,7 +57,7 @@ export const getFriendsLists = async (userid, setDatas) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Users_follows + `?userid=${userid}`, {
+      const response = await fetch(`${api.Users_follows}?userid=${userid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +102,7 @@ export async function CountFollower(userid, setDatas) {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.CountFollower + `?userid=${userid}`, {
+      const response = await fetch(`${api.CountFollower}?userid=${userid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +147,7 @@ export const askForFriends = async (userid, setPosts, setDatasProfile) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Followuser + `?userid=${userid}`, {
+      const response = await fetch(`${api.Followuser}?userid=${userid}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -176,7 +176,7 @@ export const UnfollowUser = async (
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Unfollowuser + `?userid=${userid}`, {
+      const response = await fetch(`${api.Unfollowuser}?userid=${userid}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -201,7 +201,7 @@ export const confirmFriends = async (userid, setDatas, setoldFriend) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Followuser + `?userid=${userid}`, {
+      const response = await fetch(`${api.Followuser}?userid=${userid}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -233,7 +233,7 @@ export const deleteAskingFriends = async (
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.Followuser + `?userid=${userid}`, {
+      const response = await fetch(`${api.Followuser}?userid=${userid}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

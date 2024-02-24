@@ -24,11 +24,11 @@ export default function Header() {
       router.push("/");
     }
   };
-  console.log(router.route);
+
   useEffect(() => {
     getUserBySession(setDatasUser);
     const timer = setTimeout(() => {
-     if(router.route!=="/chatpage") globalSocket(setSocket);
+      if (router.route !== "/chatpage") globalSocket(setSocket);
     }, 800);
 
     return () => clearTimeout(timer);
@@ -37,12 +37,12 @@ export default function Header() {
   useEffect(() => {
     if (!socket) return;
     socket.onopen = () => {
-      console.log("WebSocket privateMessage opened");
+      console.log("WebSocket opened from header component");
     };
 
     socket.onmessage = (event) => {
       const _message = JSON.parse(event.data);
-      console.log("mess",_message);
+      // console.log("mess",_message);
       if (_message && _message.type === "notif_private_message") {
         setNotifMessages(true);
       }
@@ -61,7 +61,7 @@ export default function Header() {
               <Link href="/home">
                 <h2>social-network</h2>
               </Link>
-              <MidlleNAvForBigScreen  notifMessages={notifMessages} />
+              <MidlleNAvForBigScreen notifMessages={notifMessages} />
               <ToggleButton
                 togglePostForm={togglePostForm}
                 toggleGroupForm={toggleGroupForm}
@@ -71,7 +71,7 @@ export default function Header() {
                 userId={datasUser?.id}
               />
             </div>
-            <MidlleNAvFormSmallScreen  notifMessages={notifMessages}/>
+            <MidlleNAvFormSmallScreen notifMessages={notifMessages} />
           </div>
         </div>
       </nav>
@@ -83,7 +83,7 @@ export default function Header() {
   );
 }
 
-export function MidlleNAvForBigScreen({notifMessages}) {
+export function MidlleNAvForBigScreen({ notifMessages }) {
   return (
     <div className={`${styles.middleContent} ${styles.middleContent0}`}>
       <Link href="/home">
@@ -112,7 +112,7 @@ export function MidlleNAvForBigScreen({notifMessages}) {
     </div>
   );
 }
-export function MidlleNAvFormSmallScreen({notifMessages}) {
+export function MidlleNAvFormSmallScreen({ notifMessages }) {
   return (
     <div className={`${styles.middleContent} ${styles.middleContent1}`}>
       <Link href="/home">
@@ -127,7 +127,7 @@ export function MidlleNAvFormSmallScreen({notifMessages}) {
       </Link>
       <Link href="/chat">
         <i className="fas fa-comment">
-        {notifMessages && <span>42</span>}
+          {notifMessages && <span>42</span>}
         </i>
       </Link>
       <Link href="/notification">

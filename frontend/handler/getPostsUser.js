@@ -30,7 +30,7 @@ export const getSpecificPostsUser = async (post_id, setPostData) => {
     try {
       const sessionId = getSessionCookie();
 
-      const response = await fetch(api.ShowPosts + `?post_id=${post_id}`, {
+      const response = await fetch(`${api.ShowPosts}?post_id=${post_id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
