@@ -59,9 +59,10 @@ export default function LeftBlocGroupPage({ state, handleState }) {
       </Link>
       <hr />
       <h4 className={styles.h4ListGroupManaged}>Groups you manage</h4>
-      {groups && <ListGroupManaged group={groups} />}
       {/* create group form */}
-      {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
+      {groupForm && <Group toggleGroupForm={toggleGroupForm} setGroups={setGroups} />}
+      
+      {groups && <ListGroupManaged group={groups} />}
     </div>
   );
 }
