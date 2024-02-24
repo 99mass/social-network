@@ -8,7 +8,7 @@ export default function DiscoverBloc() {
   const [groupDiscover, setGroupDiscover] = useState();
   useEffect(() => {
     Groupstodiscover(setGroupDiscover);
-   
+
   }, []);
 
   return (
@@ -32,20 +32,22 @@ export default function DiscoverBloc() {
 }
 
 export function GoupFace({ image, gName, nMembres, groudId }) {
- 
+
   return (
     <div className={styles.postSugess}>
       <Link href={`./profilegroup/?id=${groudId}`}>
-            <img src={image?`data:image/png;base64,${image}`:defaultImage} alt="" />
+        <img src={image ? `data:image/png;base64,${image}` : defaultImage} alt="" />
       </Link>
       <div>
         <div className={styles.nameGroupMembres}>
-        <Link href={`./profilegroup/?id=${groudId}`}>
-             <span>{gName}</span>
+          <Link href={`./profilegroup/?id=${groudId}`}>
+            <span>{gName}</span>
             <span>{nMembres} members</span>
-        </Link>
+          </Link>
         </div>
-        <button >join group</button>
+        <div className={styles.btns}>
+          <button >join group</button>
+        </div>
       </div>
     </div>
   );

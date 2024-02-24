@@ -8,7 +8,7 @@ export const getDatasProfilGroup = async (setDatas, groudId ) => {
       try {
         const sessionId = getSessionCookie();
   
-        const response = await fetch(api.ProfilGroup + `?id=${groudId}`, {
+        const response = await fetch(`${api.ProfilGroup}?id=${groudId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

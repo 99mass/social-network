@@ -26,7 +26,7 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "group_id is required", http.StatusBadRequest)
 				return
 			}
-
+			log.Println("group_id: ", groupID)
 			events, err := controller.GetEventsByGroupID(db, groupID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)

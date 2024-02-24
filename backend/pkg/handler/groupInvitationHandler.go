@@ -44,7 +44,6 @@ func AccepGrpInvitation(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")
@@ -76,21 +75,21 @@ func DeclineGrpInvitaton(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-			var invitationReq InvitationRequest
-			_, err = controller.GetGroupByID(db, invitationReq.GroupID)
+			// var invitationReq InvitationRequest
+			groupeID := r.URL.Query().Get("groupid")
+			_, err = controller.GetGroupByID(db, groupeID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "this group doesn't exit", http.StatusBadRequest)
 				log.Println("the user try to add member in a group that doesn't exist")
 				return
 			}
-			err = controller.DeclineGroupInvitaton(db, sess.UserID.String(), invitationReq.GroupID)
+			err = controller.DeclineGroupInvitaton(db, sess.UserID.String(), groupeID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "enable to accept this invitation", http.StatusBadRequest)
 				log.Println("the request invitation can't be accepted due to" + err.Error())
 				return
 			}
 
-			
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")

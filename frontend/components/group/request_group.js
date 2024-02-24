@@ -77,15 +77,17 @@ export function GoupName({
             <span>{nMembres} membres</span>
           </Link>
         </div>
-        <button onClick={() => handlerAcceptInvitationGroup(group_id)}>
-          join group
-        </button>
-        <button
-          className={styles.declineBtn}
-          onClick={() => handlerDeclineInvitaionGroup(group_id)}
-        >
-          decline group
-        </button>
+        <div className={styles.btns}>
+          <button onClick={() => handlerAcceptInvitationGroup(group_id)}>
+            join group
+          </button>
+          <button
+            className={styles.declineBtn}
+            onClick={() => handlerDeclineInvitaionGroup(group_id)}
+          >
+            decline group
+          </button>
+        </div>
       </div>
     </div>
   );
