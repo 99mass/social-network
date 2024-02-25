@@ -9,15 +9,15 @@ import { useRouter } from "next/router";
 export default function Discussion({ description }) {
   
   const router = useRouter();
-  // const { groupid } = router.query;
+  const { id } = router.query;
   const [postData, setPostsGroup] = useState(null);
   // const [comment, setComment] = useState(null);
-  let groupid = "546f7041-7185-41d6-8634-d5e97d3825c7"
-  console.log("grosupid:", groupid);
+  // let id = "546f7041-7185-41d6-8634-d5e97d3825c7"
+  // console.log("grosupid:", id);
   useEffect(() => {
-    if (groupid) {
-      getPostsGroup(groupid, setPostsGroup)
-      console.log("postgroup data:",postData)
+    if (id) {
+      getPostsGroup(id, setPostsGroup)
+      // console.log("postgroup data:",postData)
     }
   }, [])
   // iduser,
@@ -41,10 +41,18 @@ export default function Discussion({ description }) {
                 getElapsedTime(item.post.created_at).unit
               }`}
               setPosts={setPostsGroup}
-              groupid={groupid}
+              groupid={id}
             />
             <PostMiddle content={item.post.content} image={item.post.image_path} />
-            <PostFooter />
+            <PostFooter
+              is_liked={item.is_liked}
+              numberLike={item.nbr_likes}
+              numberComment={item.nbr_comments}
+              userid={item.user.id}
+              postid={item.post.id}
+              setPosts={setPostsGroup}
+              groupid={id}
+            />
           </div>
         ))) : null}
       </div>

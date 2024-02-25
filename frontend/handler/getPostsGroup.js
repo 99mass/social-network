@@ -18,7 +18,7 @@ export const getPostsGroup = async (groupid,setPostsGroup) => {
       console.error("Failed to fetch PostsUser data");
     } else {
       const data = await response.json();
-      console.log("postgroup fetch:",data)
+      // console.log("postgroup fetch:",data)
       setPostsGroup(data);
     }
   } catch (error) {
