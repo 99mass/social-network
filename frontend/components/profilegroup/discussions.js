@@ -50,8 +50,8 @@ export default function Discussion({ description }) {
               numberComment={item.nbr_comments}
               userid={item.user.id}
               postid={item.post.id}
-              setPosts={setPostsGroup}
               groupid={id}
+              setPostsGroup={setPostsGroup}
             />
           </div>
         ))) : null}

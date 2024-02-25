@@ -142,11 +142,19 @@ export function PostFooter({
   setPosts,
   setPostsCreated,
   groupid,
+  setPostsGroup,
 }) {
   const handlerLikeDislikePost = (is_liked) => {
-    likeDislikePost(userid, postid, is_liked, setPosts, setPostsCreated);
+    likeDislikePost(userid, postid, is_liked, setPosts, setPostsCreated,null,groupid,setPostsGroup);
   };
-
+  // userid,
+  // postid,
+  // is_liked,
+  // setPosts,
+  // setPostsCreated,
+  // setSpecificPostData,
+  // groupid,
+  // setPostsGroup,
   return (
     <div className="liked">
       <div
