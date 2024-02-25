@@ -41,7 +41,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/user", helper.Middleware(handler.ConnectedUser(db)))
 	http.HandleFunc("/profil", helper.Middleware(handler.ProfilHandler(db)))
 
-	http.HandleFunc("/profilegroup", helper.Middleware(handler.ProfilGroupHandler(db)))
+	http.HandleFunc("/profilegroup", helper.Middleware(handler.ProfilGroupHandler(db))) // to update (add ismember)
 	http.HandleFunc("/users_follows", helper.Middleware(handler.GetUsersHandler(db)))
 	http.HandleFunc("/show_posts", helper.Middleware(handler.ShowPosts(db)))
 	http.HandleFunc("/userposts", helper.Middleware(handler.UserPosts(db)))
@@ -55,4 +55,6 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/groupstodiscover", helper.Middleware(handler.GroupsToDiscoverHandler(db)))
 	http.HandleFunc("/create_events", helper.Middleware(handler.AddGroupEventHandler(db)))
 	http.HandleFunc("/events", helper.Middleware(handler.GetEventsByGroupHandler(db)))
+	http.HandleFunc("/show_posts_group", helper.Middleware(handler.ShowPostsGroup(db)))
+
 }

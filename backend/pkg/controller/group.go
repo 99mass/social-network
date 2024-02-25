@@ -274,3 +274,32 @@ func IsInvitationSend(db *sql.DB, groupId string, userId string) (bool, error) {
 	return false, nil
 
 }
+
+func GetPostsGroup(db *sql.DB, groupId string) ([]models.Post, error) {
+	query := `
+        SELECT *
+        FROM posts
+        WHERE group_id = ?
+    `
+	rows, err := db.Query(query, groupId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []models.Post
+	for rows.Next() {
+		var post models.Post
+		err := rows.Scan(&post.ID, &post.UserID, &post.GroupID, &post.Content, &post.ImagePath, &post.Privacy, &post.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	
+	return posts, nil
+}

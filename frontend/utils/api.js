@@ -35,4 +35,5 @@ export const api = {
   Decline_group_invitation: `${domain}/decline_group_invitation`,
   Create_events: `${domain}/create_events`,
   GetEvents: `${domain}/events`,
+  GetPostsGroup: `${domain}/show_posts_group`,
 };

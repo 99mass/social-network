@@ -94,6 +94,5 @@ export default function PostGroup({ PostForm }) {
         <button className={styles.btnPost}>Post</button>
       </form>
     </div>
-
   );
 }
