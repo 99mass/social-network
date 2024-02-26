@@ -60,22 +60,22 @@ export function PostHeader({
   time,
   setPosts,
   groupid,
+  setPostsGroup,
 }) {
   const handlerFollower = (stateFollow) => {
     if (stateFollow == "Follow") {
       // askForFriends(iduser, null, null,groupid,setPosts);
-      askForFriends(iduser, setPosts, null,null,null);
+      askForFriends(iduser, setPosts, null, groupid, setPostsGroup);
     } else if (stateFollow == "Unfollow" || stateFollow == "Delete") {
       // UnfollowUser(iduser, null, null,null,groupid,setPosts);
-      UnfollowUser(iduser, setPosts, null,null,null,null);
-
+      UnfollowUser(iduser, setPosts, null, null, groupid, setPostsGroup);
     }
-  //   userid,
-  // setPosts,
-  // setFollowingUsersList,
-  // setDatasProfile,
-  // groupeid,
-  // setPostsGroup
+    //   userid,
+    // setPosts,
+    // setFollowingUsersList,
+    // setDatasProfile,
+    // groupeid,
+    // setPostsGroup
   };
 
   return (
@@ -148,16 +148,17 @@ export function PostFooter({
   setPostsGroup,
 }) {
   const handlerLikeDislikePost = (is_liked) => {
-    likeDislikePost(userid, postid, is_liked, setPosts, setPostsCreated,null,groupid,setPostsGroup);
+    likeDislikePost(
+      userid,
+      postid,
+      is_liked,
+      setPosts,
+      setPostsCreated,
+      null,
+      groupid,
+      setPostsGroup
+    );
   };
-  // userid,
-  // postid,
-  // is_liked,
-  // setPosts,
-  // setPostsCreated,
-  // setSpecificPostData,
-  // groupid,
-  // setPostsGroup,
   return (
     <div className="liked">
       <div
