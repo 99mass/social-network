@@ -76,6 +76,7 @@ export default function Profile_group() {
       {section.section2 && datas && datas.isMember && (
         <PostGroup
           PostForm={togglePostForm}
+          section={section}
           setPostsGroup={setPostsGroup}
           groupId={datas && datas.GroupInfos.id}
         />

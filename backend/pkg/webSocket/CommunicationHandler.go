@@ -56,7 +56,7 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 		request.User1 = sess.UserID.String()
 		discuss, err := GetCommunication(db, request.User1, request.User2)
 		if err != nil {
-			SendGenResponse("error",conn,"incorrect userID")
+			SendGenResponse("error", conn, "incorrect userID")
 			log.Println("enable to get discussion", err)
 
 			return
@@ -68,6 +68,8 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 
 			return
 		}
+		controller.DeleteNotificationBySenderAndUser(db, request.User2, sess.UserID.String(), "private_message")
+		BroadcastUserList(db)
 		conn.WriteJSON(goodDiscuss)
 
 	}

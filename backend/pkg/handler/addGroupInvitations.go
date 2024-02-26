@@ -64,6 +64,7 @@ func AddGroupInvitations(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			websocket.NotificationGroupInvitation(db, sess.UserID.String(), groupInvitations.GroupID, groupInvitations.UserID)
+			websocket.BroadcastUserList(db)
 
 			helper.SendResponse(w, nil, http.StatusOK)
 			log.Println("Invitation created successfully")
