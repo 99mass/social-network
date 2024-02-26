@@ -137,13 +137,13 @@ func JoingGroupRequest(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			creator,err := controller.GetCreatorByGroupID(db,groupeID)
+			creator, err := controller.GetCreatorByGroupID(db, groupeID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
 				log.Println("can't get the creator by the groupID" + err.Error())
 				return
 			}
-			websocket.NotificationJoinGroup(db,sess.UserID.String(),groupeID,creator)
+			websocket.NotificationJoinGroup(db, sess.UserID.String(), groupeID, creator)
 			websocket.BroadcastUserList(db)
 			log.Println("Join group request successful")
 			helper.SendResponse(w, nil, http.StatusOK)
