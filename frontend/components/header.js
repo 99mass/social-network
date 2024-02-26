@@ -43,8 +43,10 @@ export default function Header() {
     };
 
     socket.onmessage = (event) => {
-      const _message = JSON.parse(event.data);
+      const _message = JSON.parse(event.data);      
       if (!_message) return;
+      console.log(_message);
+
       switch (_message.type) {
         case "nbr_notif_message":
           setNotifMessagesPrivate(_message.content);
@@ -55,6 +57,9 @@ export default function Header() {
         case "nbr_notif_follow":
           _message.type === "nbr_notif_follow";
           break;
+          case "nbr_notif_follow":
+            _message.type === "nbr_notif_follow";
+            break;
       }
     };
   }, [socket]);

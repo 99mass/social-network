@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/profile-group.module.css";
 import Discussion from "./discussions";
-import  EventLists, { FromCreateEvent } from "./events";
+import EventLists, { FromCreateEvent } from "./events";
 import PostGroup from "./post_group";
 import ChatGroup from "./chat_group";
 import { getDatasProfilGroup } from "../../handler/group_profile";
@@ -67,7 +67,7 @@ export default function Profile_group() {
         isMember={datas && datas.isMember}
         setDatasProfileGroup={setDatasProfileGroup}
       />
-      {section.section1  && (
+      {section.section1 && (
         <Discussion
           postGroup={postGroup}
           setPostsGroup={setPostsGroup}
