@@ -140,3 +140,32 @@ export const AddGroupInvitations = async (
     errorNotification(error);
   }
 };
+
+
+
+export const DeclineInvitation = async (group_id, userid, setDatasProfileGroup) => {
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(
+      `${api.Decline_group_invitation}?groupid=${group_id}&userId=${userid}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      }
+    );
+
+    // Vérifier le statut de la réponse
+    if (!response.ok) {
+      console.error("Failed to send  data");
+    } else {
+      getDatasProfilGroup( setDatasProfileGroup, group_id);
+      
+    }
+  } catch (error) {
+    console.error("Error fetching profile data:", error.message);
+  }
+};

@@ -19,6 +19,7 @@ type GroupInfos struct {
 }
 
 type UsersNoInGroup struct {
-	User      User `json:"user"`
-	IsInvited bool `json:"isInvited"`
+	User                   User `json:"user"`
+	IsInvited              bool `json:"isInvited"`
+	IsUserSenderInvitation bool `json:"isUserSenderInvitation"`
 }

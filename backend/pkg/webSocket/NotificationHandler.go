@@ -45,7 +45,7 @@ func NotificationGroupInvitation(db *sql.DB,sender, groupID, userID string) {
 	CreateGeneralNotif(db,userID,sender,groupID,"group_invitation")
 
 	if user, ok := ConnectedUsersList[userID]; ok {
-		err := SendGenResponse("notif_group_join_request", user.Conn, notif)
+		err := SendGenResponse("notif_group_invitation_request", user.Conn, notif)
 		if err != nil {
 			log.Println("enable to send a notification to the user that you sent the message")
 		}

@@ -48,6 +48,7 @@ export default function Header() {
       console.log(_message);
 
       switch (_message.type) {
+        // old notifications
         case "nbr_notif_message":
           setNotifMessagesPrivate(_message.content);
           break;
@@ -57,7 +58,8 @@ export default function Header() {
         case "nbr_notif_follow":
           _message.type === "nbr_notif_follow";
           break;
-          case "nbr_notif_follow":
+          // instantate notifications
+          case "notif_private_message":
             _message.type === "nbr_notif_follow";
             break;
       }
