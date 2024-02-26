@@ -160,7 +160,7 @@ export const askForFriends = async (userid, setPosts, setDatasProfile,groupeid,s
       if (response.ok) {
         if (setPosts) getPostsUser(setPosts);
         if (setDatasProfile) getDatasProfilUser(setDatasProfile, userid);
-        if (setPostsGroup) getPostsGroup(groupeid, setPostsGroup)
+        if (setPostsGroup && groupeid) getPostsGroup(groupeid, setPostsGroup)
       }
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
