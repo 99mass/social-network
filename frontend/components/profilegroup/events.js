@@ -4,18 +4,18 @@ import { AboutGroup } from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
 import { convertAge } from "../../utils/convert_dates";
 import { AddEvent } from "../../handler/create_event";
-import { getAllEvents } from "../../handler/getAllEvents";
+import { ListAllEvents } from "../../handler/getAllEvents";
 
-export default function Events({ group_id }) {
+export default function EventLists({ group_id }) {
   const [allevents, setAllEvents] = useState(null);
   const [listUserGoing, setListUserGoing] = useState(false);
 
+  
   useEffect(() => {
-    getAllEvents(group_id, setAllEvents);
+    ListAllEvents(group_id, setAllEvents);
   }, [])
 
-  console.log('=====================');
-  console.log(allevents && allevents);
+  console.log( allevents);
 
   const data = [
     {
@@ -50,13 +50,13 @@ export default function Events({ group_id }) {
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
-        {data.map((item, index) => (
+        {allevents && allevents.map((item, index) => (
           <EventBloc
             key={index}
-            nameGroup={item.nameGroup}
-            numberPerson={item.numberPerson}
-            time={item.time}
-            content={item.content}
+            nameGroup={item.event.title}
+            numberPerson={item.going_count}
+            time={item.event.day_time}
+            content={item.event.description}
             isGoing={item.isGoing}
             toggleListUsers={toggleListUsers}
           />

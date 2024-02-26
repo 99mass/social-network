@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/profile-group.module.css";
 import Discussion from "./discussions";
-import Events, { FromCreateEvent } from "./events";
+import  EventLists, { FromCreateEvent } from "./events";
 import PostGroup from "./post_group";
 import ChatGroup from "./chat_group";
 import { getDatasProfilGroup } from "../../handler/group_profile";
@@ -65,36 +65,13 @@ export default function Profile_group() {
         groupId={datas && datas.GroupInfos.id}
         handlerSendInvitations={handlerSendInvitations}
         isMember={datas && datas.isMember}
-        setDatasProfileGroup={setDatasProfileGroup}
       />
-      {section.section1 && datas && datas.isMember && (
-        <Discussion
-          postGroup={postGroup}
-          setPostsGroup={setPostsGroup}
-          groupId={datas && datas.GroupInfos.id}
-          description={datas && datas.GroupInfos.description}
-        />
-      )}
-      {section.section2 && datas && datas.isMember && (
-        <PostGroup
-          PostForm={togglePostForm}
-          section={section}
-          setPostsGroup={setPostsGroup}
-          groupId={datas && datas.GroupInfos.id}
-        />
-      )}
-      {section.section3 && datas && datas.isMember && (
-        <Events group_id={datas && datas.GroupInfos.id} />
-      )}
-      {section.section4 && datas && datas.isMember && (
-        <ChatGroup setSection={setSection} />
-      )}
-      {section.section5 && datas && datas.isMember && (
-        <FromCreateEvent
-          setSection={setSection}
-          groupId={datas && datas.GroupInfos.id}
-        />
-      )}
+     
+      {section.section1 && <Discussion description={ datas && datas.GroupInfos.description} />}
+      {section.section2 && <PostGroup PostForm={togglePostForm} />}
+      {section.section3 && <EventLists group_id={datas && datas.GroupInfos.id} />}
+      {section.section4 && <ChatGroup setSection={setSection} />}
+      {section.section5 && <FromCreateEvent setSection={setSection} groupId={datas && datas.GroupInfos.id} />}
     </>
   );
 }
