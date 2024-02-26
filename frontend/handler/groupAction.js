@@ -80,10 +80,7 @@ export const DeclineGroupInvitation = async (group_id, setRequestLists) => {
   }
 };
 
-
-
-export const AddPostGroup = async (data) => {
-  
+export const AddPostGroup = async (data, setPostsGroup, groupId) => {
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.AddPostGroup, {
@@ -99,7 +96,7 @@ export const AddPostGroup = async (data) => {
       successNotification(
         "Post Group added successful you can see it in the home  or  profile page."
       );
-      
+      if (groupId && setPostsGroup) getPostsGroup(groupId, setPostsGroup);
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);
