@@ -43,7 +43,7 @@ export default function Header() {
     };
 
     socket.onmessage = (event) => {
-      const _message = JSON.parse(event.data);      
+      const _message = JSON.parse(event.data);
       if (!_message) return;
       console.log(_message);
 
@@ -58,10 +58,15 @@ export default function Header() {
         case "nbr_notif_follow":
           _message.type === "nbr_notif_follow";
           break;
-          // instantate notifications
-          case "notif_private_message":
-            _message.type === "nbr_notif_follow";
-            break;
+        // now notifications
+        case "notif_private_message":
+          break;
+        case "notif_group_invitation_request":
+          break;
+        case "notif_follow_request":
+          break;
+        case "notif_join_group_request":
+          break;
       }
     };
   }, [socket]);

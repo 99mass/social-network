@@ -15,8 +15,8 @@ export default function Discussion({
     if (groupId) {
       getPostsGroup(groupId, setPostsGroup);
     }
-  }, []);
-
+  }, [isMember]);
+  
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>

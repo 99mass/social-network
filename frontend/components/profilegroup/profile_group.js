@@ -9,6 +9,7 @@ import ChatGroup from "./chat_group";
 import { getDatasProfilGroup } from "../../handler/group_profile";
 import { defaultImage } from "../group/group_page";
 import { AddGroupInvitations,  DeclineInvitation } from "../../handler/groupAction";
+import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
@@ -108,7 +109,7 @@ export default function Profile_group() {
   );
 }
 
-export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers, groupId, handlerSendInvitations, handlerDeclineInvitaionGroup,  isMember}) {
+export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers, groupId, handlerSendInvitations, handlerDeclineInvitaionGroup,  isMember,setDatasProfileGroup}) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
   const [friend, setFriend] = useState(false);
   const [membre, setMembre] = useState(false);
