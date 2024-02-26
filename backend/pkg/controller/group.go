@@ -325,3 +325,21 @@ func GetCreatorByGroupID(db *sql.DB, groupID string) (string, error) {
 
 	return creatorID, nil
 }
+
+func GetGroupTitle(db *sql.DB, groupID string) (string, error) {
+	// Prepare the SQL query to get the group title for a specific group ID.
+	query := `
+		SELECT title
+		FROM groups
+		WHERE id = ?;
+	`
+
+	// Execute the query and retrieve the result.
+	var title string
+	err := db.QueryRow(query, groupID).Scan(&title)
+	if err != nil {
+		return "", err
+	}
+
+	return title, nil
+}
