@@ -4,6 +4,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	websocket "backend/pkg/webSocket"
 	"database/sql"
 	"log"
 	"net/http"
@@ -62,6 +63,7 @@ func ShowGroupInvitation(db *sql.DB) http.HandlerFunc {
 
 			helper.SendResponse(w, groupInf, http.StatusOK)
 			err = controller.DeleteNotificationByUserID(db, sess.UserID.String(), "group_invitation")
+			websocket.BroadcastUserList(db)
 			if err != nil {
 				log.Println("error:", err.Error())
 			}
