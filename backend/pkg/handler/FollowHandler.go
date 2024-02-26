@@ -8,6 +8,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/utils"
+	websocket "backend/pkg/webSocket"
 )
 
 func FollowUser(db *sql.DB) http.HandlerFunc {
@@ -37,6 +38,8 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
 				return
 			}
+			websocket.NotificationFollowRequest(db, sess.UserID.String(), "", userid.String())
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 		case http.MethodPut:
 			// Appelez la fonction de contrôleur pour suivre l'utilisateur
@@ -46,6 +49,8 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
 				return
 			}
+			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 		case http.MethodDelete:
 			// Appelez la fonction de contrôleur pour supprimer le follow
@@ -55,6 +60,8 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "Error Following user", http.StatusInternalServerError)
 				return
 			}
+			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 
 		default:
@@ -115,11 +122,13 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 				if follower.UserAvatarPath != "" {
 					followers[i].UserAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
 					if err != nil {
-						log.Println("enable to encode image avatar",err.Error())
-						
+						log.Println("enable to encode image avatar", err.Error())
+
 					}
 				}
 			}
+			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, followers, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
@@ -148,8 +157,8 @@ func OldestPendingRequestFollow(db *sql.DB) http.HandlerFunc {
 			if follower.UserAvatarPath != "" {
 				follower.UserAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
 				if err != nil {
-					log.Println("enable to encode image avatar",err.Error())
-					
+					log.Println("enable to encode image avatar", err.Error())
+
 				}
 			}
 			helper.SendResponse(w, follower, http.StatusOK)
@@ -222,8 +231,8 @@ func GetFollowingInfos(db *sql.DB) http.HandlerFunc {
 				if follower.UserAvatarPath != "" {
 					img, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + follower.UserAvatarPath)
 					if err != nil {
-						log.Println("enable to encode image",err.Error())
-						
+						log.Println("enable to encode image", err.Error())
+
 					}
 					followers[i].UserAvatarPath = img
 				}

@@ -74,3 +74,22 @@ func DeleteNotificationByUserID(db *sql.DB, userID, typeNotif string) error {
 	_, err := db.Exec(query, userID, typeNotif)
 	return err
 }
+
+// GetNotificationCountByType retrieves the number of notifications of a specific type for a specific user.
+func GetNotificationCountByType(db *sql.DB, userID string, notificationType string) (int, error) {
+	// Prepare the SQL query to count notifications by type for a specific user.
+	query := `
+		SELECT COUNT(*) as count
+		FROM notifications
+		WHERE user_id = ? AND type = ?;
+	`
+
+	// Execute the query and retrieve the result.
+	var count int
+	err := db.QueryRow(query, userID, notificationType).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

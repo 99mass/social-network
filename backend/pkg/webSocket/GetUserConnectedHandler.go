@@ -34,6 +34,13 @@ func BroadcastUserList(db *sql.DB) {
 
 			}
 
+			nbrMessage,_:= controller.GetNotificationCountByType(db,user.UserID,"private_message")
+			SendGenResponse("nbr_notif_message",user.Conn,nbrMessage)
+			nbrFollow,_:= controller.GetNotificationCountByType(db,user.UserID,"follow_request")
+			SendGenResponse("nbr_notif_follow",user.Conn,nbrFollow)
+			nbrGrpJoinReq,_:= controller.GetNotificationCountByType(db,user.UserID,"group_invitation")
+			SendGenResponse("nbr_notif_group_invitation",user.Conn,nbrGrpJoinReq)
+
 			err = SendGenResponse("users_list", user.Conn, usersList)
 			if err != nil {
 				// Handle the error (e.g., log it, remove the user from the map, etc.)

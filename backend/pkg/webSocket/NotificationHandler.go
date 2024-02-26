@@ -17,10 +17,13 @@ type notif_group_invitation struct {
 }
 
 // this function handle the notification for private message
-func NotificationMessage(mess models.PrivateMessages) {
+func NotificationMessage(db *sql.DB,mess models.PrivateMessages) {
 	var notif notif_private_message
 	notif.Sender = mess.SenderID
 	notif.Recipient = mess.RecipientID
+
+	CreateGeneralNotif(db,mess.RecipientID,mess.SenderID,"","private_message")
+
 	if user, ok := ConnectedUsersList[mess.RecipientID]; ok {
 		err := SendGenResponse("notif_private_message", user.Conn, notif)
 		if err != nil {
@@ -45,6 +48,21 @@ func NotificationGroupInvitation(db *sql.DB,sender, groupID, userID string) {
 	}
 }
 
+func NotificationFollowRequest(db *sql.DB,senderID,sourceID,userID string){
+	var notif notif_private_message
+	notif.Sender = senderID
+	notif.Recipient = userID
+
+	CreateGeneralNotif(db,userID,senderID,sourceID,"follow_request")
+
+	if user, ok := ConnectedUsersList[userID]; ok {
+		err := SendGenResponse("notif_follow_request", user.Conn, notif)
+		if err != nil {
+			log.Println("enable to send a notification to the user that you sent the message")
+		}
+	}
+
+}
 
 
 func CreateGeneralNotif(db *sql.DB, userID, senderID ,sourceID, typeNotif string)error{
