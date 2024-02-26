@@ -51,7 +51,7 @@ export default function DiscussionPage() {
     };
 
     socket.onmessage = (event) => {
-      const _message = JSON.parse(event.data);
+      const _message = event.data && JSON.parse(event.data);
       if (_message && _message.type === "error") {
         errorNotification(_message.content);
       }

@@ -263,3 +263,7 @@
 .close:hover {
   background-color: rgb(58, 69, 83);
 }
+
+.sender{
+    color: #153586;
+}

@@ -14,10 +14,13 @@ export default function Header() {
   const [postForm, setPostFrom] = useState(false);
   const [groupForm, setGroupFrom] = useState(false);
   const [socket, setSocket] = useState(null);
-  const [notifMessagesPrivate, setNotifMessagesPrivate] = useState(0);
+  const [nbrnotifMessagesPrivate, setNbrNotifMessagesPrivate] = useState(0);
   const [nbrNotifGroupInvitation, setNbrNotifGroupInvitation] = useState(0);
   const [nbrNotifFollow, setNbrNotifFollow] = useState(0);
-
+  const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
+  const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
+  const [notifFollow, setNotifFollow] = useState("");
+  const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
   const router = useRouter();
 
   const handlerLogOut = async () => {
@@ -42,30 +45,42 @@ export default function Header() {
       console.log("WebSocket opened from header component");
     };
 
+    //     content: Object { sender: "breukh doe", recipient: "omzo doe" }
+    // ​
+    // type: "notif_private_message"
+
     socket.onmessage = (event) => {
-      const _message = JSON.parse(event.data);
+      const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      console.log(_message);
+      // console.log(_message);
 
       switch (_message.type) {
         // old notifications
         case "nbr_notif_message":
-          setNotifMessagesPrivate(_message.content);
+          setNbrNotifMessagesPrivate(_message.content);
           break;
-        case "nbr_notif_join_group_request":
+        case "nbr_notif_group_invitation":
           setNbrNotifGroupInvitation(_message.content);
           break;
         case "nbr_notif_follow":
-          _message.type === "nbr_notif_follow";
+          setNbrNotifFollow(_message.content);
           break;
         // now notifications
         case "notif_private_message":
-          break;
-        case "notif_group_invitation_request":
+          if (router.route !== "/chatpage") setNotifMessagesPrivate(_message);
+          console.log("chat:", _message);
           break;
         case "notif_follow_request":
+          setNotifFollow(_message.content);
+          console.log("Follow:", _message);
+          break;
+        case "notif_group_invitation_request":
+          setNotifGroupInvitation(_message.content);
+          console.log("Invitation:", _message);
           break;
         case "notif_join_group_request":
+          setNotifJoinGroupRequest(_message.content);
+          console.log("Join Request:", _message);
           break;
       }
     };
@@ -84,7 +99,7 @@ export default function Header() {
                 <h2>social-network</h2>
               </Link>
               <MidlleNAvForBigScreen
-                notifMessagesPrivate={notifMessagesPrivate}
+                nbrnotifMessagesPrivate={nbrnotifMessagesPrivate}
                 nbrNotifGroupInvitation={nbrNotifGroupInvitation}
                 nbrNotifFollow={nbrNotifFollow}
               />
@@ -98,7 +113,7 @@ export default function Header() {
               />
             </div>
             <MidlleNAvFormSmallScreen
-              notifMessagesPrivate={notifMessagesPrivate}
+              nbrnotifMessagesPrivate={nbrnotifMessagesPrivate}
               nbrNotifGroupInvitation={nbrNotifGroupInvitation}
               nbrNotifFollow={nbrNotifFollow}
             />
@@ -108,14 +123,20 @@ export default function Header() {
       {postForm && (
         <Post togglePostForm={togglePostForm} setPostForm={setPostFrom} />
       )}
-      <ToastNotification />
+      {notifMessagesPrivate && (
+        <ToastNotification
+          type={notifMessagesPrivate.type.replaceAll("_", " ") + "!"}
+          sender={notifMessagesPrivate.content.sender}
+          setCloseState={setNotifMessagesPrivate}
+        />
+      )}
       {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
     </>
   );
 }
 
 export function MidlleNAvForBigScreen({
-  notifMessagesPrivate,
+  nbrnotifMessagesPrivate,
   nbrNotifGroupInvitation,
   nbrNotifFollow,
 }) {
@@ -133,7 +154,9 @@ export function MidlleNAvForBigScreen({
       </Link>
       <Link href="/chat">
         <i className="fas fa-comment" title="Chat">
-          {notifMessagesPrivate > 0 && <span>{notifMessagesPrivate}+</span>}
+          {nbrnotifMessagesPrivate > 0 && (
+            <span>{nbrnotifMessagesPrivate}+</span>
+          )}
         </i>
       </Link>
       {/* <Link href="/notification">
@@ -152,7 +175,7 @@ export function MidlleNAvForBigScreen({
   );
 }
 export function MidlleNAvFormSmallScreen({
-  notifMessagesPrivate,
+  nbrnotifMessagesPrivate,
   nbrNotifGroupInvitation,
   nbrNotifFollow,
 }) {
@@ -168,7 +191,9 @@ export function MidlleNAvFormSmallScreen({
       </Link>
       <Link href="/chat">
         <i className="fas fa-comment">
-          {notifMessagesPrivate > 0 && <span>{notifMessagesPrivate}+</span>}
+          {nbrnotifMessagesPrivate > 0 && (
+            <span>{nbrnotifMessagesPrivate}+</span>
+          )}
         </i>
       </Link>
       {/* <Link href="/notification">
@@ -233,8 +258,9 @@ export function ToggleButton({
   );
 }
 
-function ToastNotification() {
-  const closeToast = () => {};
+function ToastNotification({ type, sender, setCloseState }) {
+  console.log(type);
+  const closeToast = () => setCloseState("");
 
   return (
     <div className={styles.card}>
@@ -264,12 +290,13 @@ function ToastNotification() {
         </svg>
       </div>
       <div className={styles.content}>
-        <span className={styles.title}>Good news Mac users!</span>
+        <span className={styles.title}>{type}</span>
         <div className={styles.desc}>
-          This software is now available for download.
+          You have a new message from
+          <span className={styles.sender}> {sender}</span>.
         </div>
       </div>
-      <button type="button" className={styles.close}>
+      <button type="button" className={styles.close} onClick={closeToast}>
         <svg
           aria-hidden="true"
           fill="currentColor"
