@@ -29,6 +29,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/show_group_invitation", helper.Middleware(handler.ShowGroupInvitation(db)))
 	http.HandleFunc("/accept_group_invitation", helper.Middleware(handler.AccepGrpInvitation(db)))
 	http.HandleFunc("/decline_group_invitation", helper.Middleware(handler.DeclineGrpInvitaton(db)))
+	http.HandleFunc("/add_group_invitation", helper.Middleware(handler.AddGroupInvitations(db)))
 	http.HandleFunc("/addcomment", helper.Middleware(handler.AddCommentHandler(db)))
 	http.HandleFunc("/show_comments_post", helper.Middleware(handler.ShowCommentsByPost(db)))
 	http.HandleFunc("/likepost", helper.Middleware(handler.LikePostHandler(db)))
@@ -57,6 +58,5 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/events", helper.Middleware(handler.GetEventsByGroupHandler(db)))
 	http.HandleFunc("/show_posts_group", helper.Middleware(handler.ShowPostsGroup(db)))
 	http.HandleFunc("/join_group_request", helper.Middleware(handler.JoingGroupRequest(db)))
-
 
 }

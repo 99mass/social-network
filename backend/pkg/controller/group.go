@@ -188,13 +188,13 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	return groups, nil
 }
 
-func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]models.User, error) {
+func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]models.UsersNoInGroup, error) {
 	friends, err := GetMyFriends(db, userID)
 	if err != nil {
 		return nil, err
 	}
 
-	unfollowuser := []models.User{}
+	unfollowuser := []models.UsersNoInGroup{}
 
 	for _, user := range friends {
 
@@ -206,7 +206,11 @@ func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]model
 		}
 
 		if !isInvitationSend && !ismember {
-			unfollowuser = append(unfollowuser, user)
+			_userNot := models.UsersNoInGroup{User: user, IsInvited: false}
+			unfollowuser = append(unfollowuser, _userNot)
+		} else if isInvitationSend {
+			_userNot := models.UsersNoInGroup{User: user, IsInvited: true}
+			unfollowuser = append(unfollowuser, _userNot)
 		}
 	}
 	return unfollowuser, nil
@@ -300,6 +304,6 @@ func GetPostsGroup(db *sql.DB, groupId string) ([]models.Post, error) {
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-	
+
 	return posts, nil
 }
