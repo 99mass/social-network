@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getPostsGroup } from "../../handler/getPostsGroup";
 import { getElapsedTime } from "../../utils/convert_dates";
 import styles from "../../styles/modules/profile-group.module.css";
@@ -9,17 +9,18 @@ export default function Discussion({
   setPostsGroup,
   groupId,
   description,
+  isMember
 }) {
   useEffect(() => {
     if (groupId) {
       getPostsGroup(groupId, setPostsGroup);
     }
-  }, [groupId]);
+  }, []);
 
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
-        {postGroup &&
+        {postGroup && isMember &&
           postGroup.map((item, index) => (
             <div className="post" key={index}>
               <PostHeader
