@@ -12,8 +12,8 @@ export default function Discussion({
   isMember
 }) {
   useEffect(() => {
-    if (id) {
-      getPostsGroup(id, setPostsGroup);
+    if (groupId) {
+      getPostsGroup(groupId, setPostsGroup);
     }
   }, []);
 
@@ -31,7 +31,7 @@ export default function Discussion({
                 time={`${getElapsedTime(item.post.created_at).value} ${
                   getElapsedTime(item.post.created_at).unit
                 }`}
-                groupid={id}
+                groupid={groupId}
                 setPostsGroup={setPostsGroup}
               />
               <PostMiddle
@@ -44,7 +44,7 @@ export default function Discussion({
                 numberComment={item.nbr_comments}
                 userid={item.user.id}
                 postid={item.post.id}
-                groupid={id}
+                groupid={groupId}
                 setPostsGroup={setPostsGroup}
               />
             </div>

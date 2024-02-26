@@ -10,10 +10,6 @@ import { getDatasProfilGroup } from "../../handler/group_profile";
 import { defaultImage } from "../group/group_page";
 import { AddGroupInvitations,  DeclineInvitation } from "../../handler/groupAction";
 
-DeclineInvitation
-import { AddGroupInvitations } from "../../handler/groupAction";
-import { JoingGroupRequestHandler } from "../../handler/jointGroup";
-
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
   const [datas, setDatasProfileGroup] = useState(null);
