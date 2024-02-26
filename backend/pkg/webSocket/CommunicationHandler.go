@@ -68,7 +68,7 @@ func CommunicationHandler(db *sql.DB) http.HandlerFunc {
 
 			return
 		}
-		controller.DeleteNotificationMessage(db, request.User2, sess.UserID.String(), "private_message")
+		controller.DeleteNotificationBySenderAndUser(db, request.User2, sess.UserID.String(), "private_message")
 		BroadcastUserList(db)
 		conn.WriteJSON(goodDiscuss)
 

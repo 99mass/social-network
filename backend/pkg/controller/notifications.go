@@ -75,7 +75,7 @@ func DeleteNotificationByUserID(db *sql.DB, userID, typeNotif string) error {
 	return err
 }
 
-func DeleteNotificationMessage(db *sql.DB, senderID, userID, typeNotif string) error {
+func DeleteNotificationBySenderAndUser(db *sql.DB, senderID, userID, typeNotif string) error {
 	query := `DELETE FROM notifications WHERE sender_id = ? AND user_id = ? AND type = ?`
 	_, err := db.Exec(query,senderID, userID, typeNotif)
 	return err
