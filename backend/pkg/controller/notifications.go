@@ -16,9 +16,9 @@ func CreateNotification(db *sql.DB, notification models.Notification) error {
 	}
 
 	query := `INSERT INTO notifications 
-			(id, user_id, type, source_id, is_read, created_at)
-			 VALUES (?, ?, ?, ?, ?, ?)`
-	_, err = db.Exec(query, newUUID, notification.UserID, notification.Type, notification.SourceID, notification.IsRead, time.Now())
+			(id, user_id, type, source_id, is_read, created_at,sender_id)
+			 VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err = db.Exec(query, newUUID, notification.UserID, notification.Type, notification.SourceID, notification.IsRead, time.Now(), notification.SenderID)
 
 	return err
 }
@@ -69,8 +69,8 @@ func DeleteNotificationByID(db *sql.DB, id string) error {
 	return err
 }
 
-func DeleteNotificationByUserID(db *sql.DB, userID,typeNotif string) error {
+func DeleteNotificationByUserID(db *sql.DB, userID, typeNotif string) error {
 	query := `DELETE FROM notifications WHERE user_id = ? AND type = ?`
-	_, err := db.Exec(query, userID,typeNotif)
+	_, err := db.Exec(query, userID, typeNotif)
 	return err
 }

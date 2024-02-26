@@ -7,4 +7,5 @@ CREATE TABLE IF NOT EXISTS notifications (
     is_read BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (sender_id) REFERENCES users(id)
 );
