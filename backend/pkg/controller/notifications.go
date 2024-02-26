@@ -99,3 +99,42 @@ func GetNotificationCountByType(db *sql.DB, userID string, notificationType stri
 
 	return count, nil
 }
+type NotifJoinReq struct{
+	GroupID string `json:"group_id"`
+	CountJoinReq	int `json:"count_join_request`
+}
+func GetNotificationCountByTypeAndSourceID(db *sql.DB, userID string, notificationType string) ([]NotifJoinReq, error) {
+	// Prepare the SQL query to count notifications by type and source ID for a specific user.
+	query := `
+		SELECT source_id, COUNT(*) as count
+		FROM notifications
+		WHERE user_id = ? AND type = ?
+		GROUP BY source_id;
+	`
+
+	// Execute the query and retrieve the results.
+	rows, err := db.Query(query, userID, notificationType)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Initialize a slice to hold the results.
+	var results []NotifJoinReq
+
+	// Iterate over the rows and populate the results slice.
+	for rows.Next() {
+		var notif NotifJoinReq
+		if err := rows.Scan(&notif.GroupID, &notif.CountJoinReq); err != nil {
+			return nil, err
+		}
+		results = append(results, notif)
+	}
+
+	// Check for any errors that occurred during iteration.
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
