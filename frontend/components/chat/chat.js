@@ -23,7 +23,11 @@ export default function ListUser() {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data)
-      setFriendsOnLine(data.content);
+      console.log( data);
+      if (data.type ==="users_list") {
+        setFriendsOnLine(data.content);
+
+      }
 
     }
   }, [socket]);
@@ -34,7 +38,7 @@ export default function ListUser() {
         "https://plus.unsplash.com/premium_photo-1706430116397-3aaba92f5a0a?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHx8",
       username: "username",
       text: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.Lorem ipsum dolor",
-    },
+    }
     // {
     //   image:
     //     "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGFmcmljYXxlbnwwfHwwfHx8MA%3D%3D",
