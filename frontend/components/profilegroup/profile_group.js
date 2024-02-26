@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/profile-group.module.css";
 import Discussion from "./discussions";
@@ -9,6 +9,7 @@ import ChatGroup from "./chat_group";
 import { getDatasProfilGroup } from "../../handler/group_profile";
 import { defaultImage } from "../group/group_page";
 import { AddGroupInvitations } from "../../handler/groupAction";
+import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
@@ -64,6 +65,7 @@ export default function Profile_group() {
         groupId={datas && datas.GroupInfos.id}
         handlerSendInvitations={handlerSendInvitations}
         isMember={datas && datas.isMember}
+        setDatasProfileGroup={setDatasProfileGroup}
       />
       {section.section1 && datas && datas.isMember && (
         <Discussion
@@ -76,6 +78,7 @@ export default function Profile_group() {
       {section.section2 && datas && datas.isMember && (
         <PostGroup
           PostForm={togglePostForm}
+          section={section}
           setPostsGroup={setPostsGroup}
           groupId={datas && datas.GroupInfos.id}
         />
@@ -107,6 +110,7 @@ export function ContentCovertPhotoGroup({
   groupId,
   handlerSendInvitations,
   isMember,
+  setDatasProfileGroup,
 }) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
   const [friend, setFriend] = useState(false);
@@ -114,6 +118,9 @@ export function ContentCovertPhotoGroup({
 
   const handleStateBtnJoinGroup = (state) => {
     setStateBtnJoinGroup(state);
+    if (!state) {
+      JoingGroupRequestHandler(groupId, setDatasProfileGroup);
+    }
   };
   const toggleFriend = () => setFriend(!friend);
   const toggleMembres = () => setMembre(!membre);
@@ -132,21 +139,20 @@ export function ContentCovertPhotoGroup({
             <i className="fas fa-globe-africa"></i>Public group ·
           </span>
           <span className={styles.membre} onClick={toggleMembres}>
-            {" "}
-            {members} members
+            {members} members{!isMember && "aaa"}
           </span>
         </div>
         <div className={styles.action}>
           {!stateBtnJoinGroup && !isMember && (
             <button
-              onClick={() => handleStateBtnJoinGroup(true)}
+              onClick={() => handleStateBtnJoinGroup(isMember)}
               className={styles.active}
             >
               <i className="fa-solid fa-people-group"></i>Join group
             </button>
           )}
-          {stateBtnJoinGroup && (
-            <button onClick={() => handleStateBtnJoinGroup(false)}>
+          {stateBtnJoinGroup && isMember && (
+            <button onClick={() => handleStateBtnJoinGroup(isMember)}>
               <i className="fa-solid fa-trash"></i>Leave group
             </button>
           )}

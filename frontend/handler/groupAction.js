@@ -3,6 +3,7 @@ import { getSessionCookie } from "../utils/cookies";
 import { AddGroup } from "./sendGroup";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 import { getDatasProfilGroup } from "./group_profile";
+import { getPostsGroup } from "./getPostsGroup";
 
 export const ShowGroupInvitation = async (setRequestLists) => {
   try {
@@ -80,7 +81,7 @@ export const DeclineGroupInvitation = async (group_id, setRequestLists) => {
   }
 };
 
-export const AddPostGroup = async (data, setPostsGroup, groupId) => {
+export const AddPostGroup = async (data, setPostsGroup, groupId, section) => {
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.AddPostGroup, {
@@ -93,10 +94,10 @@ export const AddPostGroup = async (data, setPostsGroup, groupId) => {
     });
 
     if (response.ok) {
-      successNotification(
-        "Post Group added successful you can see it in the home  or  profile page."
-      );
+      successNotification("Post Group added successful.");
       if (groupId && setPostsGroup) getPostsGroup(groupId, setPostsGroup);
+      section.section1 = true;
+      section.section2 = true;
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);
@@ -106,17 +107,16 @@ export const AddPostGroup = async (data, setPostsGroup, groupId) => {
   }
 };
 
-
-
-export const AddGroupInvitations = async (userId, groupId, setDatasProfileGroup) => {
-  
+export const AddGroupInvitations = async (
+  userId,
+  groupId,
+  setDatasProfileGroup
+) => {
   try {
-
     const sessionId = getSessionCookie();
     const data = {
-          group_id: groupId,
-          user_id: userId,
-         
+      group_id: groupId,
+      user_id: userId,
     };
     const response = await fetch(api.AddGroupInvitation, {
       method: "POST",
@@ -128,11 +128,10 @@ export const AddGroupInvitations = async (userId, groupId, setDatasProfileGroup)
     });
 
     if (response.ok) {
-      getDatasProfilGroup( setDatasProfileGroup, groupId);
+      getDatasProfilGroup(setDatasProfileGroup, groupId);
       // successNotification(
       //   "Group invitations added successful you can see it in the home  or  profile page."
       // );
-      
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);
