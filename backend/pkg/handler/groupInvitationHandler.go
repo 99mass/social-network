@@ -77,13 +77,21 @@ func DeclineGrpInvitaton(db *sql.DB) http.HandlerFunc {
 			}
 			// var invitationReq InvitationRequest
 			groupeID := r.URL.Query().Get("groupid")
+			_userID := r.URL.Query().Get("userId")
+
 			_, err = controller.GetGroupByID(db, groupeID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "this group doesn't exit", http.StatusBadRequest)
 				log.Println("the user try to add member in a group that doesn't exist")
 				return
 			}
-			err = controller.DeclineGroupInvitaton(db, sess.UserID.String(), groupeID)
+
+			if _userID == "" {
+				err = controller.DeclineGroupInvitaton(db, sess.UserID.String(), groupeID)
+			} else {
+				err = controller.DeclineGroupInvitaton(db, _userID, groupeID)
+			}
+
 			if err != nil {
 				helper.SendResponseError(w, "error", "enable to accept this invitation", http.StatusBadRequest)
 				log.Println("the request invitation can't be accepted due to" + err.Error())

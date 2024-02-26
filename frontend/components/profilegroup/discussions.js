@@ -5,7 +5,7 @@ import styles from "../../styles/modules/profile-group.module.css";
 import { PostFooter, PostHeader, PostMiddle } from "../home/middle_bloc";
 import { useRouter } from "next/router";
 
-export default function Discussion({ description }) {
+export default function Discussion({ description}) {
   const router = useRouter();
   const { id } = router.query;
   const [postData, setPostsGroup] = useState(null);
@@ -24,11 +24,11 @@ export default function Discussion({ description }) {
   // isfollowed,
   // time,
   // setPosts,
-
+  
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
-        {postData &&
+        {postData  &&
           postData.map((item, index) => (
             <div className="post" key={index}>
               <PostHeader

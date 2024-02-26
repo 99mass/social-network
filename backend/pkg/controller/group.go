@@ -204,12 +204,19 @@ func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]model
 		if err != nil || errr != nil {
 			return nil, err
 		}
+		// isUserSenderInvitation, err := IsSenderInvitationGroup(db, userID.String(), user.ID, groupId)
+		// if err != nil {
+		// 	return nil, err
+		// }
+		// fmt.Println(isUserSenderInvitation, "le sender")
 
 		if !isInvitationSend && !ismember {
-			_userNot := models.UsersNoInGroup{User: user, IsInvited: false}
+			_userNot := models.UsersNoInGroup{User: user, IsInvited: false, IsUserSenderInvitation: false}
 			unfollowuser = append(unfollowuser, _userNot)
 		} else if isInvitationSend {
-			_userNot := models.UsersNoInGroup{User: user, IsInvited: true}
+			isUserSenderInvitation, _ := IsSenderInvitationGroup(db, userID.String(), user.ID, groupId)
+
+			_userNot := models.UsersNoInGroup{User: user, IsInvited: true, IsUserSenderInvitation: isUserSenderInvitation}
 			unfollowuser = append(unfollowuser, _userNot)
 		}
 	}
@@ -306,4 +313,18 @@ func GetPostsGroup(db *sql.DB, groupId string) ([]models.Post, error) {
 	}
 
 	return posts, nil
+}
+
+func IsSenderInvitationGroup(db *sql.DB, senderID, userId, groupId string) (bool, error) {
+	query := `
+        SELECT COUNT(*)
+        FROM group_invitations
+        WHERE sender_id = ? AND user_id = ? AND group_id = ?
+    `
+	var count int
+	err := db.QueryRow(query, senderID, userId, groupId).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }

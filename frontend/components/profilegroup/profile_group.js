@@ -8,9 +8,9 @@ import PostGroup from "./post_group";
 import ChatGroup from "./chat_group";
 import { getDatasProfilGroup } from "../../handler/group_profile";
 import { defaultImage } from "../group/group_page";
-import { AddGroupInvitations } from "../../handler/groupAction";
+import { AddGroupInvitations,  DeclineInvitation } from "../../handler/groupAction";
 
-
+DeclineInvitation
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
   const [datas, setDatasProfileGroup] = useState(null);
@@ -27,9 +27,15 @@ export default function Profile_group() {
 
  
   const   handlerSendInvitations = (userId) => {
-    AddGroupInvitations(userId,query.id, setDatasProfileGroup)
+    AddGroupInvitations(userId, query.id, setDatasProfileGroup)
   };
 
+  const handlerDeclineInvitaionGroup = (userId) => {
+    
+    DeclineInvitation(query.id, userId,  setDatasProfileGroup);
+  };
+
+ 
   
   const [section, setSection] = useState({
     section1: true,
@@ -67,19 +73,20 @@ export default function Profile_group() {
         listMembers={ datas && datas.listMembreGroup} 
         groupId={datas && datas.GroupInfos.id}
         handlerSendInvitations={handlerSendInvitations}
+        handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}
         isMember={datas && datas.isMember}
       />
      
-      {section.section1 && <Discussion description={ datas && datas.GroupInfos.description} />}
-      {section.section2 && <PostGroup PostForm={togglePostForm} />}
-      {section.section3 && <Events />}
-      {section.section4 && <ChatGroup setSection={setSection} />}
-      {section.section5 && <FromCreateEvent setSection={setSection} groupId={datas && datas.GroupInfos.id} />}
+      {section.section1 && <Discussion description={ datas && datas.GroupInfos.description}  />}
+      {section.section2 && datas && datas.isMember && <PostGroup PostForm={togglePostForm} />}
+      {section.section3 && datas && datas.isMember && <Events />}
+      {section.section4 && datas && datas.isMember && <ChatGroup setSection={setSection} />}
+      {section.section5 &&  datas && datas.isMember &&  <FromCreateEvent setSection={setSection} groupId={datas && datas.GroupInfos.id} />}
     </>
   );
 }
 
-export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers, groupId, handlerSendInvitations,  isMember}) {
+export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers, groupId, handlerSendInvitations, handlerDeclineInvitaionGroup,  isMember}) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
   const [friend, setFriend] = useState(false);
   const [membre, setMembre] = useState(false);
@@ -133,7 +140,7 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
       )}
       
       {membre && <ListMembreGroup toggleMembres={toggleMembres} listMembers={listMembers} />}
-      {friend && <ListFriend toggleFriend={toggleFriend} friendList={friendList}  handlerSendInvitations={handlerSendInvitations}/>}
+      {friend && <ListFriend toggleFriend={toggleFriend} friendList={friendList}  handlerSendInvitations={handlerSendInvitations} handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}/>}
     </div>
   );
 }
@@ -223,7 +230,7 @@ export function ListMembreGroup({ toggleMembres, listMembers }) {
   );
 }
 
-export function ListFriend({ toggleFriend, friendList, handlerSendInvitations }) {
+export function ListFriend({ toggleFriend, friendList, handlerSendInvitations, handlerDeclineInvitaionGroup}) {
  
   return (
     <div className={styles.contentListPeopleGoing}>
@@ -251,10 +258,15 @@ export function ListFriend({ toggleFriend, friendList, handlerSendInvitations })
               </Link>
              
             </div> 
-            {item.isInvited && (
-               <button onClick={() => handlerSendInvitations(item.user.id)}>
-               <i className="fa-solid fa-share"></i>waiting
-             </button>
+            {item.isInvited && item.isUserSenderInvitation &&(
+              <button style={{ background: 'red' }} onClick={() => handlerDeclineInvitaionGroup(item.user.id)}>
+                <i className="fa-solid fa-trash"></i>Delete
+              </button>
+            )}
+            {item.isInvited && !item.isUserSenderInvitation  && (
+              <button style={{ background: 'grey' }}>
+                <i className="fa-solid fa-hourglass-half"></i>Other invited
+              </button>
             )}
             
             {!item.isInvited && (
