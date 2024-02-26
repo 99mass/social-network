@@ -139,7 +139,7 @@ export function ContentCovertPhotoGroup({
             <i className="fas fa-globe-africa"></i>Public group ·
           </span>
           <span className={styles.membre} onClick={toggleMembres}>
-            {members} members{!isMember && "aaa"}
+            {members} members
           </span>
         </div>
         <div className={styles.action}>

@@ -51,9 +51,9 @@ export default function Header() {
         setNotifMessagesPrivate(_message.content);
         console.log("nbr_notif_message:", _message.content);
       }
-      if (_message.type === "nbr_notif_group_invitation") {
+      if (_message.type === "nbr_notif_join_group_request") {
         setNbrNotifGroupInvitation(_message.content);
-        console.log("nbr_notif_group_invitation:", _message.content);
+        console.log("nbrNotifJoinGroupRequest:", _message.content);
       }
       if (_message.type === "nbr_notif_follow") {
         setNbrNotifFollow(_message.content);
@@ -224,7 +224,7 @@ export function ToggleButton({
 }
 
 function Notification() {
-  
+
   return (
     <div className={styles.toastContainer} id={styles.toast}>
       <span className={styles.toastClose} onclick="closeToast()">
