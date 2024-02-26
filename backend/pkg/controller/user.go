@@ -206,3 +206,25 @@ func GetMyFriends(db *sql.DB, userId uuid.UUID) ([]models.User, error) {
 
 	return users, nil
 }
+
+
+func GetUserNameByID(db *sql.DB, userID string) (string, error) {
+	// Prepare the SQL query to get the user's name for a specific user ID.
+	query := `
+		SELECT firstname, lastname
+		FROM users
+		WHERE id = ?;
+	`
+
+	// Execute the query and retrieve the result.
+	var firstName, lastName string
+	err := db.QueryRow(query, userID).Scan(&firstName, &lastName)
+	if err != nil {
+		return "", fmt.Errorf("failed to query user name: %w", err)
+	}
+
+	// Combine the first name and last name to form the full name.
+	fullName := fmt.Sprintf("%s %s", firstName, lastName)
+
+	return fullName, nil
+}

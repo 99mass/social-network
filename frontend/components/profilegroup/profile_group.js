@@ -77,13 +77,37 @@ export default function Profile_group() {
         handlerSendInvitations={handlerSendInvitations}
         handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}
         isMember={datas && datas.isMember}
+        setDatasProfileGroup={setDatasProfileGroup}
       />
-     
-      {section.section1 && <Discussion description={ datas && datas.GroupInfos.description} />}
-      {section.section2 && <PostGroup PostForm={togglePostForm} />}
-      {section.section3 && <EventLists group_id={datas && datas.GroupInfos.id} />}
-      {section.section4 && <ChatGroup setSection={setSection} />}
-      {section.section5 && <FromCreateEvent setSection={setSection} groupId={datas && datas.GroupInfos.id} />}
+      {section.section1  && (
+        <Discussion
+          postGroup={postGroup}
+          setPostsGroup={setPostsGroup}
+          groupId={datas && datas.GroupInfos.id}
+          description={datas && datas.GroupInfos.description}
+          isMember={datas?.isMember}
+        />
+      )}
+      {section.section2 && datas && datas.isMember && (
+        <PostGroup
+          PostForm={togglePostForm}
+          section={section}
+          setPostsGroup={setPostsGroup}
+          groupId={datas && datas.GroupInfos.id}
+        />
+      )}
+      {section.section3 && datas && datas.isMember && (
+        <Events group_id={datas && datas.GroupInfos.id} />
+      )}
+      {section.section4 && datas && datas.isMember && (
+        <ChatGroup setSection={setSection} />
+      )}
+      {section.section5 && datas && datas.isMember && (
+        <FromCreateEvent
+          setSection={setSection}
+          groupId={datas && datas.GroupInfos.id}
+        />
+      )}
     </>
   );
 }

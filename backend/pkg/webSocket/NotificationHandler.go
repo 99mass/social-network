@@ -18,9 +18,11 @@ type notif_group_invitation struct {
 
 // this function handle the notification for private message
 func NotificationMessage(db *sql.DB,mess models.PrivateMessages) {
+	sender,_ := controller.GetUserNameByID(db,mess.SenderID)
+	recipient,_:= controller.GetUserNameByID(db,mess.RecipientID)
 	var notif notif_private_message
-	notif.Sender = mess.SenderID
-	notif.Recipient = mess.RecipientID
+	notif.Sender = sender
+	notif.Recipient = recipient
 
 	CreateGeneralNotif(db,mess.RecipientID,mess.SenderID,"","private_message")
 
@@ -34,9 +36,11 @@ func NotificationMessage(db *sql.DB,mess models.PrivateMessages) {
 
 //this one is for sending a notification while someone invite a user to join a group
 func NotificationGroupInvitation(db *sql.DB,sender, groupID, userID string) {
+	sendern,_:= controller.GetUserNameByID(db,sender)
+	group,_ := controller.GetGroupTitle(db,groupID)
 	var notif notif_group_invitation
-	notif.Group = groupID
-	notif.Sender = sender
+	notif.Group = group
+	notif.Sender = sendern
 	
 	CreateGeneralNotif(db,userID,sender,groupID,"group_invitation")
 
@@ -49,9 +53,11 @@ func NotificationGroupInvitation(db *sql.DB,sender, groupID, userID string) {
 }
 
 func NotificationFollowRequest(db *sql.DB,senderID,sourceID,userID string){
+	sender,_ := controller.GetUserNameByID(db,senderID)
+	recipient,_:= controller.GetUserNameByID(db,userID)
 	var notif notif_private_message
-	notif.Sender = senderID
-	notif.Recipient = userID
+	notif.Sender = sender
+	notif.Recipient = recipient
 
 	CreateGeneralNotif(db,userID,senderID,sourceID,"follow_request")
 
@@ -65,9 +71,11 @@ func NotificationFollowRequest(db *sql.DB,senderID,sourceID,userID string){
 }
 
 func NotificationJoinGroup(db *sql.DB,senderID, sourceID,userID string){
+	sender,_ := controller.GetUserNameByID(db,senderID)
+	group,_:= controller.GetGroupTitle(db,sourceID)
 	var notif notif_group_invitation
-	notif.Group = sourceID
-	notif.Sender = senderID
+	notif.Group = group
+	notif.Sender = sender
 
 	CreateGeneralNotif(db,userID,senderID,sourceID,"join_group")
 
