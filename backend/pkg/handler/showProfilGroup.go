@@ -12,10 +12,11 @@ import (
 )
 
 type ProfilGroupToSend struct {
-	GroupInfos      models.GroupInfos `json:"GroupInfos"`
-	UsersNotInGroup []models.User     `json:"usersNotInGroup"`
-	ListMembreGroup []models.User     `json:"listMembreGroup"`
-	AllPost         []models.Post     `json:"allPost"`
+	GroupInfos      models.GroupInfos       `json:"GroupInfos"`
+	UsersNotInGroup []models.UsersNoInGroup `json:"usersNotInGroup"`
+	ListMembreGroup []models.User           `json:"listMembreGroup"`
+	AllPost         []models.Post           `json:"allPost"`
+	IsMember        bool                    `json:"isMember"`
 }
 
 func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
@@ -57,13 +58,13 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			for i, userNot := range userNotInGroup {
-				if userNot.AvatarPath != "" {
-					encodedAvatar, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + userNot.AvatarPath)
+				if userNot.User.AvatarPath != "" {
+					encodedAvatar, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + userNot.User.AvatarPath)
 					if err != nil {
 						log.Println("enable to encode image avatar", err.Error())
 						continue
 					}
-					userNotInGroup[i].AvatarPath = encodedAvatar
+					userNotInGroup[i].User.AvatarPath = encodedAvatar
 				}
 			}
 
@@ -83,6 +84,12 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 					listMember[i].AvatarPath = encodedAvatar
 				}
 			}
+
+			isMember, _ := controller.IsMember(db, sess.UserID.String(), groupId.String())
+			if isMember {
+				profilGroup.IsMember = true
+			}
+
 			profilGroup.GroupInfos = groupInfo
 			profilGroup.UsersNotInGroup = userNotInGroup
 			profilGroup.ListMembreGroup = listMember

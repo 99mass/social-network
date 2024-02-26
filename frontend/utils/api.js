@@ -26,6 +26,7 @@ export const api = {
   GetFolliwgUsers: `${domain}/getfollowingusers`,
   AddGroup: `${domain}/create_group`,
   AddPostGroup: `${domain}/addpost_group`,
+  AddGroupInvitation: `${domain}/add_group_invitation`,
   CountFollower: `${domain}/CountFollower`,
   Groupsimanage: `${domain}/groupsimanage`,
   MygroupsParticep: `${domain}/mygroups`,

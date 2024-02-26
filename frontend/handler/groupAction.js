@@ -2,7 +2,7 @@ import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 import { AddGroup } from "./sendGroup";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
-import { getPostsGroup } from "./getPostsGroup";
+import { getDatasProfilGroup } from "./group_profile";
 
 export const ShowGroupInvitation = async (setRequestLists) => {
   try {
@@ -97,6 +97,42 @@ export const AddPostGroup = async (data, setPostsGroup, groupId) => {
         "Post Group added successful you can see it in the home  or  profile page."
       );
       if (groupId && setPostsGroup) getPostsGroup(groupId, setPostsGroup);
+    } else {
+      const errorData = await response.json();
+      errorNotification(errorData.message);
+    }
+  } catch (error) {
+    errorNotification(error);
+  }
+};
+
+
+
+export const AddGroupInvitations = async (userId, groupId, setDatasProfileGroup) => {
+  
+  try {
+
+    const sessionId = getSessionCookie();
+    const data = {
+          group_id: groupId,
+          user_id: userId,
+         
+    };
+    const response = await fetch(api.AddGroupInvitation, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionId,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      getDatasProfilGroup( setDatasProfileGroup, groupId);
+      // successNotification(
+      //   "Group invitations added successful you can see it in the home  or  profile page."
+      // );
+      
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);

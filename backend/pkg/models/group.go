@@ -15,5 +15,10 @@ type GroupInfos struct {
 	AvatarPath  string `json:"avatarpath"`
 	NbrMembers  int    `db:"nbr_members" json:"nbr_members"`
 	Description string `db:"description" json:"description"`
-	IsMembers  bool   `json:"is_member"`
+	IsMembers   bool   `json:"is_member"`
+}
+
+type UsersNoInGroup struct {
+	User      User `json:"user"`
+	IsInvited bool `json:"isInvited"`
 }
