@@ -63,9 +63,12 @@ export function PostHeader({
 }) {
   const handlerFollower = (stateFollow) => {
     if (stateFollow == "Follow") {
-      askForFriends(iduser, null, null,groupid,setPosts);
+      // askForFriends(iduser, null, null,groupid,setPosts);
+      askForFriends(iduser, setPosts, null,null,null);
     } else if (stateFollow == "Unfollow" || stateFollow == "Delete") {
-      UnfollowUser(iduser, null, null,null,groupid,setPosts);
+      // UnfollowUser(iduser, null, null,null,groupid,setPosts);
+      UnfollowUser(iduser, setPosts, null,null,null,null);
+
     }
   //   userid,
   // setPosts,
