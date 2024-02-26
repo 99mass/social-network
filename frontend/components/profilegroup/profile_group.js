@@ -14,20 +14,17 @@ import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
   const [datas, setDatasProfileGroup] = useState(null);
-
+  const [postGroup, setPostsGroup] = useState(null);
   const router = useRouter();
   const query= router.query;
  
   useEffect(() => {
     if (!datas) {     
-      getDatasProfilGroup( setDatasProfileGroup, query.id);
-      
+      getDatasProfilGroup( setDatasProfileGroup, query.id);      
     }
     
   }, [query, datas]);
 
-
- 
   
   const [section, setSection] = useState({
     section1: true,
@@ -66,8 +63,8 @@ export default function Profile_group() {
         setDatasProfileGroup={setDatasProfileGroup}
         id={query.id}
       />
-      {section.section1 && <Discussion description={ datas && datas.GroupInfos.description} />}
-      {section.section2 && <PostGroup PostForm={togglePostForm} />}
+      {section.section1 && <Discussion postGroup={postGroup} setPostsGroup={setPostsGroup} groupId={datas && datas.GroupInfos.id} description={ datas && datas.GroupInfos.description} />}
+      {section.section2 && <PostGroup PostForm={togglePostForm} setPostsGroup={setPostsGroup} groupId={datas && datas.GroupInfos.id} />}
       {section.section3 && <Events group_id={datas && datas.GroupInfos.id}/>}
       {section.section4 && <ChatGroup setSection={setSection} />}
       {section.section5 && <FromCreateEvent setSection={setSection} groupId={datas && datas.GroupInfos.id} />}

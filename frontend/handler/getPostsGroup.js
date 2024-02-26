@@ -1,11 +1,11 @@
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 
-export const getPostsGroup = async (groupid,setPostsGroup) => {
+export const getPostsGroup = async (groupid, setPostsGroup) => {
   try {
     const sessionId = getSessionCookie();
-    console.log("groupid",groupid)
-    const response = await fetch(api.GetPostsGroup+`?groupid=${groupid}`, {
+
+    const response = await fetch(`${api.GetPostsGroup}?groupid=${groupid}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -18,7 +18,6 @@ export const getPostsGroup = async (groupid,setPostsGroup) => {
       console.error("Failed to fetch PostsUser data");
     } else {
       const data = await response.json();
-      // console.log("postgroup fetch:",data)
       setPostsGroup(data);
     }
   } catch (error) {
@@ -52,10 +51,7 @@ export const getSpecificPostsUser = async (post_id, setPostData) => {
   }
 };
 
-export const getPostsUserCreated = async (
-  userid,
-  setPostsGroupCreated
-) => {
+export const getPostsUserCreated = async (userid, setPostsGroupCreated) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -69,13 +65,13 @@ export const getPostsUserCreated = async (
       });
 
       if (!response.ok) {
-        console.error("Failed to fetch PostsUserCreated  data");       
+        console.error("Failed to fetch PostsUserCreated  data");
       } else {
         const data = await response.json();
         setPostsGroupCreated(data);
       }
     } catch (error) {
-      console.error("Error fetching PostsUserCreated data:", error.message);     
+      console.error("Error fetching PostsUserCreated data:", error.message);
     }
   }
 };

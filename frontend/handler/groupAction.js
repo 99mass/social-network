@@ -2,6 +2,7 @@ import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 import { AddGroup } from "./sendGroup";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
+import { getPostsGroup } from "./getPostsGroup";
 
 export const ShowGroupInvitation = async (setRequestLists) => {
   try {
@@ -79,10 +80,7 @@ export const DeclineGroupInvitation = async (group_id, setRequestLists) => {
   }
 };
 
-
-
-export const AddPostGroup = async (data) => {
-  
+export const AddPostGroup = async (data, setPostsGroup, groupId) => {
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.AddPostGroup, {
@@ -98,7 +96,7 @@ export const AddPostGroup = async (data) => {
       successNotification(
         "Post Group added successful you can see it in the home  or  profile page."
       );
-      
+      if (groupId && setPostsGroup) getPostsGroup(groupId, setPostsGroup);
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);

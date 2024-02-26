@@ -2,17 +2,11 @@ import { useState, useRef } from "react";
 import styles from '../../styles/modules/CreatePost.module.css'
 import EmojiForm from "../emoji/emoji";
 import { AddPostGroup } from "../../handler/groupAction";
-import { useRouter } from "next/router";
 import { errorNotification } from "../../utils/sweeAlert";
 import { EncodeImage } from "../../utils/encodeImage";
 
 
-export default function PostGroup({ PostForm }) {
-
-
-  const router = useRouter();
-  const query= router.query;
- 
+export default function PostGroup({ PostForm,setPostsGroup,groupId }) {
 
   const [emoji, setEmoji] = useState(false)
   const [selectedEmoji, setSelectedEmoji] = useState('');
@@ -37,13 +31,13 @@ export default function PostGroup({ PostForm }) {
     // si on n'a pas d'image
     if (!fileInputRef.current.files[0]) {
       const data = {
-        group_id: query.id,
+        group_id: groupId,
         content: content,
         image_path: "",
         
       };
      
-      AddPostGroup(data)
+      AddPostGroup(data,setPostsGroup,groupId)
       return;
     }
    
@@ -53,11 +47,11 @@ export default function PostGroup({ PostForm }) {
         const encodedFile = await EncodeImage(fileInputRef);
 
         const data = {
-          group_id: query.id,
+          group_id: groupId,
           content: content,
           image_path: encodedFile,
         };
-        AddPostGroup(data);
+        AddPostGroup(data,setPostsGroup,groupId);
       } catch (error) {
         errorNotification(error);
       }
