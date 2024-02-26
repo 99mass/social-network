@@ -56,5 +56,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/create_events", helper.Middleware(handler.AddGroupEventHandler(db)))
 	http.HandleFunc("/events", helper.Middleware(handler.GetEventsByGroupHandler(db)))
 	http.HandleFunc("/show_posts_group", helper.Middleware(handler.ShowPostsGroup(db)))
+	http.HandleFunc("/join_group_request", helper.Middleware(handler.JoingGroupRequest(db)))
+
 
 }

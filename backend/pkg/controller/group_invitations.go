@@ -153,7 +153,7 @@ func GetGroupsInvitationsSend(db *sql.DB, groupId string) ([]models.Group_Invita
 	return groups, nil
 }
 
-//Return the number of group inviations waiting
+// Return the number of group inviations waiting
 func GetNbrGroupInvitations(db *sql.DB, userID string) (int, error) {
 	query := `
 		SELECT COUNT(*)
@@ -166,4 +166,41 @@ func GetNbrGroupInvitations(db *sql.DB, userID string) (int, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+func JoinGroupRequest(db *sql.DB, userID, groupID string) error {
+	// Check if the user is already a member of the group
+	isMember, err := IsMember(db, userID, groupID)
+	if err != nil {
+		return err
+	}
+	if isMember {
+		return fmt.Errorf("user is already a member of the group")
+	}
+
+	// Check if an invitation has already been sent to the user
+	isInvitationSent, err := IsInvitationSend(db, groupID, userID)
+	if err != nil {
+		return err
+	}
+	if isInvitationSent {
+		return fmt.Errorf("an invitation has already been sent to the user")
+	}
+
+	// Create a new group invitation record
+	newUUID, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+
+	query := `
+        INSERT INTO group_invitations (id, user_id, group_id, sender_id, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
+    `
+	_, err = db.Exec(query, newUUID.String(), userID, groupID, userID, "waiting", time.Now(), time.Now())
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

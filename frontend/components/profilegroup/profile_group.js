@@ -8,6 +8,7 @@ import PostGroup from "./post_group";
 import ChatGroup from "./chat_group";
 import { getDatasProfilGroup } from "../../handler/group_profile";
 import { defaultImage } from "../group/group_page";
+import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 
 
 export default function Profile_group() {
@@ -20,6 +21,7 @@ export default function Profile_group() {
   useEffect(() => {
     if (!datas) {     
       getDatasProfilGroup( setDatasProfileGroup, query.id);
+      
     }
     
   }, [query, datas]);
@@ -61,6 +63,8 @@ export default function Profile_group() {
         members={ datas && datas.GroupInfos.nbr_members}
         friendList={ datas && datas.usersNotInGroup} 
         listMembers={ datas && datas.listMembreGroup} 
+        setDatasProfileGroup={setDatasProfileGroup}
+        id={query.id}
       />
       {section.section1 && <Discussion description={ datas && datas.GroupInfos.description} />}
       {section.section2 && <PostGroup PostForm={togglePostForm} />}
@@ -71,12 +75,19 @@ export default function Profile_group() {
   );
 }
 
-export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers}) {
+export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers,setDatasProfileGroup,id}) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
   const [friend, setFriend] = useState(false);
   const [membre, setMembre] = useState(false);
 
   const handleStateBtnJoinGroup = (state) => {
+    if (state === true){
+      console.log("try joining group:",state)
+      JoingGroupRequestHandler(setDatasProfileGroup,id)
+    }else{
+      console.log("try leaving group:",state)
+      //TODO add LeavGroupHandler 
+    }
     setStateBtnJoinGroup(state);
   };
   const toggleFriend = () => setFriend(!friend);
@@ -104,7 +115,8 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
             </button>
           )}
           {stateBtnJoinGroup && (
-            <button onClick={() => handleStateBtnJoinGroup(false)}>
+            <button onClick={() => handleStateBtnJoinGroup(false)}
+            className={styles.active}>
               <i className="fa-solid fa-trash"></i>Leave group
             </button>
           )}

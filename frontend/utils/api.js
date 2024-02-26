@@ -36,4 +36,7 @@ export const api = {
   Create_events: `${domain}/create_events`,
   GetEvents: `${domain}/events`,
   GetPostsGroup: `${domain}/show_posts_group`,
+  JoinGroupRequest: `${domain}/join_group_request`,
+
+
 };
