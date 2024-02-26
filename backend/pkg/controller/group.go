@@ -307,3 +307,21 @@ func GetPostsGroup(db *sql.DB, groupId string) ([]models.Post, error) {
 
 	return posts, nil
 }
+
+// GetCreatorByGroupID retrieves the creator ID of a group by its group ID.
+func GetCreatorByGroupID(db *sql.DB, groupID string) (string, error) {
+	query := `
+		SELECT creator_id
+		FROM groups
+		WHERE id = ?;
+	`
+
+	// Execute the query and retrieve the result.
+	var creatorID string
+	err := db.QueryRow(query, groupID).Scan(&creatorID)
+	if err != nil {
+		return "", err
+	}
+
+	return creatorID, nil
+}

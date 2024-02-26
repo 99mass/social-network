@@ -34,12 +34,14 @@ func BroadcastUserList(db *sql.DB) {
 
 			}
 
-			nbrMessage,_:= controller.GetNotificationCountByType(db,user.UserID,"private_message")
-			SendGenResponse("nbr_notif_message",user.Conn,nbrMessage)
-			nbrFollow,_:= controller.GetNotificationCountByType(db,user.UserID,"follow_request")
-			SendGenResponse("nbr_notif_follow",user.Conn,nbrFollow)
-			nbrGrpJoinReq,_:= controller.GetNotificationCountByType(db,user.UserID,"group_invitation")
-			SendGenResponse("nbr_notif_group_invitation",user.Conn,nbrGrpJoinReq)
+			nbrMessage, _ := controller.GetNotificationCountByType(db, user.UserID, "private_message")
+			SendGenResponse("nbr_notif_message", user.Conn, nbrMessage)
+			nbrFollow, _ := controller.GetNotificationCountByType(db, user.UserID, "follow_request")
+			SendGenResponse("nbr_notif_follow", user.Conn, nbrFollow)
+			nbrGrpJoinReq, _ := controller.GetNotificationCountByType(db, user.UserID, "group_invitation")
+			SendGenResponse("nbr_notif_group_invitation", user.Conn, nbrGrpJoinReq)
+			nbrJoinReq, _ := controller.GetNotificationCountByType(db, user.UserID, "join_group")
+			SendGenResponse("nbr_notif_join_group_request", user.Conn, nbrJoinReq)
 
 			err = SendGenResponse("users_list", user.Conn, usersList)
 			if err != nil {
@@ -52,6 +54,6 @@ func BroadcastUserList(db *sql.DB) {
 }
 
 func RemoveUserFromConnectedList(userID string) {
-    // Assuming ConnectedUsersList is a global variable or accessible in this scope
-    delete(ConnectedUsersList, userID)
+	// Assuming ConnectedUsersList is a global variable or accessible in this scope
+	delete(ConnectedUsersList, userID)
 }
