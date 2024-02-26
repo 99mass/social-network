@@ -3,7 +3,6 @@ import { getPostsGroup } from "../../handler/getPostsGroup";
 import { getElapsedTime } from "../../utils/convert_dates";
 import styles from "../../styles/modules/profile-group.module.css";
 import { PostFooter, PostHeader, PostMiddle } from "../home/middle_bloc";
-import { useRouter } from "next/router";
 
 export default function Discussion({
   postGroup,
@@ -15,16 +14,9 @@ export default function Discussion({
   useEffect(() => {
     if (id) {
       getPostsGroup(id, setPostsGroup);
-      // console.log("postgroup data:",postData)
     }
   }, []);
-  // iduser,
-  // user,
-  // image,
-  // isfollowed,
-  // time,
-  // setPosts,
-  
+
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
