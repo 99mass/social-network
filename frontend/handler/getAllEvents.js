@@ -1,12 +1,12 @@
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 
-export const getAllEvents = async (groupId, setAllEvents) => {
+export const ListAllEvents = async (groupId, setAllEvents) => {
     if (groupId) {
         try {
             const sessionId = getSessionCookie();
 
-            const response = await fetch(`${api.GetEvents}?group_id=${groupId}`, {
+            const response = await fetch(`${api.ListAllEvents}?group_id=${groupId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -16,6 +16,7 @@ export const getAllEvents = async (groupId, setAllEvents) => {
 
             if (response.ok) {
                 const data = await response.json();
+                console.log(data ,"event");
                 setAllEvents(data);
             }
             else{
