@@ -44,20 +44,17 @@ export default function Header() {
 
     socket.onmessage = (event) => {
       const _message = JSON.parse(event.data);
-      console.log("mess", _message);
       if (!_message) return;
-
-      if (_message.type === "nbr_notif_message") {
-        setNotifMessagesPrivate(_message.content);
-        console.log("nbr_notif_message:", _message.content);
-      }
-      if (_message.type === "nbr_notif_join_group_request") {
-        setNbrNotifGroupInvitation(_message.content);
-        console.log("nbrNotifJoinGroupRequest:", _message.content);
-      }
-      if (_message.type === "nbr_notif_follow") {
-        setNbrNotifFollow(_message.content);
-        console.log("nbr_notif_follow:", _message.content);
+      switch (_message.type) {
+        case "nbr_notif_message":
+          setNotifMessagesPrivate(_message.content);
+          break;
+        case "nbr_notif_join_group_request":
+          setNbrNotifGroupInvitation(_message.content);
+          break;
+        case "nbr_notif_follow":
+          _message.type === "nbr_notif_follow";
+          break;
       }
     };
   }, [socket]);
@@ -224,7 +221,6 @@ export function ToggleButton({
 }
 
 function Notification() {
-
   return (
     <div className={styles.toastContainer} id={styles.toast}>
       <span className={styles.toastClose} onclick="closeToast()">
