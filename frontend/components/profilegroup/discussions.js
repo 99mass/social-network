@@ -9,6 +9,7 @@ export default function Discussion({
   setPostsGroup,
   groupId,
   description,
+  isMember
 }) {
   useEffect(() => {
     if (groupId) {
@@ -19,7 +20,7 @@ export default function Discussion({
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
-        {postGroup &&
+        {postGroup && isMember &&
           postGroup.map((item, index) => (
             <div className="post" key={index}>
               <PostHeader

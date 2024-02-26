@@ -67,12 +67,13 @@ export default function Profile_group() {
         isMember={datas && datas.isMember}
         setDatasProfileGroup={setDatasProfileGroup}
       />
-      {section.section1 && datas && datas.isMember && (
+      {section.section1  && (
         <Discussion
           postGroup={postGroup}
           setPostsGroup={setPostsGroup}
           groupId={datas && datas.GroupInfos.id}
           description={datas && datas.GroupInfos.description}
+          isMember={datas?.isMember}
         />
       )}
       {section.section2 && datas && datas.isMember && (
