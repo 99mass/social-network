@@ -1,25 +1,28 @@
 import { useState, useRef } from "react";
-import styles from '../../styles/modules/CreatePost.module.css'
+import styles from "../../styles/modules/CreatePost.module.css";
 import EmojiForm from "../emoji/emoji";
 import { AddPostGroup } from "../../handler/groupAction";
-import { useRouter } from "next/router";
 import { errorNotification } from "../../utils/sweeAlert";
 import { EncodeImage } from "../../utils/encodeImage";
 
-
-export default function PostGroup({ PostForm }) {
-
-
-  const router = useRouter();
-  const query= router.query;
- 
-
-  const [emoji, setEmoji] = useState(false)
-  const [selectedEmoji, setSelectedEmoji] = useState('');
+export default function PostGroup({
+  PostForm,
+  section,
+  setPostsGroup,
+  groupId,
+}) {
+  const [imgeName, setImageName] = useState("");
+  const [emoji, setEmoji] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState("");
   const fileInputRef = useRef(null);
 
   const handleFileIconClick = () => {
     fileInputRef.current.click();
+  };
+
+  const toggleImageName = () => {
+    const _file = fileInputRef.current.files[0];
+    if (_file) setImageName(_file.name);
   };
 
   const toggleEmojicon = () => setEmoji(!emoji);
@@ -33,46 +36,49 @@ export default function PostGroup({ PostForm }) {
       errorNotification("Content can not be empty.");
       return;
     }
-  
+
     // si on n'a pas d'image
     if (!fileInputRef.current.files[0]) {
       const data = {
-        group_id: query.id,
+        group_id: groupId,
         content: content,
         image_path: "",
-        
       };
-     
-      AddPostGroup(data)
+
+      AddPostGroup(data, setPostsGroup, groupId, section);
       return;
     }
-   
-     // si on a une image
-     async function someFunction() {
+
+    // si on a une image
+    async function someFunction() {
       try {
         const encodedFile = await EncodeImage(fileInputRef);
 
         const data = {
-          group_id: query.id,
+          group_id: groupId,
           content: content,
           image_path: encodedFile,
         };
-        AddPostGroup(data);
+        AddPostGroup(data, setPostsGroup, groupId, section);
       } catch (error) {
         errorNotification(error);
       }
     }
     someFunction();
-  }
-  
+  };
+
   return (
     <div className={`${styles.contentFormPost} content-form-post`}>
       <div className={styles.postHeader}>
         <h1>Create post</h1>
-        <i className="fa-regular fa-circle-xmark close-form-btn" onClick={PostForm} title="Close form"></i>
+        <i
+          className="fa-regular fa-circle-xmark close-form-btn"
+          onClick={PostForm}
+          title="Close form"
+        ></i>
       </div>
       <hr />
-      <form 
+      <form
         method="post"
         onSubmit={handlerGroupFromPost}
         encType="multipart/form-data"
@@ -82,13 +88,37 @@ export default function PostGroup({ PostForm }) {
             value={selectedEmoji}
             name="content"
             onChange={(e) => setSelectedEmoji(e.target.value)}
-            placeholder="What's on your mind ?" id="" />
+            placeholder="What's on your mind ?"
+            id=""
+          />
           <div className={styles.contentAssets}>
-            <i className="fa-regular fa-file-image" title="Choose image" onClick={handleFileIconClick}><input type="file" className={styles.filesPost} ref={fileInputRef} />
-            </i><span onClick={toggleEmojicon} className="emoji" title="Choose emoji">😄</span>
+          <span>{imgeName}</span>
+            <i
+              className="fa-regular fa-file-image"
+              title="Choose image"
+              onClick={handleFileIconClick}
+            >
+              <input
+                onChange={toggleImageName}
+                type="file"
+                className={styles.filesPost}
+                ref={fileInputRef}
+              />
+            </i>
+            <span
+              onClick={toggleEmojicon}
+              className="emoji"
+              title="Choose emoji"
+            >
+              😄
+            </span>
 
-            {emoji && <EmojiForm toggleEmojicon={toggleEmojicon} setSelectedEmoji={setSelectedEmoji} />}
-
+            {emoji && (
+              <EmojiForm
+                toggleEmojicon={toggleEmojicon}
+                setSelectedEmoji={setSelectedEmoji}
+              />
+            )}
           </div>
         </div>
         <button className={styles.btnPost}>Post</button>

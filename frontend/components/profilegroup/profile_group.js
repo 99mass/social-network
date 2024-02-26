@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/modules/profile-group.module.css";
 import Discussion from "./discussions";
-import Events, { FromCreateEvent } from "./events";
+import  EventLists, { FromCreateEvent } from "./events";
 import PostGroup from "./post_group";
 import ChatGroup from "./chat_group";
 import { getDatasProfilGroup } from "../../handler/group_profile";
@@ -11,18 +11,20 @@ import { defaultImage } from "../group/group_page";
 import { AddGroupInvitations,  DeclineInvitation } from "../../handler/groupAction";
 
 DeclineInvitation
+import { AddGroupInvitations } from "../../handler/groupAction";
+import { JoingGroupRequestHandler } from "../../handler/jointGroup";
+
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
   const [datas, setDatasProfileGroup] = useState(null);
-
+  const [postGroup, setPostsGroup] = useState(null);
   const router = useRouter();
-  const query= router.query;
- 
+  const query = router.query;
+
   useEffect(() => {
-    if (!datas) {     
-      getDatasProfilGroup( setDatasProfileGroup, query.id);
+    if (!datas) {
+      getDatasProfilGroup(setDatasProfileGroup, query.id);
     }
-    
   }, [query, datas]);
 
  
@@ -66,22 +68,22 @@ export default function Profile_group() {
       <ContentCovertPhotoGroup
         section={section}
         handleSection={handleSection}
-        image={ datas && datas.GroupInfos.avatarpath}
-        title={ datas && datas.GroupInfos.title}
-        members={ datas && datas.GroupInfos.nbr_members}
-        friendList={ datas && datas.usersNotInGroup} 
-        listMembers={ datas && datas.listMembreGroup} 
+        image={datas && datas.GroupInfos.avatarpath}
+        title={datas && datas.GroupInfos.title}
+        members={datas && datas.GroupInfos.nbr_members}
+        friendList={datas && datas.usersNotInGroup}
+        listMembers={datas && datas.listMembreGroup}
         groupId={datas && datas.GroupInfos.id}
         handlerSendInvitations={handlerSendInvitations}
         handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}
         isMember={datas && datas.isMember}
       />
      
-      {section.section1 && <Discussion description={ datas && datas.GroupInfos.description}  />}
-      {section.section2 && datas && datas.isMember && <PostGroup PostForm={togglePostForm} />}
-      {section.section3 && datas && datas.isMember && <Events />}
-      {section.section4 && datas && datas.isMember && <ChatGroup setSection={setSection} />}
-      {section.section5 &&  datas && datas.isMember &&  <FromCreateEvent setSection={setSection} groupId={datas && datas.GroupInfos.id} />}
+      {section.section1 && <Discussion description={ datas && datas.GroupInfos.description} />}
+      {section.section2 && <PostGroup PostForm={togglePostForm} />}
+      {section.section3 && <EventLists group_id={datas && datas.GroupInfos.id} />}
+      {section.section4 && <ChatGroup setSection={setSection} />}
+      {section.section5 && <FromCreateEvent setSection={setSection} groupId={datas && datas.GroupInfos.id} />}
     </>
   );
 }
@@ -91,16 +93,21 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
   const [friend, setFriend] = useState(false);
   const [membre, setMembre] = useState(false);
 
-  
   const handleStateBtnJoinGroup = (state) => {
     setStateBtnJoinGroup(state);
+    if (!state) {
+      JoingGroupRequestHandler(groupId, setDatasProfileGroup);
+    }
   };
   const toggleFriend = () => setFriend(!friend);
   const toggleMembres = () => setMembre(!membre);
 
   return (
     <div className={styles.photoCovert}>
-      <img src={image?`data:image/png;base64,${image}`:defaultImage} alt="" />
+      <img
+        src={image ? `data:image/png;base64,${image}` : defaultImage}
+        alt=""
+      />
 
       <h1>{title}</h1>
       <div className={styles.blocActionGroupType}>
@@ -108,35 +115,48 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
           <span>
             <i className="fas fa-globe-africa"></i>Public group ·
           </span>
-          <span className={styles.membre} onClick={toggleMembres}> {members} members</span>
+          <span className={styles.membre} onClick={toggleMembres}>
+            {members} members
+          </span>
         </div>
         <div className={styles.action}>
-          
           {!stateBtnJoinGroup && !isMember && (
             <button
-              onClick={() => handleStateBtnJoinGroup(true)}
+              onClick={() => handleStateBtnJoinGroup(isMember)}
               className={styles.active}
             >
               <i className="fa-solid fa-people-group"></i>Join group
             </button>
           )}
-          {stateBtnJoinGroup && (
-            <button onClick={() => handleStateBtnJoinGroup(false)}>
+          {stateBtnJoinGroup && isMember && (
+            <button onClick={() => handleStateBtnJoinGroup(isMember)}>
               <i className="fa-solid fa-trash"></i>Leave group
             </button>
           )}
 
           {isMember && (
-             <button onClick={toggleFriend}>
-             <i className="fa-solid fa-plus"></i>Invite
-             
-           </button>
+            <button onClick={toggleFriend}>
+              <i className="fa-solid fa-plus"></i>Invite
+            </button>
           )}
-         
         </div>
       </div>
       {isMember && (
-          <NavMenuGroup section={section} handleSection={handleSection} />
+        <NavMenuGroup section={section} handleSection={handleSection} />
+      )}
+
+      {membre && (
+        <ListMembreGroup
+          toggleMembres={toggleMembres}
+          listMembers={listMembers}
+        />
+      )}
+      {friend && (
+        <ListFriend
+          toggleFriend={toggleFriend}
+          friendList={friendList}
+          handlerSendInvitations={handlerSendInvitations}
+        />
       )}
       
       {membre && <ListMembreGroup toggleMembres={toggleMembres} listMembers={listMembers} />}
@@ -195,7 +215,6 @@ export function NavMenuGroup({ section, handleSection }) {
 }
 
 export function ListMembreGroup({ toggleMembres, listMembers }) {
- 
   return (
     <div className={styles.contentListPeopleGoing}>
       <div className={styles.listHeader}>
@@ -214,15 +233,21 @@ export function ListMembreGroup({ toggleMembres, listMembers }) {
           <div key={index} className={styles.userBloc}>
             <div>
               <Link href={`./profileuser?userid=${item.id}`}>
-                <img src={item.avatarpath?`data:image/png;base64,${item.avatarpath}`:defaultImage} alt="" />
-               
+                <img
+                  src={
+                    item.avatarpath
+                      ? `data:image/png;base64,${item.avatarpath}`
+                      : defaultImage
+                  }
+                  alt=""
+                />
               </Link>
               <Link href={`./profileuser?userid=${item.id}`}>
-                <span>{item.firstname} {item.lastname}</span>
+                <span>
+                  {item.firstname} {item.lastname}
+                </span>
               </Link>
-             
             </div>
-            
           </div>
         ))}
       </div>
@@ -250,11 +275,19 @@ export function ListFriend({ toggleFriend, friendList, handlerSendInvitations, h
           <div key={index} className={styles.userBloc}>
             <div>
               <Link href={`./profileuser?userid=${item.user.id}`}>
-                <img src={item.user.avatarpath?`data:image/png;base64,${item.user.avatarpath}`:defaultImage} alt="" />
-               
+                <img
+                  src={
+                    item.user.avatarpath
+                      ? `data:image/png;base64,${item.user.avatarpath}`
+                      : defaultImage
+                  }
+                  alt=""
+                />
               </Link>
               <Link href={`./profileuser?userid=${item.user.id}`}>
-                <span>{item.user.firstname} {item.user.lastname}</span>
+                <span>
+                  {item.user.firstname} {item.user.lastname}
+                </span>
               </Link>
              
             </div> 
@@ -268,18 +301,15 @@ export function ListFriend({ toggleFriend, friendList, handlerSendInvitations, h
                 <i className="fa-solid fa-hourglass-half"></i>Other invited
               </button>
             )}
-            
+
             {!item.isInvited && (
-               <button onClick={() => handlerSendInvitations(item.user.id)}>
-               <i className="fa-solid fa-share"></i>Invite
-             </button>
+              <button onClick={() => handlerSendInvitations(item.user.id)}>
+                <i className="fa-solid fa-share"></i>Invite
+              </button>
             )}
-          
-           
           </div>
         ))}
       </div>
     </div>
   );
 }
-

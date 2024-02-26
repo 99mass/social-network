@@ -95,6 +95,9 @@ func UnfollowUser(db *sql.DB) http.HandlerFunc {
 				return
 			}
 			log.Println("no error")
+
+			controller.DeleteNotificationBySenderAndUser(db, sess.UserID.String(), userid.String(), "follow_request")
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)

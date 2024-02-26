@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/gofrs/uuid"
 
@@ -55,32 +56,7 @@ func GetEventsByGroupID(db *sql.DB, groupID string) ([]models.GroupEvent, error)
 	return events, nil
 }
 
-// GetAllEvents récupère tous les événements de la base de données.
-func GetAllEvents(db *sql.DB) ([]models.GroupEvent, error) {
-	query := `
-		SELECT * 
-		FROM group_events
-	`
-	rows, err := db.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
 
-	var events []models.GroupEvent
-	for rows.Next() {
-		var event models.GroupEvent
-		err := rows.Scan(&event.ID, &event.GroupID, &event.Title, &event.Description, &event.DayTime)
-		if err != nil {
-			return nil, err
-		}
-		events = append(events, event)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return events, nil
-}
 
 // GetGroupByEvent récupère le groupe associé à un événement spécifique.
 func GetGroupByEvent(db *sql.DB, eventID string) (string, error) {
@@ -117,3 +93,38 @@ func GetEventByID(db *sql.DB, eventID string) (*models.GroupEvent, error) {
 	}
 	return &event, nil
 }
+
+
+
+
+// GetAllEvents récupère tous les événements de la base de données.
+func GetAllEvents(db *sql.DB) ([]models.GroupEvent, error) {
+	// Préparez la requête SQL pour récupérer tous les événements.
+	query := `SELECT id, group_id, title, description, day_time FROM group_events`
+	rows, err := db.Query(query)
+	if err != nil {
+		fmt.Println("Erreur lors de la récupération des événements :", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var events []models.GroupEvent
+	for rows.Next() {
+		var event models.GroupEvent
+		err := rows.Scan(&event.ID, &event.GroupID, &event.Title, &event.Description, &event.DayTime)
+		if err != nil {
+			fmt.Println("Erreur lors de la lecture des événements :", err)
+			return nil, err
+		}
+		events = append(events, event)
+		fmt.Println(events,"evvvvvvvvvvvvvvvvv")
+	}
+
+	if err = rows.Err(); err != nil {
+		fmt.Println("Erreur lors de l'itération sur les événements :", err)
+		return nil, err
+	}
+
+	return events, nil
+}
+

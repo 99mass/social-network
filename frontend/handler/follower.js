@@ -112,7 +112,6 @@ export async function CountFollower(userid, setDatas) {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setDatas(data);
       }
     } catch (error) {

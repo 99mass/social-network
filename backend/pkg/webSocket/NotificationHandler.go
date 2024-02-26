@@ -64,6 +64,21 @@ func NotificationFollowRequest(db *sql.DB,senderID,sourceID,userID string){
 
 }
 
+func NotificationJoinGroup(db *sql.DB,senderID, sourceID,userID string){
+	var notif notif_group_invitation
+	notif.Group = sourceID
+	notif.Sender = senderID
+
+	CreateGeneralNotif(db,userID,senderID,sourceID,"join_group")
+
+	if user, ok := ConnectedUsersList[userID]; ok {
+		err := SendGenResponse("notif_join_group_request", user.Conn, notif)
+		if err != nil {
+			log.Println("enable to send a notification to the user that you sent the message")
+		}
+	}
+}
+
 
 func CreateGeneralNotif(db *sql.DB, userID, senderID ,sourceID, typeNotif string)error{
 	var notif models.Notification

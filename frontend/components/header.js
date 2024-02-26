@@ -14,7 +14,9 @@ export default function Header() {
   const [postForm, setPostFrom] = useState(false);
   const [groupForm, setGroupFrom] = useState(false);
   const [socket, setSocket] = useState(null);
-  const [notifMessages, setNotifMessages] = useState(false);
+  const [notifMessagesPrivate, setNotifMessagesPrivate] = useState(0);
+  const [nbrNotifGroupInvitation, setNbrNotifGroupInvitation] = useState(0);
+  const [nbrNotifFollow, setNbrNotifFollow] = useState(0);
 
   const router = useRouter();
 
@@ -42,9 +44,17 @@ export default function Header() {
 
     socket.onmessage = (event) => {
       const _message = JSON.parse(event.data);
-      // console.log("mess",_message);
-      if (_message && _message.type === "notif_private_message") {
-        setNotifMessages(true);
+      if (!_message) return;
+      switch (_message.type) {
+        case "nbr_notif_message":
+          setNotifMessagesPrivate(_message.content);
+          break;
+        case "nbr_notif_join_group_request":
+          setNbrNotifGroupInvitation(_message.content);
+          break;
+        case "nbr_notif_follow":
+          _message.type === "nbr_notif_follow";
+          break;
       }
     };
   }, [socket]);
@@ -61,7 +71,11 @@ export default function Header() {
               <Link href="/home">
                 <h2>social-network</h2>
               </Link>
-              <MidlleNAvForBigScreen notifMessages={notifMessages} />
+              <MidlleNAvForBigScreen
+                notifMessagesPrivate={notifMessagesPrivate}
+                nbrNotifGroupInvitation={nbrNotifGroupInvitation}
+                nbrNotifFollow={nbrNotifFollow}
+              />
               <ToggleButton
                 togglePostForm={togglePostForm}
                 toggleGroupForm={toggleGroupForm}
@@ -71,7 +85,11 @@ export default function Header() {
                 userId={datasUser?.id}
               />
             </div>
-            <MidlleNAvFormSmallScreen notifMessages={notifMessages} />
+            <MidlleNAvFormSmallScreen
+              notifMessagesPrivate={notifMessagesPrivate}
+              nbrNotifGroupInvitation={nbrNotifGroupInvitation}
+              nbrNotifFollow={nbrNotifFollow}
+            />
           </div>
         </div>
       </nav>
@@ -83,60 +101,74 @@ export default function Header() {
   );
 }
 
-export function MidlleNAvForBigScreen({ notifMessages }) {
+export function MidlleNAvForBigScreen({
+  notifMessagesPrivate,
+  nbrNotifGroupInvitation,
+  nbrNotifFollow,
+}) {
   return (
     <div className={`${styles.middleContent} ${styles.middleContent0}`}>
       <Link href="/home">
         <i className="active fas fa-home" title="Home">
-          <span>25+</span>
+          {/* <span>25+</span> */}
         </i>
       </Link>
       <Link href="/friend">
         <i className="fas fa-user-friends" title="Friend Requests">
-          <span>4+</span>
+          {nbrNotifFollow > 0 && <span>{nbrNotifFollow}+</span>}
         </i>
       </Link>
       <Link href="/chat">
         <i className="fas fa-comment" title="Chat">
-          <span> 42</span>
+          {notifMessagesPrivate > 0 && <span>{notifMessagesPrivate}+</span>}
         </i>
       </Link>
-      <Link href="/notification">
+      {/* <Link href="/notification">
         <i className="fas fa-bell" title="Notification">
-          {notifMessages && <span>22+</span>}
+          <span>22+</span>
         </i>
-      </Link>
+      </Link> */}
       <Link href="/group" title="Groups">
-        <i className="fas fa-users"></i>
+        <i className="fas fa-users">
+          {nbrNotifGroupInvitation > 0 && (
+            <span>{nbrNotifGroupInvitation}+</span>
+          )}
+        </i>
       </Link>
     </div>
   );
 }
-export function MidlleNAvFormSmallScreen({ notifMessages }) {
+export function MidlleNAvFormSmallScreen({
+  notifMessagesPrivate,
+  nbrNotifGroupInvitation,
+  nbrNotifFollow,
+}) {
   return (
     <div className={`${styles.middleContent} ${styles.middleContent1}`}>
       <Link href="/home">
-        <i className="active fas fa-home">
-          <span>25+</span>
-        </i>
+        <i className="active fas fa-home">{/* <span>25+</span> */}</i>
       </Link>
       <Link href="/friend">
         <i className="fas fa-user-friends">
-          <span>4+</span>
+          {nbrNotifFollow > 0 && <span>{nbrNotifFollow}+</span>}
         </i>
       </Link>
       <Link href="/chat">
         <i className="fas fa-comment">
-          {notifMessages && <span>42</span>}
+          {notifMessagesPrivate > 0 && <span>{notifMessagesPrivate}+</span>}
         </i>
       </Link>
-      <Link href="/notification">
+      {/* <Link href="/notification">
         <i className="fas fa-bell">
           <span>22+</span>
         </i>
-      </Link>
+      </Link> */}
       <Link href="/group">
-        <i className="fas fa-users"></i>
+        <i className="fas fa-users">
+          {nbrNotifGroupInvitation > 0 && (
+            <span>{nbrNotifGroupInvitation}+</span>
+          )}
+        </i>
       </Link>
     </div>
   );
@@ -185,5 +217,24 @@ export function ToggleButton({
         </div>
       )}
     </>
+  );
+}
+
+function Notification() {
+  return (
+    <div className={styles.toastContainer} id={styles.toast}>
+      <span className={styles.toastClose} onclick="closeToast()">
+        &times;
+      </span>
+      <div className={styles.toastHeader} id={styles.toastHeader}>
+        {/* <!-- SVG and Header content will be dynamically inserted here --> */}
+      </div>
+      <div className={styles.txtblk} id={styles.txtBlock}>
+        {/* <!-- Text block content will be dynamically inserted here --> */}
+      </div>
+      <div className={styles.toastBody} id={styles.toastBody}>
+        {/* <!-- Dynamic content will be inserted here --> */}
+      </div>
+    </div>
   );
 }
