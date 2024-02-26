@@ -81,12 +81,7 @@ export const DeclineGroupInvitation = async (group_id, setRequestLists) => {
   }
 };
 
-export const AddPostGroup = async (
-  data,
-  setPostsGroup,
-  groupId,
-  section
-) => {
+export const AddPostGroup = async (data, setPostsGroup, groupId, section) => {
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.AddPostGroup, {

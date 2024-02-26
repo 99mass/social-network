@@ -5,6 +5,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"backend/pkg/utils"
+	websocket "backend/pkg/webSocket"
 	"database/sql"
 	"log"
 	"net/http"
@@ -127,6 +128,15 @@ func JoingGroupRequest(db *sql.DB) http.HandlerFunc {
 				log.Println("the request invitation can't be accepted due to" + err.Error())
 				return
 			}
+
+			creator,err := controller.GetCreatorByGroupID(db,groupeID)
+			if err != nil {
+				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
+				log.Println("can't get the creator by the groupID" + err.Error())
+				return
+			}
+			websocket.NotificationJoinGroup(db,sess.UserID.String(),groupeID,creator)
+			websocket.BroadcastUserList(db)
 			log.Println("Join group request successful")
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
