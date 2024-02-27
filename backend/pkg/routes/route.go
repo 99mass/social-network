@@ -22,7 +22,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/logout", helper.Middleware(handler.LogOutHandler(db)))
 	http.HandleFunc("/update_profil", helper.Middleware(handler.UpdateProfil(db)))
 	http.HandleFunc("/followuser", helper.Middleware(handler.FollowUser(db)))
-	http.HandleFunc("/unfollowuser", helper.Middleware(handler.UnfollowUser(db))) // unfollow user
+	http.HandleFunc("/unfollowuser", helper.Middleware(handler.UnfollowUser(db)))
 
 	http.HandleFunc("/addpost", helper.Middleware(handler.AddPostHandler(db)))
 	http.HandleFunc("/addcomment", helper.Middleware(handler.AddCommentHandler(db)))
@@ -62,10 +62,10 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/join_group_request", helper.Middleware(handler.JoingGroupRequest(db)))
 	http.HandleFunc("/show_join_group_request", helper.Middleware(handler.ShowJoinGroupRequest(db)))
 	http.HandleFunc("/accept_join_group_request", helper.Middleware(handler.AcceptJoinGroupRequestHandler(db)))
+	http.HandleFunc("/reject_join_group_request", helper.Middleware(handler.RejectJoinGroupRequestHandler(db)))
 
 	// Events Group
 	http.HandleFunc("/create_events", helper.Middleware(handler.AddGroupEventHandler(db)))
 	http.HandleFunc("/events", helper.Middleware(handler.GetEventsByGroupHandler(db)))
 	http.HandleFunc("/create_participants", helper.Middleware(handler.AddEventParticipantHandler(db)))
-
 }
