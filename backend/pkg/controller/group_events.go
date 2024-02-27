@@ -31,7 +31,7 @@ func CreateGroupEvent(db *sql.DB, event models.GroupEvent) (uuid.UUID, error) {
 // GetEventsByGroupID récupère tous les événements d'un groupe spécifique.
 func GetEventsByGroupID(db *sql.DB, groupID string) ([]models.GroupEvent, error) {
 	query := `
-		SELECT * 
+		SELECT *
 		FROM group_events 
 		WHERE group_id = ?
 	`
@@ -49,14 +49,14 @@ func GetEventsByGroupID(db *sql.DB, groupID string) ([]models.GroupEvent, error)
 			return nil, err
 		}
 		events = append(events, event)
+
+		fmt.Println("date:", event.DayTime)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 	return events, nil
 }
-
-
 
 // GetGroupByEvent récupère le groupe associé à un événement spécifique.
 func GetGroupByEvent(db *sql.DB, eventID string) (string, error) {
@@ -94,9 +94,6 @@ func GetEventByID(db *sql.DB, eventID string) (*models.GroupEvent, error) {
 	return &event, nil
 }
 
-
-
-
 // GetAllEvents récupère tous les événements de la base de données.
 func GetAllEvents(db *sql.DB) ([]models.GroupEvent, error) {
 	// Préparez la requête SQL pour récupérer tous les événements.
@@ -117,7 +114,7 @@ func GetAllEvents(db *sql.DB) ([]models.GroupEvent, error) {
 			return nil, err
 		}
 		events = append(events, event)
-		fmt.Println(events,"evvvvvvvvvvvvvvvvv")
+		fmt.Println(events, "evvvvvvvvvvvvvvvvv")
 	}
 
 	if err = rows.Err(); err != nil {
@@ -127,4 +124,3 @@ func GetAllEvents(db *sql.DB) ([]models.GroupEvent, error) {
 
 	return events, nil
 }
-

@@ -68,7 +68,7 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 				log.Println("Unable to create the group event: ", err)
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
-					Message: "YUnable to create the group event",
+					Message: "Unable to create the group event",
 				}, http.StatusInternalServerError)
 				return
 			}
