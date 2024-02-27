@@ -94,7 +94,7 @@ export default function Profile_group() {
         />
       )}
       {section.section3 && datas && datas.isMember && (
-        <Events group_id={datas && datas.GroupInfos.id} />
+        <EventLists group_id={datas && datas.GroupInfos.id} />
       )}
       {section.section4 && datas && datas.isMember && (
         <ChatGroup setSection={setSection} />
