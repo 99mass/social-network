@@ -3,19 +3,9 @@ import styles from "../../styles/modules/profile-group.module.css";
 import { allDiscussionGroupPrivateSocket } from "../websocket/globalSocket";
 import Discussion from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
+import EmojiForm from "../emoji/emoji";
 
 export default function ChatGroup({ setSection, groupName, group_id }) {
-
-  // const [socket, setSocket] = useState(null);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     allDiscussionGroupPrivateSocket(setSocket);
-  //   }, 800);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
-
   return (
     <>
       <Discussion />
@@ -26,52 +16,65 @@ export default function ChatGroup({ setSection, groupName, group_id }) {
 
 export function ChatContainer({ setSection, groupName, group_id }) {
 
+  const [socket, setSocket] = useState(null);
+  const [messages, setMessages] = useState(null);
 
 
-  // useEffect(() => {
-  //   if (!socket) return;
-  //   socket.onopen = () => {
-  //     console.log("WebSocket group opened.");
-  //     socket.send(JSON.stringify({ group_id: group_id.trim() }))
-  //   };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      allDiscussionGroupPrivateSocket(setSocket);
+    }, 800);
 
-  //   socket.onmessage = (event) => {
-  //     const _message = event.data && JSON.parse(event.data);
-  //     if (!_message) return;
-  //     console.log("mess:", _message);
-  //   }
-  // }, [socket]);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.onopen = () => {
+      console.log("WebSocket group opened.");
+      socket.send(JSON.stringify({ group_id: group_id.trim() }))
+    };
+
+    socket.onmessage = (event) => {
+      const _message = event.data && JSON.parse(event.data);
+      if (!_message) return;
+      console.log("mess:", _message);
+      setMessages(_message)
+    }
+  }, [socket]);
 
 
-  // const handlerSendMessage = (e) => {
-  //   e.preventDefault();
-  //   if (!socket || socket.readyState !== WebSocket.OPEN) {
-  //     console.error("WebSocket connection not open.");
-  //     return;
-  //   }
-  // console.log("aaaa");
-  //   return
-  //   const dataFrom = new FormData(e.target);
-  //   const content = dataFrom.get("content");
-  //   if (content.trim() == "") {
-  //     errorNotification("Content can not be empty.");
-  //     return;
-  //   }
-  //   const data = {
-  //     group_id: group_id,
-  //     content: content,
-  //   };
 
-  //   socket.send(JSON.stringify(data));
-  //   allDiscussionGroupPrivateSocket(setSocket); //actualiser les anciennes messages
-  // };
+  const handlerSendMessage = (e) => {
+    e.preventDefault();
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      console.error("WebSocket connection not open.");
+      return;
+    }
+
+    const dataFrom = new FormData(e.target);
+    const content = dataFrom.get("content");
+    if (content.trim() == "") {
+      errorNotification("Content can not be empty.");
+      return;
+    }
+    const data = {
+      group_id: group_id,
+      content: content,
+    };
+    console.log("aaaa", data);
+
+
+    socket.send(JSON.stringify(data));
+    allDiscussionGroupPrivateSocket(setSocket); //actualiser les anciennes messages
+  };
 
   return (
     <div className={styles.containerChatGroup}>
       <ChatHeader setSection={setSection} groupName={groupName} />
       <hr />
-      <ChatBody group_id={group_id} />
-      <ChatFooter group_id={group_id}  />
+      <ChatBody messages={messages} />
+      <ChatFooter group_id={group_id} handlerSendMessage={handlerSendMessage} />
     </div>
   );
 }
@@ -99,7 +102,7 @@ export function ChatHeader({ setSection, groupName }) {
   );
 }
 
-export function ChatBody() {
+export function ChatBody({messages}) {
 
 
 
@@ -153,13 +156,14 @@ export function ChatBody() {
       time: "2m ago",
     },
   ];
+
   return (
     <div className={styles.chatBody}>
       {data.map((item, index) => (
         <div key={index} className={styles.contentMess}>
           <img src={item.image} alt="" />
           <div>
-            <pre>{item.content}</pre>
+            <pre className={styles.specifyBG}>{item.content}</pre>
             <p>
               <span>by {item.user}</span>
               {item.time}
@@ -171,37 +175,50 @@ export function ChatBody() {
   );
 }
 
-export function ChatFooter({handlerSendMessage}) {
+export function ChatFooter({ handlerSendMessage }) {
+
+  const [emoji, setEmoji] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState("");
+  const toggleEmojicon = () => setEmoji(!emoji);
 
   return (
-    <form  method="post" onSubmit={handlerSendMessage} className={styles.chatFooter}>
-      <textarea
-        name="content"
-        required=""
-        placeholder="Message..."
-        type="text"
-        id={styles.messageInput2}
-      ></textarea>
-      <div className={styles.emoji}>😄</div>
-      <button id={styles.sendButton2} type="submit">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 664 663"
-        >
-          <path
+    <>
+      <form method="post" onSubmit={handlerSendMessage} className={styles.chatFooter}>
+        <textarea
+          value={selectedEmoji}
+          name="content"
+          onChange={(e) => setSelectedEmoji(e.target.value)}
+          placeholder="Message..."
+          id={styles.messageInput2}
+        />
+
+        <div onClick={toggleEmojicon} className={styles.emoji}>😄</div>
+        <button id={styles.sendButton2} type="submit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
-          ></path>
-          <path
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            strokeWidth="33.67"
-            stroke="#6c6c6c"
-            d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
-          ></path>
-        </svg>
-      </button>
-    </form>
+            viewBox="0 0 664 663"
+          >
+            <path
+              fill="none"
+              d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
+            ></path>
+            <path
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              strokeWidth="33.67"
+              stroke="#6c6c6c"
+              d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
+            ></path>
+          </svg>
+        </button>
+      </form>
+      {/* emoji form */}
+      {emoji && (
+        <EmojiForm
+          toggleEmojicon={toggleEmojicon}
+          setSelectedEmoji={setSelectedEmoji}
+        />
+      )}</>
   );
 }

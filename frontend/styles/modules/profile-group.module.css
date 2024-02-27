@@ -352,6 +352,10 @@
     word-wrap: break-word;
     background: var(--primary-bg);
 }
+.containerChatGroup .chatBody .contentMess div .specifyBG{
+  background-color: darkslategray;
+
+}
 .containerChatGroup .chatBody .contentMess div p{
     font-size: small;
 }

@@ -65,7 +65,7 @@ func HandleMessages(db *sql.DB, conn *websocket.Conn, userID string) {
 		err := conn.ReadJSON(&message)
 		if err != nil {
 			log.Println(err)
-			continue
+			return
 		}
 		log.Println("this is the message to sent:", message)
 		if err == nil {
