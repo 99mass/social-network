@@ -68,21 +68,6 @@ export default function LeftBlocGroupPage({ state, handleState }) {
 }
 
 export function ListGroupManaged({ group }) {
-  // const defaultImage = "../images/groups-defaul.png"; 
-
-  // Object { type: "nbr_notif_join_group_request", content: (1) […] }
-  // ​
-  // content: Array [ {…} ]
-  // ​​
-  // 0: Object { group_id: "d01c7138-bba1-4208-99c9-1e1989acae12", CountJoinReq: 6 }
-  // ​​
-  // length: 1
-  // ​​
-  // <prototype>: Array []
-  // ​
-  // type: "nbr_notif_join_group_request"
-  // ​
-  // <prototype>: Object { … }
 
   return (
     <div className={styles.listGroupManaged}>

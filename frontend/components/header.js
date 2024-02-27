@@ -50,7 +50,7 @@ export default function Header() {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      console.log(_message);
+      // console.log(_message);
 
       switch (_message.type) {
         // old notifications

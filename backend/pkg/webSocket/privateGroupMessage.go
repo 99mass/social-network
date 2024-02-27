@@ -18,8 +18,8 @@ type GroupID struct {
 	GroupID string `json:"group_id"`
 }
 type MessageGroupToSend struct {
-	message models.PrivateGroupeMessages
-	user    models.User
+	Message models.PrivateGroupeMessages `json:"message"`
+	User    models.User                  `json:"user"`
 }
 
 func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
@@ -73,9 +73,11 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 
 				}
 			}
-			good.message = mes
-			good.user = user
+
+			good.Message = mes
+			good.User = user
 			ToSend = append(ToSend, good)
+			log.Println("to send", ToSend)
 
 		}
 
