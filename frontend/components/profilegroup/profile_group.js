@@ -29,8 +29,7 @@ export default function Profile_group() {
     AddGroupInvitations(userId, query.id, setDatasProfileGroup)
   };
 
-  const handlerDeclineInvitaionGroup = (userId) => {
-    
+  const handlerDeclineInvitaionGroup = (userId) => {    
     DeclineInvitation(query.id, userId,  setDatasProfileGroup);
   };
 
