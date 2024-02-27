@@ -28,6 +28,7 @@ export default function EventLists({ group_id }) {
             key={index}
             nameGroup={item.event.title}
             numberPerson={item.going_count}
+            userBy={item.user.nickname}
             time={item.event.day_time}
             content={item.event.description}
             isGoing={item.isGoing}
@@ -44,6 +45,7 @@ export default function EventLists({ group_id }) {
 export function EventBloc({
   nameGroup,
   numberPerson,
+  userBy,
   time,
   content,
   isGoing,
@@ -60,7 +62,7 @@ export function EventBloc({
       <p>
         <i className="fa-solid fa-user-group"></i>
         <span>Event by</span>
-        {nameGroup}
+        {userBy}
       </p>
       <p className={styles.duration}>
         <i className="fa-solid fa-stopwatch"></i>
@@ -68,15 +70,16 @@ export function EventBloc({
       </p>
       <pre>{content}</pre>
       <div>
-        {isGoing ? (
+        
           <button>
             <i className="fa-solid fa-circle-check"></i>Going
           </button>
-        ) : (
+        
           <button className={styles.btnNotGoing}>
             <i className="fa-solid fa-circle-check"></i>Not going
           </button>
-        )}
+          
+        
         <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
           <i className="fa-solid fa-list-check"></i>Guest List
         </button>
