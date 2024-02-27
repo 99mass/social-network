@@ -70,15 +70,16 @@ export function EventBloc({
       </p>
       <pre>{content}</pre>
       <div>
-        {isGoing ? (
+        
           <button>
             <i className="fa-solid fa-circle-check"></i>Going
           </button>
-        ) : (
+        
           <button className={styles.btnNotGoing}>
             <i className="fa-solid fa-circle-check"></i>Not going
           </button>
-        )}
+          
+        
         <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
           <i className="fa-solid fa-list-check"></i>Guest List
         </button>
