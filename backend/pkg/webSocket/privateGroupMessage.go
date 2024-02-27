@@ -14,6 +14,8 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+var GroupConnectedUsersList map[string]*models.UserConnected = make(map[string]*models.UserConnected)
+
 type GroupID struct {
 	GroupID string `json:"group_id"`
 }
@@ -42,6 +44,14 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			log.Println(err)
 			return
 		}
+		if user, ok := GroupConnectedUsersList[sess.UserID.String()]; ok {
+			// Si l'utilisateur existe déjà, mettez à jour la connexion
+			user.Conn = conn
+		} else {
+			// Sinon, créez un nouvel utilisateur
+			GroupConnectedUsersList[sess.UserID.String()] = &models.UserConnected{Conn: conn, UserID: sess.UserID.String()}
+		}
+
 		var group GroupID
 		err = conn.ReadJSON(&group)
 		if err != nil {
@@ -77,8 +87,6 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			good.Message = mes
 			good.User = user
 			ToSend = append(ToSend, good)
-			log.Println("to send", ToSend)
-
 		}
 
 		SendGenResponse("chat_group", conn, ToSend)
@@ -122,9 +130,47 @@ func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages, userID s
 		return err
 	}
 
-	err = controller.CreateGroupMessage(db, message, userID)
+	_, err = controller.CreateGroupMessage(db, message, userID)
 	if err != nil {
 		return errors.New("enable to create your message")
 	}
+
+	BroadcastGroupMessage(db, message.GroupID)
+
 	return nil
+}
+
+func BroadcastGroupMessage(db *sql.DB, GroupID string) {
+	for _, user := range GroupConnectedUsersList {
+		if user.Conn != nil {
+			message, err := controller.GetGroupMessage(db, GroupID)
+			if err != nil {
+				log.Println("enable to get the chat of the group,", err.Error())
+				return
+			}
+			var ToSend []MessageGroupToSend
+			for _, mes := range message {
+				usID, _ := uuid.FromString(mes.UserID)
+				user, err := controller.GetUserByID(db, usID)
+				if err != nil {
+					log.Println("cant get the user", err.Error())
+					return
+				}
+				var good MessageGroupToSend
+				if user.AvatarPath != "" {
+					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+					if err != nil {
+						log.Println("enable to encode image avatar", err.Error())
+
+					}
+				}
+
+				good.Message = mes
+				good.User = user
+				ToSend = append(ToSend, good)
+			}
+
+			SendGenResponse("chat_group", user.Conn, ToSend)
+		}
+	}
 }
