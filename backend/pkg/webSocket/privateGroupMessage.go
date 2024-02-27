@@ -10,11 +10,18 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
 )
 
+var GroupConnectedUsersList map[string]*models.UserGroupConnected = make(map[string]*models.UserGroupConnected)
+
 type GroupID struct {
 	GroupID string `json:"group_id"`
+}
+type MessageGroupToSend struct {
+	Message models.PrivateGroupeMessages `json:"message"`
+	User    models.User                  `json:"user"`
 }
 
 func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
@@ -24,9 +31,23 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 			return
 		}
+		//TODO:Remplis l'id et le verifier
+		idGroup := r.URL.Query().Get("group_id")
+		log.Println("id du group", idGroup)
+		_, err = controller.GetGrpByID(db, idGroup)
+		if err != nil {
+			helper.SendResponseError(w, "error", "invalid group id", http.StatusBadRequest)
+			return
+		}
 		sess, err := controller.GetSessionByID(db, sessid)
 		if err != nil {
 			helper.SendResponseError(w, "error", "invalid session", http.StatusBadRequest)
+			return
+		}
+		verif, err := controller.IsMember(db, sess.UserID.String(), idGroup)
+		if !verif {
+			log.Println("l'utilisateur tente d'acceder a un groupe qui n'est pas sien", err.Error())
+			helper.SendResponseError(w, "error", "invalid id group", http.StatusBadRequest)
 			return
 		}
 		upgrader := websocket.Upgrader{
@@ -37,6 +58,15 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			log.Println(err)
 			return
 		}
+		if user, ok := GroupConnectedUsersList[sess.UserID.String()]; ok {
+			// Si l'utilisateur existe déjà, mettez à jour la connexion
+			user.Conn = conn
+			user.GroupID = idGroup
+		} else {
+			// Sinon, créez un nouvel utilisateur
+			GroupConnectedUsersList[sess.UserID.String()] = &models.UserGroupConnected{Conn: conn, UserID: sess.UserID.String(), GroupID: idGroup}
+		}
+
 		var group GroupID
 		err = conn.ReadJSON(&group)
 		if err != nil {
@@ -52,7 +82,29 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			log.Println("enable to get the chat of the group,", err.Error())
 			return
 		}
-		SendGenResponse("chat_group", conn, message,)
+		var ToSend []MessageGroupToSend
+		for _, mes := range message {
+			usID, _ := uuid.FromString(mes.UserID)
+			user, err := controller.GetUserByID(db, usID)
+			if err != nil {
+				log.Println("cant get the user", err.Error())
+				return
+			}
+			var good MessageGroupToSend
+			if user.AvatarPath != "" {
+				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+				if err != nil {
+					log.Println("enable to encode image avatar", err.Error())
+
+				}
+			}
+
+			good.Message = mes
+			good.User = user
+			ToSend = append(ToSend, good)
+		}
+
+		SendGenResponse("chat_group", conn, ToSend)
 
 		go HandleGroupMessage(db, conn, sess.UserID.String())
 	}
@@ -74,7 +126,7 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 			SendGenResponse("error", conn, "invalid type for message")
 			continue
 		}
-		err = SendGroupMessage(db, message,userID)
+		err = SendGroupMessage(db, message, userID)
 		if err != nil {
 			SendGenResponse("error", conn, err.Error())
 			continue
@@ -83,7 +135,7 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 	}
 }
 
-func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages,userID string) error {
+func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages, userID string) error {
 	_, err := controller.GetGroupByID(db, message.GroupID)
 	if err != nil {
 		return errors.New("group given doesn't exist")
@@ -93,9 +145,54 @@ func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages,userID st
 		return err
 	}
 
-	err = controller.CreateGroupMessage(db, message,userID)
+	_, err = controller.CreateGroupMessage(db, message, userID)
 	if err != nil {
 		return errors.New("enable to create your message")
 	}
+
+	BroadcastGroupMessage(db, message.GroupID)
+
 	return nil
+}
+
+func BroadcastGroupMessage(db *sql.DB, GroupID string) {
+	for _, user := range GroupConnectedUsersList {
+		if user.Conn != nil {
+			ok, _ := controller.IsMember(db, user.UserID, GroupID)
+			if ok {
+				if user.GroupID == GroupID {
+					message, err := controller.GetGroupMessage(db, GroupID)
+					if err != nil {
+						log.Println("enable to get the chat of the group,", err.Error())
+						return
+					}
+					var ToSend []MessageGroupToSend
+					for _, mes := range message {
+						usID, _ := uuid.FromString(mes.UserID)
+						user, err := controller.GetUserByID(db, usID)
+						if err != nil {
+							log.Println("cant get the user", err.Error())
+							return
+						}
+						var good MessageGroupToSend
+						if user.AvatarPath != "" {
+							user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+							if err != nil {
+								log.Println("enable to encode image avatar", err.Error())
+
+							}
+						}
+
+						good.Message = mes
+						good.User = user
+						ToSend = append(ToSend, good)
+					}
+
+					SendGenResponse("chat_group", user.Conn, ToSend)
+				}
+
+			}
+
+		}
+	}
 }

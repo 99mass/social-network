@@ -21,3 +21,9 @@ type UserConnected struct {
 	Conn *websocket.Conn
 	UserID string
 }
+
+type UserGroupConnected struct {
+	Conn *websocket.Conn
+	UserID string
+	GroupID string
+}

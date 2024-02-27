@@ -40,5 +40,4 @@ export const api = {
   JoinGroupRequest: `${domain}/join_group_request`,
   GetJoinGroupRequest:`${domain}/show_join_group_request`,
 
-
 };

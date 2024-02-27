@@ -3,7 +3,6 @@ package controller
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/gofrs/uuid"
 
@@ -13,15 +12,15 @@ import (
 // CreateGroupEvent crée un nouvel événement de groupe dans la base de données.
 func CreateGroupEvent(db *sql.DB, event models.GroupEvent) (uuid.UUID, error) {
 	query := `
-		INSERT INTO group_events (id, group_id, title, description, day_time) 
-		VALUES (?, ?, ?, ?, ?)
+		INSERT INTO group_events (id, group_id, title, description, day_time, created_by) 
+		VALUES (?, ?, ?, ?, ?, ?)
 	`
 	newUUID, err := uuid.NewV4()
 	if err != nil {
 		return uuid.UUID{}, err
 	}
 
-	_, err = db.Exec(query, newUUID.String(), event.GroupID, event.Title, event.Description, event.DayTime)
+	_, err = db.Exec(query, newUUID.String(), event.GroupID, event.Title, event.Description, event.DayTime, event.CreatedBy)
 	if err != nil {
 		return uuid.UUID{}, err
 	}
@@ -44,13 +43,11 @@ func GetEventsByGroupID(db *sql.DB, groupID string) ([]models.GroupEvent, error)
 	var events []models.GroupEvent
 	for rows.Next() {
 		var event models.GroupEvent
-		err := rows.Scan(&event.ID, &event.GroupID, &event.Title, &event.Description, &event.DayTime)
+		err := rows.Scan(&event.ID, &event.GroupID, &event.Title, &event.Description, &event.DayTime, &event.CreatedBy)
 		if err != nil {
 			return nil, err
 		}
 		events = append(events, event)
-
-		fmt.Println("date:", event.DayTime)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -84,7 +81,7 @@ func GetEventByID(db *sql.DB, eventID string) (*models.GroupEvent, error) {
 		WHERE id = ?
 	`
 	var event models.GroupEvent
-	err := db.QueryRow(query, eventID).Scan(&event.ID, &event.GroupID, &event.Title, &event.Description, &event.DayTime)
+	err := db.QueryRow(query, eventID).Scan(&event.ID, &event.GroupID, &event.Title, &event.Description, &event.DayTime, &event.CreatedBy)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
@@ -94,33 +91,31 @@ func GetEventByID(db *sql.DB, eventID string) (*models.GroupEvent, error) {
 	return &event, nil
 }
 
-// GetAllEvents récupère tous les événements de la base de données.
-func GetAllEvents(db *sql.DB) ([]models.GroupEvent, error) {
-	// Préparez la requête SQL pour récupérer tous les événements.
-	query := `SELECT id, group_id, title, description, day_time FROM group_events`
-	rows, err := db.Query(query)
+// GetEventsByGroupWithCreatorInfo récupère les événements d'un groupe avec les informations de l'utilisateur qui les a créés.
+func GetEventsByGroupWithCreatorInfo(db *sql.DB, groupID string) ([]models.EventRequest, error) {
+	query := `
+        SELECT group_events.*, users.nickname
+        FROM group_events
+        JOIN users ON group_events.created_by = users.id
+        WHERE group_events.group_id = ?
+    `
+	rows, err := db.Query(query, groupID)
 	if err != nil {
-		fmt.Println("Erreur lors de la récupération des événements :", err)
 		return nil, err
 	}
 	defer rows.Close()
 
-	var events []models.GroupEvent
+	var events []models.EventRequest
 	for rows.Next() {
-		var event models.GroupEvent
-		err := rows.Scan(&event.ID, &event.GroupID, &event.Title, &event.Description, &event.DayTime)
+		var event models.EventRequest
+		err := rows.Scan(&event.Event.ID, &event.Event.GroupID, &event.Event.Title, &event.Event.Description, &event.Event.DayTime, &event.Event.CreatedBy, &event.User.Nickname)
 		if err != nil {
-			fmt.Println("Erreur lors de la lecture des événements :", err)
 			return nil, err
 		}
 		events = append(events, event)
-		fmt.Println(events, "evvvvvvvvvvvvvvvvv")
 	}
-
-	if err = rows.Err(); err != nil {
-		fmt.Println("Erreur lors de l'itération sur les événements :", err)
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-
 	return events, nil
 }

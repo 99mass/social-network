@@ -26,21 +26,21 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "group_id is required", http.StatusBadRequest)
 				return
 			}
-			log.Println("group_id: ", groupID)
-			events, err := controller.GetEventsByGroupID(db, groupID)
+
+			events, err := controller.GetEventsByGroupWithCreatorInfo(db, groupID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
-				log.Println("w e got an issue", err.Error())
+				log.Println("we got an issue", err.Error())
 				return
 			}
 
 			// For each event, determine the user's participation status
 			var eventRequests []models.EventRequest
 			for _, event := range events {
-				participationStatus, err := controller.GetParticipantStatus(db, event.ID, sess.UserID.String())
+				participationStatus, err := controller.GetParticipantStatus(db, event.Event.ID, sess.UserID.String())
 				if err != nil {
 					helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
-					log.Println("w e got an issue", err.Error())
+					log.Println("we got an issue", err.Error())
 					return
 				}
 
@@ -53,7 +53,7 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 				}
 
 				//Get the count of participants who are going
-				participantsCountAndDetails, err := controller.GetParticipantsCountAndDetailsByEventID(db, event.ID)
+				participantsCountAndDetails, err := controller.GetParticipantsCountAndDetailsByEventID(db, event.Event.ID)
 				if err != nil {
 					helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
 					log.Println("we got an issue", err.Error())
@@ -67,9 +67,10 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 
 				// Create an EventRequest for each event
 				eventRequest := models.EventRequest{
-					Event:               event,
+					Event:               event.Event,
 					ParticipationStatus: status,
 					GoingCount:          goingCount,
+					User:                event.User,
 				}
 
 				eventRequests = append(eventRequests, eventRequest)
