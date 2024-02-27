@@ -35,9 +35,9 @@ body {
     padding: 0px 5%;
     text-align: center;
     color: gray;
-  }
-  
-  .emptyDisc svg {
+}
+
+.emptyDisc svg {
     width: 100px;
     height: 100px;
-  }
+}

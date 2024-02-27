@@ -5,6 +5,7 @@ import Discussion from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
 import EmojiForm from "../emoji/emoji";
 import { getElapsedTime } from "../../utils/convert_dates";
+import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function ChatGroup({ setSection, groupName, group_id }) {
   return (
@@ -17,11 +18,13 @@ export default function ChatGroup({ setSection, groupName, group_id }) {
 
 export function ChatContainer({ setSection, groupName, group_id }) {
 
+  const [dataUserConected, setDataUserConnected] = useState(null)
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState(null);
 
 
   useEffect(() => {
+    getUserBySession(setDataUserConnected);
     const timer = setTimeout(() => {
       allDiscussionGroupPrivateSocket(setSocket);
     }, 200);
@@ -39,7 +42,7 @@ export function ChatContainer({ setSection, groupName, group_id }) {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      console.log("mess:", _message);
+      // console.log("mess:", _message);
       setMessages(_message)
     }
   }, [socket]);
@@ -62,9 +65,7 @@ export function ChatContainer({ setSection, groupName, group_id }) {
     const data = {
       group_id: group_id,
       content: content,
-    };
-    console.log("aaaa", data);
-
+    }
 
     socket.send(JSON.stringify(data));
     allDiscussionGroupPrivateSocket(setSocket); //actualiser les anciennes messages
@@ -74,7 +75,7 @@ export function ChatContainer({ setSection, groupName, group_id }) {
     <div className={styles.containerChatGroup}>
       <ChatHeader setSection={setSection} groupName={groupName} />
       <hr />
-      <ChatBody messages={messages} />
+      <ChatBody messages={messages} userId={dataUserConected?.id} group_id={group_id} />
       <ChatFooter group_id={group_id} handlerSendMessage={handlerSendMessage} />
     </div>
   );
@@ -103,7 +104,7 @@ export function ChatHeader({ setSection, groupName }) {
   );
 }
 
-export function ChatBody({ messages }) {
+export function ChatBody({ messages, userId, group_id }) {
 
   const endOfMessagesRef = useRef(null);
   useEffect(() => {
@@ -112,14 +113,14 @@ export function ChatBody({ messages }) {
     }
   }, [messages]);
 
-
   return (
     <div className={styles.chatBody}>
       {messages && messages.content ? messages.content.map((item, index) => (
+        item.message.group_id === group_id &&
         <div key={`${item.message.id}${index}`} className={styles.contentMess}>
           <img src={item.user.avatarpath ? `data:image/png;base64,${item.user.avatarpath} ` : "../images/default-image.svg"} alt="" />
           <div>
-            <pre className={styles.specifyBG}>{item.message.content}</pre>
+            <pre className={item.user.id == userId && styles.specifyBG}>{item.message.content}</pre>
             <p>
               <span>by {`${item.user.firstname} ${item.user.lastname}`}</span>
               {`${getElapsedTime(item.message.created_at).value} ${getElapsedTime(item.message.created_at).unit} ago`}

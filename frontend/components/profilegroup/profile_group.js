@@ -24,7 +24,6 @@ export default function Profile_group() {
     }
   }, [query, datas]);
 
-
   const handlerSendInvitations = (userId) => {
     AddGroupInvitations(userId, query.id, setDatasProfileGroup)
   };
