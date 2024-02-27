@@ -116,11 +116,10 @@ export function ChatBody({ messages, userId, group_id }) {
   return (
     <div className={styles.chatBody}>
       {messages && messages.content ? messages.content.map((item, index) => (
-        item.message.group_id === group_id &&
         <div key={`${item.message.id}${index}`} className={styles.contentMess}>
           <img src={item.user.avatarpath ? `data:image/png;base64,${item.user.avatarpath} ` : "../images/default-image.svg"} alt="" />
           <div>
-            <pre className={item.user.id == userId && styles.specifyBG}>{item.message.content}</pre>
+            <pre className={item.user.id == userId ? styles.specifyBG : ""}>{item.message.content}</pre>
             <p>
               <span>by {`${item.user.firstname} ${item.user.lastname}`}</span>
               {`${getElapsedTime(item.message.created_at).value} ${getElapsedTime(item.message.created_at).unit} ago`}
