@@ -30,7 +30,7 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 			events, err := controller.GetEventsByGroupWithCreatorInfo(db, groupID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
-				log.Println("w e got an issue", err.Error())
+				log.Println("we got an issue", err.Error())
 				return
 			}
 
@@ -40,7 +40,7 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 				participationStatus, err := controller.GetParticipantStatus(db, event.Event.ID, sess.UserID.String())
 				if err != nil {
 					helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
-					log.Println("w e got an issue", err.Error())
+					log.Println("we got an issue", err.Error())
 					return
 				}
 

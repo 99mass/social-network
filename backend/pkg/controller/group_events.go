@@ -108,7 +108,7 @@ func GetEventsByGroupWithCreatorInfo(db *sql.DB, groupID string) ([]models.Event
 	var events []models.EventRequest
 	for rows.Next() {
 		var event models.EventRequest
-		err := rows.Scan(&event.Event.ID, &event.Event.GroupID, &event.Event.Title, &event.Event.Description, &event.Event.DayTime, &event.User.Nickname)
+		err := rows.Scan(&event.Event.ID, &event.Event.GroupID, &event.Event.Title, &event.Event.Description, &event.Event.DayTime, &event.Event.CreatedBy, &event.User.Nickname)
 		if err != nil {
 			return nil, err
 		}
