@@ -107,6 +107,7 @@
   border: 1px solid gray;
   background: #202123;
 }
+
 .topContent .dropdownMenu ul {
   display: flex;
   flex-direction: column;
@@ -118,9 +119,11 @@
   list-style: none;
   cursor: pointer;
 }
+
 .topContent .dropdownMenu ul li i {
   margin-right: 10px;
 }
+
 .topContent .dropdownMenu ul li:hover {
   background: #40414f;
 }
@@ -175,32 +178,34 @@
 /* toast Notification */
 
 .card {
-    position: fixed;
-    bottom:  20px;
-    left:  20px;
-    max-width:  320px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    border-radius:  0.5rem;
-    background: #606c88;
-    background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
-    background: linear-gradient(to right top, #3f4c6b, #606c88);
-    padding:  1rem;
-    opacity:  0;
-    color: rgb(107,  114,  128);
-    box-shadow:  0px  87px  78px -39px rgba(0,  0,  0,  0.4);
-    animation: fadeIn  1s ease-in-out forwards;
+  position: fixed;
+  bottom: 10px;
+  left: 30px;
+  max-width: 320px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-radius: 0.5rem;
+  background: #606c88;
+  background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
+  background: linear-gradient(to right top, #3f4c6b, #606c88);
+  padding: 1rem;
+  opacity: 0;
+  color: rgb(107, 114, 128);
+  box-shadow: 0px 87px 78px -39px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 1s ease-in-out forwards;
+  z-index: 10000;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity:  0;
-    }
-    to {
-      opacity:  1;
-    }
+
+  to {
+    opacity: 1;
   }
+}
 
 .icon {
   height: 2rem;
@@ -228,7 +233,7 @@
 
 .title {
   margin-bottom: 0.25rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.25rem;
   font-weight: 600;
   color: rgb(255, 255, 255);
@@ -236,7 +241,8 @@
 
 .desc {
   margin-bottom: 0.5rem;
-  font-size: 0.875rem;
+  /* font-size: 0.875rem; */
+  font-size: 17px;
   line-height: 1.25rem;
   font-weight: 400;
   color: rgb(202, 200, 200);
@@ -264,6 +270,9 @@
   background-color: rgb(58, 69, 83);
 }
 
-.sender{
-    color: #153586;
+.sender {
+  color: #153586;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: capitalize;
 }
