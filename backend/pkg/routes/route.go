@@ -55,11 +55,13 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/mygroups", helper.Middleware(handler.GetMyGroupsHandler(db)))
 	http.HandleFunc("/groupsimanage", helper.Middleware(handler.GroupsIManageHandler(db)))
 	http.HandleFunc("/groupstodiscover", helper.Middleware(handler.GroupsToDiscoverHandler(db)))
+
+	// Events Group
 	http.HandleFunc("/create_events", helper.Middleware(handler.AddGroupEventHandler(db)))
 	http.HandleFunc("/events", helper.Middleware(handler.GetEventsByGroupHandler(db)))
+	http.HandleFunc("/create_participants", helper.Middleware(handler.AddEventParticipantHandler(db)))
+	
 	http.HandleFunc("/show_posts_group", helper.Middleware(handler.ShowPostsGroup(db)))
 	http.HandleFunc("/join_group_request", helper.Middleware(handler.JoingGroupRequest(db)))
-
-	//http.HandleFunc("/listAllEventsHandler", helper.Middleware(handler.ListAllEventsHandler(db)))
 
 }

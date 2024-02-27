@@ -8,7 +8,7 @@ import (
 )
 
 // AddParticipant ajoute un participant à un événement.
-func AddParticipant(db *sql.DB, participant models.EventParticipants) error {
+func CreateParticipantStatus(db *sql.DB, participant models.EventParticipants) error {
 	query := `
 		INSERT INTO event_participants (event_id, user_id, chosen_option) 
 		VALUES (?, ?, ?)
@@ -65,9 +65,9 @@ func GetParticipantStatus(db *sql.DB, eventID, userID string) (int, error) {
 	err := db.QueryRow(query, eventID, userID).Scan(&option)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return 0, nil // Retourne  0 si l'utilisateur n'est pas participant
+			return 2, nil // Retourne  0 si l'utilisateur n'est pas participant
 		}
-		return 0, err
+		return 2, err
 	}
 	return option, nil
 }
