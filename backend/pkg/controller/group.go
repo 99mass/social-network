@@ -2,6 +2,7 @@ package controller
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"time"
 
@@ -24,6 +25,24 @@ func CreateGroup(db *sql.DB, group models.Group) (uuid.UUID, error) {
 		return uuid.UUID{}, err
 	}
 	return newUUID, nil
+}
+
+func GetGrpByID(db *sql.DB, groupID string) (models.Group, error) {
+	query := `
+		SELECT *
+		FROM groups
+		WHERE id = ?
+	`
+	var group models.Group
+	err := db.QueryRow(query, groupID).Scan(&group.ID, &group.Title, &group.Description, &group.CreatorID, &group.AvatarPath, &group.CreatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// No group found with the given ID
+			return models.Group{}, errors.New("group not found")
+		}
+		return models.Group{}, err
+	}
+	return group, nil
 }
 
 func GetGroupByID(db *sql.DB, groupID string) (bool, error) {
