@@ -9,7 +9,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-func CreateGroupMessage(db *sql.DB, message models.PrivateGroupeMessages) error {
+func CreateGroupMessage(db *sql.DB, message models.PrivateGroupeMessages, userID string) error {
 
 	query := `
 			INSERT INTO group_chat_messages (id, group_id, user_id, content, created_at)
@@ -21,7 +21,7 @@ func CreateGroupMessage(db *sql.DB, message models.PrivateGroupeMessages) error 
 		return err
 	}
 
-	_, err = db.Exec(query, newUUID.String(), message.GroupID, message.UserID, message.Content, time.Now().Format("2006-01-02 15:04:05"))
+	_, err = db.Exec(query, newUUID.String(), message.GroupID, userID, message.Content, time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
 		return err
 	}
