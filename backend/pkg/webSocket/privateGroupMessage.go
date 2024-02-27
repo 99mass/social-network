@@ -64,7 +64,7 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 		err := conn.ReadJSON(&message)
 		if err != nil {
 			log.Println(err)
-			continue
+			return
 		}
 		if len(message.Content) > 100 {
 			SendGenResponse("error", conn, "your message is too long, max 100 character")
