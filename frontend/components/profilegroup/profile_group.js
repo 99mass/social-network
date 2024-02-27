@@ -10,6 +10,9 @@ import { getDatasProfilGroup } from "../../handler/group_profile";
 import { defaultImage } from "../group/group_page";
 import { AddGroupInvitations,  DeclineInvitation } from "../../handler/groupAction";
 import { JoingGroupRequestHandler } from "../../handler/jointGroup";
+import JoinRequestGroup from "./joinGroupRequest";
+
+
 
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
@@ -42,6 +45,7 @@ export default function Profile_group() {
     section3: false,
     section4: false,
     section5: false,
+    section6: false,
   });
 
   const handleSection = ({
@@ -50,8 +54,9 @@ export default function Profile_group() {
     section3,
     section4,
     section5,
+    section6,
   }) => {
-    setSection({ section1, section2, section3, section4, section5 });
+    setSection({ section1, section2, section3, section4, section5, section6 });
   };
 
   const togglePostForm = () => {
@@ -104,6 +109,10 @@ export default function Profile_group() {
           setSection={setSection}
           groupId={datas && datas.GroupInfos.id}
         />
+      )}
+
+      {section.section6 &&  (
+        <JoinRequestGroup groupId={datas && datas.GroupInfos.id}  />
       )}
     </>
   );
@@ -194,6 +203,7 @@ export function NavMenuGroup({ section, handleSection }) {
       section3: false,
       section4: false,
       section5: false,
+      section6 :false,
       [clickedSection]: true,
     };
     handleSection(newSection);
@@ -230,6 +240,13 @@ export function NavMenuGroup({ section, handleSection }) {
         className={section.section4 ? styles.activeBtn : ""}
       >
         <i className="fa-solid fa-comment"></i>chat
+      </button>
+
+      <button
+        onClick={() => handleClick("section6")}
+        className={section.section6 ? styles.activeBtn : ""}
+      >
+        <i className="fa-solid fa-right-to-bracket"></i>Join Request
       </button>
     </div>
   );

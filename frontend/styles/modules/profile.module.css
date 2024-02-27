@@ -338,3 +338,10 @@
 .active {
   background: var(--second-blue);
 }
+
+.joinContainer {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  gap:  10px; 
+}

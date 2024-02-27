@@ -364,3 +364,14 @@ func GetGroupTitle(db *sql.DB, groupID string) (string, error) {
 
 	return title, nil
 }
+
+func IsUserGroupCreator(db *sql.DB, userID string, groupID string) (bool, error) {
+
+	creatorID, err := GetCreatorByGroupID(db, groupID)
+
+	if err != nil {
+		return false, err
+	}
+
+	return userID == creatorID, nil
+}
