@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../../styles/modules/profile-group.module.css";
 import { allDiscussionGroupPrivateSocket } from "../websocket/globalSocket";
 import Discussion from "./discussions";
@@ -102,8 +102,14 @@ export function ChatHeader({ setSection, groupName }) {
   );
 }
 
-export function ChatBody({messages}) {
+export function ChatBody({ messages }) {
 
+  const endOfMessagesRef = useRef(null);
+  useEffect(() => {
+    if (endOfMessagesRef.current) {
+      endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
 
   const data = [
@@ -171,6 +177,7 @@ export function ChatBody({messages}) {
           </div>
         </div>
       ))}
+      <span ref={endOfMessagesRef} />
     </div>
   );
 }
