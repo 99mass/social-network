@@ -68,7 +68,6 @@ export default function LeftBlocGroupPage({ state, handleState }) {
 }
 
 export function ListGroupManaged({ group }) {
-  // const defaultImage = "../images/groups-defaul.png"; 
 
   return (
     <div className={styles.listGroupManaged}>

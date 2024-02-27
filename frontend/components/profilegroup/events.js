@@ -17,34 +17,7 @@ export default function EventLists({ group_id }) {
 
   console.log("allevents", allevents && allevents);
 
-  // const data = [
-  //   {
-  //     nameGroup: "Démarches Visa depuis le Sénégal",
-  //     numberPerson: "5",
-  //     time: "jan-31-2024 11:28",
-  //     content: `
-  //     L'ambiance des stades s'invite à l'Infinity Pool bar du Radisson Blu !
-  //     Supportez votre équipe favorite de la plus grande compétition d'Afrique
-  //     en suivant les rencontres en direct et sur écran géant ! Entrée sur
-  //     consommation ! Infos et réservations: +221 78 187 59 50 #RadissonBlu
-  //     #Itsgametime #MatchDay
-  //     `,
-  //     isGoing: true,
-  //   },
-  //   {
-  //     nameGroup: "ICI C'EST BARÇA",
-  //     numberPerson: "22",
-  //     time: "-31fev-2024 11:28",
-  //     content: `
-  //     L'ambiance des stades s'invite à l'Infinity Pool bar du Radisson Blu !
-  //     Supportez votre équipe favorite de la plus grande compétition d'Afrique
-  //     en suivant les rencontres en direct et sur écran géant ! Entrée sur
-  //     consommation ! Infos et réservations: +221 78 187 59 50 #RadissonBlu
-  //     #Itsgametime #MatchDay
-  //     `,
-  //     isGoing: false,
-  //   },
-  // ];
+
   const toggleListUsers = (state) => setListUserGoing(state);
 
   return (

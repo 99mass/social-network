@@ -33,7 +33,9 @@ export default function Header() {
   useEffect(() => {
     getUserBySession(setDatasUser);
     const timer = setTimeout(() => {
-      if (router.route !== "/chatpage") globalSocket(setSocket);
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
+        if (router.route !== "/chatpage") globalSocket(setSocket);
+      }
     }, 800);
 
     return () => clearTimeout(timer);
@@ -44,10 +46,6 @@ export default function Header() {
     socket.onopen = () => {
       console.log("WebSocket opened from header component");
     };
-
-    //     content: Object { sender: "breukh doe", recipient: "omzo doe" }
-    // ​
-    // type: "notif_private_message"
 
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
@@ -65,6 +63,7 @@ export default function Header() {
         case "nbr_notif_follow":
           setNbrNotifFollow(_message.content);
           break;
+
         // now notifications
         case "notif_private_message":
           if (router.route !== "/chatpage") setNotifMessagesPrivate(_message);
@@ -75,11 +74,11 @@ export default function Header() {
           console.log("Follow:", _message);
           break;
         case "notif_group_invitation_request":
-          setNotifGroupInvitation(_message.content);
+          setNotifGroupInvitation(_message);
           console.log("Invitation:", _message);
           break;
         case "notif_join_group_request":
-          setNotifJoinGroupRequest(_message.content);
+          setNotifJoinGroupRequest(_message);
           console.log("Join Request:", _message);
           break;
       }
@@ -126,10 +125,30 @@ export default function Header() {
       {notifMessagesPrivate && (
         <ToastNotification
           type={notifMessagesPrivate.type.replaceAll("_", " ") + "!"}
+          text={"has just sent you a new private message"}
           sender={notifMessagesPrivate.content.sender}
           setCloseState={setNotifMessagesPrivate}
         />
       )}
+      {notifJoinGroupRequest && (
+        <ToastNotification
+          type={notifJoinGroupRequest.type.replaceAll("_", " ") + " !"}
+          text={"requests permission to be a member of your group"}
+          sender={notifJoinGroupRequest.content.sender}
+          group={notifJoinGroupRequest.content.group}
+          setCloseState={setNotifJoinGroupRequest}
+        />
+      )}
+      {notifGroupInvitation && (
+        <ToastNotification
+          type={notifGroupInvitation.type.replaceAll("_", " ") + " !"}
+          text={"invites you to join the group"}
+          sender={notifGroupInvitation.content.sender}
+          group={notifGroupInvitation.content.group}
+          setCloseState={setNotifGroupInvitation}
+        />
+      )}
+
       {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
     </>
   );
@@ -258,8 +277,8 @@ export function ToggleButton({
   );
 }
 
-function ToastNotification({ type, sender, setCloseState }) {
-  console.log(type);
+function ToastNotification({ type, text, sender, group, setCloseState }) {
+
   const closeToast = () => setCloseState("");
 
   return (
@@ -292,8 +311,7 @@ function ToastNotification({ type, sender, setCloseState }) {
       <div className={styles.content}>
         <span className={styles.title}>{type}</span>
         <div className={styles.desc}>
-          You have a new message from
-          <span className={styles.sender}> {sender}</span>.
+          <span className={styles.sender}> {sender}</span> {text} <span className={styles.sender}> {group}</span>.
         </div>
       </div>
       <button type="button" className={styles.close} onClick={closeToast}>

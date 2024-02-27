@@ -10,11 +10,16 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
 )
 
 type GroupID struct {
 	GroupID string `json:"group_id"`
+}
+type MessageGroupToSend struct {
+	Message models.PrivateGroupeMessages `json:"message"`
+	User    models.User                  `json:"user"`
 }
 
 func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
@@ -52,7 +57,31 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			log.Println("enable to get the chat of the group,", err.Error())
 			return
 		}
-		SendGenResponse("chat_group", conn, message)
+		var ToSend []MessageGroupToSend
+		for _, mes := range message {
+			usID, _ := uuid.FromString(mes.UserID)
+			user, err := controller.GetUserByID(db, usID)
+			if err != nil {
+				log.Println("cant get the user", err.Error())
+				return
+			}
+			var good MessageGroupToSend
+			if user.AvatarPath != "" {
+				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+				if err != nil {
+					log.Println("enable to encode image avatar", err.Error())
+
+				}
+			}
+
+			good.Message = mes
+			good.User = user
+			ToSend = append(ToSend, good)
+			log.Println("to send", ToSend)
+
+		}
+
+		SendGenResponse("chat_group", conn, ToSend)
 
 		go HandleGroupMessage(db, conn, sess.UserID.String())
 	}
@@ -64,17 +93,17 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 		err := conn.ReadJSON(&message)
 		if err != nil {
 			log.Println(err)
-			continue
+			return
 		}
 		if len(message.Content) > 100 {
 			SendGenResponse("error", conn, "your message is too long, max 100 character")
 			continue
 		}
-		if message.GroupID == "" || message.UserID == "" || message.Content == "" {
+		if message.GroupID == "" || userID == "" || message.Content == "" {
 			SendGenResponse("error", conn, "invalid type for message")
 			continue
 		}
-		err = SendGroupMessage(db, message)
+		err = SendGroupMessage(db, message, userID)
 		if err != nil {
 			SendGenResponse("error", conn, err.Error())
 			continue
@@ -83,17 +112,17 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 	}
 }
 
-func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages) error {
+func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages, userID string) error {
 	_, err := controller.GetGroupByID(db, message.GroupID)
 	if err != nil {
 		return errors.New("group given doesn't exist")
 	}
-	ok, err := controller.IsMember(db, message.UserID, message.GroupID)
+	ok, err := controller.IsMember(db, userID, message.GroupID)
 	if !ok {
 		return err
 	}
 
-	err = controller.CreateGroupMessage(db, message)
+	err = controller.CreateGroupMessage(db, message, userID)
 	if err != nil {
 		return errors.New("enable to create your message")
 	}

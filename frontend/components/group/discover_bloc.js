@@ -3,13 +3,18 @@ import { Groupstodiscover } from "../../handler/getGroup";
 import styles from "../../styles/modules/group.module.css";
 import { defaultImage } from "./group_page";
 import Link from "next/link";
+import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 
 export default function DiscoverBloc() {
   const [groupDiscover, setGroupDiscover] = useState();
   useEffect(() => {
     Groupstodiscover(setGroupDiscover);
-
   }, []);
+
+  const joinGroup = (groudId) => {
+    JoingGroupRequestHandler(groudId, null, setGroupDiscover);
+  }
+
 
   return (
     <div className={`${styles.menuMiddle} ${styles.discover}`}>
@@ -23,6 +28,7 @@ export default function DiscoverBloc() {
               gName={item.title}
               nMembres={item.nbr_members}
               groudId={item.id}
+              joinGroup={joinGroup}
             />
           ))}
         </div>
@@ -31,7 +37,7 @@ export default function DiscoverBloc() {
   );
 }
 
-export function GoupFace({ image, gName, nMembres, groudId }) {
+export function GoupFace({ image, gName, nMembres, groudId, joinGroup }) {
 
   return (
     <div className={styles.postSugess}>
@@ -46,7 +52,7 @@ export function GoupFace({ image, gName, nMembres, groudId }) {
           </Link>
         </div>
         <div className={styles.btns}>
-          <button >join group</button>
+          <button onClick={() => joinGroup(groudId)} >join group</button>
         </div>
       </div>
     </div>
