@@ -3,7 +3,9 @@ package controller
 import (
 	"backend/pkg/models"
 	"database/sql"
+	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -19,13 +21,15 @@ func JoinGroupRequest(db *sql.DB, userID, groupID string) error {
 		return fmt.Errorf("user is already a member of the group")
 	}
 
+	log.Println("check is join request")
 	// Check if an invitation has already been sent to the user
-	isInvitationSent, err := IsInvitationSend(db, groupID, userID)
+	isJoinRequest, err := IsJoinRequestSend(db, userID,groupID)
 	if err != nil {
 		return err
 	}
-	if isInvitationSent {
-		return fmt.Errorf("an invitation has already been sent to the user")
+	if isJoinRequest {
+		log.Println("a join request has already been sent to the group owner")
+		return errors.New("already sent")
 	}
 
 	// Create a new group invitation record
@@ -85,4 +89,20 @@ func GetGroupJoinRequestsInfo(db *sql.DB, groupID string) ([]models.UserJoinGrou
 	}
 
 	return usersInfo, nil
+}
+
+func IsJoinRequestSend(db *sql.DB, userid, groupid string) (bool, error) {
+    query := `
+    SELECT COUNT(*)
+    FROM group_join_requests
+    WHERE user_id = ? AND group_id = ?;
+    `
+
+    var count int
+    err := db.QueryRow(query, userid, groupid).Scan(&count)
+    if err != nil {
+        return false, err
+    }
+	log.Println("no error")
+    return count >  0, nil
 }

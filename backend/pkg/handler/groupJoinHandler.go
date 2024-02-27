@@ -32,13 +32,14 @@ func JoingGroupRequest(db *sql.DB) http.HandlerFunc {
 				log.Println("the user try to add member in a group that doesn't exist")
 				return
 			}
+			log.Println("check again")
 			err = controller.JoinGroupRequest(db, sess.UserID.String(), groupeID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "enable to join the group", http.StatusBadRequest)
 				log.Println("the request invitation can't be accepted due to" + err.Error())
 				return
 			}
-
+			log.Println("checked")
 			creator, err := controller.GetCreatorByGroupID(db, groupeID)
 			if err != nil {
 				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
