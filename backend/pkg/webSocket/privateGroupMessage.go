@@ -10,11 +10,16 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
 )
 
 type GroupID struct {
 	GroupID string `json:"group_id"`
+}
+type MessageGroupToSend struct {
+	message models.PrivateGroupeMessages
+	user    models.User
 }
 
 func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
@@ -52,7 +57,29 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			log.Println("enable to get the chat of the group,", err.Error())
 			return
 		}
-		SendGenResponse("chat_group", conn, message,)
+		var ToSend []MessageGroupToSend
+		for _, mes := range message {
+			usID, _ := uuid.FromString(mes.UserID)
+			user, err := controller.GetUserByID(db, usID)
+			if err != nil {
+				log.Println("cant get the user", err.Error())
+				return
+			}
+			var good MessageGroupToSend
+			if user.AvatarPath != "" {
+				user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+				if err != nil {
+					log.Println("enable to encode image avatar", err.Error())
+
+				}
+			}
+			good.message = mes
+			good.user = user
+			ToSend = append(ToSend, good)
+
+		}
+
+		SendGenResponse("chat_group", conn, ToSend)
 
 		go HandleGroupMessage(db, conn, sess.UserID.String())
 	}
@@ -74,7 +101,7 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 			SendGenResponse("error", conn, "invalid type for message")
 			continue
 		}
-		err = SendGroupMessage(db, message,userID)
+		err = SendGroupMessage(db, message, userID)
 		if err != nil {
 			SendGenResponse("error", conn, err.Error())
 			continue
@@ -83,7 +110,7 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 	}
 }
 
-func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages,userID string) error {
+func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages, userID string) error {
 	_, err := controller.GetGroupByID(db, message.GroupID)
 	if err != nil {
 		return errors.New("group given doesn't exist")
@@ -93,7 +120,7 @@ func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages,userID st
 		return err
 	}
 
-	err = controller.CreateGroupMessage(db, message,userID)
+	err = controller.CreateGroupMessage(db, message, userID)
 	if err != nil {
 		return errors.New("enable to create your message")
 	}
