@@ -257,7 +257,7 @@ export function ListGroupManaged({ group, nbrNotifFollow }) {
           <Link href={`./profilegroup?id=${item.id}`}>
             <img src={item.avatarpath?`data:image/png;base64,${item.avatarpath} `: defaultImage} alt="" />
             <span>{item.title}
-            {nbrNotifFollow >  0 && <span>{nbrNotifFollow}+</span>}
+            {nbrNotifFollow >  0 && <span className={styles.notifGroup}>{nbrNotifFollow}+</span>}
             </span>
           </Link>
         </div>
