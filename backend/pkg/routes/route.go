@@ -59,6 +59,6 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/show_posts_group", helper.Middleware(handler.ShowPostsGroup(db)))
 	http.HandleFunc("/join_group_request", helper.Middleware(handler.JoingGroupRequest(db)))
 
-	http.HandleFunc("/listAllEventsHandler", helper.Middleware(handler.ListAllEventsHandler(db)))
+	//http.HandleFunc("/listAllEventsHandler", helper.Middleware(handler.ListAllEventsHandler(db)))
 
 }
