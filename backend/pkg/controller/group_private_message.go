@@ -23,10 +23,10 @@ func CreateGroupMessage(db *sql.DB, message models.PrivateGroupeMessages, userID
 
 	_, err = db.Exec(query, newUUID.String(), message.GroupID, userID, message.Content, time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
-		return "",err
+		return "", err
 	}
 
-	return newUUID.String(),nil
+	return newUUID.String(), nil
 }
 
 // GetGroupMessage retrieves the group messages by group ID.
@@ -34,8 +34,7 @@ func GetGroupMessage(db *sql.DB, groupID string) ([]models.PrivateGroupeMessages
 	query := `
 		SELECT id, group_id, user_id, content, created_at
 		FROM group_chat_messages
-		WHERE group_id = ?
-		ORDER BY created_at DESC;
+		WHERE group_id = ?;
 	`
 
 	// Execute the query and retrieve the results.
