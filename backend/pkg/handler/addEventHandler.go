@@ -58,7 +58,7 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 			eventReq.DayTime = strings.TrimSpace(eventReq.DayTime)
 
 			// Parse the event date and time
-			eventTime, err := time.Parse("2006-01-02  15:04:05", eventReq.DayTime)
+			eventTime, err := time.Parse("02-01-2006  15:04", eventReq.DayTime)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",

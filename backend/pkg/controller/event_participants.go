@@ -10,7 +10,7 @@ import (
 // AddParticipant ajoute un participant à un événement.
 func CreateParticipantStatus(db *sql.DB, participant models.EventParticipants) error {
 	query := `
-		INSERT INTO event_participants (event_id, user_id, chosen_option) 
+		INSERT INTO event_participants (event_id, user_id, choosen_option) 
 		VALUES (?, ?, ?)
 	`
 	_, err := db.Exec(query, participant.EventID, participant.UserID, participant.Option)
@@ -58,7 +58,7 @@ func RemoveParticipant(db *sql.DB, eventID, userID string) error {
 // GetParticipantStatus récupère le statut de participation d'un utilisateur pour un événement spécifique.
 func GetParticipantStatus(db *sql.DB, eventID, userID string) (int, error) {
 	query := `
-		SELECT chosen_option FROM event_participants 
+		SELECT choosen_option FROM event_participants 
 		WHERE event_id = ? AND user_id = ?
 	`
 	var option int
@@ -76,7 +76,7 @@ func GetParticipantStatus(db *sql.DB, eventID, userID string) (int, error) {
 func UpdateParticipantStatus(db *sql.DB, eventID, userID string, option int) error {
 	query :=`
 		UPDATE event_participants 
-		SET chosen_option= ? 
+		SET choosen_option= ? 
 		WHERE event_id = ? AND user_id = ?
 	`
 	_, err := db.Exec(query, option, eventID, userID)
@@ -86,10 +86,10 @@ func UpdateParticipantStatus(db *sql.DB, eventID, userID string, option int) err
 // GetParticipantsCountAndDetailsByEventID récupère le nombre de participants pour chaque option et les détails des participants.
 func GetParticipantsCountAndDetailsByEventID(db *sql.DB, eventID string) (map[int]struct{Count int; Participants []models.EventParticipants}, error)  {
 	query := `
-		SELECT chosen_option, 
+		SELECT choosen_option, 
 		COUNT(*) as count 
 		FROM event_participants 
-		WHERE event_id = ? GROUP BY chosen_option
+		WHERE event_id = ? GROUP BY choosen_option
 	`
 	// Requête pour compter les participants par option
 	rows, err := db.Query(query, eventID)
@@ -131,7 +131,7 @@ func getParticipantsByOption(db *sql.DB, eventID string, option int) ([]models.E
 	query := `
 		SELECT * 
 		FROM event_participants 
-		WHERE event_id = ? AND chosen_option= ?
+		WHERE event_id = ? AND choosen_option= ?
 	`
 	rows, err := db.Query(query, eventID, option)
 	if err != nil {
