@@ -67,19 +67,15 @@ export default function Header() {
         // now notifications
         case "notif_private_message":
           if (router.route !== "/chatpage") setNotifMessagesPrivate(_message);
-          console.log("chat:", _message);
           break;
         case "notif_follow_request":
-          setNotifFollow(_message.content);
-          console.log("Follow:", _message);
+          setNotifFollow(_message);
           break;
         case "notif_group_invitation_request":
           setNotifGroupInvitation(_message);
-          console.log("Invitation:", _message);
           break;
         case "notif_join_group_request":
           setNotifJoinGroupRequest(_message);
-          console.log("Join Request:", _message);
           break;
       }
     };
@@ -87,6 +83,7 @@ export default function Header() {
 
   const togglePostForm = () => setPostFrom((prevState) => !prevState);
   const toggleGroupForm = () => setGroupFrom((prevState) => !prevState);
+
 
   return (
     <>
@@ -127,6 +124,7 @@ export default function Header() {
           type={notifMessagesPrivate.type.replaceAll("_", " ") + "!"}
           text={"has just sent you a new private message"}
           sender={notifMessagesPrivate.content.sender}
+          group={""}
           setCloseState={setNotifMessagesPrivate}
         />
       )}
@@ -146,6 +144,15 @@ export default function Header() {
           sender={notifGroupInvitation.content.sender}
           group={notifGroupInvitation.content.group}
           setCloseState={setNotifGroupInvitation}
+        />
+      )}
+       {notifFollow && (
+        <ToastNotification
+          type={notifFollow.type.replaceAll("_", " ") + " !"}
+          text={"has just sent you a friend request"}
+          sender={notifFollow.content.sender}
+          group={""}
+          setCloseState={setNotifFollow}
         />
       )}
 
@@ -280,7 +287,6 @@ export function ToggleButton({
 function ToastNotification({ type, text, sender, group, setCloseState }) {
 
   const closeToast = () => setCloseState("");
-
   return (
     <div className={styles.card}>
       <div className={styles.icon}>
