@@ -33,6 +33,7 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 		}
 		//TODO:Remplis l'id et le verifier
 		idGroup := r.URL.Query().Get("group_id")
+		log.Println("id du group", idGroup)
 		_, err = controller.GetGrpByID(db, idGroup)
 		if err != nil {
 			helper.SendResponseError(w, "error", "invalid group id", http.StatusBadRequest)
@@ -45,7 +46,7 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 		}
 		verif, err := controller.IsMember(db, sess.UserID.String(), idGroup)
 		if !verif {
-			log.Println("l'utilisateur tente d'acceder a un groupe qui n'est pas sien",err.Error())
+			log.Println("l'utilisateur tente d'acceder a un groupe qui n'est pas sien", err.Error())
 			helper.SendResponseError(w, "error", "invalid id group", http.StatusBadRequest)
 			return
 		}
@@ -60,6 +61,7 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 		if user, ok := GroupConnectedUsersList[sess.UserID.String()]; ok {
 			// Si l'utilisateur existe déjà, mettez à jour la connexion
 			user.Conn = conn
+			user.GroupID = idGroup
 		} else {
 			// Sinon, créez un nouvel utilisateur
 			GroupConnectedUsersList[sess.UserID.String()] = &models.UserGroupConnected{Conn: conn, UserID: sess.UserID.String(), GroupID: idGroup}
