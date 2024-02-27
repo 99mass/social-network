@@ -1,11 +1,12 @@
 package controller
 
 import (
-	"backend/pkg/models"
 	"database/sql"
 	"time"
 
 	"github.com/gofrs/uuid"
+
+	"backend/pkg/models"
 )
 
 func CreateNotification(db *sql.DB, notification models.Notification) error {
@@ -77,7 +78,7 @@ func DeleteNotificationByUserID(db *sql.DB, userID, typeNotif string) error {
 
 func DeleteNotificationBySenderAndUser(db *sql.DB, senderID, userID, typeNotif string) error {
 	query := `DELETE FROM notifications WHERE sender_id = ? AND user_id = ? AND type = ?`
-	_, err := db.Exec(query,senderID, userID, typeNotif)
+	_, err := db.Exec(query, senderID, userID, typeNotif)
 	return err
 }
 
@@ -99,10 +100,12 @@ func GetNotificationCountByType(db *sql.DB, userID string, notificationType stri
 
 	return count, nil
 }
-type NotifJoinReq struct{
-	GroupID string `json:"group_id"`
-	CountJoinReq	int `json:"count_join_request`
+
+type NotifJoinReq struct {
+	GroupID      string `json:"group_id"`
+	CountJoinReq int    `json:"count_join_request`
 }
+
 func GetNotificationCountByTypeAndSourceID(db *sql.DB, userID string, notificationType string) ([]NotifJoinReq, error) {
 	// Prepare the SQL query to count notifications by type and source ID for a specific user.
 	query := `
