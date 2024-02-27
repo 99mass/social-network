@@ -11,6 +11,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
+// Send a request to join a group
 func JoinGroupRequest(db *sql.DB, userID, groupID string) error {
 	// Check if the user is already a member of the group
 	isMember, err := IsMember(db, userID, groupID)
@@ -23,7 +24,7 @@ func JoinGroupRequest(db *sql.DB, userID, groupID string) error {
 
 	log.Println("check is join request")
 	// Check if an invitation has already been sent to the user
-	isJoinRequest, err := IsJoinRequestSend(db, userID,groupID)
+	isJoinRequest, err := IsJoinRequestSend(db, userID, groupID)
 	if err != nil {
 		return err
 	}
@@ -50,6 +51,7 @@ func JoinGroupRequest(db *sql.DB, userID, groupID string) error {
 	return nil
 }
 
+// Get all request for joinning a group
 func GetGroupJoinRequestsInfo(db *sql.DB, groupID string) ([]models.UserJoinGroupInfo, error) {
 	query := `
 	SELECT  
@@ -91,18 +93,57 @@ func GetGroupJoinRequestsInfo(db *sql.DB, groupID string) ([]models.UserJoinGrou
 	return usersInfo, nil
 }
 
+// Verify if the users has already sent a request to join a group
 func IsJoinRequestSend(db *sql.DB, userid, groupid string) (bool, error) {
-    query := `
+	query := `
     SELECT COUNT(*)
     FROM group_join_requests
     WHERE user_id = ? AND group_id = ?;
     `
 
-    var count int
-    err := db.QueryRow(query, userid, groupid).Scan(&count)
-    if err != nil {
-        return false, err
-    }
+	var count int
+	err := db.QueryRow(query, userid, groupid).Scan(&count)
+	if err != nil {
+		return false, err
+	}
 	log.Println("no error")
-    return count >  0, nil
+	return count > 0, nil
+}
+
+// Accepte a join group request
+func AcceptJoinGroupRequest(db *sql.DB, userid, groupid string) error {
+	// Start a transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback() // Ensure the transaction is rolled back if an error occurs
+
+	// SQL query to delete the join request
+	deleteQuery := `
+        DELETE FROM group_join_requests
+        WHERE user_id = ? AND group_id = ?
+    `
+	_, err = tx.Exec(deleteQuery, userid, groupid)
+	if err != nil {
+		return err
+	}
+
+	// SQL query to add the user to the group_members table
+	addMemberQuery := `
+        INSERT INTO group_members (user_id, group_id, is_creator)
+        VALUES (?, ?, ?)
+    `
+	_, err = tx.Exec(addMemberQuery, userid, groupid, false)
+	if err != nil {
+		return err
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

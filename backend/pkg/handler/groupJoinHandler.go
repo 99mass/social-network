@@ -56,3 +56,40 @@ func JoingGroupRequest(db *sql.DB) http.HandlerFunc {
 		}
 	}
 }
+
+func AcceptJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			sess, err := utils.CheckAuthorization(db, w, r)
+			if err != nil {
+				log.Println("default")
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+				return
+			}
+
+			groupeID := r.URL.Query().Get("groupid")
+			userID := r.URL.Query().Get("userid")
+
+			iscreator, err := controller.IsUserGroupCreator(db, sess.UserID.String(), groupeID)
+
+			if !iscreator {
+				log.Println("Error: Not allowed to accept the join group request")
+				helper.SendResponseError(w, "error", "you are not allowed to accept the join group request", http.StatusBadRequest)
+				return
+			}
+
+			err = controller.AcceptJoinGroupRequest(db, userID, groupeID)
+			if err != nil {
+				log.Println("Error: accepting join group request failled:", err)
+				helper.SendResponseError(w, "error", "something goes wrong", http.StatusBadRequest)
+				return
+			}
+
+			helper.SendResponse(w, nil, http.StatusOK)
+		default:
+			helper.SendResponseError(w, "error", "methode not allowed", http.StatusMethodNotAllowed)
+			log.Println("the request can't be accepted", r.Method)
+		}
+	}
+}

@@ -23,19 +23,21 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/update_profil", helper.Middleware(handler.UpdateProfil(db)))
 	http.HandleFunc("/followuser", helper.Middleware(handler.FollowUser(db)))
 	http.HandleFunc("/unfollowuser", helper.Middleware(handler.UnfollowUser(db))) // unfollow user
+
 	http.HandleFunc("/addpost", helper.Middleware(handler.AddPostHandler(db)))
-	http.HandleFunc("/addpost_group", helper.Middleware(handler.AddPostHandler(db)))
-	http.HandleFunc("/create_group", helper.Middleware(handler.AddGroupHandler(db)))
-	http.HandleFunc("/add_members", helper.Middleware(handler.AddMember(db)))
-	http.HandleFunc("/show_group_invitation", helper.Middleware(handler.ShowGroupInvitation(db)))
-	http.HandleFunc("/accept_group_invitation", helper.Middleware(handler.AccepGrpInvitation(db)))
-	http.HandleFunc("/decline_group_invitation", helper.Middleware(handler.DeclineGrpInvitaton(db)))
-	http.HandleFunc("/add_group_invitation", helper.Middleware(handler.AddGroupInvitations(db)))
 	http.HandleFunc("/addcomment", helper.Middleware(handler.AddCommentHandler(db)))
 	http.HandleFunc("/show_comments_post", helper.Middleware(handler.ShowCommentsByPost(db)))
 	http.HandleFunc("/likepost", helper.Middleware(handler.LikePostHandler(db)))
-
 	http.HandleFunc("/countpostliked", helper.Middleware(handler.GetPostLikesCountHandler(db)))
+
+	http.HandleFunc("/create_group", helper.Middleware(handler.AddGroupHandler(db)))
+	http.HandleFunc("/add_members", helper.Middleware(handler.AddMember(db)))
+	http.HandleFunc("/addpost_group", helper.Middleware(handler.AddPostHandler(db)))
+	http.HandleFunc("/add_group_invitation", helper.Middleware(handler.AddGroupInvitations(db)))
+	http.HandleFunc("/show_group_invitation", helper.Middleware(handler.ShowGroupInvitation(db)))
+	http.HandleFunc("/accept_group_invitation", helper.Middleware(handler.AccepGrpInvitation(db)))
+	http.HandleFunc("/decline_group_invitation", helper.Middleware(handler.DeclineGrpInvitaton(db)))
+
 	http.HandleFunc("/private_chat", helper.Middleware(handler.PrivateChatHandler(db)))
 
 	// Display Request
@@ -43,7 +45,6 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/user", helper.Middleware(handler.ConnectedUser(db)))
 	http.HandleFunc("/profil", helper.Middleware(handler.ProfilHandler(db)))
 
-	http.HandleFunc("/profilegroup", helper.Middleware(handler.ProfilGroupHandler(db))) // to update (add ismember)
 	http.HandleFunc("/users_follows", helper.Middleware(handler.GetUsersHandler(db)))
 	http.HandleFunc("/show_posts", helper.Middleware(handler.ShowPosts(db)))
 	http.HandleFunc("/userposts", helper.Middleware(handler.UserPosts(db)))
@@ -52,17 +53,19 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/getfollowers", helper.Middleware(handler.GetFollowerInfos(db)))
 	http.HandleFunc("/getfollowingusers", helper.Middleware(handler.GetFollowingInfos(db)))
 	http.HandleFunc("/CountFollower", helper.Middleware(handler.CountFollower(db)))
+
+	http.HandleFunc("/profilegroup", helper.Middleware(handler.ProfilGroupHandler(db))) // to update (add ismember)
 	http.HandleFunc("/mygroups", helper.Middleware(handler.GetMyGroupsHandler(db)))
 	http.HandleFunc("/groupsimanage", helper.Middleware(handler.GroupsIManageHandler(db)))
 	http.HandleFunc("/groupstodiscover", helper.Middleware(handler.GroupsToDiscoverHandler(db)))
+	http.HandleFunc("/show_posts_group", helper.Middleware(handler.ShowPostsGroup(db)))
+	http.HandleFunc("/join_group_request", helper.Middleware(handler.JoingGroupRequest(db)))
+	http.HandleFunc("/show_join_group_request", helper.Middleware(handler.ShowJoinGroupRequest(db)))
+	http.HandleFunc("/accept_join_group_request", helper.Middleware(handler.AcceptJoinGroupRequestHandler(db)))
 
 	// Events Group
 	http.HandleFunc("/create_events", helper.Middleware(handler.AddGroupEventHandler(db)))
 	http.HandleFunc("/events", helper.Middleware(handler.GetEventsByGroupHandler(db)))
 	http.HandleFunc("/create_participants", helper.Middleware(handler.AddEventParticipantHandler(db)))
-	
-	http.HandleFunc("/show_posts_group", helper.Middleware(handler.ShowPostsGroup(db)))
-	http.HandleFunc("/join_group_request", helper.Middleware(handler.JoingGroupRequest(db)))
-	http.HandleFunc("/show_join_group_request", helper.Middleware(handler.ShowJoinGroupRequest(db)))
 
 }
