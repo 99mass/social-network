@@ -26,7 +26,7 @@ export function ChatContainer({ setSection, groupName, group_id }) {
   useEffect(() => {
     getUserBySession(setDataUserConnected);
     const timer = setTimeout(() => {
-      allDiscussionGroupPrivateSocket(setSocket);
+      allDiscussionGroupPrivateSocket(setSocket,group_id);
     }, 200);
 
     return () => clearTimeout(timer);
@@ -68,7 +68,7 @@ export function ChatContainer({ setSection, groupName, group_id }) {
     }
 
     socket.send(JSON.stringify(data));
-    allDiscussionGroupPrivateSocket(setSocket); //actualiser les anciennes messages
+    allDiscussionGroupPrivateSocket(setSocket,group_id); //actualiser les anciennes messages
   };
 
   return (

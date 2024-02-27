@@ -13,9 +13,9 @@ export function allDiscussionPrivateSocket(setSocketDiscussion) {
     setSocketDiscussion(discussions)
 }
 
-export function allDiscussionGroupPrivateSocket(setSocketDiscussionGroup) {
+export function allDiscussionGroupPrivateSocket(setSocketDiscussionGroup,group_id) {
     const sessionId = getSessionCookie();
-    const discussions = new WebSocket(`${domainSocket}/group_chat?Authorization=${sessionId}`);
+    const discussions = new WebSocket(`${domainSocket}/group_chat?Authorization=${sessionId}&group_id=${group_id}`);
     setSocketDiscussionGroup(discussions)
 }
 
