@@ -1,27 +1,85 @@
+import { useEffect, useState } from "react";
 import styles from "../../styles/modules/profile-group.module.css";
+import { allDiscussionGroupPrivateSocket } from "../websocket/globalSocket";
 import Discussion from "./discussions";
 
-export default function ChatGroup({ setSection }) {
+export default function ChatGroup({ setSection, groupName, group_id }) {
   return (
     <>
       <Discussion />
-      <ChatContainer setSection={setSection} />
+      <ChatContainer setSection={setSection} groupName={groupName} group_id={group_id} />
     </>
   );
 }
 
-export function ChatContainer({ setSection }) {
+export function ChatContainer({ setSection, groupName, group_id }) {
+
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      allDiscussionGroupPrivateSocket(setSocket);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [group_id]);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.onopen = () => {
+      console.log("WebSocket group opened.");
+      socket.send(JSON.stringify({ group_id: group_id.trim() }))
+    };
+
+    socket.onmessage = (event) => {
+      const _message = event.data && JSON.parse(event.data);
+      if (!_message) return;
+      console.log("mess:", _message);
+    }
+  }, [socket]);
+
+  //   type PrivateGroupeMessages struct {
+  //     ID        string `db:"id" json:"id"`
+  //     UserID    string `db:"user_id" json:"user_id"`
+  //     GroupID   string `db:"group_id" json:"group_id"`
+  //     Content   string `db:"content" json:"content"`
+  //     CreatedAt string `db:"created_at" json:"created_at"`
+  // }
+
+  const handlerSendMessage = (e) => {
+    e.preventDefault();
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      console.error("WebSocket connection not open.");
+      return;
+    }
+
+    const dataFrom = new FormData(e.target);
+    const content = dataFrom.get("content");
+    if (content.trim() == "") {
+      errorNotification("Content can not be empty.");
+      return;
+    }
+    const data = {
+      sender_id: userIdConnect,
+      recipient_id: userid,
+      content: content,
+    };
+
+    socket.send(JSON.stringify(data));
+    allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les anciennes messages
+  };
+
   return (
     <div className={styles.containerChatGroup}>
-      <ChatHeader setSection={setSection} />
+      <ChatHeader setSection={setSection} groupName={groupName} />
       <hr />
-      <ChatBody />
-      <ChatFooter />
+      <ChatBody group_id={group_id} />
+      <ChatFooter group_id={group_id} setSocket={setSocket} />
     </div>
   );
 }
 
-export function ChatHeader({ setSection }) {
+export function ChatHeader({ setSection, groupName }) {
   const toggleChat = () => {
     setSection({
       section1: true,
@@ -34,7 +92,7 @@ export function ChatHeader({ setSection }) {
 
   return (
     <div className={styles.chatHeader}>
-      <h3>Démarches Visa depuis le Sénégal</h3>
+      <h3>{groupName}</h3>
       <i
         onClick={toggleChat}
         className={`${styles.closeChatGroup} fa-regular fa-circle-xmark`}
@@ -45,6 +103,9 @@ export function ChatHeader({ setSection }) {
 }
 
 export function ChatBody() {
+
+
+
   const data = [
     {
       image: "../images/default-image.svg",
@@ -114,9 +175,11 @@ export function ChatBody() {
 }
 
 export function ChatFooter() {
+
   return (
     <div className={styles.chatFooter}>
       <textarea
+        name="content"
         required=""
         placeholder="Message..."
         type="text"

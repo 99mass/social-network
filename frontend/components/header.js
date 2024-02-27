@@ -61,6 +61,7 @@ export default function Header() {
         case "nbr_notif_follow":
           setNbrNotifFollow(_message.content);
           break;
+
         // now notifications
         case "notif_private_message":
           if (router.route !== "/chatpage") setNotifMessagesPrivate(_message);
@@ -81,14 +82,6 @@ export default function Header() {
       }
     };
   }, [socket]);
-
-
-// content
-// : 
-// {sender: 'omzo doe', group: 'group Teste'}
-// type
-// : 
-// "notif_group_invitation_request"
 
   const togglePostForm = () => setPostFrom((prevState) => !prevState);
   const toggleGroupForm = () => setGroupFrom((prevState) => !prevState);
@@ -153,7 +146,7 @@ export default function Header() {
           setCloseState={setNotifGroupInvitation}
         />
       )}
-      
+
       {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
     </>
   );
