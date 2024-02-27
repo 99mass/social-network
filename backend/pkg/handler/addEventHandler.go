@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"backend/pkg/controller"
 	"backend/pkg/helper"
@@ -18,13 +19,14 @@ type GroupEnventRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	DayTime     string `json:"day_time"`
+	CreatedBy   string `json:"created_by"`
 }
 
 func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:
-			_, err := utils.CheckAuthorization(db, w, r)
+			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 				return
@@ -55,11 +57,31 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 			eventReq.Description = strings.TrimSpace(eventReq.Description)
 			eventReq.DayTime = strings.TrimSpace(eventReq.DayTime)
 
+			// Parse the event date and time
+			eventTime, err := time.Parse("2006-01-02  15:04:05", eventReq.DayTime)
+			if err != nil {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "Invalid date and time format",
+				}, http.StatusBadRequest)
+				return
+			}
+
+			// Check if the event date is in the future
+			if eventTime.Before(time.Now()) {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "Event date cannot be in the past",
+				}, http.StatusBadRequest)
+				return
+			}
+
 			event := models.GroupEvent{
 				GroupID:     eventReq.GroupID,
 				Title:       eventReq.Title,
 				Description: eventReq.Description,
 				DayTime:     eventReq.DayTime,
+				CreatedBy: sess.UserID.String(),
 			}
 
 			// Create the group event

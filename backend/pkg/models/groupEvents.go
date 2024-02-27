@@ -6,6 +6,7 @@ type GroupEvent struct {
 	Title       string `db:"title" json:"title"`
 	Description string `db:"description" json:"description"`
 	DayTime     string `db:"day_time" json:"day_time"`
+	CreatedBy string `db:"created_by" json:"created_by"`
 }
 
 type EventRequest struct {
