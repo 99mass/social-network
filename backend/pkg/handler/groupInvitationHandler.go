@@ -98,6 +98,11 @@ func DeclineGrpInvitaton(db *sql.DB) http.HandlerFunc {
 				log.Println("the request invitation can't be accepted due to" + err.Error())
 				return
 			}
+			err = controller.DeleteNotificationByUserID(db, _userID, "group_invitation")
+			if err != nil {
+				log.Println("error:", err.Error())
+			}
+			websocket.BroadcastUserList(db)
 
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)

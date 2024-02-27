@@ -10,7 +10,7 @@ import (
 // AddParticipant ajoute un participant à un événement.
 func AddParticipant(db *sql.DB, participant models.EventParticipants) error {
 	query := `
-		INSERT INTO event_participants (event_id, user_id, option) 
+		INSERT INTO event_participants (event_id, user_id, chosen_option) 
 		VALUES (?, ?, ?)
 	`
 	_, err := db.Exec(query, participant.EventID, participant.UserID, participant.Option)
@@ -89,7 +89,7 @@ func GetParticipantsCountAndDetailsByEventID(db *sql.DB, eventID string) (map[in
 		SELECT chosen_option, 
 		COUNT(*) as count 
 		FROM event_participants 
-		WHERE event_id = ? GROUP BY option
+		WHERE event_id = ? GROUP BY chosen_option
 	`
 	// Requête pour compter les participants par option
 	rows, err := db.Query(query, eventID)

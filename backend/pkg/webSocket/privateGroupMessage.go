@@ -52,7 +52,7 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			log.Println("enable to get the chat of the group,", err.Error())
 			return
 		}
-		SendGenResponse("chat_group", conn, message)
+		SendGenResponse("chat_group", conn, message,)
 
 		go HandleGroupMessage(db, conn, sess.UserID.String())
 	}
@@ -70,11 +70,11 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 			SendGenResponse("error", conn, "your message is too long, max 100 character")
 			continue
 		}
-		if message.GroupID == "" || message.UserID == "" || message.Content == "" {
+		if message.GroupID == "" || userID == "" || message.Content == "" {
 			SendGenResponse("error", conn, "invalid type for message")
 			continue
 		}
-		err = SendGroupMessage(db, message)
+		err = SendGroupMessage(db, message,userID)
 		if err != nil {
 			SendGenResponse("error", conn, err.Error())
 			continue
@@ -83,17 +83,17 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 	}
 }
 
-func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages) error {
+func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages,userID string) error {
 	_, err := controller.GetGroupByID(db, message.GroupID)
 	if err != nil {
 		return errors.New("group given doesn't exist")
 	}
-	ok, err := controller.IsMember(db, message.UserID, message.GroupID)
+	ok, err := controller.IsMember(db, userID, message.GroupID)
 	if !ok {
 		return err
 	}
 
-	err = controller.CreateGroupMessage(db, message)
+	err = controller.CreateGroupMessage(db, message,userID)
 	if err != nil {
 		return errors.New("enable to create your message")
 	}

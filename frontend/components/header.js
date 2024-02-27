@@ -33,7 +33,9 @@ export default function Header() {
   useEffect(() => {
     getUserBySession(setDatasUser);
     const timer = setTimeout(() => {
-      if (router.route !== "/chatpage") globalSocket(setSocket);
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
+        if (router.route !== "/chatpage") globalSocket(setSocket);
+      }
     }, 800);
 
     return () => clearTimeout(timer);

@@ -52,24 +52,24 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 					status = "Not Going"
 				}
 
-				// Get the count of participants who are going
-				// participantsCountAndDetails, err := controller.GetParticipantsCountAndDetailsByEventID(db, event.ID)
-				// if err != nil {
-				// 	helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
-				// 	log.Println("we got an issue", err.Error())
-				// 	return
-				// }
+				//Get the count of participants who are going
+				participantsCountAndDetails, err := controller.GetParticipantsCountAndDetailsByEventID(db, event.ID)
+				if err != nil {
+					helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
+					log.Println("we got an issue", err.Error())
+					return
+				}
 
-				// var goingCount int
-				// if goingDetails, ok := participantsCountAndDetails[1]; ok {
-				// 	goingCount = goingDetails.Count
-				// }
+				var goingCount int
+				if goingDetails, ok := participantsCountAndDetails[1]; ok {
+					goingCount = goingDetails.Count
+				}
 
 				// Create an EventRequest for each event
 				eventRequest := models.EventRequest{
 					Event:               event,
 					ParticipationStatus: status,
-					//GoingCount:          goingCount,
+					GoingCount:          goingCount,
 				}
 
 				eventRequests = append(eventRequests, eventRequest)
@@ -83,56 +83,3 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 		}
 	}
 }
-
-// func ListAllEventsHandler(db *sql.DB) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		switch r.Method {
-// 		case http.MethodGet:
-// 			sess, err := utils.CheckAuthorization(db, w, r)
-// 			if err != nil {
-// 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
-// 				return
-// 			}
-
-// 			events, err := controller.GetAllEvents(db)
-// 			if err != nil {
-// 				helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
-// 				log.Println("we got an issue", err.Error())
-// 				return
-// 			}
-
-// 			// For each event, determine the user's participation status
-// 			var eventRequests []models.EventRequest
-// 			for _, event := range events {
-// 				participationStatus, err := controller.GetParticipantStatus(db, event.ID, sess.UserID.String())
-// 				if err != nil {
-// 					helper.SendResponseError(w, "error", "we got an issue", http.StatusBadRequest)
-// 					log.Println("we got an issue", err.Error())
-// 					return
-// 				}
-
-// 				// Map the participation status to a string representation
-// 				var status string
-// 				if participationStatus ==  1 {
-// 					status = "Going"
-// 				} else {
-// 					status = "Not Going"
-// 				}
-
-// 				// Create an EventRequest for each event
-// 				eventRequest := models.EventRequest{
-// 					Event:               event,
-// 					ParticipationStatus: status,
-// 				}
-
-// 				eventRequests = append(eventRequests, eventRequest)
-// 			}
-
-// 			helper.SendResponse(w, eventRequests, http.StatusOK)
-
-// 		default:
-// 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
-// 			log.Println("Method not allowed")
-// 		}
-// 	}
-// }
