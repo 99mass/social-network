@@ -143,34 +143,38 @@ func SendGroupMessage(db *sql.DB, message models.PrivateGroupeMessages, userID s
 func BroadcastGroupMessage(db *sql.DB, GroupID string) {
 	for _, user := range GroupConnectedUsersList {
 		if user.Conn != nil {
-			message, err := controller.GetGroupMessage(db, GroupID)
-			if err != nil {
-				log.Println("enable to get the chat of the group,", err.Error())
-				return
-			}
-			var ToSend []MessageGroupToSend
-			for _, mes := range message {
-				usID, _ := uuid.FromString(mes.UserID)
-				user, err := controller.GetUserByID(db, usID)
+			ok, _ := controller.IsMember(db, user.UserID, GroupID)
+			if ok {
+				message, err := controller.GetGroupMessage(db, GroupID)
 				if err != nil {
-					log.Println("cant get the user", err.Error())
+					log.Println("enable to get the chat of the group,", err.Error())
 					return
 				}
-				var good MessageGroupToSend
-				if user.AvatarPath != "" {
-					user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+				var ToSend []MessageGroupToSend
+				for _, mes := range message {
+					usID, _ := uuid.FromString(mes.UserID)
+					user, err := controller.GetUserByID(db, usID)
 					if err != nil {
-						log.Println("enable to encode image avatar", err.Error())
-
+						log.Println("cant get the user", err.Error())
+						return
 					}
+					var good MessageGroupToSend
+					if user.AvatarPath != "" {
+						user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+						if err != nil {
+							log.Println("enable to encode image avatar", err.Error())
+
+						}
+					}
+
+					good.Message = mes
+					good.User = user
+					ToSend = append(ToSend, good)
 				}
 
-				good.Message = mes
-				good.User = user
-				ToSend = append(ToSend, good)
+				SendGenResponse("chat_group", user.Conn, ToSend)
 			}
 
-			SendGenResponse("chat_group", user.Conn, ToSend)
 		}
 	}
 }
