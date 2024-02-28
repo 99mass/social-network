@@ -131,6 +131,8 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 			SendGenResponse("error", conn, err.Error())
 			continue
 		}
+		NotificationGroupChat(db, userID, message.GroupID)
+		BroadcastUserList(db)
 
 	}
 }
