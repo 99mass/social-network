@@ -42,7 +42,6 @@ export function ChatContainer({ setSection, groupName, group_id }) {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      // console.log("mess:", _message);
       setMessages(_message)
     }
   }, [socket]);

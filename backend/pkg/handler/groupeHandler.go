@@ -110,6 +110,12 @@ func GroupsToDiscoverHandler(db *sql.DB) http.HandlerFunc {
 					log.Println("error", "unable to check join Group", http.StatusInternalServerError)
 				}
 				groups[i].IsJoinRequestSend = isJoin
+				nbrMember, err := controller.CountGroupMembers(db, group.ID)
+				if err != nil {
+					helper.SendResponseError(w, "errro", "can't count members", http.StatusInternalServerError)
+					return
+				}
+				groups[i].NbrMembers = nbrMember
 			}
 
 			helper.SendResponse(w, groups, http.StatusOK)

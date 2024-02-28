@@ -18,6 +18,7 @@ export default function Header() {
   const [nbrNotifGroupInvitation, setNbrNotifGroupInvitation] = useState(0);
   const [nbrNotifFollow, setNbrNotifFollow] = useState(0);
   const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
+  const [notifMessagesGroup, setNotifMessagesGroup] = useState("");
   const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
   const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
@@ -50,8 +51,7 @@ export default function Header() {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      // console.log(_message);
-
+      console.log(_message);
       switch (_message.type) {
         // old notifications
         case "nbr_notif_message":
@@ -68,6 +68,9 @@ export default function Header() {
         case "notif_private_message":
           if (router.route !== "/chatpage") setNotifMessagesPrivate(_message);
           break;
+        case "notif_chat_group":
+          setNotifMessagesGroup(_message);
+          break;
         case "notif_follow_request":
           setNotifFollow(_message);
           break;
@@ -83,7 +86,6 @@ export default function Header() {
 
   const togglePostForm = () => setPostFrom((prevState) => !prevState);
   const toggleGroupForm = () => setGroupFrom((prevState) => !prevState);
-
 
   return (
     <>
@@ -146,13 +148,22 @@ export default function Header() {
           setCloseState={setNotifGroupInvitation}
         />
       )}
-       {notifFollow && (
+      {notifFollow && (
         <ToastNotification
           type={notifFollow.type.replaceAll("_", " ") + " !"}
           text={"has just sent you a friend request"}
           sender={notifFollow.content.sender}
           group={""}
           setCloseState={setNotifFollow}
+        />
+      )}
+      {notifMessagesGroup && (
+        <ToastNotification
+          type={notifMessagesGroup.type.replaceAll("_", " ") + " !"}
+          text={"has just sent a message in the group"}
+          sender={notifMessagesGroup.content.sender}
+          group={notifMessagesGroup.content.group}
+          setCloseState={setNotifMessagesGroup}
         />
       )}
 
@@ -169,9 +180,7 @@ export function MidlleNAvForBigScreen({
   return (
     <div className={`${styles.middleContent} ${styles.middleContent0}`}>
       <Link href="/home">
-        <i className="active fas fa-home" title="Home">
-          {/* <span>25+</span> */}
-        </i>
+        <i className="active fas fa-home" title="Home"></i>
       </Link>
       <Link href="/friend">
         <i className="fas fa-user-friends" title="Friend Requests">
@@ -185,11 +194,6 @@ export function MidlleNAvForBigScreen({
           )}
         </i>
       </Link>
-      {/* <Link href="/notification">
-        <i className="fas fa-bell" title="Notification">
-          <span>22+</span>
-        </i>
-      </Link> */}
       <Link href="/group" title="Groups">
         <i className="fas fa-users">
           {nbrNotifGroupInvitation > 0 && (
@@ -208,7 +212,7 @@ export function MidlleNAvFormSmallScreen({
   return (
     <div className={`${styles.middleContent} ${styles.middleContent1}`}>
       <Link href="/home">
-        <i className="active fas fa-home">{/* <span>25+</span> */}</i>
+        <i className="active fas fa-home"></i>
       </Link>
       <Link href="/friend">
         <i className="fas fa-user-friends">
@@ -222,11 +226,6 @@ export function MidlleNAvFormSmallScreen({
           )}
         </i>
       </Link>
-      {/* <Link href="/notification">
-        <i className="fas fa-bell">
-          <span>22+</span>
-        </i>
-      </Link> */}
       <Link href="/group">
         <i className="fas fa-users">
           {nbrNotifGroupInvitation > 0 && (
@@ -285,7 +284,6 @@ export function ToggleButton({
 }
 
 function ToastNotification({ type, text, sender, group, setCloseState }) {
-
   const closeToast = () => setCloseState("");
   return (
     <div className={styles.card}>
@@ -317,7 +315,8 @@ function ToastNotification({ type, text, sender, group, setCloseState }) {
       <div className={styles.content}>
         <span className={styles.title}>{type}</span>
         <div className={styles.desc}>
-          <span className={styles.sender}> {sender}</span> {text} <span className={styles.sender}> {group}</span>.
+          <span className={styles.sender}> {sender}</span> {text}{" "}
+          <span className={styles.sender}> {group}</span>.
         </div>
       </div>
       <button type="button" className={styles.close} onClick={closeToast}>

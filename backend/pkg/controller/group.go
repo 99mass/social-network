@@ -161,14 +161,15 @@ func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 }
 
 func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
-	// SQL query to get all groups that a user is not a member of
-
-	query :=
-		`SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
-		FROM groups g
-		LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
-		WHERE m.user_id IS NULL
-		GROUP BY g.id`
+	// SQL query to get all groups that a user is not a member of and has not received an invitation
+	query := `
+        SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
+        FROM groups g
+        LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
+        LEFT JOIN group_invitations gi ON g.id = gi.group_id AND gi.user_id = ? AND gi.status = 'waiting'
+        WHERE m.user_id IS NULL AND gi.group_id IS NULL
+        GROUP BY g.id
+    `
 
 	// Prepare the statement
 	stmt, err := db.Prepare(query)
@@ -178,7 +179,7 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	defer stmt.Close()
 
 	// Execute the query
-	rows, err := stmt.Query(userID)
+	rows, err := stmt.Query(userID, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -189,10 +190,6 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	for rows.Next() {
 		var group models.GroupInfos
 		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
-		if err != nil {
-			return nil, err
-		}
-		group.NbrMembers, err = CountGroupMembers(db, group.ID)
 		if err != nil {
 			return nil, err
 		}
