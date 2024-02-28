@@ -75,7 +75,7 @@ export function LastFrienRequest({ data, setoldFriend }) {
 export function Friends({ FriendsList }) {
   return (
     <div className="friend-online">
-      <h4>Chat with Friend online</h4>
+      <h4>Chat with Friend</h4>
       <div className="list-users">
         {FriendsList &&
           FriendsList.map((item) => (

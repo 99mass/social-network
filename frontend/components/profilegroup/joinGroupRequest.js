@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import styles from "../../styles/modules/profile.module.css";
+import styles from "../../styles/modules/profile-group.module.css";
 import { getJoinGroupRequest } from "../../handler/getJoinGroupRequest";
 import {
 
@@ -53,13 +52,13 @@ export default function JoinRequestGroup({groupId}) {
               <div className={styles.joinContainer}>
                     <span
                         onClick={() => handlerAcceptJoinGroupRequest(user.user_id, groupId)}
-                        className={styles.unfollowBtn}
+                        className={styles.accept}
                     >
                         <i className="fa-solid fa-check"></i>Accept
                     </span>
                     <span
                         onClick={() => handlerDeclineJoinGroupRequest(user.user_id, groupId)}
-                        className={styles.unfollowBtn}
+                        className={styles.banner}
                     >
                         <i className="fa-solid fa-rectangle-xmark"></i>Banner
                     </span>
