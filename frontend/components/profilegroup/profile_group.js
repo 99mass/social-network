@@ -78,6 +78,7 @@ export default function Profile_group() {
         handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}
         isMember={datas && datas.isMember}
         setDatasProfileGroup={setDatasProfileGroup}
+        isCreator={datas?.isCreator}
       />
       {section.section1 && (
         <Discussion
@@ -109,14 +110,14 @@ export default function Profile_group() {
         />
       )}
 
-      {section.section6 &&  (
+      {section.section6 && datas?.isCreator && (
         <JoinRequestGroup groupId={datas && datas.GroupInfos.id}  />
       )}
     </>
   );
 }
 
-export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers, groupId, handlerSendInvitations, handlerDeclineInvitaionGroup, isMember, setDatasProfileGroup }) {
+export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers, groupId, handlerSendInvitations, handlerDeclineInvitaionGroup, isMember, setDatasProfileGroup, isCreator}) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
   const [friend, setFriend] = useState(false);
   const [membre, setMembre] = useState(false);
@@ -156,7 +157,7 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
               <i className="fa-solid fa-people-group"></i>Join group
             </button>
           )}
-          {stateBtnJoinGroup && isMember && (
+          {stateBtnJoinGroup && !isMember && (
             <button onClick={() => handleStateBtnJoinGroup(isMember)}>
               <i className="fa-solid fa-trash"></i>Leave group
             </button>
@@ -170,7 +171,7 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
         </div>
       </div>
       {isMember && (
-        <NavMenuGroup section={section} handleSection={handleSection} />
+        <NavMenuGroup section={section} handleSection={handleSection} isCreator={isCreator} />
       )}
 
       {membre && (
@@ -193,7 +194,7 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
   );
 }
 
-export function NavMenuGroup({ section, handleSection }) {
+export function NavMenuGroup({ section, handleSection , isCreator}) {
   const handleClick = (clickedSection) => {
     const newSection = {
       section1: false,
@@ -239,13 +240,16 @@ export function NavMenuGroup({ section, handleSection }) {
       >
         <i className="fa-solid fa-comment"></i>chat
       </button>
-
-      <button
-        onClick={() => handleClick("section6")}
-        className={section.section6 ? styles.activeBtn : ""}
-      >
-        <i className="fa-solid fa-right-to-bracket"></i>Join Request
-      </button>
+      
+      {isCreator && (
+         <button
+         onClick={() => handleClick("section6")}
+         className={section.section6 ? styles.activeBtn : ""}
+       >
+         <i className="fa-solid fa-right-to-bracket"></i>Join Request
+       </button>
+      )}
+     
     </div>
   );
 }

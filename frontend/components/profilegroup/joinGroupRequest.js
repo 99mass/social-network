@@ -1,32 +1,36 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import styles from "../../styles/modules/profile.module.css";
-
+import styles from "../../styles/modules/profile-group.module.css";
+import { getJoinGroupRequest } from "../../handler/getJoinGroupRequest";
 import {
-  AcceptGroupInvitation,
-  DeclineGroupInvitation,
+
+  AcceptJoinGroupRequest, 
+  DeclineJoinGroupRequest,
 
 } from "../../handler/groupAction";
-import { getJoinGroupRequest } from "../../handler/getJoinGroupRequest";
+
+
+
 
 export default function JoinRequestGroup({groupId}) {
   
   const [joinRequestLists, setJoinRequestLists] = useState(null);
 
   useEffect(() => {
-  
+
     getJoinGroupRequest(groupId, setJoinRequestLists)
     
   }, [groupId,  setJoinRequestLists ]);
 
-  console.log(joinRequestLists, groupId,  "requests lists")
+ 
 
-//   const handlerAcceptInvitationGroup = (group_id) => {
-//     AcceptGroupInvitation(group_id, setRequestLists);
-//   };
-//   const handlerDeclineInvitaionGroup = (group_id) => {
-//     DeclineGroupInvitation(group_id, setRequestLists);
-//   };
+  const handlerAcceptJoinGroupRequest = (userId, group_id) => {
+    AcceptJoinGroupRequest(userId, group_id, setJoinRequestLists);
+  };
+
+  const handlerDeclineJoinGroupRequest = (userId, group_id) => {
+    DeclineJoinGroupRequest(userId, group_id, setJoinRequestLists);
+  };
+  
 
   return (
     <div className={styles.contentListFriend}>
@@ -47,14 +51,14 @@ export default function JoinRequestGroup({groupId}) {
                
               <div className={styles.joinContainer}>
                     <span
-                        // onClick={() => handlerFollower(user.follower_id)}
-                        className={styles.unfollowBtn}
+                        onClick={() => handlerAcceptJoinGroupRequest(user.user_id, groupId)}
+                        className={styles.accept}
                     >
                         <i className="fa-solid fa-check"></i>Accept
                     </span>
                     <span
-                        // onClick={() => handlerFollower(user.follower_id)}
-                        className={styles.unfollowBtn}
+                        onClick={() => handlerDeclineJoinGroupRequest(user.user_id, groupId)}
+                        className={styles.banner}
                     >
                         <i className="fa-solid fa-rectangle-xmark"></i>Banner
                     </span>
@@ -66,7 +70,7 @@ export default function JoinRequestGroup({groupId}) {
       ) : (
         <div className="noResults">
           <img src="../images/no-result.png" alt="no result found" />
-          <p>you have nofollower </p>
+          <p>you have no join request</p>
         </div>
       )}
     </div>

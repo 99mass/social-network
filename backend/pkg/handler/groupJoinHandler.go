@@ -60,7 +60,7 @@ func JoingGroupRequest(db *sql.DB) http.HandlerFunc {
 func AcceptJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
-		case http.MethodGet:
+		case http.MethodPost:
 			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				log.Println("default")
@@ -97,7 +97,7 @@ func AcceptJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 func RejectJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
-		case http.MethodGet:
+		case http.MethodPost:
 			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				log.Println("default")

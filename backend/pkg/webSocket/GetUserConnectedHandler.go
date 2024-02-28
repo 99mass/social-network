@@ -42,6 +42,8 @@ func BroadcastUserList(db *sql.DB) {
 			SendGenResponse("nbr_notif_group_invitation", user.Conn, nbrGrpJoinReq)
 			nbrJoinReq, _ := controller.GetNotificationCountByTypeAndSourceID(db, user.UserID, "join_group")
 			SendGenResponse("nbr_notif_join_group_request", user.Conn, nbrJoinReq)
+			nbrChatGrp, _ := controller.GetNotificationCountByTypeAndSourceID(db, user.UserID, "chat_group")
+			SendGenResponse("nbr_notif_chat_group", user.Conn, nbrChatGrp)
 
 			err = SendGenResponse("users_list", user.Conn, usersList)
 			if err != nil {

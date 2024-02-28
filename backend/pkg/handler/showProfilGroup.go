@@ -18,6 +18,7 @@ type ProfilGroupToSend struct {
 	ListMembreGroup []models.User           `json:"listMembreGroup"`
 	AllPost         []models.Post           `json:"allPost"`
 	IsMember        bool                    `json:"isMember"`
+	Iscreator       bool                    `json:"isCreator"`
 }
 
 func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
@@ -90,12 +91,19 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 			if isMember {
 				profilGroup.IsMember = true
 			}
-
+			iscreator, err := controller.IsUserGroupCreator(db, sess.UserID.String(), groupId.String())
+			if err != nil {
+				helper.SendResponseError(w, "error", "Don't get a creator", http.StatusBadRequest)
+				return
+			}
+			if iscreator && isMember {
+				profilGroup.Iscreator = true
+			}
 			profilGroup.GroupInfos = groupInfo
 			profilGroup.UsersNotInGroup = userNotInGroup
 			profilGroup.ListMembreGroup = listMember
 
-			controller.DeleteNotificationJoinGroup(db, sess.UserID.String(),groupId.String(), "join_group")
+			controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), groupId.String(), "join_group")
 			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, profilGroup, http.StatusOK)
 
