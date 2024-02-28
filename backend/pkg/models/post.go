@@ -17,4 +17,6 @@ type Post_Request struct {
 	IsLiked     bool   `json:"is_liked"`
 	NbrLikes    int    `json:"nbr_likes"`
 	NbrComments int    `json:"nbr_comments"`
+	GroupName   string `json:"group_name"`
+	GroupID     string `json:"group_id"`
 }

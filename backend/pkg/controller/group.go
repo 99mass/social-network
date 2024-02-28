@@ -299,7 +299,6 @@ func IsInvitationSend(db *sql.DB, groupId string, userId string) (bool, error) {
 		}
 	}
 	return false, nil
-
 }
 
 func GetPostsGroup(db *sql.DB, groupId string) ([]models.Post, error) {
@@ -390,4 +389,21 @@ func IsUserGroupCreator(db *sql.DB, userID string, groupID string) (bool, error)
 	}
 
 	return userID == creatorID, nil
+}
+
+func GetGroupNameByIdPost(db *sql.DB, groupID string) (string, error) {
+    query := `
+        SELECT title
+        FROM groups
+        WHERE id = ?
+    `
+    var title string
+    err := db.QueryRow(query, groupID).Scan(&title)
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return "", errors.New("group not found")
+        }
+        return "", err
+    }
+    return title, nil
 }
