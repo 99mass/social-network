@@ -18,6 +18,7 @@ export default function Header() {
   const [nbrNotifGroupInvitation, setNbrNotifGroupInvitation] = useState(0);
   const [nbrNotifFollow, setNbrNotifFollow] = useState(0);
   const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
+  const [notifMessagesGroup, setNotifMessagesGroup] = useState("");
   const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
   const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
@@ -57,6 +58,10 @@ export default function Header() {
         case "nbr_notif_message":
           setNbrNotifMessagesPrivate(_message.content);
           break;
+        case "notif_chat_group":
+          setNotifMessagesGroup(_message);
+          console.log("_message:", _message);
+          break;
         case "nbr_notif_group_invitation":
           setNbrNotifGroupInvitation(_message.content);
           break;
@@ -84,6 +89,11 @@ export default function Header() {
   const togglePostForm = () => setPostFrom((prevState) => !prevState);
   const toggleGroupForm = () => setGroupFrom((prevState) => !prevState);
 
+  //   Object { type: "notif_chat_group", content: {…} }
+  // ​
+  // content: Object { sender: "omzo doe", group: "breukh group" }
+  // ​
+  // type: "notif_chat_group"
 
   return (
     <>
@@ -146,13 +156,22 @@ export default function Header() {
           setCloseState={setNotifGroupInvitation}
         />
       )}
-       {notifFollow && (
+      {notifFollow && (
         <ToastNotification
           type={notifFollow.type.replaceAll("_", " ") + " !"}
           text={"has just sent you a friend request"}
           sender={notifFollow.content.sender}
           group={""}
           setCloseState={setNotifFollow}
+        />
+      )}
+      {notifMessagesGroup && (
+        <ToastNotification
+          type={notifMessagesGroup.type.replaceAll("_", " ") + " !"}
+          text={"has just sent a message in the group"}
+          sender={notifMessagesGroup.content.sender}
+          group={notifMessagesGroup.content.group}
+          setCloseState={setNotifMessagesGroup}
         />
       )}
 
@@ -285,7 +304,6 @@ export function ToggleButton({
 }
 
 function ToastNotification({ type, text, sender, group, setCloseState }) {
-
   const closeToast = () => setCloseState("");
   return (
     <div className={styles.card}>
@@ -317,7 +335,8 @@ function ToastNotification({ type, text, sender, group, setCloseState }) {
       <div className={styles.content}>
         <span className={styles.title}>{type}</span>
         <div className={styles.desc}>
-          <span className={styles.sender}> {sender}</span> {text} <span className={styles.sender}> {group}</span>.
+          <span className={styles.sender}> {sender}</span> {text}{" "}
+          <span className={styles.sender}> {group}</span>.
         </div>
       </div>
       <button type="button" className={styles.close} onClick={closeToast}>
