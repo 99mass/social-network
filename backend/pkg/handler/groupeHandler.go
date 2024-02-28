@@ -105,6 +105,12 @@ func GroupsToDiscoverHandler(db *sql.DB) http.HandlerFunc {
 					}
 					groups[i].AvatarPath = encodedImage
 				}
+				nbrMember, err := controller.CountGroupMembers(db, group.ID)
+				if err != nil {
+					helper.SendResponseError(w, "errro", "can't count members", http.StatusInternalServerError)
+					return
+				}
+				groups[i].NbrMembers = nbrMember
 			}
 
 			helper.SendResponse(w, groups, http.StatusOK)
