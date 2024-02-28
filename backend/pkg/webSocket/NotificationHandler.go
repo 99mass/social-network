@@ -99,9 +99,11 @@ func NotificationGroupChat(db *sql.DB, senderID, sourceID string) {
 	for _, member := range members {
 		CreateGeneralNotif(db, member.ID, senderID, sourceID, "chat_group")
 		if user, ok := ConnectedUsersList[member.ID]; ok {
-			err := SendGenResponse("notif_chat_group", user.Conn, notif)
-			if err != nil {
-				log.Println("enable to send a notification to the user that you sent the message")
+			if member.ID != senderID {
+				err := SendGenResponse("notif_chat_group", user.Conn, notif)
+				if err != nil {
+					log.Println("enable to send a notification to the user that you sent the message")
+				}
 			}
 
 		}
