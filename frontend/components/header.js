@@ -51,7 +51,7 @@ export default function Header() {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-
+      console.log(_message);
       switch (_message.type) {
         // old notifications
         case "nbr_notif_message":
@@ -180,8 +180,7 @@ export function MidlleNAvForBigScreen({
   return (
     <div className={`${styles.middleContent} ${styles.middleContent0}`}>
       <Link href="/home">
-        <i className="active fas fa-home" title="Home">
-        </i>
+        <i className="active fas fa-home" title="Home"></i>
       </Link>
       <Link href="/friend">
         <i className="fas fa-user-friends" title="Friend Requests">
