@@ -174,6 +174,35 @@ export const DeclineInvitation = async (group_id, userid, setDatasProfileGroup) 
 
 
 
+export const leaveInGroup = async (group_id, setDatasProfileGroup) => {
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(
+      `${api.Leave_in_group}?groupid=${group_id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      }
+    );
+
+    // Vérifier le statut de la réponse
+    if (!response.ok) {
+      console.error("Failed to send  data");
+    } else {
+      getDatasProfilGroup( setDatasProfileGroup, group_id);
+      
+    }
+  } catch (error) {
+    console.error("Error fetching profile data:", error.message);
+  }
+};
+
+
+
 
 export const AcceptJoinGroupRequest = async (userId, group_id, setJoinRequestLists) => {
   try {
@@ -194,14 +223,14 @@ export const AcceptJoinGroupRequest = async (userId, group_id, setJoinRequestLis
     if (!response.ok) {
       console.error("Failed to send  data");
     } else {
-      getJoinGroupRequest(group_id, setJoinRequestLists)
+      getJoinGroupRequest( setJoinRequestLists, group_id)
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);
   }
 };
 
-export const DeclineJoinGroupRequest = async (userId, group_id, setJoinRequestLists) => {
+export const DeclineJoinGroupRequest = async ( group_id, setJoinRequestLists, callback, userId) => {
   try {
     const sessionId = getSessionCookie();
 
@@ -220,7 +249,33 @@ export const DeclineJoinGroupRequest = async (userId, group_id, setJoinRequestLi
     if (!response.ok) {
       console.error("Failed to send  data");
     } else {
-      getJoinGroupRequest(group_id, setJoinRequestLists)
+         callback(setJoinRequestLists, group_id)
+    }
+  } catch (error) {
+    console.error("Error fetching profile data:", error.message);
+  }
+};
+
+export const AcceptGroupInvitProfil = async (group_id, setDatasProfileGroup) => {
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(
+      `${api.Accept_group_invitation}?groupid=${group_id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      }
+    );
+
+    // Vérifier le statut de la réponse
+    if (!response.ok) {
+      console.error("Failed to send  data");
+    } else {
+      getDatasProfilGroup( setDatasProfileGroup, group_id);
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);

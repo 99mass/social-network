@@ -4,6 +4,7 @@ import styles from "../../styles/modules/group.module.css";
 import { defaultImage } from "./group_page";
 import Link from "next/link";
 import { JoingGroupRequestHandler } from "../../handler/jointGroup";
+import { DeclineJoinGroupRequest } from "../../handler/groupAction";
 
 export default function DiscoverBloc() {
   const [groupDiscover, setGroupDiscover] = useState();
@@ -15,6 +16,9 @@ export default function DiscoverBloc() {
     JoingGroupRequestHandler(groudId, null, setGroupDiscover);
   }
 
+  const declineJoinRequestHandler = (groudId) => {
+    DeclineJoinGroupRequest(groudId,  setGroupDiscover, Groupstodiscover, "" );
+  }
 
   return (
     <div className={`${styles.menuMiddle} ${styles.discover}`}>
@@ -28,7 +32,9 @@ export default function DiscoverBloc() {
               gName={item.title}
               nMembres={item.nbr_members}
               groudId={item.id}
+              isJoinGroup={item.is_join_request}
               joinGroup={joinGroup}
+              declineJoinRequestHandler={declineJoinRequestHandler}
             />
           ))}
         </div>
@@ -37,7 +43,7 @@ export default function DiscoverBloc() {
   );
 }
 
-export function GoupFace({ image, gName, nMembres, groudId, joinGroup }) {
+export function GoupFace({ image, gName, nMembres, groudId, joinGroup,isJoinGroup, declineJoinRequestHandler }) {
 
   return (
     <div className={styles.postSugess}>
@@ -51,9 +57,23 @@ export function GoupFace({ image, gName, nMembres, groudId, joinGroup }) {
             <span>{nMembres} members</span>
           </Link>
         </div>
-        <div className={styles.btns}>
-          <button onClick={() => joinGroup(groudId)} >join group</button>
-        </div>
+        {!isJoinGroup && (
+          <div className={styles.btns}>
+            <button onClick={() => joinGroup(groudId)} >join group</button>
+          </div>
+        )}
+        {isJoinGroup && (
+          <div className={styles.btns}>
+            
+            <button 
+              style={{ background: '#c43a33' }} 
+              onClick={() => declineJoinRequestHandler(groudId)} 
+            >
+               <i className="fa-solid fa-trash"></i> waiting
+            </button>
+          </div>
+        )}
+        
       </div>
     </div>
   );

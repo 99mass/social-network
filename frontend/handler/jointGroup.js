@@ -21,7 +21,7 @@ export async function JoingGroupRequestHandler(group_id, setDatasProfileGroup, s
     } else {
       if (setDatasProfileGroup) getDatasProfilGroup(setDatasProfileGroup, group_id);
       if (setGroupDiscover) {
-        successNotification("The request has been successfully transmitted");
+        // successNotification("The request has been successfully transmitted");
         Groupstodiscover(setGroupDiscover);
       }
     }

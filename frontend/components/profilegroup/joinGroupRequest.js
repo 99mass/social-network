@@ -6,6 +6,7 @@ import {
 
   AcceptJoinGroupRequest, 
   DeclineJoinGroupRequest,
+ 
 
 } from "../../handler/groupAction";
 
@@ -18,7 +19,7 @@ export default function JoinRequestGroup({groupId}) {
 
   useEffect(() => {
 
-    getJoinGroupRequest(groupId, setJoinRequestLists)
+    getJoinGroupRequest( setJoinRequestLists, groupId)
     
   }, [groupId,  setJoinRequestLists ]);
 
@@ -29,7 +30,7 @@ export default function JoinRequestGroup({groupId}) {
   };
 
   const handlerDeclineJoinGroupRequest = (userId, group_id) => {
-    DeclineJoinGroupRequest(userId, group_id, setJoinRequestLists);
+    DeclineJoinGroupRequest( group_id, setJoinRequestLists, getJoinGroupRequest, userId);
   };
   
 
