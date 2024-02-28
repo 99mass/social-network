@@ -106,6 +106,7 @@
   border-radius: 8px;
   border: 1px solid gray;
   background: #202123;
+  z-index: 9999;
 }
 
 .topContent .dropdownMenu ul {

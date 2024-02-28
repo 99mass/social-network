@@ -51,16 +51,11 @@ export default function Header() {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      // console.log(_message);
 
       switch (_message.type) {
         // old notifications
         case "nbr_notif_message":
           setNbrNotifMessagesPrivate(_message.content);
-          break;
-        case "notif_chat_group":
-          setNotifMessagesGroup(_message);
-          console.log("_message:", _message);
           break;
         case "nbr_notif_group_invitation":
           setNbrNotifGroupInvitation(_message.content);
@@ -72,6 +67,9 @@ export default function Header() {
         // now notifications
         case "notif_private_message":
           if (router.route !== "/chatpage") setNotifMessagesPrivate(_message);
+          break;
+        case "notif_chat_group":
+          setNotifMessagesGroup(_message);
           break;
         case "notif_follow_request":
           setNotifFollow(_message);
@@ -88,12 +86,6 @@ export default function Header() {
 
   const togglePostForm = () => setPostFrom((prevState) => !prevState);
   const toggleGroupForm = () => setGroupFrom((prevState) => !prevState);
-
-  //   Object { type: "notif_chat_group", content: {…} }
-  // ​
-  // content: Object { sender: "omzo doe", group: "breukh group" }
-  // ​
-  // type: "notif_chat_group"
 
   return (
     <>
@@ -189,7 +181,6 @@ export function MidlleNAvForBigScreen({
     <div className={`${styles.middleContent} ${styles.middleContent0}`}>
       <Link href="/home">
         <i className="active fas fa-home" title="Home">
-          {/* <span>25+</span> */}
         </i>
       </Link>
       <Link href="/friend">
@@ -204,11 +195,6 @@ export function MidlleNAvForBigScreen({
           )}
         </i>
       </Link>
-      {/* <Link href="/notification">
-        <i className="fas fa-bell" title="Notification">
-          <span>22+</span>
-        </i>
-      </Link> */}
       <Link href="/group" title="Groups">
         <i className="fas fa-users">
           {nbrNotifGroupInvitation > 0 && (
@@ -227,7 +213,7 @@ export function MidlleNAvFormSmallScreen({
   return (
     <div className={`${styles.middleContent} ${styles.middleContent1}`}>
       <Link href="/home">
-        <i className="active fas fa-home">{/* <span>25+</span> */}</i>
+        <i className="active fas fa-home"></i>
       </Link>
       <Link href="/friend">
         <i className="fas fa-user-friends">
@@ -241,11 +227,6 @@ export function MidlleNAvFormSmallScreen({
           )}
         </i>
       </Link>
-      {/* <Link href="/notification">
-        <i className="fas fa-bell">
-          <span>22+</span>
-        </i>
-      </Link> */}
       <Link href="/group">
         <i className="fas fa-users">
           {nbrNotifGroupInvitation > 0 && (
