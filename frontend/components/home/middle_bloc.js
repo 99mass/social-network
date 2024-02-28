@@ -61,6 +61,9 @@ export function PostHeader({
   setPosts,
   groupid,
   setPostsGroup,
+  groupName,
+  groupId,
+  groupAvatarPath,
 }) {
   const handlerFollower = (stateFollow) => {
     if (stateFollow == "Follow") {
@@ -73,19 +76,45 @@ export function PostHeader({
   return (
     <div className="profileuser">
       <div className="left-side">
-        <div className="profile-pic">
-          <Link href={`./profileuser?userid=${iduser}`}>
+        <div
+          className={`profile-pic ${
+            groupName ? "profile-pic-group" : "profile-pic-simple"
+          }`}
+        >
+          <Link
+            href={
+              !groupName
+                ? `./profileuser?userid=${iduser}`
+                : `./profilegroup?id=${groupId}`
+            }
+          >
             <img
               src={
-                image && image !== ""
-                  ? `data:image/png;base64,${image}`
+                (image && image !== "") ||
+                (groupAvatarPath && groupAvatarPath !== "")
+                  ? `data:image/png;base64,${
+                      !groupName ? image : groupAvatarPath
+                    }`
                   : "../images/user-circle.png"
               }
               alt=""
             />
           </Link>
+          {groupName && (
+            <Link href={`./profileuser?userid=${iduser}`}>
+              <img
+                src={
+                  groupAvatarPath && groupAvatarPath !== ""
+                    ? `data:image/png;base64,${groupAvatarPath}`
+                    : "../images/user-circle.png"
+                }
+                alt=""
+              />
+            </Link>
+          )}
         </div>
-        <span>
+        <span className={groupName ? `span-group` : `span-simple`}>
+          {groupName && <h3>{groupName}</h3>}
           <h3>
             {user} .
             <span
@@ -98,7 +127,6 @@ export function PostHeader({
           </h3>
           <p>
             {time} <sup>.</sup> <i className="fas fa-globe-africa"></i>
-            {}
           </p>
         </span>
       </div>
