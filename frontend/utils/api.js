@@ -39,5 +39,7 @@ export const api = {
   GetPostsGroup: `${domain}/show_posts_group`,
   JoinGroupRequest: `${domain}/join_group_request`,
   GetJoinGroupRequest:`${domain}/show_join_group_request`,
+  Accept_join_request:`${domain}/accept_join_group_request`,
+  Decline_join_request:`${domain}/reject_join_group_request`
 
 };

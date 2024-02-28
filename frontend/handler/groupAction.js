@@ -4,6 +4,8 @@ import { AddGroup } from "./sendGroup";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 import { getDatasProfilGroup } from "./group_profile";
 import { getPostsGroup } from "./getPostsGroup";
+import { getJoinGroupRequest } from "./getJoinGroupRequest";
+
 
 export const ShowGroupInvitation = async (setRequestLists) => {
   try {
@@ -164,6 +166,61 @@ export const DeclineInvitation = async (group_id, userid, setDatasProfileGroup) 
     } else {
       getDatasProfilGroup( setDatasProfileGroup, group_id);
       
+    }
+  } catch (error) {
+    console.error("Error fetching profile data:", error.message);
+  }
+};
+
+
+
+
+export const AcceptJoinGroupRequest = async (userId, group_id, setJoinRequestLists) => {
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(
+      `${api.Accept_join_request}?groupid=${group_id}&userid=${userId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      }
+    );
+
+    // Vérifier le statut de la réponse
+    if (!response.ok) {
+      console.error("Failed to send  data");
+    } else {
+      getJoinGroupRequest(group_id, setJoinRequestLists)
+    }
+  } catch (error) {
+    console.error("Error fetching profile data:", error.message);
+  }
+};
+
+export const DeclineJoinGroupRequest = async (userId, group_id, setJoinRequestLists) => {
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(
+      `${api.Decline_join_request}?groupid=${group_id}&userid=${userId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionId,
+        },
+      }
+    );
+
+    // Vérifier le statut de la réponse
+    if (!response.ok) {
+      console.error("Failed to send  data");
+    } else {
+      getJoinGroupRequest(group_id, setJoinRequestLists)
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);
