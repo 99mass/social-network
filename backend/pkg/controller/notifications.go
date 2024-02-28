@@ -109,7 +109,7 @@ func GetNotificationCountByType(db *sql.DB, userID string, notificationType stri
 
 type NotifJoinReq struct {
 	GroupID      string `json:"group_id"`
-	CountJoinReq int    `json:"count_join_request`
+	CountJoinReq int    `json:"count_join_request"`
 }
 
 func GetNotificationCountByTypeAndSourceID(db *sql.DB, userID string, notificationType string) ([]NotifJoinReq, error) {
