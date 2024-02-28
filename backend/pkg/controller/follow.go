@@ -303,7 +303,7 @@ func CountFollowerReq(db *sql.DB, userID string) (int, error) {
 	err := db.QueryRow("SELECT COUNT(*) FROM followers WHERE following_id = $1 AND status = 'accepted'", userID).Scan(&count)
 	if err != nil {
 		log.Println("Error counting followers:", err)
-		return  0, err
+		return 0, err
 	}
 	return count, nil
 }

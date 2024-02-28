@@ -8,7 +8,7 @@ import PostGroup from "./post_group";
 import ChatGroup from "./chat_group";
 import { getDatasProfilGroup } from "../../handler/group_profile";
 import { defaultImage } from "../group/group_page";
-import { AddGroupInvitations, DeclineInvitation } from "../../handler/groupAction";
+import { AcceptGroupInvitProfil, AddGroupInvitations, DeclineInvitation, DeclineJoinGroupRequest, leaveInGroup } from "../../handler/groupAction";
 import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 import JoinRequestGroup from "./joinGroupRequest";
 
@@ -36,7 +36,7 @@ export default function Profile_group() {
   };
 
 
-
+ 
   const [section, setSection] = useState({
     section1: true,
     section2: false,
@@ -79,6 +79,9 @@ export default function Profile_group() {
         isMember={datas && datas.isMember}
         setDatasProfileGroup={setDatasProfileGroup}
         isCreator={datas?.isCreator}
+        isJoinRequest={datas?.isJoinRequest}
+        isInvited={datas?.isInvited}
+        
       />
       {section.section1 && (
         <Discussion
@@ -117,7 +120,7 @@ export default function Profile_group() {
   );
 }
 
-export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers, groupId, handlerSendInvitations, handlerDeclineInvitaionGroup, isMember, setDatasProfileGroup, isCreator}) {
+export function ContentCovertPhotoGroup({ section, handleSection, image, title, members, friendList, listMembers, groupId, handlerSendInvitations, handlerDeclineInvitaionGroup, isMember, setDatasProfileGroup, isCreator, isJoinRequest, isInvited}) {
   const [stateBtnJoinGroup, setStateBtnJoinGroup] = useState(false);
   const [friend, setFriend] = useState(false);
   const [membre, setMembre] = useState(false);
@@ -128,6 +131,26 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
       JoingGroupRequestHandler(groupId, setDatasProfileGroup);
     }
   };
+
+  const handlerLeaveGroup = () => {
+    if (isMember && !isCreator){
+      leaveInGroup(groupId, setDatasProfileGroup);
+    }
+  };
+
+  const handlerDeclineJoin= () => {
+    
+    if (!isMember && isJoinRequest){
+      DeclineJoinGroupRequest(groupId, setDatasProfileGroup, getDatasProfilGroup, "");
+    }
+  };
+
+
+  const handlerAcceptGroupInvitation= () => {
+    AcceptGroupInvitProfil(groupId, setDatasProfileGroup);
+  };
+
+
   const toggleFriend = () => setFriend(!friend);
   const toggleMembres = () => setMembre(!membre);
 
@@ -149,7 +172,19 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
           </span>
         </div>
         <div className={styles.action}>
-          {!stateBtnJoinGroup && !isMember && (
+           
+
+          
+          {!isMember && !isJoinRequest && isInvited && (
+            <button
+              onClick={() => handlerAcceptGroupInvitation()}
+              className={styles.active}
+            >
+              <i className="fa-solid fa-people-group"></i>Accept invitation
+            </button>
+          )}
+
+          {!isMember && !isJoinRequest &&  !isInvited  && (
             <button
               onClick={() => handleStateBtnJoinGroup(isMember)}
               className={styles.active}
@@ -157,8 +192,17 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
               <i className="fa-solid fa-people-group"></i>Join group
             </button>
           )}
-          {stateBtnJoinGroup && !isMember && (
-            <button onClick={() => handleStateBtnJoinGroup(isMember)}>
+
+          { !isMember && isJoinRequest && (
+            <button
+              onClick={() => handlerDeclineJoin()}
+            >
+              <i className="fa-solid fa-trash"></i>Pending
+            </button>
+          )}
+
+          { isMember && !isCreator &&  (
+            <button style={{ background: '#c43a33' }}   onClick={() => handlerLeaveGroup()}>
               <i className="fa-solid fa-trash"></i>Leave group
             </button>
           )}

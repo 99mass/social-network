@@ -148,15 +148,29 @@ func AcceptJoinGroupRequest(db *sql.DB, userid, groupid string) error {
 	return nil
 }
 func RejectJoinGroupRequest(db *sql.DB, userid, groupid string) error {
-    // SQL query to delete the join request
-    query := `
+	// SQL query to delete the join request
+	query := `
         DELETE FROM group_join_requests
         WHERE user_id = ? AND group_id = ?
     `
-    _, err := db.Exec(query, userid, groupid)
-    if err != nil {
-        return err
-    }
+	_, err := db.Exec(query, userid, groupid)
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
+}
+
+func LeaveInGroupRequest(db *sql.DB, userid, groupid string) error {
+	// SQL query to delete the join request
+	query := `
+        DELETE FROM group_members
+        WHERE user_id = ? AND group_id = ?
+    `
+	_, err := db.Exec(query, userid, groupid)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
