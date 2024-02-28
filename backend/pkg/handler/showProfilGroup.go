@@ -13,12 +13,14 @@ import (
 )
 
 type ProfilGroupToSend struct {
-	GroupInfos      models.GroupInfos       `json:"GroupInfos"`
-	UsersNotInGroup []models.UsersNoInGroup `json:"usersNotInGroup"`
-	ListMembreGroup []models.User           `json:"listMembreGroup"`
-	AllPost         []models.Post           `json:"allPost"`
-	IsMember        bool                    `json:"isMember"`
-	Iscreator       bool                    `json:"isCreator"`
+	GroupInfos        models.GroupInfos       `json:"GroupInfos"`
+	UsersNotInGroup   []models.UsersNoInGroup `json:"usersNotInGroup"`
+	ListMembreGroup   []models.User           `json:"listMembreGroup"`
+	AllPost           []models.Post           `json:"allPost"`
+	IsMember          bool                    `json:"isMember"`
+	IsJoinRequestSend bool                    `json:"isJoinRequest"`
+	Iscreator         bool                    `json:"isCreator"`
+	IsInvitationSend  bool                    `json:"isInvited"`
 }
 
 func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
@@ -87,6 +89,16 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 				}
 			}
 
+			isInvited, _ := controller.IsInvitationSend(db, groupId.String(), sess.UserID.String())
+			if isInvited {
+				profilGroup.IsInvitationSend = true
+			}
+
+			isJoinRequest, _ := controller.IsJoinRequestSend(db, sess.UserID.String(), groupId.String())
+			if isJoinRequest {
+				profilGroup.IsJoinRequestSend = true
+			}
+
 			isMember, _ := controller.IsMember(db, sess.UserID.String(), groupId.String())
 			if isMember {
 				profilGroup.IsMember = true
@@ -99,6 +111,7 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 			if iscreator && isMember {
 				profilGroup.Iscreator = true
 			}
+
 			profilGroup.GroupInfos = groupInfo
 			profilGroup.UsersNotInGroup = userNotInGroup
 			profilGroup.ListMembreGroup = listMember

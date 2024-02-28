@@ -1,7 +1,7 @@
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 
-export const getJoinGroupRequest = async (groupid, setJoinGroupRequest) => {
+export const getJoinGroupRequest = async (setJoinGroupRequest, groupid) => {
   try {
     const sessionId = getSessionCookie();
 

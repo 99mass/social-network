@@ -40,6 +40,7 @@ export const api = {
   JoinGroupRequest: `${domain}/join_group_request`,
   GetJoinGroupRequest:`${domain}/show_join_group_request`,
   Accept_join_request:`${domain}/accept_join_group_request`,
-  Decline_join_request:`${domain}/reject_join_group_request`
+  Decline_join_request:`${domain}/reject_join_group_request`,
+  Leave_in_group: `${domain}/leave_in_group`,
 
 };

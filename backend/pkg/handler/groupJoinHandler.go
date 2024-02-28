@@ -107,25 +107,37 @@ func RejectJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 
 			groupeID := r.URL.Query().Get("groupid")
 			userID := r.URL.Query().Get("userid")
+			if userID != "" {
+				iscreator, _ := controller.IsUserGroupCreator(db, sess.UserID.String(), groupeID)
 
-			iscreator, err := controller.IsUserGroupCreator(db, sess.UserID.String(), groupeID)
+				if !iscreator {
+					log.Println("Error: Not allowed to reject the join group request")
+					helper.SendResponseError(w, "error", "you are not allowed to accept the join group request", http.StatusBadRequest)
+					return
+				}
 
-			if !iscreator {
-				log.Println("Error: Not allowed to reject the join group request")
-				helper.SendResponseError(w, "error", "you are not allowed to accept the join group request", http.StatusBadRequest)
-				return
-			}
+				err = controller.RejectJoinGroupRequest(db, userID, groupeID)
+				if err != nil {
+					log.Println("Error: rejecting join group request failled:", err)
+					helper.SendResponseError(w, "error", "something goes wrong", http.StatusBadRequest)
+					return
+				}
+			} else {
+				isJoinRequest, _ := controller.IsJoinRequestSend(db, sess.UserID.String(), groupeID)
+				if isJoinRequest {
+					err = controller.RejectJoinGroupRequest(db, sess.UserID.String(), groupeID)
+					if err != nil {
+						log.Println("Error: rejecting join group request failled:", err)
+						helper.SendResponseError(w, "error", "something goes wrong", http.StatusBadRequest)
+						return
+					}
+				}
 
-			err = controller.RejectJoinGroupRequest(db, userID, groupeID)
-			if err != nil {
-				log.Println("Error: rejecting join group request failled:", err)
-				helper.SendResponseError(w, "error", "something goes wrong", http.StatusBadRequest)
-				return
 			}
 
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
-			helper.SendResponseError(w, "error", "methode not allowed", http.StatusMethodNotAllowed)
+			helper.SendResponseError(w, "error", "methode not allowedeeee", http.StatusMethodNotAllowed)
 			log.Println("the request can't be accepted", r.Method)
 		}
 	}

@@ -161,8 +161,8 @@ func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 }
 
 func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
-    // SQL query to get all groups that a user is not a member of and has not received an invitation
-    query := `
+	// SQL query to get all groups that a user is not a member of and has not received an invitation
+	query := `
         SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
         FROM groups g
         LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
@@ -171,37 +171,37 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
         GROUP BY g.id
     `
 
-    // Prepare the statement
-    stmt, err := db.Prepare(query)
-    if err != nil {
-        return nil, err
-    }
-    defer stmt.Close()
+	// Prepare the statement
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
 
-    // Execute the query
-    rows, err := stmt.Query(userID, userID)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+	// Execute the query
+	rows, err := stmt.Query(userID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-    // Scan the results into a slice of GroupInfos
-    var groups []models.GroupInfos
-    for rows.Next() {
-        var group models.GroupInfos
-        err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
-        if err != nil {
-            return nil, err
-        }
-        groups = append(groups, group)
-    }
+	// Scan the results into a slice of GroupInfos
+	var groups []models.GroupInfos
+	for rows.Next() {
+		var group models.GroupInfos
+		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
+		if err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
 
-    // Check for errors from iterating over rows.
-    if err := rows.Err(); err != nil {
-        return nil, err
-    }
+	// Check for errors from iterating over rows.
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 
-    return groups, nil
+	return groups, nil
 }
 
 func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]models.UsersNoInGroup, error) {
