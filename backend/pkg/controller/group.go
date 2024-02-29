@@ -216,17 +216,12 @@ func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]model
 
 		isInvitationSend, errr := IsInvitationSend(db, groupId, user.ID)
 		ismember, err := IsMember(db, user.ID, groupId)
-
-		if err != nil || errr != nil {
+		isJoinRequestSend, err1 := IsJoinRequestSend(db, user.ID, groupId)
+		if err != nil || errr != nil || err1 != nil {
 			return nil, err
 		}
-		// isUserSenderInvitation, err := IsSenderInvitationGroup(db, userID.String(), user.ID, groupId)
-		// if err != nil {
-		// 	return nil, err
-		// }
-		// fmt.Println(isUserSenderInvitation, "le sender")
 
-		if !isInvitationSend && !ismember {
+		if !isInvitationSend && !ismember && !isJoinRequestSend {
 			_userNot := models.UsersNoInGroup{User: user, IsInvited: false, IsUserSenderInvitation: false}
 			unfollowuser = append(unfollowuser, _userNot)
 		} else if isInvitationSend {
