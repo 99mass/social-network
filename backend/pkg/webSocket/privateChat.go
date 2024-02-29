@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -132,16 +133,21 @@ func SaveMessage(db *sql.DB, sender string, recipient string, message string) er
 	return nil
 }
 
+var connMutex sync.Mutex
+
 func SendGenResponse(name string, conn *websocket.Conn, message interface{}) error {
 	var res GenResponse
 	res.Type = name
 	res.Content = message
+
+	connMutex.Lock()
+	defer connMutex.Unlock()
+
 	err := conn.WriteJSON(res)
 	if err != nil {
 		return err
 	}
 	return nil
-
 }
 
 func GetConnectedUsersList() map[string]*models.UserConnected {

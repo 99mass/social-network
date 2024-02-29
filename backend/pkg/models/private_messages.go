@@ -10,7 +10,8 @@ type PrivateMessages struct {
 }
 
 type RecentDiscussion struct {
-	OtherUserID        string    `json:"other_user_id"`
+	OtherUserID        string `json:"other_user_id"`
+	OtherUserNickname string    `json:"other_user_nickname"`
 	LastMessageTime    string `json:"last_message_time"`
-	LastMessageContent string    `json:"last_message_content"`
+	LastMessageContent string `json:"last_message_content"`
 }
