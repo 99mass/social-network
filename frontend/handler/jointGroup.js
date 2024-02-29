@@ -29,7 +29,7 @@ export async function JoingGroupRequestHandler(
         getDatasProfilGroup(setDatasProfileGroup, group_id);
       }
       if (setGroupDiscover) {
-        // successNotification("The request has been successfully transmitted");
+        successNotification("The request has been successfully transmitted");
         Groupstodiscover(setGroupDiscover);
       }
     }
