@@ -10,7 +10,7 @@ export default function MidlleBloc({ posts, setPosts }) {
   useEffect(() => {
     getPostsUser(setPosts);
   }, []);
-  console.log(posts, "les")
+  console.log(posts, "les");
   return (
     <div className="menu-middle">
       {posts ? (
@@ -97,9 +97,12 @@ export function PostHeader({
               src={
                 (image && image !== "") ||
                 (groupAvatarPath && groupAvatarPath !== "")
-                  ? `data:image/png;base64,${
-                      !groupName ? image : groupAvatarPath
-                    }`
+                  ? !groupName
+                    ? image !="" && 
+                    `data:image/png;base64,${image}` 
+                    : groupAvatarPath !== ""
+                    ? `data:image/png;base64,${groupAvatarPath}`
+                    : "../images/groups-defaul.png"
                   : "../images/user-circle.png"
               }
               alt=""
@@ -109,8 +112,8 @@ export function PostHeader({
             <Link href={`./profileuser?userid=${iduser}`}>
               <img
                 src={
-                  groupAvatarPath && groupAvatarPath !== ""
-                    ? `data:image/png;base64,${groupAvatarPath}`
+                  groupName && groupName !== ""
+                    ? `data:image/png;base64,${image}`
                     : "../images/user-circle.png"
                 }
                 alt=""

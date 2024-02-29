@@ -43,7 +43,7 @@ export default function ListUser() {
 
     socketRecentDiscussion.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
-      // console.log("old", _message);
+      console.log("old", _message);
       if (_message) {
         setMessagesLists(_message);
       }
@@ -99,14 +99,14 @@ export function LastChatWitheAutherUser({ data }) {
             <Link href={`./chatpage?userid=${item.other_user_id}`}>
               <img
                 src={
-                  item.avatarpath
-                    ? `data:image/png;base64,${item.avatarpath}`
+                  item.other_user_avatarpath
+                    ? `data:image/png;base64,${item.other_user_avatarpath}`
                     : `../images/user-circle.png`
                 }
                 alt=""
               />
               <div>
-                <p>{item.username}</p>
+                <p>{item.other_user_nickname}</p>
                 <p>{item.last_message_content}</p>
               </div>
             </Link>
