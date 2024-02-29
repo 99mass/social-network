@@ -15,6 +15,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/global_socket", websocket.ChatHandler(db))
 	http.HandleFunc("/discussion", websocket.CommunicationHandler(db))
 	http.HandleFunc("/group_chat", websocket.PrivateGroupChat(db))
+	http.HandleFunc("/recent_discussions", websocket.RecentDiscussionsHandler(db))
 
 	//User Actions
 	http.HandleFunc("/register", helper.Middleware(handler.RegisterHandler(db)))
