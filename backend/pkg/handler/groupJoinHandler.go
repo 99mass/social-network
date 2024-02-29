@@ -24,7 +24,6 @@ func JoingGroupRequest(db *sql.DB) http.HandlerFunc {
 			log.Println("authorization checked")
 
 			groupeID := r.URL.Query().Get("groupid")
-			log.Println("grid:", groupeID)
 			// var invitationReq InvitationRequest
 			_, err = controller.GetGroupByID(db, groupeID)
 			if err != nil {
@@ -85,7 +84,7 @@ func AcceptJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "something goes wrong", http.StatusBadRequest)
 				return
 			}
-
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "methode not allowed", http.StatusMethodNotAllowed)
@@ -107,6 +106,8 @@ func RejectJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 
 			groupeID := r.URL.Query().Get("groupid")
 			userID := r.URL.Query().Get("userid")
+			creator := r.URL.Query().Get("creatorid")
+			log.Println("creatorid:", creator)
 			if userID != "" {
 				iscreator, _ := controller.IsUserGroupCreator(db, sess.UserID.String(), groupeID)
 
@@ -132,9 +133,12 @@ func RejectJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 						return
 					}
 				}
-
+				controller.DeleteNotificationJoinGroupBySender(db, creator, groupeID,sess.UserID.String(), "join_group")
+				websocket.BroadcastUserList(db)
+				
 			}
-
+			websocket.BroadcastUserList(db)
+			
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "methode not allowedeeee", http.StatusMethodNotAllowed)

@@ -4,7 +4,8 @@ import { AboutGroup } from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
 import { convertAge } from "../../utils/convert_dates";
 import { AddEvent } from "../../handler/create_event";
-import { ListAllEvents } from "../../handler/getAllEvents";
+import { ListAllEvents, eventPartipants } from "../../handler/getAllEvents";
+import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function EventLists({ group_id }) {
   const [allevents, setAllEvents] = useState(null);
@@ -15,7 +16,9 @@ export default function EventLists({ group_id }) {
     ListAllEvents(group_id, setAllEvents);
   }, [])
 
-  console.log("allevents", allevents && allevents);
+  
+
+  console.log("allevents",  allevents);
 
 
   const toggleListUsers = (state) => setListUserGoing(state);
@@ -31,7 +34,8 @@ export default function EventLists({ group_id }) {
             userBy={item.user.nickname}
             time={item.event.day_time}
             content={item.event.description}
-            isGoing={item.isGoing}
+            eventID={item.event.id}
+            participation_status={item.participation_status}
             toggleListUsers={toggleListUsers}
           />
         ))}
@@ -42,16 +46,45 @@ export default function EventLists({ group_id }) {
   );
 }
 
+
 export function EventBloc({
   nameGroup,
   numberPerson,
   userBy,
   time,
   content,
-  isGoing,
+  eventID,
+  participation_status,
   toggleListUsers
 }) {
 
+  // const [goingOption, setgoingOp]=  useState()
+  // useEffect(() =>{
+    // eventPartipants(isGoing,choseOption,setgoingOp)
+  // },[])
+  const [userdata,setuserdata] = useState();
+  // console.log(userdata,"user");
+  // getUserBySession()
+  useEffect(() =>{
+    getUserBySession(setuserdata)
+  },[])
+
+  console.log(userdata?.id,"userid");
+ 
+ const handlerEventParticipant =(chosen_option,user)=> {
+
+  // const data = {
+  //   even_id: eventID,
+  //   user_id :userdata?.id,
+  //   option: chosen_option
+     
+  
+  // }
+  // console.log(data, "data");
+  // console.log(chosen_option);
+  eventPartipants(eventID,chosen_option)
+ }
+  // console.log("Using state",goingOption &&goingOption);
   return (
     <div className={styles.eventDetails}>
       <h2>{nameGroup}</h2>
@@ -71,11 +104,12 @@ export function EventBloc({
       <pre>{content}</pre>
       <div>
         
-          <button>
+          <button onClick={()=>handlerEventParticipant("1")}>
             <i className="fa-solid fa-circle-check"></i>Going
+            
           </button>
-        
-          <button className={styles.btnNotGoing}>
+          :
+          <button className={styles.btnNotGoing} onClick={()=>handlerEventParticipant("0")} >
             <i className="fa-solid fa-circle-check"></i>Not going
           </button>
           

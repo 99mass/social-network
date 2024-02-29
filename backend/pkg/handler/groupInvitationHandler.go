@@ -44,6 +44,8 @@ func AccepGrpInvitation(db *sql.DB) http.HandlerFunc {
 				log.Println("the request invitation can't be accepted due to" + err.Error())
 				return
 			}
+			websocket.BroadcastUserList(db)
+			
 
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
@@ -89,8 +91,12 @@ func DeclineGrpInvitaton(db *sql.DB) http.HandlerFunc {
 
 			if _userID == "" {
 				err = controller.DeclineGroupInvitaton(db, sess.UserID.String(), groupeID)
+				websocket.BroadcastUserList(db)
+				
 			} else {
 				err = controller.DeclineGroupInvitaton(db, _userID, groupeID)
+				websocket.BroadcastUserList(db)
+				
 			}
 
 			if err != nil {
@@ -103,6 +109,7 @@ func DeclineGrpInvitaton(db *sql.DB) http.HandlerFunc {
 				log.Println("error:", err.Error())
 			}
 			websocket.BroadcastUserList(db)
+			
 
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)

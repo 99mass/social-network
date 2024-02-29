@@ -75,7 +75,6 @@ func DeclineGroupInvitaton(db *sql.DB, userID, groupID string) error {
 		log.Println("Error Declining follower request", err.Error())
 		return fmt.Errorf("failed to unfollow user: %w", err)
 	}
-
 	return nil
 }
 

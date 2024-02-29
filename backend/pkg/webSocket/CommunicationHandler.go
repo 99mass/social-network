@@ -1,10 +1,6 @@
 package websocket
 
 import (
-	"backend/pkg/controller"
-	"backend/pkg/helper"
-	"backend/pkg/models"
-	"backend/pkg/utils"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -13,6 +9,11 @@ import (
 
 	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
+
+	"backend/pkg/controller"
+	"backend/pkg/helper"
+	"backend/pkg/models"
+	"backend/pkg/utils"
 )
 
 type messageToSend struct {
@@ -106,6 +107,7 @@ func GoodToSend(db *sql.DB, discuss []models.PrivateMessages) ([]messageToSend, 
 
 	return messToSend, nil
 }
+
 func GetUsername(db *sql.DB, user uuid.UUID) (string, error) {
 	us, err := controller.GetUserByID(db, user)
 	if err != nil {

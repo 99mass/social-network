@@ -54,6 +54,7 @@ func LogOutHandler(db *sql.DB) http.HandlerFunc {
 			helper.SendResponse(w, nil, http.StatusOK)
 			websocket.RemoveUserFromConnectedList(sess.UserID.String())
 			websocket.BroadcastUserList(db)
+			
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
 				Status:  "error",

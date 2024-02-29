@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	"backend/pkg/models"
 )
@@ -69,6 +70,7 @@ func GetParticipantStatus(db *sql.DB, eventID, userID string) (int, error) {
 		}
 		return 2, err
 	}
+	log.Println("optionnn:",option)
 	return option, nil
 }
 
@@ -76,10 +78,10 @@ func GetParticipantStatus(db *sql.DB, eventID, userID string) (int, error) {
 func UpdateParticipantStatus(db *sql.DB, eventID, userID string, option int) error {
 	query :=`
 		UPDATE event_participants 
-		SET choosen_option= ? 
+		SET choosen_option = ? 
 		WHERE event_id = ? AND user_id = ?
 	`
-	_, err := db.Exec(query, option, eventID, userID)
+	_, err := db.Exec(query,option, eventID, userID)
 	return err
 }
 

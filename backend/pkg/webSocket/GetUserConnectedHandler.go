@@ -36,14 +36,23 @@ func BroadcastUserList(db *sql.DB) {
 
 			nbrMessage, _ := controller.GetNotificationCountByType(db, user.UserID, "private_message")
 			SendGenResponse("nbr_notif_message", user.Conn, nbrMessage)
+			detailMessage, _ := controller.GetNotificationCountByTypeAndSenderID(db, user.UserID, "private_message")
+			SendGenResponse("nbr_notif_message_by_user", user.Conn, detailMessage)
 			nbrFollow, _ := controller.GetNotificationCountByType(db, user.UserID, "follow_request")
 			SendGenResponse("nbr_notif_follow", user.Conn, nbrFollow)
-			nbrGrpJoinReq, _ := controller.GetNotificationCountByType(db, user.UserID, "group_invitation")
-			SendGenResponse("nbr_notif_group_invitation", user.Conn, nbrGrpJoinReq)
 			nbrJoinReq, _ := controller.GetNotificationCountByTypeAndSourceID(db, user.UserID, "join_group")
 			SendGenResponse("nbr_notif_join_group_request", user.Conn, nbrJoinReq)
+			var res int
+			for _, v := range nbrJoinReq {
+				res += v.CountJoinReq
+			}
+			nbrGrpJoinReq, _ := controller.GetNotificationCountByType(db, user.UserID, "group_invitation")
+			SendGenResponse("nbr_notif_group_invitation", user.Conn, nbrGrpJoinReq)
+
 			nbrChatGrp, _ := controller.GetNotificationCountByTypeAndSourceID(db, user.UserID, "chat_group")
 			SendGenResponse("nbr_notif_chat_group", user.Conn, nbrChatGrp)
+
+			SendGenResponse("total_group_notif", user.Conn, res+nbrGrpJoinReq+len(nbrChatGrp))
 
 			err = SendGenResponse("users_list", user.Conn, usersList)
 			if err != nil {
@@ -59,3 +68,5 @@ func RemoveUserFromConnectedList(userID string) {
 	// Assuming ConnectedUsersList is a global variable or accessible in this scope
 	delete(ConnectedUsersList, userID)
 }
+
+

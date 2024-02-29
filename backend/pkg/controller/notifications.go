@@ -82,6 +82,12 @@ func DeleteNotificationJoinGroup(db *sql.DB, userID, groupID, typeNotif string) 
 	return err
 }
 
+func DeleteNotificationJoinGroupBySender(db *sql.DB, userID, groupID, senderID, typeNotif string) error {
+	query := `DELETE FROM notifications WHERE user_id = ? AND source_id = ? AND sender_id = ? AND type = ?`
+	_, err := db.Exec(query, userID, groupID, senderID, typeNotif)
+	return err
+}
+
 func DeleteNotificationBySenderAndUser(db *sql.DB, senderID, userID, typeNotif string) error {
 	query := `DELETE FROM notifications WHERE sender_id = ? AND user_id = ? AND type = ?`
 	_, err := db.Exec(query, senderID, userID, typeNotif)
@@ -119,6 +125,43 @@ func GetNotificationCountByTypeAndSourceID(db *sql.DB, userID string, notificati
 		FROM notifications
 		WHERE user_id = ? AND type = ?
 		GROUP BY source_id;
+	`
+
+	// Execute the query and retrieve the results.
+	rows, err := db.Query(query, userID, notificationType)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Initialize a slice to hold the results.
+	var results []NotifJoinReq
+
+	// Iterate over the rows and populate the results slice.
+	for rows.Next() {
+		var notif NotifJoinReq
+		if err := rows.Scan(&notif.GroupID, &notif.CountJoinReq); err != nil {
+			return nil, err
+		}
+		results = append(results, notif)
+	}
+
+	// Check for any errors that occurred during iteration.
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+
+func GetNotificationCountByTypeAndSenderID(db *sql.DB, userID string, notificationType string) ([]NotifJoinReq, error) {
+	// Prepare the SQL query to count notifications by type and source ID for a specific user.
+	query := `
+		SELECT source_id, COUNT(*) as count
+		FROM notifications
+		WHERE user_id = ? AND type = ?
+		GROUP BY sender_id;
 	`
 
 	// Execute the query and retrieve the results.

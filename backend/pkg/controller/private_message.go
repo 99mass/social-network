@@ -1,13 +1,17 @@
 package controller
 
 import (
-	"backend/pkg/models"
 	"database/sql"
+	"encoding/base64"
+	"errors"
+	"io/ioutil"
 	"log"
 	"sort"
 	"time"
 
 	"github.com/gofrs/uuid"
+
+	"backend/pkg/models"
 )
 
 func CreateMessage(db *sql.DB, message models.PrivateMessages) (uuid.UUID, error) {
@@ -119,4 +123,73 @@ func getNbrUnreadMessage(db *sql.DB, userID, senderID string) (int, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+// GetRecentDiscussions retourne la liste des utilisateurs avec lesquels un utilisateur a discuté récemment,
+// ainsi que le dernier message pour chaque discussion.
+func GetRecentDiscussions(db *sql.DB, userID string) ([]models.RecentDiscussion, error) {
+	query := `
+		SELECT 
+			CASE 
+				WHEN sender_id = ? THEN recipient_id 
+				ELSE sender_id 
+			END AS other_user_id,
+			MAX(created_at) AS last_message_time,
+			content AS last_message_content
+		FROM private_messages
+		WHERE sender_id = ? OR recipient_id = ?
+		GROUP BY other_user_id
+		ORDER BY last_message_time DESC;
+	`
+
+	rows, err := db.Query(query, userID, userID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var discussions []models.RecentDiscussion
+	for rows.Next() {
+		var discussion models.RecentDiscussion
+		err := rows.Scan(&discussion.OtherUserID, &discussion.LastMessageTime, &discussion.LastMessageContent)
+		if err != nil {
+			return nil, err
+		}
+
+		// Récupérer le surnom de l'utilisateur à partir de la table des utilisateurs
+		var otherUserNickname string
+		err = db.QueryRow("SELECT nickname FROM users WHERE id = ?", discussion.OtherUserID).Scan(&otherUserNickname)
+		if err != nil {
+			return nil, err
+		}
+		discussion.OtherUserNickname = otherUserNickname
+
+		var image string
+		err = db.QueryRow("SELECT avatarpath FROM users WHERE id = ?", discussion.OtherUserID).Scan(&image)
+		if err != nil {
+			return nil, err
+		}
+		if image != "" {
+			image, err = EncodeImageToBase64("./pkg/static/avatarImage/" + image)
+			if err != nil {
+				log.Println("enable to encode image avatar", err.Error())
+
+			}
+		}
+		discussion.ImagePath = image
+
+		discussions = append(discussions, discussion)
+	}
+
+	return discussions, nil
+}
+
+func EncodeImageToBase64(imagePath string) (string, error) {
+	data, err := ioutil.ReadFile(imagePath)
+	if err != nil {
+		return "", errors.New("enable to encode image" + err.Error())
+	}
+
+	encodedData := base64.StdEncoding.EncodeToString(data)
+	return encodedData, nil
 }

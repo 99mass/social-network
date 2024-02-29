@@ -71,6 +71,44 @@ func ShowPostsGroup(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+func ShowFeedPost(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			var Posts []models.Post_Request
+			sess, err := utils.CheckAuthorization(db, w, r)
+			if err != nil {
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+				log.Println("not authorized", err)
+				return
+			}
+
+			posts, err := controller.MyAllGroupPosts(db, sess.UserID.String())
+
+			if err != nil {
+				helper.SendResponseError(w, "error", "Can't get posts", http.StatusInternalServerError)
+				return
+			}
+
+			for _, post := range posts {
+
+				PostReq, err := FitPostRequest(db, w, post, sess.UserID.String())
+
+				if err != nil {
+					return
+				}
+				Posts = append(Posts, PostReq)
+			}
+			log.Println("Posts group sent successfully")
+			helper.SendResponse(w, Posts, http.StatusOK)
+
+		default:
+			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+	}
+}
+
 // Fit the post request models through the post.
 func FitPostRequest(db *sql.DB, w http.ResponseWriter, post models.Post, ConnecteduseriID string) (models.Post_Request, error) {
 	var PostReq models.Post_Request
@@ -96,6 +134,7 @@ func FitPostRequest(db *sql.DB, w http.ResponseWriter, post models.Post, Connect
 		helper.SendResponseError(w, "error", err.Error(), http.StatusBadRequest)
 		return models.Post_Request{}, err
 	}
+
 	PostReq.Post = post
 	if strings.TrimSpace(user.AvatarPath) != "" {
 		user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
@@ -140,8 +179,25 @@ func FitPostRequest(db *sql.DB, w http.ResponseWriter, post models.Post, Connect
 		return models.Post_Request{}, err
 	}
 
+	groupeName, avatarPath, err := controller.GetGroupNameByIdPost(db, post.GroupID)
+	if err != nil {
+		helper.SendResponseError(w, "error", "error getting group name", http.StatusInternalServerError)
+		return models.Post_Request{}, err
+	}
+
+	if strings.TrimSpace(avatarPath) != "" {
+		PostReq.GroupAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + avatarPath)
+		if err != nil {
+			user.AvatarPath = "default.png"
+			// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
+			log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
+			// return
+		}
+	}
 	PostReq.NbrLikes = nbrLikes
 	PostReq.NbrComments = nbrComments
+	PostReq.GroupName = groupeName
+	PostReq.GroupID = post.GroupID
 
 	return PostReq, nil
 }
