@@ -14,5 +14,5 @@ type RecentDiscussion struct {
 	OtherUserNickname  string `json:"other_user_nickname"`
 	LastMessageTime    string `json:"last_message_time"`
 	LastMessageContent string `json:"last_message_content"`
-	ImagePath          string `json:"other_user_iamge_path"`
+	ImagePath          string `json:"other_user_avatarpath"`
 }
