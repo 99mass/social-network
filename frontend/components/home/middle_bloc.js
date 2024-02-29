@@ -10,7 +10,7 @@ export default function MidlleBloc({ posts, setPosts }) {
   useEffect(() => {
     getPostsUser(setPosts);
   }, []);
-  console.log(posts, "les post")
+  console.log(posts, "les");
   return (
     <div className="menu-middle">
       {posts ? (
@@ -21,12 +21,15 @@ export default function MidlleBloc({ posts, setPosts }) {
               user={item.user.firstname}
               image={item.user.avatarpath}
               isfollowed={item.is_followed}
-              groupName= {item.group_name}
-              groupAvatarPath= {item.group_avatar_path}
               time={`${getElapsedTime(item.post.created_at).value} ${
                 getElapsedTime(item.post.created_at).unit
               }`}
               setPosts={setPosts}
+              groupid={item.group_id}
+              setPostsGroup={setPosts}
+              groupName={item.group_name}
+              groupId={item.group_id}
+              groupAvatarPath={item.group_avatar_path}
             />
             <PostMiddle
               content={item.post.content}
@@ -94,9 +97,12 @@ export function PostHeader({
               src={
                 (image && image !== "") ||
                 (groupAvatarPath && groupAvatarPath !== "")
-                  ? `data:image/png;base64,${
-                      !groupName ? image : groupAvatarPath
-                    }`
+                  ? !groupName
+                    ? image !="" && 
+                    `data:image/png;base64,${image}` 
+                    : groupAvatarPath !== ""
+                    ? `data:image/png;base64,${groupAvatarPath}`
+                    : "../images/groups-defaul.png"
                   : "../images/user-circle.png"
               }
               alt=""
@@ -106,8 +112,8 @@ export function PostHeader({
             <Link href={`./profileuser?userid=${iduser}`}>
               <img
                 src={
-                  groupAvatarPath && groupAvatarPath !== ""
-                    ? `data:image/png;base64,${groupAvatarPath}`
+                  groupName && groupName !== ""
+                    ? `data:image/png;base64,${image}`
                     : "../images/user-circle.png"
                 }
                 alt=""
