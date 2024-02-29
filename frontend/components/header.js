@@ -52,14 +52,11 @@ export default function Header() {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      // console.log(_message);
+      console.log(_message);
       switch (_message.type) {
         // old notifications
         case "nbr_notif_message":
           setNbrNotifMessagesPrivate(_message.content);
-          break;
-        case "nbr_notif_group_invitation":
-          setNbrNotifGroupInvitation(_message.content);
           break;
         case "nbr_notif_follow":
           setNbrNotifFollow(_message.content);

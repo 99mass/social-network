@@ -386,19 +386,21 @@ func IsUserGroupCreator(db *sql.DB, userID string, groupID string) (bool, error)
 	return userID == creatorID, nil
 }
 
-func GetGroupNameByIdPost(db *sql.DB, groupID string) (string, error) {
+func GetGroupNameByIdPost(db *sql.DB, groupID string) (string, string, error) {
 	query := `
-        SELECT title
+        SELECT title, avatarpath
         FROM groups
         WHERE id = ?
     `
 	var title string
-	err := db.QueryRow(query, groupID).Scan(&title)
+	var avatarpath string
+	err := db.QueryRow(query, groupID).Scan(&title, &avatarpath)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return "", errors.New("group not found")
+			log.Println("group not found")
+			return "", "", nil
 		}
-		return "", err
+		return "", "", err
 	}
-	return title, nil
+	return title, avatarpath, nil
 }
