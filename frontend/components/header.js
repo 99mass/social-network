@@ -17,6 +17,7 @@ export default function Header() {
   const [nbrnotifMessagesPrivate, setNbrNotifMessagesPrivate] = useState(0);
   const [nbrNotifGroupInvitation, setNbrNotifGroupInvitation] = useState(0);
   const [nbrNotifFollow, setNbrNotifFollow] = useState(0);
+  const [totalGroupNotif, setTotalGroupNotif] = useState(0);
   const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
   const [notifMessagesGroup, setNotifMessagesGroup] = useState("");
   const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
@@ -63,6 +64,9 @@ export default function Header() {
         case "nbr_notif_follow":
           setNbrNotifFollow(_message.content);
           break;
+        case "total_group_notif":
+          setTotalGroupNotif(_message.content);
+          break;
 
         // now notifications
         case "notif_private_message":
@@ -98,7 +102,7 @@ export default function Header() {
               </Link>
               <MidlleNAvForBigScreen
                 nbrnotifMessagesPrivate={nbrnotifMessagesPrivate}
-                nbrNotifGroupInvitation={nbrNotifGroupInvitation}
+                totalGroupNotif={totalGroupNotif}
                 nbrNotifFollow={nbrNotifFollow}
               />
               <ToggleButton
@@ -112,7 +116,7 @@ export default function Header() {
             </div>
             <MidlleNAvFormSmallScreen
               nbrnotifMessagesPrivate={nbrnotifMessagesPrivate}
-              nbrNotifGroupInvitation={nbrNotifGroupInvitation}
+              totalGroupNotif={totalGroupNotif}
               nbrNotifFollow={nbrNotifFollow}
             />
           </div>
@@ -174,7 +178,7 @@ export default function Header() {
 
 export function MidlleNAvForBigScreen({
   nbrnotifMessagesPrivate,
-  nbrNotifGroupInvitation,
+  totalGroupNotif,
   nbrNotifFollow,
 }) {
   return (
@@ -196,9 +200,7 @@ export function MidlleNAvForBigScreen({
       </Link>
       <Link href="/group" title="Groups">
         <i className="fas fa-users">
-          {nbrNotifGroupInvitation > 0 && (
-            <span>{nbrNotifGroupInvitation}+</span>
-          )}
+          {totalGroupNotif > 0 && <span>{totalGroupNotif}+</span>}
         </i>
       </Link>
     </div>
@@ -206,7 +208,7 @@ export function MidlleNAvForBigScreen({
 }
 export function MidlleNAvFormSmallScreen({
   nbrnotifMessagesPrivate,
-  nbrNotifGroupInvitation,
+  totalGroupNotif,
   nbrNotifFollow,
 }) {
   return (
@@ -228,9 +230,7 @@ export function MidlleNAvFormSmallScreen({
       </Link>
       <Link href="/group">
         <i className="fas fa-users">
-          {nbrNotifGroupInvitation > 0 && (
-            <span>{nbrNotifGroupInvitation}+</span>
-          )}
+          {totalGroupNotif > 0 && <span>{totalGroupNotif}+</span>}
         </i>
       </Link>
     </div>
