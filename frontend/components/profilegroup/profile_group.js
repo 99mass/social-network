@@ -11,6 +11,7 @@ import { defaultImage } from "../group/group_page";
 import { AcceptGroupInvitProfil, AddGroupInvitations, DeclineInvitation, DeclineJoinGroupRequest, leaveInGroup } from "../../handler/groupAction";
 import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 import JoinRequestGroup from "./joinGroupRequest";
+import { ErrorProfile } from "../errors/error_profiles";
 
 
 
@@ -65,24 +66,30 @@ export default function Profile_group() {
 
   return (
     <>
-      <ContentCovertPhotoGroup
-        section={section}
-        handleSection={handleSection}
-        image={datas && datas.GroupInfos.avatarpath}
-        title={datas && datas.GroupInfos.title}
-        members={datas && datas.GroupInfos.nbr_members}
-        friendList={datas && datas.usersNotInGroup}
-        listMembers={datas && datas.listMembreGroup}
-        groupId={datas && datas.GroupInfos.id}
-        handlerSendInvitations={handlerSendInvitations}
-        handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}
-        isMember={datas && datas.isMember}
-        setDatasProfileGroup={setDatasProfileGroup}
-        isCreator={datas?.isCreator}
-        isJoinRequest={datas?.isJoinRequest}
-        isInvited={datas?.isInvited}
+
+      {datas ? (
+        <ContentCovertPhotoGroup
+          section={section}
+          handleSection={handleSection}
+          image={datas && datas.GroupInfos.avatarpath}
+          title={datas && datas.GroupInfos.title}
+          members={datas && datas.GroupInfos.nbr_members}
+          friendList={datas && datas.usersNotInGroup}
+          listMembers={datas && datas.listMembreGroup}
+          groupId={datas && datas.GroupInfos.id}
+          handlerSendInvitations={handlerSendInvitations}
+          handlerDeclineInvitaionGroup={handlerDeclineInvitaionGroup}
+          isMember={datas && datas.isMember}
+          setDatasProfileGroup={setDatasProfileGroup}
+          isCreator={datas?.isCreator}
+          isJoinRequest={datas?.isJoinRequest}
+          isInvited={datas?.isInvited}
         
-      />
+        />
+      ) : (
+        <ErrorProfile />
+      )}
+      
       {section.section1 && (
         <Discussion
           postGroup={postGroup}
@@ -226,7 +233,7 @@ export function ContentCovertPhotoGroup({ section, handleSection, image, title, 
       )}
       {friend && (
         <ListFriend
-          toggleFriend={toggleFriend}
+          toggleFriend={toggleFriend}      
           friendList={friendList}
           handlerSendInvitations={handlerSendInvitations}
         />
