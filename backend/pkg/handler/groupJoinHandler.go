@@ -133,7 +133,7 @@ func RejectJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 						return
 					}
 				}
-				controller.DeleteNotificationJoinGroup(db, creator, groupeID, "join_group")
+				controller.DeleteNotificationJoinGroupBySender(db, creator, groupeID,sess.UserID.String(), "join_group")
 				websocket.BroadcastUserList(db)
 			}
 			websocket.BroadcastUserList(db)

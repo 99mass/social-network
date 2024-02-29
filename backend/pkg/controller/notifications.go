@@ -82,6 +82,12 @@ func DeleteNotificationJoinGroup(db *sql.DB, userID, groupID, typeNotif string) 
 	return err
 }
 
+func DeleteNotificationJoinGroupBySender(db *sql.DB, userID, groupID, senderID, typeNotif string) error {
+	query := `DELETE FROM notifications WHERE user_id = ? AND source_id = ? AND sender_id = ? AND type = ?`
+	_, err := db.Exec(query, userID, groupID, senderID, typeNotif)
+	return err
+}
+
 func DeleteNotificationBySenderAndUser(db *sql.DB, senderID, userID, typeNotif string) error {
 	query := `DELETE FROM notifications WHERE sender_id = ? AND user_id = ? AND type = ?`
 	_, err := db.Exec(query, senderID, userID, typeNotif)
