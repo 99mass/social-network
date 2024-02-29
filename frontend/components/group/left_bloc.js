@@ -152,9 +152,9 @@ export default function LeftBlocGroupPage({ state, handleState }) {
 
   const [groups, setGroups] = useState();
   const [groupForm, setGroupForm] = useState(false);
-  const [nbrNotifChatGroup, setNbrNotifChatGroup] = useState(0);
+  const [hasHighNbrNotifChatGroup, setHasHighbrNotifChatGroup] =
+    useState(false);
   const [nbrNotifInvitationGroup, setNbrNotifInvitationGroup] = useState(0);
-
   const [nbrNotifJoinGroupRequest, setNbrJoinGroupRequest] = useState([]);
   const [socket, setSocket] = useState(null);
 
@@ -190,6 +190,13 @@ export default function LeftBlocGroupPage({ state, handleState }) {
             setNbrJoinGroupRequest(_message.content);
           break;
         case "nbr_notif_chat_group":
+          if (_message.content && _message.content.length > 0) {
+            // Vérifier si on un message chat group non lue
+            const hasHighRequest = _message.content.some(
+              (row) => row.count_join_request > 1
+            );
+            setHasHighbrNotifChatGroup(hasHighRequest);
+          }
           break;
         case "nbr_notif_group_invitation":
           setNbrNotifInvitationGroup(_message.content);
@@ -200,6 +207,7 @@ export default function LeftBlocGroupPage({ state, handleState }) {
       }
     };
   }, [socket]);
+  console.log("hasHighNbrNotifChatGroup", hasHighNbrNotifChatGroup);
 
   const toggleGroupForm = () => setGroupForm((prevState) => !prevState);
 
@@ -221,9 +229,12 @@ export default function LeftBlocGroupPage({ state, handleState }) {
         </h4>
         <h4
           onClick={() => handleClick("state3")}
-          className={state.state3 ? styles.active : ""}
+          className={`${styles.imgNew} ${state.state3 ? styles.active : ""}`}
         >
-          <i className="fa-solid fa-people-group"></i>your groups
+          <span>
+            <i className="fa-solid fa-people-group"></i>your groups
+          </span>
+          {hasHighNbrNotifChatGroup && <img src="../images/new.png" alt="" />}
         </h4>
         <h4
           onClick={() => handleClick("state4")}
@@ -279,7 +290,11 @@ export function ListGroupManaged({ group, nbrNotifJoinGroupRequest }) {
                 <span>
                   {item.title}
                   {hasJoinRequestNotifications && (
-                    <img className={styles.notifJoinGroup} src="../images/new.png" alt="" />
+                    <img
+                      className={styles.notifJoinGroup}
+                      src="../images/new.png"
+                      alt=""
+                    />
                   )}
                 </span>
               </Link>
