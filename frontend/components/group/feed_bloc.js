@@ -3,12 +3,11 @@ import {
   FormComment,
   PostFooterComment,
 } from "../comment/comment_bloc";
-import { PostHeader, PostMiddle } from "../home/middle_bloc";
+import { PostFooter, PostHeader, PostMiddle } from "../home/middle_bloc";
 import styles from "../../styles/modules/group.module.css";
 import { getAllGroupPosts } from "../../handler/getPostsGroup";
 import { useEffect, useState } from "react";
 import { getElapsedTime } from "../../utils/convert_dates";
-
 
 export function FeedBloc() {
 
@@ -19,76 +18,6 @@ export function FeedBloc() {
   }, []);
 
   console.log(postGroups, "mes posts du group")
-  const data = [
-    {
-      user: "Lions M ",
-      text: "The Lions 💯 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus minima, quod nulla incidunt illum itaque esse fugit! Aspernatur earum, eaque adipisci facilis mollitia eos exercitationem ex porro, consequatur quibusdam perspiciatis.",
-      imageUrl: "",
-      date: "16m",
-      like: "100k",
-      comment: "2k",
-    },
-    {
-      user: "Lions D ",
-      text: "The Lions D 💯 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus minima, quod nulla incidunt illum itaque esse fugit! Aspernatur earum, eaque adipisci facilis mollitia eos exercitationem ex porro, consequatur quibusdam perspiciatis.",
-      imageUrl: "",
-      date: "26m",
-      like: "90k",
-      comment: "12k",
-    },
-  ];
-  const dataComment = [
-    {
-      user: "alpha",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "",
-      time: "3mn",
-    },
-    {
-      user: "breukh",
-      textComment:
-        "Lorem ipsum dolor sit amet elit dolor sit amet elit. Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "",
-      time: "2mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "",
-      time: "1mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "",
-      time: "1mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "",
-      time: "1mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "",
-      time: "1mn",
-    },
-    {
-      user: "tom",
-      textComment: "Lorem ipsum dolor sit amet elit dolor sit amet elit.",
-      commentUserUrl:
-        "",
-      time: "1mn",
-    },
-  ];
 
   return (
     <div className={`${styles.menuMiddle} _middle`}>
@@ -96,7 +25,7 @@ export function FeedBloc() {
       {postGroups ? (
         postGroups.map((item, index) => (
             <div key={index} className={`${styles.contenPost} _contenPost`}>
-              <PostsFeed item={item} dataComment={dataComment} setPostGroups={setPostGroups}/>
+              <PostsFeed item={item}  setPostGroups={setPostGroups}/>
             </div>
         ))
       ) : (
@@ -113,7 +42,7 @@ export function FeedBloc() {
   );
 }
 
-export function PostsFeed({ item, dataComment, setPostGroups }) {
+export function PostsFeed({ item, setPostGroups }) {
   return (
     <div className="post">
        <PostHeader
@@ -129,21 +58,22 @@ export function PostsFeed({ item, dataComment, setPostGroups }) {
               setPostsGroup={setPostGroups}
               groupName={item.group_name}
               groupId={item.group_id}
-              groupAvatarPath=""
+              groupAvatarPath={item.group_avatar_path}
         />
         <PostMiddle
               content={item.post.content}
               image={item.post.image_path}
         />
-        <PostFooterComment 
-              userid={item.user.id} 
-              postid={item.post.id} 
-              is_liked={item.is_liked} 
-              numberLike={item.nbr_likes} 
-              numberComment={item.nbr_comments} 
-              setPostData="" />
-        <CommentPost data={null} />
-      <FormComment postid={item.post.id} setComment={null} />
+      
+        <PostFooter
+              is_liked={item.is_liked}
+              numberLike={item.nbr_likes}
+              numberComment={item.nbr_comments}
+              userid={item.user.id}
+              postid={item.post.id}
+              setPosts={setPostGroups}
+        />
+  
     </div>
   );
 }

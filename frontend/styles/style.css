@@ -87,6 +87,7 @@
   a:first-of-type
   img:first-of-type {
   border-radius: 20%;
+  border: 1px solid;
 }
 .post
   .profileuser
@@ -96,6 +97,7 @@
   img:last-of-type {
   width: 40px;
   height: 40px;
+  border-radius: 100%;
 }
 
 .Follow,
