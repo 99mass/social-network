@@ -17,7 +17,7 @@ export default function EventLists({ group_id }) {
 
   
 
-  console.log("allevents", allevents && allevents);
+  console.log("allevents",  allevents);
 
 
   const toggleListUsers = (state) => setListUserGoing(state);
@@ -62,7 +62,7 @@ export function EventBloc({
     // eventPartipants(isGoing,choseOption,setgoingOp)
   // },[])
  const handlerEventParticipant =(chosen_option)=> {
-  console.log(chosen_option,"1 ou 0");
+  console.log(chosen_option);
   eventPartipants(eventID,chosen_option)
  }
   // console.log("Using state",goingOption &&goingOption);
