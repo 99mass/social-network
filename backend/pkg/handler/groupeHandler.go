@@ -8,6 +8,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/utils"
+	websocket "backend/pkg/webSocket"
 )
 
 func GetMyGroupsHandler(db *sql.DB) http.HandlerFunc {
@@ -73,6 +74,7 @@ func GroupsIManageHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			helper.SendResponse(w, groups, http.StatusOK)
+			websocket.BroadcastUserList(db)
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")
