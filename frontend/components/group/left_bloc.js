@@ -153,7 +153,9 @@ export default function LeftBlocGroupPage({ state, handleState }) {
   const [groups, setGroups] = useState();
   const [groupForm, setGroupForm] = useState(false);
   const [nbrNotifChatGroup, setNbrNotifChatGroup] = useState(0);
-  const [nbrNotifFollow, setNbrNotifFollow] = useState(0);
+  const [nbrNotifInvitationGroup, setNbrNotifInvitationGroup] = useState(0);
+
+  const [nbrNotifJoinGroupRequest, setNbrJoinGroupRequest] = useState([]);
   const [socket, setSocket] = useState(null);
 
   const router = useRouter();
@@ -184,13 +186,13 @@ export default function LeftBlocGroupPage({ state, handleState }) {
       if (!_message) return;
       switch (_message.type) {
         case "nbr_notif_join_group_request":
-          if (_message.content && Array.isArray(_message.content)) {
-            const content = _message.content[0];
-            const countJoinReq = content.CountJoinReq;
-            setNbrNotifFollow(countJoinReq);
-          }
+          if (_message.content && _message.content.length > 0)
+            setNbrJoinGroupRequest(_message.content);
           break;
         case "nbr_notif_chat_group":
+          break;
+        case "nbr_notif_group_invitation":
+          setNbrNotifInvitationGroup(_message.content);
           break;
 
         default:
@@ -225,9 +227,14 @@ export default function LeftBlocGroupPage({ state, handleState }) {
         </h4>
         <h4
           onClick={() => handleClick("state4")}
-          className={state.state4 ? styles.active : ""}
+          className={`${styles.imgNew} ${state.state4 ? styles.active : ""}`}
         >
-          <i className="fa-solid fa-wand-sparkles"></i>request groups
+          <span>
+            <i className="fa-solid fa-wand-sparkles"></i>request groups
+          </span>
+          {nbrNotifInvitationGroup > 0 && (
+            <img src="../images/new.png" alt="" />
+          )}
         </h4>
       </div>
       <Link href="" onClick={toggleGroupForm} className={styles.btnNewGroup}>
@@ -239,35 +246,47 @@ export default function LeftBlocGroupPage({ state, handleState }) {
         <Group toggleGroupForm={toggleGroupForm} setGroups={setGroups} />
       )}
       {groups && (
-        <ListGroupManaged group={groups} nbrNotifFollow={nbrNotifFollow} />
+        <ListGroupManaged
+          group={groups}
+          nbrNotifJoinGroupRequest={nbrNotifJoinGroupRequest}
+        />
       )}
     </div>
   );
 }
 
-export function ListGroupManaged({ group, nbrNotifFollow }) {
+export function ListGroupManaged({ group, nbrNotifJoinGroupRequest }) {
   return (
     <div className={styles.listGroupManaged}>
-      {group.map((item, index) => (
-        <div key={index} className={styles.group}>
-          <Link href={`./profilegroup?id=${item.id}`}>
-            <img
-              src={
-                item.avatarpath
-                  ? `data:image/png;base64,${item.avatarpath} `
-                  : defaultImage
-              }
-              alt=""
-            />
-            <span>
-              {item.title}
-              {nbrNotifFollow > 0 && (
-                <span className={styles.notifGroup}>{nbrNotifFollow}+</span>
-              )}
-            </span>
-          </Link>
-        </div>
-      ))}
+      {group &&
+        group.map((item, index) => {
+          // Trouver si le groupe actuel a des notifications de demande de rejointure
+          const hasJoinRequestNotifications = nbrNotifJoinGroupRequest.some(
+            (row) => row.group_id === item.id && row.count_join_request > 0
+          );
+
+          return (
+            <div key={index} className={styles.group}>
+              <Link href={`./profilegroup?id=${item.id}`}>
+                <img
+                  src={
+                    item.avatarpath
+                      ? `data:image/png;base64,${item.avatarpath} `
+                      : defaultImage
+                  }
+                  alt=""
+                />
+                <span>
+                  {item.title}
+                  {hasJoinRequestNotifications && (
+                    <img className={styles.notifJoinGroup} src="../images/new.png" alt="" />
+                  )}
+                </span>
+              </Link>
+            </div>
+          );
+        })}
     </div>
   );
 }
+// <span className={styles.notifGroup}>{nbrNotifFollow}+</span>group_id count_join_request
