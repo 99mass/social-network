@@ -163,7 +163,7 @@ func GroupsIManage(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	// SQL query to get all groups that a user is not a member of and has not received an invitation
 	query := `
-        SELECT g.id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
+        SELECT g.id, g.creator_id, g.title, g.avatarpath, COUNT(m.user_id) as nbr_members
         FROM groups g
         LEFT JOIN group_members m ON g.id = m.group_id AND m.user_id = ?
         LEFT JOIN group_invitations gi ON g.id = gi.group_id AND gi.user_id = ? AND gi.status = 'waiting'
@@ -189,7 +189,7 @@ func GroupsToDiscover(db *sql.DB, userID string) ([]models.GroupInfos, error) {
 	var groups []models.GroupInfos
 	for rows.Next() {
 		var group models.GroupInfos
-		err := rows.Scan(&group.ID, &group.Title, &group.AvatarPath, &group.NbrMembers)
+		err := rows.Scan(&group.ID, &group.CreatorID, &group.Title, &group.AvatarPath, &group.NbrMembers)
 		if err != nil {
 			return nil, err
 		}
@@ -392,18 +392,18 @@ func IsUserGroupCreator(db *sql.DB, userID string, groupID string) (bool, error)
 }
 
 func GetGroupNameByIdPost(db *sql.DB, groupID string) (string, error) {
-    query := `
+	query := `
         SELECT title
         FROM groups
         WHERE id = ?
     `
-    var title string
-    err := db.QueryRow(query, groupID).Scan(&title)
-    if err != nil {
-        if err == sql.ErrNoRows {
-            return "", errors.New("group not found")
-        }
-        return "", err
-    }
-    return title, nil
+	var title string
+	err := db.QueryRow(query, groupID).Scan(&title)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", errors.New("group not found")
+		}
+		return "", err
+	}
+	return title, nil
 }
