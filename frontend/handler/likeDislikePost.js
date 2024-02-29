@@ -1,6 +1,6 @@
 import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
-import { getPostsGroup } from "./getPostsGroup";
+import { getAllGroupPosts, getPostsGroup } from "./getPostsGroup";
 import {
   getPostsUser,
   getPostsUserCreated,
@@ -16,6 +16,7 @@ export const likeDislikePost = async (
   setSpecificPostData,
   groupid,
   setPostsGroup,
+  setAllPostGroup
 ) => {
   const data = {
     post_id: postid,
@@ -39,6 +40,7 @@ export const likeDislikePost = async (
       if (setPostsCreated) getPostsUserCreated(userid, setPostsCreated);
       if (setSpecificPostData) getSpecificPostsUser(postid, setSpecificPostData);
       if (setPostsGroup) getPostsGroup(groupid, setPostsGroup);
+      if (setAllPostGroup) getAllGroupPosts(setAllPostGroup)
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);

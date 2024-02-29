@@ -84,7 +84,7 @@ func AcceptJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "something goes wrong", http.StatusBadRequest)
 				return
 			}
-
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "methode not allowed", http.StatusMethodNotAllowed)
@@ -135,8 +135,10 @@ func RejectJoinGroupRequestHandler(db *sql.DB) http.HandlerFunc {
 				}
 				controller.DeleteNotificationJoinGroupBySender(db, creator, groupeID,sess.UserID.String(), "join_group")
 				websocket.BroadcastUserList(db)
+				
 			}
 			websocket.BroadcastUserList(db)
+			
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "methode not allowedeeee", http.StatusMethodNotAllowed)

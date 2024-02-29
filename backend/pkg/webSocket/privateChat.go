@@ -88,6 +88,7 @@ func HandleMessages(db *sql.DB, conn *websocket.Conn, userID string) {
 
 		}
 		BroadcastUserList(db)
+	
 	}
 }
 

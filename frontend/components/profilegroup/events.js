@@ -5,6 +5,7 @@ import { errorNotification } from "../../utils/sweeAlert";
 import { convertAge } from "../../utils/convert_dates";
 import { AddEvent } from "../../handler/create_event";
 import { ListAllEvents, eventPartipants } from "../../handler/getAllEvents";
+import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function EventLists({ group_id }) {
   const [allevents, setAllEvents] = useState(null);
@@ -61,8 +62,26 @@ export function EventBloc({
   // useEffect(() =>{
     // eventPartipants(isGoing,choseOption,setgoingOp)
   // },[])
- const handlerEventParticipant =(chosen_option)=> {
-  console.log(chosen_option);
+  const [userdata,setuserdata] = useState();
+  // console.log(userdata,"user");
+  // getUserBySession()
+  useEffect(() =>{
+    getUserBySession(setuserdata)
+  },[])
+
+  console.log(userdata?.id,"userid");
+ 
+ const handlerEventParticipant =(chosen_option,user)=> {
+
+  // const data = {
+  //   even_id: eventID,
+  //   user_id :userdata?.id,
+  //   option: chosen_option
+     
+  
+  // }
+  // console.log(data, "data");
+  // console.log(chosen_option);
   eventPartipants(eventID,chosen_option)
  }
   // console.log("Using state",goingOption &&goingOption);
@@ -85,15 +104,15 @@ export function EventBloc({
       <pre>{content}</pre>
       <div>
         
-         {participation_status && participation_status == "Not Going"? <button onClick={()=>handlerEventParticipant("Going")}>
+          <button onClick={()=>handlerEventParticipant("1")}>
             <i className="fa-solid fa-circle-check"></i>Going
             
           </button>
           :
-          <button className={styles.btnNotGoing}>
+          <button className={styles.btnNotGoing} onClick={()=>handlerEventParticipant("0")} >
             <i className="fa-solid fa-circle-check"></i>Not going
           </button>
-          }
+          
         
         <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
           <i className="fa-solid fa-list-check"></i>Guest List
