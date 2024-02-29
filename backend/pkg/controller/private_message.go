@@ -2,6 +2,9 @@ package controller
 
 import (
 	"database/sql"
+	"encoding/base64"
+	"errors"
+	"io/ioutil"
 	"log"
 	"sort"
 	"time"
@@ -161,8 +164,32 @@ func GetRecentDiscussions(db *sql.DB, userID string) ([]models.RecentDiscussion,
 		}
 		discussion.OtherUserNickname = otherUserNickname
 
+		var image string
+		err = db.QueryRow("SELECT avatarpath FROM users WHERE id = ?", discussion.OtherUserID).Scan(&image)
+		if err != nil {
+			return nil, err
+		}
+		if image != "" {
+			image, err = EncodeImageToBase64("./pkg/static/avatarImage/" + image)
+			if err != nil {
+				log.Println("enable to encode image avatar", err.Error())
+
+			}
+		}
+		discussion.ImagePath = image
+
 		discussions = append(discussions, discussion)
 	}
 
 	return discussions, nil
+}
+
+func EncodeImageToBase64(imagePath string) (string, error) {
+	data, err := ioutil.ReadFile(imagePath)
+	if err != nil {
+		return "", errors.New("enable to encode image" + err.Error())
+	}
+
+	encodedData := base64.StdEncoding.EncodeToString(data)
+	return encodedData, nil
 }
