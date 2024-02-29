@@ -55,6 +55,7 @@ func ChatHandler(db *sql.DB) http.HandlerFunc {
 		}
 		log.Println("list of connected users: ", ConnectedUsersList)
 		BroadcastUserList(db)
+		PopupSocket(db)
 		go HandleMessages(db, conn, sess.UserID.String())
 	}
 }
@@ -88,6 +89,7 @@ func HandleMessages(db *sql.DB, conn *websocket.Conn, userID string) {
 
 		}
 		BroadcastUserList(db)
+		PopupSocket(db)
 	}
 }
 
