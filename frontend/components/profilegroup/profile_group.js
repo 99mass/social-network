@@ -27,6 +27,33 @@ export default function Profile_group() {
   const router = useRouter();
   const query = router.query;
 
+  const [socket, setSocket] = useState(null);
+  const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
+
+  useEffect(() => {
+    globalSocket(setSocket);
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.onopen = () => {
+      console.log("socket open profile group ");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      // console.log("data", data);
+      if (data && data.type === "nbr_notif_join_group_request") {
+        setNbrNotifJoinGroupRequest(
+          data.content && data.content[0]?.count_join_request
+        );
+        console.log("==========");
+        console.log(data.content);
+      }
+    };
+  }, [socket]);
+
 
   useEffect(() => {
     if (!datas) {
@@ -289,33 +316,33 @@ export function NavMenuGroup({
   isCreator,
 }) {
 
-  const [socket, setSocket] = useState(null);
-  const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
+  // const [socket, setSocket] = useState(null);
+  // const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
 
-  useEffect(() => {
-    globalSocket(setSocket);
-  }, []);
+  // useEffect(() => {
+  //   globalSocket(setSocket);
+  // }, []);
 
-  useEffect(() => {
-    if (!socket) return;
+  // useEffect(() => {
+  //   if (!socket) return;
 
-    socket.onopen = () => {
-      console.log("socket open profile group ");
-    };
+  //   socket.onopen = () => {
+  //     console.log("socket open profile group ");
+  //   };
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      // console.log("data", data);
-      if (data && data.type === "nbr_notif_join_group_request") {
-        setNbrNotifJoinGroupRequest(
-          data.content && data.content[0]?.count_join_request
-        );
-        console.log("==========");
-        console.log(data.content);
-      }
-    };
-  }, [socket]);
-  
+  //   socket.onmessage = (event) => {
+  //     const data = JSON.parse(event.data);
+  //     // console.log("data", data);
+  //     if (data && data.type === "nbr_notif_join_group_request") {
+  //       setNbrNotifJoinGroupRequest(
+  //         data.content && data.content[0]?.count_join_request
+  //       );
+  //       console.log("==========");
+  //       console.log(data.content);
+  //     }
+  //   };
+  // }, [socket]);
+
   const handleClick = (clickedSection) => {
     const newSection = {
       section1: false,
@@ -368,7 +395,7 @@ export function NavMenuGroup({
           className={section.section6 ? styles.activeBtn : ""}
         >
           <i className="fa-solid fa-right-to-bracket"></i>Join Request{" "}
-          {nbrNotifJoinGroupRequest}
+          {/* {nbrNotifJoinGroupRequest} */}
         </button>
       )}
     </div>
