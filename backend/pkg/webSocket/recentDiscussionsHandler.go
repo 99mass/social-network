@@ -14,13 +14,16 @@ import (
 
 func RecentDiscussionsHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		sess, err := utils.CheckAuthorization(db, w, r)
+		sessid, err := utils.TextToUUID(r.URL.Query().Get("Authorization"))
 		if err != nil {
 			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
-			log.Println("not authorized", err)
 			return
 		}
-
+		sess, err := controller.GetSessionByID(db, sessid)
+		if err != nil {
+			helper.SendResponseError(w, "error", "invalid session", http.StatusBadRequest)
+			return
+		}
 		upgrader := websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool { return true },
 		}
