@@ -16,6 +16,7 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/discussion", websocket.CommunicationHandler(db))
 	http.HandleFunc("/group_chat", websocket.PrivateGroupChat(db))
 	http.HandleFunc("/recent_discussions", websocket.RecentDiscussionsHandler(db))
+	//http.HandleFunc("/recent_discussions", helper.Middleware(handler.RecentDiscussionsHandler(db)))
 
 	//User Actions
 	http.HandleFunc("/register", helper.Middleware(handler.RegisterHandler(db)))
@@ -65,10 +66,10 @@ func Route(db *sql.DB) {
 	http.HandleFunc("/accept_join_group_request", helper.Middleware(handler.AcceptJoinGroupRequestHandler(db)))
 	http.HandleFunc("/reject_join_group_request", helper.Middleware(handler.RejectJoinGroupRequestHandler(db)))
 	http.HandleFunc("/leave_in_group", helper.Middleware(handler.LeaveInGroupHandler(db)))
-	
+
 	// New endpoints
 	http.HandleFunc("/all_groups_posts", helper.Middleware(handler.ShowFeedPost(db)))
-	
+
 	// Events Group
 	http.HandleFunc("/create_events", helper.Middleware(handler.AddGroupEventHandler(db)))
 	http.HandleFunc("/events", helper.Middleware(handler.GetEventsByGroupHandler(db)))

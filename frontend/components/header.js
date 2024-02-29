@@ -58,9 +58,6 @@ export default function Header() {
         case "nbr_notif_message":
           setNbrNotifMessagesPrivate(_message.content);
           break;
-        case "nbr_notif_group_invitation":
-          setNbrNotifGroupInvitation(_message.content);
-          break;
         case "nbr_notif_follow":
           setNbrNotifFollow(_message.content);
           break;
