@@ -182,7 +182,7 @@ export default function LeftBlocGroupPage({ state, handleState }) {
 
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
-      // console.log(_message,"mess");
+      console.log(_message,"mess");
       if (!_message) return;
       switch (_message.type) {
         case "nbr_notif_join_group_request":

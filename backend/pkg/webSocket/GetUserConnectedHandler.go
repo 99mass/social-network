@@ -45,7 +45,7 @@ func BroadcastUserList(db *sql.DB) {
 				res += v.CountJoinReq
 			}
 			nbrGrpJoinReq, _ := controller.GetNotificationCountByType(db, user.UserID, "group_invitation")
-			SendGenResponse("nbr_notif_group_invitation", user.Conn, nbrGrpJoinReq+res)
+			SendGenResponse("nbr_notif_group_invitation", user.Conn, nbrGrpJoinReq)
 			nbrChatGrp, _ := controller.GetNotificationCountByTypeAndSourceID(db, user.UserID, "chat_group")
 			SendGenResponse("nbr_notif_chat_group", user.Conn, nbrChatGrp)
 

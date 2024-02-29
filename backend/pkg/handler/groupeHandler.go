@@ -94,6 +94,7 @@ func GroupsToDiscoverHandler(db *sql.DB) http.HandlerFunc {
 
 			groups, err := controller.GroupsToDiscover(db, sess.UserID.String())
 			if err != nil {
+				log.Println("error", err.Error())
 				helper.SendResponseError(w, "error", "can't load groups", http.StatusInternalServerError)
 				return
 			}

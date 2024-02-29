@@ -230,12 +230,12 @@ export const AcceptJoinGroupRequest = async (userId, group_id, setJoinRequestLis
   }
 };
 
-export const DeclineJoinGroupRequest = async ( group_id, setJoinRequestLists, callback, userId) => {
+export const DeclineJoinGroupRequest = async ( group_id, setJoinRequestLists, callback, userId, creatorid) => {
   try {
     const sessionId = getSessionCookie();
 
     const response = await fetch(
-      `${api.Decline_join_request}?groupid=${group_id}&userid=${userId}`,
+      `${api.Decline_join_request}?groupid=${group_id}&userid=${userId}&creatorid=${creatorid}`,
       {
         method: "POST",
         headers: {
