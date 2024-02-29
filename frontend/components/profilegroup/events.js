@@ -4,7 +4,7 @@ import { AboutGroup } from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
 import { convertAge } from "../../utils/convert_dates";
 import { AddEvent } from "../../handler/create_event";
-import { ListAllEvents } from "../../handler/getAllEvents";
+import { ListAllEvents, eventPartipants } from "../../handler/getAllEvents";
 
 export default function EventLists({ group_id }) {
   const [allevents, setAllEvents] = useState(null);
@@ -14,6 +14,8 @@ export default function EventLists({ group_id }) {
   useEffect(() => {
     ListAllEvents(group_id, setAllEvents);
   }, [])
+
+  
 
   console.log("allevents", allevents && allevents);
 
@@ -31,7 +33,8 @@ export default function EventLists({ group_id }) {
             userBy={item.user.nickname}
             time={item.event.day_time}
             content={item.event.description}
-            isGoing={item.isGoing}
+            eventID={item.event.id}
+            participation_status={item.participation_status}
             toggleListUsers={toggleListUsers}
           />
         ))}
@@ -42,16 +45,27 @@ export default function EventLists({ group_id }) {
   );
 }
 
+
 export function EventBloc({
   nameGroup,
   numberPerson,
   userBy,
   time,
   content,
-  isGoing,
+  eventID,
+  participation_status,
   toggleListUsers
 }) {
 
+  // const [goingOption, setgoingOp]=  useState()
+  // useEffect(() =>{
+    // eventPartipants(isGoing,choseOption,setgoingOp)
+  // },[])
+ const handlerEventParticipant =(chosen_option)=> {
+  console.log(chosen_option,"1 ou 0");
+  eventPartipants(eventID,chosen_option)
+ }
+  // console.log("Using state",goingOption &&goingOption);
   return (
     <div className={styles.eventDetails}>
       <h2>{nameGroup}</h2>
@@ -71,14 +85,15 @@ export function EventBloc({
       <pre>{content}</pre>
       <div>
         
-          <button>
+         {participation_status && participation_status == "Not Going"? <button onClick={()=>handlerEventParticipant("Going")}>
             <i className="fa-solid fa-circle-check"></i>Going
+            
           </button>
-        
+          :
           <button className={styles.btnNotGoing}>
             <i className="fa-solid fa-circle-check"></i>Not going
           </button>
-          
+          }
         
         <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
           <i className="fa-solid fa-list-check"></i>Guest List
