@@ -75,3 +75,28 @@ export const getPostsUserCreated = async (userid, setPostsGroupCreated) => {
     }
   }
 };
+
+
+export const getAllGroupPosts = async (setPostGroups) => {
+  try {
+    const sessionId = getSessionCookie();
+
+    const response = await fetch(`${api.GetAllGroupPosts}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionId,
+      },
+    });
+
+    // Vérifier le statut de la réponse
+    if (!response.ok) {
+      console.error("Failed to fetch PostsUser data");
+    } else {
+      const data = await response.json();
+      setPostGroups(data);
+    }
+  } catch (error) {
+    console.error("Error fetching profile data:", error.message);
+  }
+};

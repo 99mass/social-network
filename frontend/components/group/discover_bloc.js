@@ -15,7 +15,6 @@ export default function DiscoverBloc() {
   const joinGroup = (groudId) => {
     JoingGroupRequestHandler(groudId, null, setGroupDiscover);
   }
-  console.log(groupDiscover, "group disco")
 
   const declineJoinRequestHandler = (groudId, creatorid) => {
     DeclineJoinGroupRequest(groudId,  setGroupDiscover, Groupstodiscover, "" , creatorid);
