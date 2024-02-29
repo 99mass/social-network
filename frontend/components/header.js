@@ -92,7 +92,7 @@ export default function Header() {
     <>
       <nav className={styles.top}>
         <div className={styles.fixed}>
-          <div className={styles.mainHeader}>
+          <div classNasetNotifJoinGroupRequestsetNotifJoinGroupRequestme={styles.mainHeader}>
             <div className={styles.topContent}>
               <Link href="/home">
                 <h2>social-network</h2>
