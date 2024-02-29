@@ -64,7 +64,6 @@ func ShowGroupInvitation(db *sql.DB) http.HandlerFunc {
 			helper.SendResponse(w, groupInf, http.StatusOK)
 			err = controller.DeleteNotificationByUserID(db, sess.UserID.String(), "group_invitation")
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
 			if err != nil {
 				log.Println("error:", err.Error())
 			}

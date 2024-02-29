@@ -75,7 +75,7 @@ func GroupsIManageHandler(db *sql.DB) http.HandlerFunc {
 
 			helper.SendResponse(w, groups, http.StatusOK)
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
+		
 		default:
 			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
 			log.Println("methods not allowed")

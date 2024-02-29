@@ -123,7 +123,6 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 			}
 			helper.SendResponse(w, nil, http.StatusOK)
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
 
 		default:
 			helper.SendResponse(w, models.ErrorResponse{
