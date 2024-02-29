@@ -19,24 +19,7 @@ export function FeedBloc() {
   }, []);
 
   console.log(postGroups, "mes posts du group")
-  const data = [
-    {
-      user: "Lions M ",
-      text: "The Lions 💯 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus minima, quod nulla incidunt illum itaque esse fugit! Aspernatur earum, eaque adipisci facilis mollitia eos exercitationem ex porro, consequatur quibusdam perspiciatis.",
-      imageUrl: "",
-      date: "16m",
-      like: "100k",
-      comment: "2k",
-    },
-    {
-      user: "Lions D ",
-      text: "The Lions D 💯 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus minima, quod nulla incidunt illum itaque esse fugit! Aspernatur earum, eaque adipisci facilis mollitia eos exercitationem ex porro, consequatur quibusdam perspiciatis.",
-      imageUrl: "",
-      date: "26m",
-      like: "90k",
-      comment: "12k",
-    },
-  ];
+  
   const dataComment = [
     {
       user: "alpha",
@@ -129,7 +112,7 @@ export function PostsFeed({ item, dataComment, setPostGroups }) {
               setPostsGroup={setPostGroups}
               groupName={item.group_name}
               groupId={item.group_id}
-              groupAvatarPath=""
+              groupAvatarPath={item.group_avatar_path}
         />
         <PostMiddle
               content={item.post.content}
