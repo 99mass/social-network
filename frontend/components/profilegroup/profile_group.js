@@ -27,32 +27,36 @@ export default function Profile_group() {
   const router = useRouter();
   const query = router.query;
 
-  const [socket, setSocket] = useState(null);
-  const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
+//   const [socket, setSocket] = useState(null);
+//   const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
 
-  useEffect(() => {
-    globalSocket(setSocket);
-  }, []);
+//   useEffect(() => {
+//     globalSocket(setSocket);
+//   }, []);
 
-  useEffect(() => {
-    if (!socket) return;
+//   useEffect(() => {
+//     if (!socket) return;
 
-    socket.onopen = () => {
-      console.log("socket open profile group ");
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log("data 111", data);
-      if (data && data.type === "nbr_notif_join_group_request") {
-        setNbrNotifJoinGroupRequest(
-          data.content && data.content[0]?.count_join_request
-        );
-        console.log("==========");
-        console.log(data.content);
-      }
-    };
-  }, [socket]);
+//     socket.onopen = () => {
+//       console.log("socket open profile group ");
+//     };
+// setInterval(() => {
+  
+// }, 1000);
+//     socket.onmessage = (event) => {
+//       const data = JSON.parse(event.data);
+//       setTimeout(() => {        
+//         console.log("data 111", data);
+//       }, 1000);
+//       if (data && data.type === "nbr_notif_join_group_request") {
+//         // setNbrNotifJoinGroupRequest(
+//         //   data.content && data.content[0]?.count_join_request
+//         // );
+//         console.log("==========");
+//         console.log(data.content);
+//       }
+//     };
+//   }, [socket]);
 
 
   useEffect(() => {

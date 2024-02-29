@@ -36,54 +36,54 @@ export default function Header() {
     getUserBySession(setDatasUser);
     const timer = setTimeout(() => {
       if (!socket || socket.readyState !== WebSocket.OPEN) {
-        // if (router.route !== "/chatpage") globalSocket(setSocket);
+        if (router.route !== "/profilegroup") globalSocket(setSocket);
       }
     }, 800);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // useEffect(() => {
-  //   if (!socket) return;
-  //   socket.onopen = () => {
-  //     console.log("WebSocket opened from header component");
-  //   };
+  useEffect(() => {
+    if (!socket) return;
+    socket.onopen = () => {
+      console.log("WebSocket opened from header component");
+    };
 
-  //   socket.onmessage = (event) => {
-  //     const _message = event.data && JSON.parse(event.data);
-  //     if (!_message) return;
-  //     // console.log(_message);
-  //     switch (_message.type) {
-  //       // old notifications
-  //       case "nbr_notif_message":
-  //         setNbrNotifMessagesPrivate(_message.content);
-  //         break;
-  //       case "nbr_notif_follow":
-  //         setNbrNotifFollow(_message.content);
-  //         break;
-  //       case "total_group_notif":
-  //         setTotalGroupNotif(_message.content);
-  //         break;
+    socket.onmessage = (event) => {
+      const _message = event.data && JSON.parse(event.data);
+      if (!_message) return;
+      // console.log(_message);
+      switch (_message.type) {
+        // old notifications
+        case "nbr_notif_message":
+          if (router.route !== "/chatpage") setNbrNotifMessagesPrivate(_message.content);
+          break;
+        case "nbr_notif_follow":
+          setNbrNotifFollow(_message.content);
+          break;
+        case "total_group_notif":
+          setTotalGroupNotif(_message.content);
+          break;
 
-  //       // now notifications
-  //       case "notif_private_message":
-  //         if (router.route !== "/chatpage") setNotifMessagesPrivate(_message);
-  //         break;
-  //       case "notif_chat_group":
-  //         setNotifMessagesGroup(_message);
-  //         break;
-  //       case "notif_follow_request":
-  //         setNotifFollow(_message);
-  //         break;
-  //       case "notif_group_invitation_request":
-  //         setNotifGroupInvitation(_message);
-  //         break;
-  //       case "notif_join_group_request":
-  //         setNotifJoinGroupRequest(_message);
-  //         break;
-  //     }
-  //   };
-  // }, [socket]);
+        // now notifications
+        case "notif_private_message":
+          if (router.route !== "/chatpage") setNotifMessagesPrivate(_message);
+          break;
+        case "notif_chat_group":
+          setNotifMessagesGroup(_message);
+          break;
+        case "notif_follow_request":
+          setNotifFollow(_message);
+          break;
+        case "notif_group_invitation_request":
+          setNotifGroupInvitation(_message);
+          break;
+        case "notif_join_group_request":
+          setNotifJoinGroupRequest(_message);
+          break;
+      }
+    };
+  }, [socket]);
 
   const togglePostForm = () => setPostFrom((prevState) => !prevState);
   const toggleGroupForm = () => setGroupFrom((prevState) => !prevState);

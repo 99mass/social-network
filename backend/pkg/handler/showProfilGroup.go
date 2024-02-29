@@ -117,6 +117,7 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 			profilGroup.ListMembreGroup = listMember
 
 			websocket.BroadcastUserList(db)
+			websocket.PopupSocket(db)
 			helper.SendResponse(w, profilGroup, http.StatusOK)
 
 		default:

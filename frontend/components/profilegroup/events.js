@@ -61,7 +61,7 @@ export function EventBloc({
   // useEffect(() =>{
     // eventPartipants(isGoing,choseOption,setgoingOp)
   // },[])
- const handlerEventParticipant =(chosen_option)=> {
+ const handlerEventParticipant =(chosen_option,user)=> {
   console.log(chosen_option);
   eventPartipants(eventID,chosen_option)
  }
@@ -85,15 +85,15 @@ export function EventBloc({
       <pre>{content}</pre>
       <div>
         
-         {participation_status && participation_status == "Not Going"? <button onClick={()=>handlerEventParticipant("Going")}>
+          <button onClick={()=>handlerEventParticipant("Going")}>
             <i className="fa-solid fa-circle-check"></i>Going
             
           </button>
           :
-          <button className={styles.btnNotGoing}>
+          <button className={styles.btnNotGoing} onClick={()=>handlerEventParticipant("Not Going")} >
             <i className="fa-solid fa-circle-check"></i>Not going
           </button>
-          }
+          
         
         <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
           <i className="fa-solid fa-list-check"></i>Guest List

@@ -88,6 +88,7 @@ func AddMember(db *sql.DB) http.HandlerFunc {
 					}
 					websocket.NotificationGroupInvitation(db, sess.UserID.String(), addMember.GroupID, userId)
 					websocket.BroadcastUserList(db)
+					websocket.PopupSocket(db)
 				}
 			}
 		default:
