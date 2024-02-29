@@ -17,6 +17,7 @@ export default function Header() {
   const [nbrnotifMessagesPrivate, setNbrNotifMessagesPrivate] = useState(0);
   const [nbrNotifGroupInvitation, setNbrNotifGroupInvitation] = useState(0);
   const [nbrNotifFollow, setNbrNotifFollow] = useState(0);
+  const [totalGroupNotif, settotalGroupNotif] = useState(0);
   const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
   const [notifMessagesGroup, setNotifMessagesGroup] = useState("");
   const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
