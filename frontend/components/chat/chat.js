@@ -99,8 +99,8 @@ export function LastChatWitheAutherUser({ data }) {
             <Link href={`./chatpage?userid=${item.other_user_id}`}>
               <img
                 src={
-                  item.other_user_iamge_path
-                    ? `data:image/png;base64,${item.other_user_iamge_path}`
+                  item.other_user_avatarpath
+                    ? `data:image/png;base64,${item.other_user_avatarpath}`
                     : `../images/user-circle.png`
                 }
                 alt=""
