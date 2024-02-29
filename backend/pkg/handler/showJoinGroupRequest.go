@@ -63,7 +63,6 @@ func ShowJoinGroupRequest(db *sql.DB) http.HandlerFunc {
 			}
 			controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), groupeID, "join_group")
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
 			helper.SendResponse(w, userJoingroupInf, http.StatusOK)
 
 		default:

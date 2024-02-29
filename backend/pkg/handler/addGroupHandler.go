@@ -107,7 +107,7 @@ func AddGroupHandler(db *sql.DB) http.HandlerFunc {
 					}
 					websocket.NotificationGroupInvitation(db,sess.UserID.String(), groupID.String(), userId)
 					websocket.BroadcastUserList(db)
-					websocket.PopupSocket(db)
+					
 				}
 			}
 

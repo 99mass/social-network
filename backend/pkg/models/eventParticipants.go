@@ -7,7 +7,7 @@ type EventParticipants struct {
 }
 
 type ParticipantRequest struct {
-	EvenID string `json:"even_id"`
+	EvenID string `json:"event_id"`
 	UserID string `json:"user_id"`
-	Option int    `json:"option"`
+	Option int    `json:"choosen_option"`
 }
