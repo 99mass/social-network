@@ -179,10 +179,20 @@ func FitPostRequest(db *sql.DB, w http.ResponseWriter, post models.Post, Connect
 		return models.Post_Request{}, err
 	}
 
-	groupeName, err := controller.GetGroupNameByIdPost(db, post.GroupID)
+	groupeName, avatarPath, err := controller.GetGroupNameByIdPost(db, post.GroupID)
 	if err != nil {
 		helper.SendResponseError(w, "error", "error getting group name", http.StatusInternalServerError)
 		return models.Post_Request{}, err
+	}
+
+	if strings.TrimSpace(avatarPath) != "" {
+		PostReq.GroupAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + avatarPath)
+		if err != nil {
+			user.AvatarPath = "default.png"
+			// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
+			log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
+			// return
+		}
 	}
 	PostReq.NbrLikes = nbrLikes
 	PostReq.NbrComments = nbrComments
