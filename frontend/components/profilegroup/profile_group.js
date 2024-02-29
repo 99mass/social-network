@@ -19,6 +19,7 @@ import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 import JoinRequestGroup from "./joinGroupRequest";
 import { ErrorProfile } from "../errors/error_profiles";
 import { globalSocket } from "../websocket/globalSocket";
+import { ToastNotification } from "../header";
 
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
@@ -26,34 +27,6 @@ export default function Profile_group() {
   const [postGroup, setPostsGroup] = useState(null);
   const router = useRouter();
   const query = router.query;
-
-  const [socket, setSocket] = useState(null);
-  const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
-
-  useEffect(() => {
-    globalSocket(setSocket);
-  }, []);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.onopen = () => {
-      console.log("socket open profile group ");
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      // console.log("data", data);
-      if (data && data.type === "nbr_notif_join_group_request") {
-        setNbrNotifJoinGroupRequest(
-          data.content && data.content[0]?.count_join_request
-        );
-        console.log("==========");
-        console.log(data.content);
-      }
-    };
-  }, [socket]);
-
 
   useEffect(() => {
     if (!datas) {
@@ -310,38 +283,47 @@ export function ContentCovertPhotoGroup({
   );
 }
 
-export function NavMenuGroup({
-  section,
-  handleSection,
-  isCreator,
-}) {
+export function NavMenuGroup({ section, handleSection, isCreator }) {
+  const [socket, setSocket] = useState(null);
+  const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
+  const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
 
-  // const [socket, setSocket] = useState(null);
-  // const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
+        globalSocket(setSocket);
+      }
+    }, 1000);
 
-  // useEffect(() => {
-  //   globalSocket(setSocket);
-  // }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
-  // useEffect(() => {
-  //   if (!socket) return;
+  useEffect(() => {
+    if (!socket) return;
 
-  //   socket.onopen = () => {
-  //     console.log("socket open profile group ");
-  //   };
+    socket.onopen = () => {
+      console.log("socket open profile group ");
+    };
 
-  //   socket.onmessage = (event) => {
-  //     const data = JSON.parse(event.data);
-  //     // console.log("data", data);
-  //     if (data && data.type === "nbr_notif_join_group_request") {
-  //       setNbrNotifJoinGroupRequest(
-  //         data.content && data.content[0]?.count_join_request
-  //       );
-  //       console.log("==========");
-  //       console.log(data.content);
-  //     }
-  //   };
-  // }, [socket]);
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      switch (data.type) {
+        case "nbr_notif_join_group_request":
+          setNbrNotifJoinGroupRequest(
+            data.content && data.content[0]?.count_join_request
+          );
+          break;
+        case "notif_join_group_request":
+          setNotifJoinGroupRequest(data);
+          console.log(data.content);
+          break;
+
+        default:
+          break;
+      }
+    };
+  }, [socket]);
 
   const handleClick = (clickedSection) => {
     const newSection = {
@@ -357,48 +339,59 @@ export function NavMenuGroup({
   };
 
   return (
-    <div className={styles.navBlocLeft}>
-      <button
-        onClick={() => handleClick("section1")}
-        className={section.section1 ? styles.activeBtn : ""}
-      >
-        <i className="fa-solid fa-signs-post"></i>Discussion
-      </button>
-      <button
-        onClick={() => handleClick("section2")}
-        className={section.section2 ? styles.activeBtn : ""}
-      >
-        <i className="fa-solid fa-plus"></i>Add post
-      </button>
-      <button
-        onClick={() => handleClick("section3")}
-        className={section.section3 ? styles.activeBtn : ""}
-      >
-        <i className="fa-brands fa-elementor"></i>Events
-      </button>
-      <button
-        onClick={() => handleClick("section5")}
-        className={section.section5 ? styles.activeBtn : ""}
-      >
-        <i className="fa-solid fa-plus"></i>Add Event
-      </button>
-      <button
-        onClick={() => handleClick("section4")}
-        className={section.section4 ? styles.activeBtn : ""}
-      >
-        <i className="fa-solid fa-comment"></i>chat
-      </button>
-
-      {isCreator && (
+    <>
+      <div className={styles.navBlocLeft}>
         <button
-          onClick={() => handleClick("section6")}
-          className={section.section6 ? styles.activeBtn : ""}
+          onClick={() => handleClick("section1")}
+          className={section.section1 ? styles.activeBtn : ""}
         >
-          <i className="fa-solid fa-right-to-bracket"></i>Join Request{" "}
-          {/* {nbrNotifJoinGroupRequest} */}
+          <i className="fa-solid fa-signs-post"></i>Discussion
         </button>
+        <button
+          onClick={() => handleClick("section2")}
+          className={section.section2 ? styles.activeBtn : ""}
+        >
+          <i className="fa-solid fa-plus"></i>Add post
+        </button>
+        <button
+          onClick={() => handleClick("section3")}
+          className={section.section3 ? styles.activeBtn : ""}
+        >
+          <i className="fa-brands fa-elementor"></i>Events
+        </button>
+        <button
+          onClick={() => handleClick("section5")}
+          className={section.section5 ? styles.activeBtn : ""}
+        >
+          <i className="fa-solid fa-plus"></i>Add Event
+        </button>
+        <button
+          onClick={() => handleClick("section4")}
+          className={section.section4 ? styles.activeBtn : ""}
+        >
+          <i className="fa-solid fa-comment"></i>chat
+        </button>
+
+        {isCreator && (
+          <button
+            onClick={() => handleClick("section6")}
+            className={section.section6 ? styles.activeBtn : ""}
+          >
+            <i className="fa-solid fa-right-to-bracket"></i>Join Request{" "}
+            {nbrNotifJoinGroupRequest}
+          </button>
+        )}
+      </div>
+      {notifJoinGroupRequest && (
+        <ToastNotification
+          type={notifJoinGroupRequest.type.replaceAll("_", " ") + " !"}
+          text={"requests permission to be a member of your group"}
+          sender={notifJoinGroupRequest.content.sender}
+          group={notifJoinGroupRequest.content.group}
+          setCloseState={setNotifJoinGroupRequest}
+        />
       )}
-    </div>
+    </>
   );
 }
 

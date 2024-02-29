@@ -10,7 +10,7 @@ export default function MidlleBloc({ posts, setPosts }) {
   useEffect(() => {
     getPostsUser(setPosts);
   }, []);
- 
+  
   return (
     <div className="menu-middle">
       {posts ? (

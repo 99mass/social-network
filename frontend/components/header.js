@@ -15,7 +15,6 @@ export default function Header() {
   const [groupForm, setGroupFrom] = useState(false);
   const [socket, setSocket] = useState(null);
   const [nbrnotifMessagesPrivate, setNbrNotifMessagesPrivate] = useState(0);
-  const [nbrNotifGroupInvitation, setNbrNotifGroupInvitation] = useState(0);
   const [nbrNotifFollow, setNbrNotifFollow] = useState(0);
   const [totalGroupNotif, setTotalGroupNotif] = useState(0);
   const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
@@ -36,7 +35,7 @@ export default function Header() {
     getUserBySession(setDatasUser);
     const timer = setTimeout(() => {
       if (!socket || socket.readyState !== WebSocket.OPEN) {
-        if (router.route !== "/chatpage") globalSocket(setSocket);
+        globalSocket(setSocket);
       }
     }, 800);
 
@@ -52,11 +51,12 @@ export default function Header() {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      // console.log(_message);
+
       switch (_message.type) {
         // old notifications
         case "nbr_notif_message":
-          setNbrNotifMessagesPrivate(_message.content);
+          if (router.route !== "/chatpage")
+            setNbrNotifMessagesPrivate(_message.content);
           break;
         case "nbr_notif_follow":
           setNbrNotifFollow(_message.content);
@@ -280,7 +280,13 @@ export function ToggleButton({
   );
 }
 
-function ToastNotification({ type, text, sender, group, setCloseState }) {
+export function ToastNotification({
+  type,
+  text,
+  sender,
+  group,
+  setCloseState,
+}) {
   const closeToast = () => setCloseState("");
   return (
     <div className={styles.card}>

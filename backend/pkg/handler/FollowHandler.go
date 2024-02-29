@@ -40,7 +40,7 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			}
 			websocket.NotificationFollowRequest(db, sess.UserID.String(), "", userid.String())
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
+		
 			helper.SendResponse(w, nil, http.StatusOK)
 		case http.MethodPut:
 			// Appelez la fonction de contrôleur pour suivre l'utilisateur
@@ -52,7 +52,7 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			}
 			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
+			
 			helper.SendResponse(w, nil, http.StatusOK)
 		case http.MethodDelete:
 			// Appelez la fonction de contrôleur pour supprimer le follow
@@ -64,7 +64,7 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			}
 			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
+			
 			helper.SendResponse(w, nil, http.StatusOK)
 
 		default:
@@ -101,7 +101,7 @@ func UnfollowUser(db *sql.DB) http.HandlerFunc {
 
 			controller.DeleteNotificationBySenderAndUser(db, sess.UserID.String(), userid.String(), "follow_request")
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
+		
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
@@ -136,7 +136,7 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 			}
 			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
 			websocket.BroadcastUserList(db)
-			websocket.PopupSocket(db)
+			
 			helper.SendResponse(w, followers, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)

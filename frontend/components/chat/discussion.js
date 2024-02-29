@@ -11,6 +11,7 @@ import EmojiForm from "../emoji/emoji";
 import { errorNotification } from "../../utils/sweeAlert";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { getDatasAutherUserInfos } from "../../handler/getAutherUserInfos";
+import { ToastNotification } from "../header";
 
 export default function DiscussionPage() {
   const [datasUser, setDatasUser] = useState(null);
@@ -20,8 +21,11 @@ export default function DiscussionPage() {
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [socket, setSocket] = useState(null);
   const [socketDiscussion, setSocketDiscussion] = useState(null);
-  const [messages, setMessages] = useState(null);
   const [discussions, setDiscussions] = useState([]);
+  const [notifMessagesGroup, setNotifMessagesGroup] = useState("");
+  const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
+  const [notifFollow, setNotifFollow] = useState("");
+  const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
   const [error, setError] = useState(false);
 
   const router = useRouter();
@@ -56,8 +60,22 @@ export default function DiscussionPage() {
         errorNotification(_message.content);
       }
       if (_message && _message.type === "message") {
-        setMessages(_message.content);
         allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les anciennes messages
+      }
+      switch (_message.type) {
+        // now notifications
+        case "notif_chat_group":
+          setNotifMessagesGroup(_message);
+          break;
+        case "notif_follow_request":
+          setNotifFollow(_message);
+          break;
+        case "notif_group_invitation_request":
+          setNotifGroupInvitation(_message);
+          break;
+        case "notif_join_group_request":
+          setNotifJoinGroupRequest(_message);
+          break;
       }
     };
   }, [socket]);
@@ -168,6 +186,43 @@ export default function DiscussionPage() {
         <EmojiForm
           toggleEmojicon={toggleEmojicon}
           setSelectedEmoji={setSelectedEmoji}
+        />
+      )}
+
+      {notifJoinGroupRequest && (
+        <ToastNotification
+          type={notifJoinGroupRequest.type.replaceAll("_", " ") + " !"}
+          text={"requests permission to be a member of your group"}
+          sender={notifJoinGroupRequest.content.sender}
+          group={notifJoinGroupRequest.content.group}
+          setCloseState={setNotifJoinGroupRequest}
+        />
+      )}
+      {notifGroupInvitation && (
+        <ToastNotification
+          type={notifGroupInvitation.type.replaceAll("_", " ") + " !"}
+          text={"invites you to join the group"}
+          sender={notifGroupInvitation.content.sender}
+          group={notifGroupInvitation.content.group}
+          setCloseState={setNotifGroupInvitation}
+        />
+      )}
+      {notifFollow && (
+        <ToastNotification
+          type={notifFollow.type.replaceAll("_", " ") + " !"}
+          text={"has just sent you a friend request"}
+          sender={notifFollow.content.sender}
+          group={""}
+          setCloseState={setNotifFollow}
+        />
+      )}
+      {notifMessagesGroup && (
+        <ToastNotification
+          type={notifMessagesGroup.type.replaceAll("_", " ") + " !"}
+          text={"has just sent a message in the group"}
+          sender={notifMessagesGroup.content.sender}
+          group={notifMessagesGroup.content.group}
+          setCloseState={setNotifMessagesGroup}
         />
       )}
     </>
