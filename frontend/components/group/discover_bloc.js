@@ -15,9 +15,10 @@ export default function DiscoverBloc() {
   const joinGroup = (groudId) => {
     JoingGroupRequestHandler(groudId, null, setGroupDiscover);
   }
+  console.log(groupDiscover, "group disco")
 
-  const declineJoinRequestHandler = (groudId) => {
-    DeclineJoinGroupRequest(groudId,  setGroupDiscover, Groupstodiscover, "" );
+  const declineJoinRequestHandler = (groudId, creatorid) => {
+    DeclineJoinGroupRequest(groudId,  setGroupDiscover, Groupstodiscover, "" , creatorid);
   }
 
   return (
@@ -35,6 +36,7 @@ export default function DiscoverBloc() {
               isJoinGroup={item.is_join_request}
               joinGroup={joinGroup}
               declineJoinRequestHandler={declineJoinRequestHandler}
+              creatorid={item.creator_id}
             />
           ))}
         </div>
@@ -43,7 +45,7 @@ export default function DiscoverBloc() {
   );
 }
 
-export function GoupFace({ image, gName, nMembres, groudId, joinGroup,isJoinGroup, declineJoinRequestHandler }) {
+export function GoupFace({ image, gName, nMembres, groudId, joinGroup,isJoinGroup, declineJoinRequestHandler, creatorid }) {
 
   return (
     <div className={styles.postSugess}>
@@ -67,7 +69,7 @@ export function GoupFace({ image, gName, nMembres, groudId, joinGroup,isJoinGrou
             
             <button 
               style={{ background: '#c43a33' }} 
-              onClick={() => declineJoinRequestHandler(groudId)} 
+              onClick={() => declineJoinRequestHandler(groudId, creatorid)} 
             >
                <i className="fa-solid fa-trash"></i> waiting
             </button>

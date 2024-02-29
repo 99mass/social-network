@@ -17,6 +17,7 @@ type GroupInfos struct {
 	Description       string `db:"description" json:"description"`
 	IsMembers         bool   `json:"is_member"`
 	IsJoinRequestSend bool   `json:"is_join_request"`
+	CreatorID         string `db:"creator_id" json:"creator_id"`
 }
 
 type UsersNoInGroup struct {
