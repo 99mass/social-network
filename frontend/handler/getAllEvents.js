@@ -65,9 +65,9 @@ export const ListAllEvents = async (groupId, setAllEvents) => {
 export const eventPartipants = async (event_id, choosen_option, setDatas) => {
     try {
         const sessionId = getSessionCookie();
-        console.log("Sending data:", data); // Log the data being sent
+        // console.log("Sending data:", data); // Log the data being sent
         const response = await fetch(`${api.Create_participants_event}?even_id=${event_id}&chosen_option${choosen_option}`, {
-            method: "POST",
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: sessionId,
