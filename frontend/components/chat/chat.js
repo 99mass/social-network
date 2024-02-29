@@ -29,7 +29,6 @@ export default function ListUser() {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
       if (data.type === "users_list") {
         setFriendsOnLine(data.content);
       }
@@ -44,7 +43,7 @@ export default function ListUser() {
 
     socketRecentDiscussion.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
-      console.log("old", _message);
+      // console.log("old", _message);
       if (_message) {
         setMessagesLists(_message);
       }

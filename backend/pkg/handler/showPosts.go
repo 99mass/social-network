@@ -98,9 +98,28 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 					log.Println("error counting comments for the post:", err.Error())
 					return
 				}
+				log.Println("group_id:", post.GroupID)
+				groupName, avatarPath, err := controller.GetGroupNameByIdPost(db, post.GroupID)
+				if err != nil {
+					log.Println("error getting group name", err.Error())
+					helper.SendResponseError(w, "error", "error getting group name", http.StatusInternalServerError)
+					return
+				}
+
+				if strings.TrimSpace(avatarPath) != "" {
+					Post.GroupAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + avatarPath)
+					if err != nil {
+						user.AvatarPath = "default.png"
+						// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
+						log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
+						// return
+					}
+				}
 
 				Post.NbrLikes = nbrLikes
 				Post.NbrComments = nbrComments
+				Post.GroupID = post.GroupID
+				Post.GroupName = groupName
 
 				Posts = append(Posts, Post)
 			}
@@ -150,11 +169,11 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 						user.AvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
 						if err != nil {
 							log.Println("enable to encode image user", err)
-							
+
 						}
 					}
 					postToShow.User = user
-					
+
 					// Itère sur chaque post et récupère le statut du like
 					isLiked, err := controller.IsPostLikedByUser(db, sess.UserID.String(), post.ID)
 					if err != nil {

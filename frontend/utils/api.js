@@ -37,6 +37,7 @@ export const api = {
   Create_events: `${domain}/create_events`,
   GetEvents: `${domain}/events`,
   GetPostsGroup: `${domain}/show_posts_group`,
+  GetAllGroupPosts: `${domain}/all_groups_posts`,
   JoinGroupRequest: `${domain}/join_group_request`,
   GetJoinGroupRequest:`${domain}/show_join_group_request`,
   Accept_join_request:`${domain}/accept_join_group_request`,
