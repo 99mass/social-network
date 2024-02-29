@@ -216,17 +216,12 @@ func GetNonGroupFollowers(db *sql.DB, userID uuid.UUID, groupId string) ([]model
 
 		isInvitationSend, errr := IsInvitationSend(db, groupId, user.ID)
 		ismember, err := IsMember(db, user.ID, groupId)
-
-		if err != nil || errr != nil {
+		isJoinRequestSend, err1 := IsJoinRequestSend(db, user.ID, groupId)
+		if err != nil || errr != nil || err1 != nil {
 			return nil, err
 		}
-		// isUserSenderInvitation, err := IsSenderInvitationGroup(db, userID.String(), user.ID, groupId)
-		// if err != nil {
-		// 	return nil, err
-		// }
-		// fmt.Println(isUserSenderInvitation, "le sender")
 
-		if !isInvitationSend && !ismember {
+		if !isInvitationSend && !ismember && !isJoinRequestSend {
 			_userNot := models.UsersNoInGroup{User: user, IsInvited: false, IsUserSenderInvitation: false}
 			unfollowuser = append(unfollowuser, _userNot)
 		} else if isInvitationSend {
@@ -392,18 +387,18 @@ func IsUserGroupCreator(db *sql.DB, userID string, groupID string) (bool, error)
 }
 
 func GetGroupNameByIdPost(db *sql.DB, groupID string) (string, error) {
-    query := `
+	query := `
         SELECT title
         FROM groups
         WHERE id = ?
     `
-    var title string
-    err := db.QueryRow(query, groupID).Scan(&title)
-    if err != nil {
-        if err == sql.ErrNoRows {
-            return "", errors.New("group not found")
-        }
-        return "", err
-    }
-    return title, nil
+	var title string
+	err := db.QueryRow(query, groupID).Scan(&title)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", errors.New("group not found")
+		}
+		return "", err
+	}
+	return title, nil
 }
