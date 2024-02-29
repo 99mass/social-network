@@ -29,7 +29,7 @@ export function allDiscussionGroupPrivateSocket(
 }
 
 export function recentDiscussionsSocket(setSocketRecentDiscussion) {
-  // recent_discussions
+
   const sessionId = getSessionCookie();
   const recentDiscussions = new WebSocket(
     `${domainSocket}/recent_discussions?Authorization=${sessionId}`
