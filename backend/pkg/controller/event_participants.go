@@ -76,7 +76,7 @@ func GetParticipantStatus(db *sql.DB, eventID, userID string) (int, error) {
 func UpdateParticipantStatus(db *sql.DB, eventID, userID string, option int) error {
 	query :=`
 		UPDATE event_participants 
-		SET choosen_option= ? 
+		SET choosen_option = ? 
 		WHERE event_id = ? AND user_id = ?
 	`
 	_, err := db.Exec(query, option, eventID, userID)
