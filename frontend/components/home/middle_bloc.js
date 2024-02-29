@@ -10,7 +10,7 @@ export default function MidlleBloc({ posts, setPosts }) {
   useEffect(() => {
     getPostsUser(setPosts);
   }, []);
-
+  console.log(posts, "les post")
   return (
     <div className="menu-middle">
       {posts ? (
@@ -21,6 +21,8 @@ export default function MidlleBloc({ posts, setPosts }) {
               user={item.user.firstname}
               image={item.user.avatarpath}
               isfollowed={item.is_followed}
+              groupName= {item.group_name}
+              groupAvatarPath= {item.group_avatar_path}
               time={`${getElapsedTime(item.post.created_at).value} ${
                 getElapsedTime(item.post.created_at).unit
               }`}

@@ -11,12 +11,13 @@ type Post struct {
 }
 
 type Post_Request struct {
-	Post        Post   `json:"post"`
-	User        User   `json:"user"`
-	IsFollowed  string `json:"is_followed"`
-	IsLiked     bool   `json:"is_liked"`
-	NbrLikes    int    `json:"nbr_likes"`
-	NbrComments int    `json:"nbr_comments"`
-	GroupName   string `json:"group_name"`
-	GroupID     string `json:"group_id"`
+	Post            Post   `json:"post"`
+	User            User   `json:"user"`
+	IsFollowed      string `json:"is_followed"`
+	IsLiked         bool   `json:"is_liked"`
+	NbrLikes        int    `json:"nbr_likes"`
+	NbrComments     int    `json:"nbr_comments"`
+	GroupName       string `json:"group_name"`
+	GroupID         string `json:"group_id"`
+	GroupAvatarPath string `json:"group_avatar_path"`
 }
