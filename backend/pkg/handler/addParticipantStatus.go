@@ -3,6 +3,7 @@ package handler
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"backend/pkg/controller"
@@ -21,6 +22,7 @@ func AddEventParticipantHandler(db *sql.DB) http.HandlerFunc {
 		// Extraire l'ID de l'événement et le statut de participation de la requête
 		eventID := r.URL.Query().Get("event_id")
 		participantStatus := r.URL.Query().Get("chosen_option")
+		fmt.Println(participantStatus, eventID)
 
 		// Convertir le statut de participation en int (1 pour Going,   0 pour Not Going)
 		var status int
