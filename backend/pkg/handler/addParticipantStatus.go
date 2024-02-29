@@ -2,7 +2,6 @@ package handler
 
 import (
 	"database/sql"
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -16,20 +15,10 @@ func AddEventParticipantHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:
-			// Extraire l'ID de l'utilisateur de la session
+			// Assurez-vous que l'utilisateur est authentifié et récupérez son ID
 			sess, err := utils.CheckAuthorization(db, w, r)
 			if err != nil {
 				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
-				return
-			}
-
-			var reqPart models.ParticipantRequest
-			err = json.NewDecoder(r.Body).Decode(&reqPart)
-			if err != nil {
-				helper.SendResponse(w, models.ErrorResponse{
-					Status:  "error",
-					Message: "incorrect request",
-				}, http.StatusBadRequest)
 				return
 			}
 
@@ -45,21 +34,16 @@ func AddEventParticipantHandler(db *sql.DB) http.HandlerFunc {
 				status = 0
 			}
 
-			reqPart.EvenID = eventID
-			reqPart.Option = status
-
-			//userID := r.URL.Query().Get("user_id")
-
 			// Vérifier si l'utilisateur a déjà un statut de participation pour cet événement
-			existingStatus, err := controller.GetParticipantStatus(db, reqPart.EvenID, sess.UserID.String())
+			existingStatus, err := controller.GetParticipantStatus(db, eventID, sess.UserID.String())
 			if err != nil && !errors.Is(err, sql.ErrNoRows) {
 				helper.SendResponseError(w, "error", "Failed to check participation status", http.StatusInternalServerError)
 				return
 			}
 
 			// Si l'utilisateur a déjà un statut de participation, mettre à jour
-			if existingStatus == 0 {
-				err = controller.UpdateParticipantStatus(db, reqPart.EvenID, sess.UserID.String(), reqPart.Option)
+			if existingStatus != 0 {
+				err = controller.UpdateParticipantStatus(db, eventID, sess.UserID.String(), status)
 				if err != nil {
 					helper.SendResponseError(w, "error", "Failed to update participation status", http.StatusInternalServerError)
 					return
@@ -67,9 +51,9 @@ func AddEventParticipantHandler(db *sql.DB) http.HandlerFunc {
 			} else {
 				// Sinon, créer une nouvelle participation
 				participant := models.EventParticipants{
-					EventID: reqPart.EvenID,
+					EventID: eventID,
 					UserID:  sess.UserID.String(),
-					Option:  reqPart.Option,
+					Option:  status,
 				}
 				err = controller.CreateParticipantStatus(db, participant)
 				if err != nil {

@@ -12,9 +12,9 @@ import { getElapsedTime } from "../../utils/convert_dates";
 export function FeedBloc() {
 
 
-  const [postGroups, setPostGroups] = useState(null);
+  const [postGroups, setAllPostGroup] = useState(null);
   useEffect(() => {
-    getAllGroupPosts(setPostGroups);
+    getAllGroupPosts(setAllPostGroup);
   }, []);
 
   console.log(postGroups, "mes posts du group")
@@ -25,7 +25,7 @@ export function FeedBloc() {
       {postGroups ? (
         postGroups.map((item, index) => (
             <div key={index} className={`${styles.contenPost} _contenPost`}>
-              <PostsFeed item={item}  setPostGroups={setPostGroups}/>
+              <PostsFeed item={item}  setAllPostGroup={setAllPostGroup}/>
             </div>
         ))
       ) : (
@@ -42,7 +42,7 @@ export function FeedBloc() {
   );
 }
 
-export function PostsFeed({ item, setPostGroups }) {
+export function PostsFeed({ item, setAllPostGroup }) {
   return (
     <div className="post">
        <PostHeader
@@ -53,9 +53,8 @@ export function PostsFeed({ item, setPostGroups }) {
               time={`${getElapsedTime(item.post.created_at).value} ${
                 getElapsedTime(item.post.created_at).unit
               }`}
-              setPosts=""
               groupid={item.group_id}
-              setPostsGroup={setPostGroups}
+              setAllPostGroup={setAllPostGroup}
               groupName={item.group_name}
               groupId={item.group_id}
               groupAvatarPath={item.group_avatar_path}
@@ -71,7 +70,7 @@ export function PostsFeed({ item, setPostGroups }) {
               numberComment={item.nbr_comments}
               userid={item.user.id}
               postid={item.post.id}
-              setPosts={setPostGroups}
+              setAllPostGroup={setAllPostGroup}
         />
   
     </div>
