@@ -127,7 +127,10 @@ func getNbrUnreadMessage(db *sql.DB, userID, senderID string) (int, error) {
 func GetRecentDiscussions(db *sql.DB, userID string) ([]models.RecentDiscussion, error) {
 	query := `
 		SELECT 
-			CASE WHEN sender_id = ? THEN recipient_id ELSE sender_id END AS other_user_id,
+			CASE 
+				WHEN sender_id = ? THEN recipient_id 
+				ELSE sender_id 
+			END AS other_user_id,
 			MAX(created_at) AS last_message_time,
 			content AS last_message_content
 		FROM private_messages
@@ -149,6 +152,15 @@ func GetRecentDiscussions(db *sql.DB, userID string) ([]models.RecentDiscussion,
 		if err != nil {
 			return nil, err
 		}
+
+		// Récupérer le surnom de l'utilisateur à partir de la table des utilisateurs
+		var otherUserNickname string
+		err = db.QueryRow("SELECT nickname FROM users WHERE id = ?", discussion.OtherUserID).Scan(&otherUserNickname)
+		if err != nil {
+			return nil, err
+		}
+		discussion.OtherUserNickname = otherUserNickname
+
 		discussions = append(discussions, discussion)
 	}
 
