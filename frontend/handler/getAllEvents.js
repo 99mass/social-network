@@ -62,23 +62,23 @@ export const ListAllEvents = async (groupId, setAllEvents) => {
     
 // };
 
-export const eventPartipants = async (data, setDatas) => {
+export const eventPartipants = async (event_id, choosen_option, setDatas) => {
     try {
         const sessionId = getSessionCookie();
         console.log("Sending data:", data); // Log the data being sent
-        const response = await fetch(`${api.Create_participants_event}`, {
+        const response = await fetch(`${api.Create_participants_event}?even_id=${event_id}&chosen_option${choosen_option}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: sessionId,
             },
-            body: JSON.stringify(data)
+            // body: JSON.stringify(data)
         });
 
         if (response.ok) {
             const data = await response.json();
             console.log(data, "OptionGo");
-            setDatas(data);
+            // setDatas(data);
         } else {
             const errorData = await response.json();
             console.error('Errorsss', errorData.message);

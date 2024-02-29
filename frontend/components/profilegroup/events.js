@@ -73,15 +73,16 @@ export function EventBloc({
  
  const handlerEventParticipant =(chosen_option,user)=> {
 
-  const data = {
-    even_id: eventID,
-    user_id :userdata?.id,
-    option: chosen_option
+  // const data = {
+  //   even_id: eventID,
+  //   user_id :userdata?.id,
+  //   option: chosen_option
      
   
-  }
+  // }
+  // console.log(data, "data");
   // console.log(chosen_option);
-  eventPartipants(data)
+  eventPartipants(eventID,chosen_option)
  }
   // console.log("Using state",goingOption &&goingOption);
   return (
