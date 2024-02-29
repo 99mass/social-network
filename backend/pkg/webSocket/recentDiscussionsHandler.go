@@ -12,12 +12,12 @@ import (
 	"backend/pkg/utils"
 )
 
+// RecentDiscussionsHandler est le handler pour obtenir les discussions récentes d'un utilisateur.
 func RecentDiscussionsHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sess, err := utils.CheckAuthorization(db, w, r)
 		if err != nil {
 			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
-			log.Println("not authorized", err)
 			return
 		}
 
