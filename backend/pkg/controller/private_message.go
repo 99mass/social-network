@@ -1,13 +1,14 @@
 package controller
 
 import (
-	"backend/pkg/models"
 	"database/sql"
 	"log"
 	"sort"
 	"time"
 
 	"github.com/gofrs/uuid"
+
+	"backend/pkg/models"
 )
 
 func CreateMessage(db *sql.DB, message models.PrivateMessages) (uuid.UUID, error) {
@@ -119,4 +120,37 @@ func getNbrUnreadMessage(db *sql.DB, userID, senderID string) (int, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+// GetRecentDiscussions retourne la liste des utilisateurs avec lesquels un utilisateur a discuté récemment,
+// ainsi que le dernier message pour chaque discussion.
+func GetRecentDiscussions(db *sql.DB, userID string) ([]models.RecentDiscussion, error) {
+	query := `
+		SELECT 
+			CASE WHEN sender_id = ? THEN recipient_id ELSE sender_id END AS other_user_id,
+			MAX(created_at) AS last_message_time,
+			content AS last_message_content
+		FROM private_messages
+		WHERE sender_id = ? OR recipient_id = ?
+		GROUP BY other_user_id
+		ORDER BY last_message_time DESC;
+	`
+
+	rows, err := db.Query(query, userID, userID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var discussions []models.RecentDiscussion
+	for rows.Next() {
+		var discussion models.RecentDiscussion
+		err := rows.Scan(&discussion.OtherUserID, &discussion.LastMessageTime, &discussion.LastMessageContent)
+		if err != nil {
+			return nil, err
+		}
+		discussions = append(discussions, discussion)
+	}
+
+	return discussions, nil
 }

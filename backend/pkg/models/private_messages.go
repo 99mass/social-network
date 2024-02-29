@@ -8,3 +8,9 @@ type PrivateMessages struct {
 	Content     string `db:"content" json:"content"`
 	CreatedAt   string `db:"created_at" json:"created_at"`
 }
+
+type RecentDiscussion struct {
+	OtherUserID        string    `json:"other_user_id"`
+	LastMessageTime    string `json:"last_message_time"`
+	LastMessageContent string    `json:"last_message_content"`
+}
