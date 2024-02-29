@@ -116,7 +116,6 @@ func ProfilGroupHandler(db *sql.DB) http.HandlerFunc {
 			profilGroup.UsersNotInGroup = userNotInGroup
 			profilGroup.ListMembreGroup = listMember
 
-			controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), groupId.String(), "join_group")
 			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, profilGroup, http.StatusOK)
 

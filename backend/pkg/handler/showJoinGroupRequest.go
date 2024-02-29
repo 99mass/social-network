@@ -4,6 +4,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/models"
+	websocket "backend/pkg/webSocket"
 	"database/sql"
 	"fmt"
 	"log"
@@ -60,7 +61,8 @@ func ShowJoinGroupRequest(db *sql.DB) http.HandlerFunc {
 				}
 
 			}
-
+			controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), groupeID, "join_group")
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, userJoingroupInf, http.StatusOK)
 
 		default:

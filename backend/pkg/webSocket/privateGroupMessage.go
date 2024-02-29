@@ -50,6 +50,8 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			helper.SendResponseError(w, "error", "invalid id group", http.StatusBadRequest)
 			return
 		}
+		controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), idGroup, "join_group")
+		BroadcastUserList(db)
 		upgrader := websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool { return true },
 		}
