@@ -235,15 +235,15 @@ export function ListUserAcceptedEvent({ eventID, toggleListUsers }) {
 
         <div className={styles.notGoingLists}>
           <h2>Not Going</h2>
-          {/* {toggleListUsers.not_going.map((item, index) => (
+           {EventLists && EventLists.not_going.map((item, index) => (
             <div key={index} className={styles.userBloc}>
               <div>
-                <img src={item.image} alt="" />
+                <img src={item.avatar_path ? `data:image/png;base64,${item.avatar_path}` :`../images/user-circle.png`} alt="" />
                 <span>{item.user_name}</span>
                 <i className="fa-regular fa-circle-xmark"></i>
               </div>
             </div>
-          ))} */}
+          ))} 
         </div>
       </div>
     </div>
