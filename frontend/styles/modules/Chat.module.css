@@ -72,10 +72,20 @@
 }
 
 .user a div p {
-
   text-transform: capitalize;
   font-size: small;
-  /* text-wrap: nowrap; */
+}
+
+.user a div p:first-of-type {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user a div p:first-of-type span {
+  background: red;
+  padding: 5px 10px;
+  border-radius: 100%;
 }
 
 .user a div p:last-of-type {
@@ -88,9 +98,7 @@
 
 @media screen and (min-width: 768px) {
 
-  /* body {
-     overflow: hidden;
-   } */
+
   .sectionChat {
     width: 100%;
     display: flex;

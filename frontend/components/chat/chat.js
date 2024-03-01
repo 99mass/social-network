@@ -103,7 +103,11 @@ export function LastChatWitheAutherUser({ data }) {
                 alt=""
               />
               <div>
-                <p>{item.other_user_nickname}</p>
+                <p>{item.other_user_nickname} {item.count_message_unread > 0 && 
+                // <span>{item.count_message_unread}+</span>
+                <img src="../images/new.png" alt="" />
+                }</p>
+
                 <p>{item.last_message_content}</p>
               </div>
             </Link>

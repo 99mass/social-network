@@ -70,23 +70,26 @@ func GetParticipantStatus(db *sql.DB, eventID, userID string) (int, error) {
 		}
 		return 2, err
 	}
-	log.Println("optionnn:",option)
+	log.Println("optionnn:", option)
 	return option, nil
 }
 
 // UpdateParticipantStatus met à jour le statut de participation d'un utilisateur pour un événement spécifique.
 func UpdateParticipantStatus(db *sql.DB, eventID, userID string, option int) error {
-	query :=`
+	query := `
 		UPDATE event_participants 
 		SET choosen_option = ? 
 		WHERE event_id = ? AND user_id = ?
 	`
-	_, err := db.Exec(query,option, eventID, userID)
+	_, err := db.Exec(query, option, eventID, userID)
 	return err
 }
 
 // GetParticipantsCountAndDetailsByEventID récupère le nombre de participants pour chaque option et les détails des participants.
-func GetParticipantsCountAndDetailsByEventID(db *sql.DB, eventID string) (map[int]struct{Count int; Participants []models.EventParticipants}, error)  {
+func GetParticipantsCountAndDetailsByEventID(db *sql.DB, eventID string) (map[int]struct {
+	Count        int
+	Participants []models.EventParticipants
+}, error) {
 	query := `
 		SELECT choosen_option, 
 		COUNT(*) as count 
@@ -116,20 +119,26 @@ func GetParticipantsCountAndDetailsByEventID(db *sql.DB, eventID string) (map[in
 	}
 
 	// Map pour stocker les participants et le nombre de participants par option
-	optionParticipants := make(map[int]struct{Count int; Participants []models.EventParticipants})
+	optionParticipants := make(map[int]struct {
+		Count        int
+		Participants []models.EventParticipants
+	})
 	for option, count := range optionCounts {
-		participants, err := getParticipantsByOption(db, eventID, option)
+		participants, err := GetParticipantsByOption(db, eventID, option)
 		if err != nil {
 			return nil, err
 		}
-		optionParticipants[option] = struct{Count int; Participants []models.EventParticipants}{Count: count, Participants: participants}
+		optionParticipants[option] = struct {
+			Count        int
+			Participants []models.EventParticipants
+		}{Count: count, Participants: participants}
 	}
 
 	return optionParticipants, nil
 }
 
 // getParticipantsByOption récupère les participants d'un événement spécifique pour une option spécifique.
-func getParticipantsByOption(db *sql.DB, eventID string, option int) ([]models.EventParticipants, error) {
+func GetParticipantsByOption(db *sql.DB, eventID string, option int) ([]models.EventParticipants, error) {
 	query := `
 		SELECT * 
 		FROM event_participants 
