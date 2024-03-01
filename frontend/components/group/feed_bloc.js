@@ -3,18 +3,21 @@ import styles from "../../styles/modules/group.module.css";
 import { getAllGroupPosts } from "../../handler/getPostsGroup";
 import { useEffect, useState } from "react";
 import { getElapsedTime } from "../../utils/convert_dates";
+import { Loader } from "../../utils/spinner";
 
 export function FeedBloc() {
 
-
+  const [isLoading, setIsLoading] = useState(true)
   const [postGroups, setAllPostGroup] = useState(null);
   useEffect(() => {
-    getAllGroupPosts(setAllPostGroup);
+    getAllGroupPosts(setAllPostGroup).then(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   return (
     <div className={`${styles.menuMiddle} _middle`}>
-      <div className={`${styles.contenPosts} _contenPosts`}>
+      {isLoading ? <Loader /> : <div className={`${styles.contenPosts} _contenPosts`}>
         {postGroups ? (
           postGroups.map((item, index) => (
             <div key={index} className={`${styles.contenPost} _contenPost`}>
@@ -30,7 +33,7 @@ export function FeedBloc() {
           </div>
         )}
 
-      </div>
+      </div>}
     </div>
   );
 }

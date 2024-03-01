@@ -20,8 +20,10 @@ import JoinRequestGroup from "./joinGroupRequest";
 import { ErrorProfile } from "../errors/error_profiles";
 import { globalSocket } from "../websocket/globalSocket";
 import { DisplayPopup } from "../header";
+import { Loader } from "../../utils/spinner";
 
 export default function Profile_group() {
+  const [isLoading, setIsLoading] = useState(true)
   const [postForm, setPostForm] = useState(false);
   const [datas, setDatasProfileGroup] = useState(null);
   const [postGroup, setPostsGroup] = useState(null);
@@ -30,7 +32,11 @@ export default function Profile_group() {
 
   useEffect(() => {
     if (!datas) {
-      getDatasProfilGroup(setDatasProfileGroup, query.id);
+      getDatasProfilGroup(setDatasProfileGroup, query.id).then(() => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      });
     }
   }, [query, datas]);
 
@@ -70,7 +76,7 @@ export default function Profile_group() {
 
   return (
     <>
-      {datas ? (
+      {isLoading ? <Loader /> : datas ? (
         <ContentCovertPhotoGroup
           section={section}
           handleSection={handleSection}
@@ -92,7 +98,7 @@ export default function Profile_group() {
         <ErrorProfile />
       )}
 
-      {section.section1 && (
+      {!isLoading && datas && section.section1 && (
         <Discussion
           postGroup={postGroup}
           setPostsGroup={setPostsGroup}

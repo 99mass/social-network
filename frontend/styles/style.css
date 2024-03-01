@@ -1,6 +1,7 @@
 .section-index {
   margin-top: 120px;
 }
+
 .menu-left,
 .menu-rigth {
   display: none;
@@ -36,6 +37,7 @@
   overflow: hidden;
   padding-top: 10px;
 }
+
 .profile-pic-simple {
   width: 40px;
   height: 40px;
@@ -45,18 +47,22 @@
   justify-content: center;
   border: solid 2px;
 }
+
 .profile-pic-group {
   padding-bottom: 10px;
 }
+
 .post .profileuser .left-side .profile-pic-simple a img {
-  
+
   width: 100%;
   height: 100%;
 }
+
 .post .profileuser .left-side .profile-pic-group a img {
   width: 50px;
   height: 50px;
 }
+
 .post .profileuser .left-side .profile-pic-group a:last-of-type {
   position: relative;
   left: -20px;
@@ -67,39 +73,32 @@
 .post .profileuser .left-side span p {
   font-weight: 100;
 }
+
 .post .profileuser .left-side .span-group {
   position: relative;
   left: -10px;
 }
+
 .post .profileuser .left-side .span-group h3:first-of-type {
   margin-bottom: 5px;
 }
 
-.post .profileuser .left-side  .span-simple{
+.post .profileuser .left-side .span-simple {
   position: relative;
   left: 10px;
 }
 
-.post
-  .profileuser
-  .left-side
-  .profile-pic-group
-  a:first-of-type
-  img:first-of-type {
+.post .profileuser .left-side .profile-pic-group a:first-of-type img:first-of-type {
   border-radius: 20%;
   border: 1px solid;
   object-fit: cover;
 }
-.post
-  .profileuser
-  .left-side
-  .profile-pic-group
-  a:last-of-type
-  img:last-of-type {
+
+.post .profileuser .left-side .profile-pic-group a:last-of-type img:last-of-type {
   width: 40px;
   height: 40px;
   border-radius: 100%;
- 
+
 }
 
 .Follow,
@@ -116,6 +115,7 @@
 .Unfollow {
   color: gray;
 }
+
 .Delete {
   color: palevioletred;
 }
@@ -208,6 +208,7 @@
   transform-origin: center;
   transform: rotateY(180deg);
 }
+
 .liked .liked-yes {
   color: var(--second-blue);
 }
@@ -220,10 +221,12 @@
   align-items: center;
   justify-content: center;
 }
+
 .noResults img {
   width: 100px;
   height: 100px;
 }
+
 .noResults p {
   width: 80%;
   text-align: center;
@@ -279,11 +282,13 @@
     height: 100%;
     align-self: center;
   }
+
   .menu-left {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
+
   .menu-left .user-actual a {
     width: 80%;
     display: flex;
@@ -302,18 +307,21 @@
     padding-left: 15px;
     text-transform: capitalize;
   }
+
   .menu-left a {
     display: flex;
     align-items: center;
     gap: 5px;
     font-size: 18px;
   }
+
   .menu-left a i {
     font-size: 35px;
     padding: 8px;
     color: var(--fds-blue-80);
     border-radius: 100%;
   }
+
   .menu-left a:hover {
     width: 80%;
 
@@ -325,14 +333,17 @@
     width: 80%;
     border-color: gray;
   }
+
   .menu-left h4 {
     color: gray;
     text-transform: capitalize;
   }
+
   .new-post-content {
     display: flex;
     flex-direction: column;
   }
+
   .new-post-content a {
     display: flex;
     align-items: center;
@@ -342,6 +353,7 @@
     font-size: 18px;
     text-transform: capitalize;
   }
+
   .new-post-content a i {
     padding: 8px;
     font-size: 22px;
@@ -349,9 +361,11 @@
     color: #fff;
     background: var(--primary-bg);
   }
+
   .menu-rigth {
     padding-left: 10px;
   }
+
   .menu-rigth .title {
     width: 90%;
     display: flex;
@@ -439,12 +453,15 @@
   .menu-rigth {
     display: none;
   }
+
   .menu-left {
     width: 35%;
   }
+
   .menu-middle {
     width: 60%;
   }
+
   .menu-left hr {
     width: 80%;
   }
@@ -456,6 +473,7 @@ body header .content-form-post {
 
 /* notif */
 @keyframes bounce {
+
   from,
   20%,
   53%,
@@ -477,6 +495,7 @@ body header .content-form-post {
     transform: translate3d(0, 0px, 0);
   }
 }
-.imgNew  {
+
+.imgNew {
   animation: bounce 1.5s infinite;
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styles from '../../styles/modules/emoji.module.css'
+import { Loader } from '../../utils/spinner';
 
 
 export default function EmojiForm({ toggleEmojicon, setSelectedEmoji }) {
@@ -60,11 +61,11 @@ export default function EmojiForm({ toggleEmojicon, setSelectedEmoji }) {
                 </div>
                 <div className={styles.listes}>
                     {
-                        filteredEmojis && filteredEmojis.map((item, index) => (
+                        filteredEmojis ? filteredEmojis.map((item, index) => (
                             <span key={index}
                                 className={`${item.slug}`}
                                 onClick={() => handleEmojiClick(item.character)}  >{item.character}</span>
-                        ))
+                        )) :  <Loader/>
                     }
                 </div>
 

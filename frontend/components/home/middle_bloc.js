@@ -5,15 +5,21 @@ import { getElapsedTime } from "../../utils/convert_dates";
 import { truncateText } from "../../utils/helper";
 import { askForFriends, UnfollowUser } from "../../handler/follower";
 import { likeDislikePost } from "../../handler/likeDislikePost";
+import { Loader } from "../../utils/spinner";
 
 export default function MidlleBloc({ posts, setPosts }) {
+  const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
-    getPostsUser(setPosts);
+    getPostsUser(setPosts).then(() => {
+      setIsLoading(false);
+    });
   }, []);
-  
+
   return (
     <div className="menu-middle">
-      {posts ? (
+      {isLoading ? (
+        <Loader />
+      ) : posts ? (
         posts.map((item) => (
           <div className="post" key={item.post.id}>
             <PostHeader
@@ -21,9 +27,8 @@ export default function MidlleBloc({ posts, setPosts }) {
               user={item.user.firstname}
               image={item.user.avatarpath}
               isfollowed={item.is_followed}
-              time={`${getElapsedTime(item.post.created_at).value} ${
-                getElapsedTime(item.post.created_at).unit
-              }`}
+              time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit
+                }`}
               setPosts={setPosts}
               groupid={item.group_id}
               setPostsGroup={setPosts}
@@ -52,7 +57,8 @@ export default function MidlleBloc({ posts, setPosts }) {
             there are no publications yet be the first to create a publication
           </p>
         </div>
-      )}
+      )
+      }
     </div>
   );
 }
@@ -82,9 +88,8 @@ export function PostHeader({
     <div className="profileuser">
       <div className="left-side">
         <div
-          className={`profile-pic ${
-            groupName ? "profile-pic-group" : "profile-pic-simple"
-          }`}
+          className={`profile-pic ${groupName ? "profile-pic-group" : "profile-pic-simple"
+            }`}
         >
           <Link
             href={
@@ -96,13 +101,13 @@ export function PostHeader({
             <img
               src={
                 (image && image !== "") ||
-                (groupAvatarPath && groupAvatarPath !== "")
+                  (groupAvatarPath && groupAvatarPath !== "")
                   ? !groupName
-                    ? image !="" && 
-                    `data:image/png;base64,${image}` 
+                    ? image != "" &&
+                    `data:image/png;base64,${image}`
                     : groupAvatarPath !== ""
-                    ? `data:image/png;base64,${groupAvatarPath}`
-                    : "../images/groups-defaul.png"
+                      ? `data:image/png;base64,${groupAvatarPath}`
+                      : "../images/groups-defaul.png"
                   : "../images/user-circle.png"
               }
               alt=""
@@ -173,7 +178,7 @@ export function PostFooter({
   setPosts,
   setPostsCreated,
   groupid,
-  setPostsGroup, 
+  setPostsGroup,
   setAllPostGroup,
 }) {
   const handlerLikeDislikePost = (is_liked) => {
