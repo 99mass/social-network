@@ -222,7 +222,7 @@ export function ListUserAcceptedEvent({ eventID, toggleListUsers }) {
       <div className={styles.listFriend}>
         <div className={styles.goingLists}>
           <h2>Going</h2>
-          {EventLists && EventLists.going.map((item, index) => (
+          {EventLists && EventLists.going && EventLists.going.map((item, index) => (
             <div key={index} className={styles.userBloc}>
               <div>
                 <img src={item.avatar_path ? `data:image/png;base64,${item.avatar_path}` : `../images/user-circle.png`} alt="" />
@@ -233,7 +233,7 @@ export function ListUserAcceptedEvent({ eventID, toggleListUsers }) {
           ))}
         </div>
 
-        <div className={styles.notGoingLists}>
+        {/* <div className={styles.notGoingLists}>
           <h2>Not Going</h2>
            {EventLists && EventLists.not_going.map((item, index) => (
             <div key={index} className={styles.userBloc}>
@@ -244,7 +244,19 @@ export function ListUserAcceptedEvent({ eventID, toggleListUsers }) {
               </div>
             </div>
           ))} 
-        </div>
+        </div> */}
+        <div className={styles.notGoingLists}>
+ <h2>Not Going</h2>
+ {EventLists && EventLists.not_going && EventLists.not_going.map((item, index) => (
+    <div key={index} className={styles.userBloc}>
+      <div>
+        <img src={item.avatar_path ? `data:image/png;base64,${item.avatar_path}` :`../images/user-circle.png`} alt="" />
+        <span>{item.user_name}</span>
+        <i className="fa-regular fa-circle-xmark"></i>
+      </div>
+    </div>
+  ))} 
+</div>
       </div>
     </div>
   );
