@@ -34,7 +34,7 @@ func NotificationMessage(db *sql.DB, mess models.PrivateMessages) {
 	}
 }
 
-//this one is for sending a notification while someone invite a user to join a group
+// this one is for sending a notification while someone invite a user to join a group
 func NotificationGroupInvitation(db *sql.DB, sender, groupID, userID string) {
 	sendern, _ := controller.GetUserNameByID(db, sender)
 	group, _ := controller.GetGroupTitle(db, groupID)
@@ -97,9 +97,10 @@ func NotificationGroupChat(db *sql.DB, senderID, sourceID string) {
 
 	members, _ := controller.GetGroupMembers(db, sourceID)
 	for _, member := range members {
-		CreateGeneralNotif(db, member.ID, senderID, sourceID, "chat_group")
+
 		if user, ok := ConnectedUsersList[member.ID]; ok {
 			if member.ID != senderID {
+				CreateGeneralNotif(db, member.ID, senderID, sourceID, "chat_group")
 				err := SendGenResponse("notif_chat_group", user.Conn, notif)
 				if err != nil {
 					log.Println("enable to send a notification to the user that you sent the message")

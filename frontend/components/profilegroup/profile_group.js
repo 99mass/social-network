@@ -19,7 +19,7 @@ import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 import JoinRequestGroup from "./joinGroupRequest";
 import { ErrorProfile } from "../errors/error_profiles";
 import { globalSocket } from "../websocket/globalSocket";
-import { ToastNotification } from "../header";
+import { DisplayPopup } from "../header";
 
 export default function Profile_group() {
   const [postForm, setPostForm] = useState(false);
@@ -313,18 +313,20 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
+
       switch (data.type) {
         case "nbr_notif_join_group_request":
-          setNbrNotifJoinGroupRequest(
-            data.content && data.content[0]?.count_join_request
-          );
+          if (data?.content?.length === 0) return
+          data && data.content && data.content.forEach(element => {
+            if (element.group_id === groupId) {
+              setNbrNotifJoinGroupRequest(element.count_join_request)
+            }
+          });
           break;
         case "nbr_notif_chat_group":
           if (data?.content?.length === 0) return
           data && data.content && data.content.forEach(element => {
             if (element.group_id === groupId) {
-              console.log("nbr_notif_chat_group: ", element.count_join_request);
               setNbrNotifChatGroup(element.count_join_request)
             }
           });
@@ -406,51 +408,20 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
           </button>
         )}
       </div>
-      {notifJoinGroupRequest && (
-        <ToastNotification
-          type={notifJoinGroupRequest.type.replaceAll("_", " ") + " !"}
-          text={"requests permission to be a member of your group"}
-          sender={notifJoinGroupRequest.content.sender}
-          group={notifJoinGroupRequest.content.group}
-          setCloseState={setNotifJoinGroupRequest}
-        />
-      )}
-      {notifGroupInvitation && (
-        <ToastNotification
-          type={notifGroupInvitation.type.replaceAll("_", " ") + " !"}
-          text={"invites you to join the group"}
-          sender={notifGroupInvitation.content.sender}
-          group={notifGroupInvitation.content.group}
-          setCloseState={setNotifGroupInvitation}
-        />
-      )}
-      {notifFollow && (
-        <ToastNotification
-          type={notifFollow.type.replaceAll("_", " ") + " !"}
-          text={"has just sent you a friend request"}
-          sender={notifFollow.content.sender}
-          group={""}
-          setCloseState={setNotifFollow}
-        />
-      )}
-      {notifMessagesPrivate && (
-        <ToastNotification
-          type={notifMessagesPrivate.type.replaceAll("_", " ") + "!"}
-          text={"has just sent you a new private message"}
-          sender={notifMessagesPrivate.content.sender}
-          group={""}
-          setCloseState={setNotifMessagesPrivate}
-        />
-      )}
-      {notifMessagesGroup && (
-        <ToastNotification
-          type={notifMessagesGroup.type.replaceAll("_", " ") + " !"}
-          text={"has just sent a message in the group"}
-          sender={notifMessagesGroup.content.sender}
-          group={notifMessagesGroup.content.group}
-          setCloseState={setNotifMessagesGroup}
-        />
-      )}
+
+      <DisplayPopup
+        notifMessagesPrivate={notifMessagesPrivate}
+        notifFollow={notifFollow}
+        notifJoinGroupRequest={notifJoinGroupRequest}
+        notifGroupInvitation={notifGroupInvitation}
+        notifMessagesGroup={notifMessagesGroup}
+        setNotifMessagesPrivate={setNotifMessagesPrivate}
+        setNotifJoinGroupRequest={setNotifJoinGroupRequest}
+        setNotifGroupInvitation={setNotifGroupInvitation}
+        setNotifFollow={setNotifFollow}
+        setNotifMessagesGroup={setNotifMessagesGroup}
+      />
+
     </>
   );
 }
