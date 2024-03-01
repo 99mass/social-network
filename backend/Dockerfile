@@ -1,6 +1,10 @@
 # Use an official Go runtime as a parent image
 FROM golang:latest
 
+
+LABEL AUTHORS="Mouhamed Alioune Diouf, Alassane Diop, Oumar Samb,Samba Diop,Elhadji Malick Lo, Alain Gildas Ogou"
+LABEL DESCRIPTION="This is the Server(backend) of the Social network project it use Golang"
+LABEL VERSION="latest"
 # Set the working directory in the container
 WORKDIR /app
 

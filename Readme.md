@@ -1,7 +1,7 @@
 # Social Network Project Readme
 ## Overview
 
-Welcome to our Social Network project! This web application allows users to connect, share posts, create and join groups, send private messages, and much more. The project is built using a combination of frontend and backend technologies, including a chosen JS framework for the frontend, Go for the backend, SQLite for the database, and Docker for containerization.
+Welcome to our Social Network project! This web application allows users to connect, share posts, create and join groups, send private messages, and much more. The project is built using a combination of frontend and backend technologies, including NextJS for the frontend, Go for the backend, SQLite for the database, and Docker for containerization.
 ### Table of Contents
 
    * Getting Started

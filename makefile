@@ -18,15 +18,15 @@ docker-images:
 
 # Run both containers
 docker-run:
-	docker run --name backend -d -p 8080:8080 backend-image && docker run --name frontend -d -p 3000:3000 frontend-image
+	docker run --name backend-container -d -p 8080:8080 backend-image && docker run --name frontend-container -d -p 3000:3000 frontend-image
 
 # Stop running containers
 docker-stop:
-	docker stop backend && docker stop frontend
+	docker stop backend-container && docker stop frontend-container
 
 # Remove containers created
 docker-remove-container:
-	docker rm frontend && docker rm backend
+	docker rm frontend-container && docker rm backend-container
 
 # Remove images created
 docker-remove-images : 
