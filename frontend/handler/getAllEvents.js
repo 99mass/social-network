@@ -76,7 +76,7 @@ export const eventPartipants = async (event_id, choosen_option, setDatas) => {
         if (response.ok) {
             const data = await response.json();
             console.log(data, "OptionGo");
-            setDatas(data); // Utilisez setDatas pour mettre à jour l'état
+            // setDatas(data); // Utilisez setDatas pour mettre à jour l'état
         } else {
             const errorData = await response.json();
             console.error('Errorsss', errorData.message);
