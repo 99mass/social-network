@@ -4,21 +4,11 @@ import styles from "../../styles/modules/group.module.css";
 import Group from "../form/group";
 import { getMygroups } from "../../handler/getGroup";
 import { defaultImage } from "./group_page";
-import { useRouter } from "next/router";
 import { globalSocket } from "../websocket/globalSocket";
 import { DisplayPopup } from "../header";
 
 export default function LeftBlocGroupPage({ state, handleState }) {
-  const handleClick = (clickedState) => {
-    const newState = {
-      state1: false,
-      state2: false,
-      state3: false,
-      state4: false,
-      [clickedState]: true,
-    };
-    handleState(newState);
-  };
+
 
   const [groups, setGroups] = useState();
   const [groupForm, setGroupForm] = useState(false);
@@ -34,20 +24,29 @@ export default function LeftBlocGroupPage({ state, handleState }) {
 
   const [socket, setSocket] = useState(null);
 
-  const router = useRouter();
+  const handleClick = (clickedState) => {
+    const newState = {
+      state1: false,
+      state2: false,
+      state3: false,
+      state4: false,
+      [clickedState]: true,
+    };
+    handleState(newState);
+  };
 
   useEffect(() => {
     getMygroups(setGroups);
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // const timer = setTimeout(() => {
       if (!socket || socket.readyState !== WebSocket.OPEN) {
         globalSocket(setSocket);
       }
-    }, 800);
+    // }, 10);
 
-    return () => clearTimeout(timer);
+    // return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {

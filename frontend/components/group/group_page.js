@@ -4,8 +4,6 @@ import LeftBlocGroupPage from "./left_bloc";
 import DiscoverBloc from "./discover_bloc";
 import YourGroup from "./your_group";
 import RequestGroup from "./request_group";
-import { Groupstodiscover } from "../../handler/getGroup";
-
 
 export const defaultImage = "../images/groups-defaul.png"; 
 

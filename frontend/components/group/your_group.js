@@ -18,13 +18,13 @@ export default function YourGroup() {
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // const timer = setTimeout(() => {
       if (!socket || socket.readyState !== WebSocket.OPEN) {
         globalSocket(setSocket);
       }
-    }, 800);
+    // }, 10);
 
-    return () => clearTimeout(timer);
+    // return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -37,18 +37,9 @@ export default function YourGroup() {
       const _message = event.data && JSON.parse(event.data);
 
       if (!_message) return;
-      // console.log(_message);
-      switch (_message.type) {
 
+      switch (_message.type) {
         case "nbr_notif_chat_group":
-          // if (_message.content && _message.content.length > 0) {
-          //   // Vérifier si on un message chat group non lue
-          //   const hasHighRequest = _message.content.some(
-          //     (row) => row.count_join_request >= 1
-          //   );
-          //   setHasHighbrNotifChatGroup(hasHighRequest);
-          // }
-          console.log(_message);
           setNbrNotifChatGroup(_message.content)
           break;
         // now notifications
