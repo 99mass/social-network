@@ -38,6 +38,7 @@ func BroadcastUserList(db *sql.DB) {
 			SendGenResponse("nbr_notif_message", user.Conn, nbrMessage)
 			detailMessage, _ := controller.GetNotificationMessageCountByTypeAndSenderID(db, user.UserID, "private_message")
 			SendGenResponse("nbr_notif_message_by_user", user.Conn, detailMessage)
+			log.Println("details private message",detailMessage)
 			nbrFollow, _ := controller.GetNotificationCountByType(db, user.UserID, "follow_request")
 			SendGenResponse("nbr_notif_follow", user.Conn, nbrFollow)
 			nbrJoinReq, _ := controller.GetNotificationCountByTypeAndSourceID(db, user.UserID, "join_group")

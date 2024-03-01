@@ -154,7 +154,6 @@ func GetNotificationCountByTypeAndSourceID(db *sql.DB, userID string, notificati
 	return results, nil
 }
 
-
 func GetNotificationCountByTypeAndSenderID(db *sql.DB, userID string, notificationType string) ([]NotifJoinReq, error) {
 	// Prepare the SQL query to count notifications by type and source ID for a specific user.
 	query := `
@@ -191,10 +190,15 @@ func GetNotificationCountByTypeAndSenderID(db *sql.DB, userID string, notificati
 	return results, nil
 }
 
-func GetNotificationMessageCountByTypeAndSenderID(db *sql.DB, userID string, notificationType string) ([]NotifJoinReq, error) {
+type NotifDetailsPrivateMessage struct {
+	SenderID     string `json:"sender_id"`
+	CountMessage int    `json:"count_message"`
+}
+
+func GetNotificationMessageCountByTypeAndSenderID(db *sql.DB, userID string, notificationType string) ([]NotifDetailsPrivateMessage, error) {
 	// Prepare the SQL query to count notifications by type and source ID for a specific user.
 	query := `
-		SELECT COUNT(*) as count
+		SELECT sender_id, COUNT(*) as count
 		FROM notifications
 		WHERE user_id = ? AND type = ?
 		GROUP BY sender_id;
@@ -208,12 +212,12 @@ func GetNotificationMessageCountByTypeAndSenderID(db *sql.DB, userID string, not
 	defer rows.Close()
 
 	// Initialize a slice to hold the results.
-	var results []NotifJoinReq
+	var results []NotifDetailsPrivateMessage
 
 	// Iterate over the rows and populate the results slice.
 	for rows.Next() {
-		var notif NotifJoinReq
-		if err := rows.Scan(&notif.GroupID, &notif.CountJoinReq); err != nil {
+		var notif NotifDetailsPrivateMessage
+		if err := rows.Scan(&notif.SenderID, &notif.CountMessage); err != nil {
 			return nil, err
 		}
 		results = append(results, notif)
