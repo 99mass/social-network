@@ -284,11 +284,14 @@ export function ContentCovertPhotoGroup({
   );
 }
 
-export function NavMenuGroup({ section, handleSection, isCreator,groupId }) {
+export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
   const [socket, setSocket] = useState(null);
   const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
   const [nbrNotifChatGroup, setNbrNotifChatGroup] = useState(0);
-
+  const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
+  const [notifMessagesGroup, setNotifMessagesGroup] = useState("");
+  const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
+  const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
 
   useEffect(() => {
@@ -310,25 +313,37 @@ export function NavMenuGroup({ section, handleSection, isCreator,groupId }) {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      // console.log(data);
+      console.log(data);
       switch (data.type) {
         case "nbr_notif_join_group_request":
           setNbrNotifJoinGroupRequest(
             data.content && data.content[0]?.count_join_request
           );
           break;
+        case "nbr_notif_chat_group":
+          if (data?.content?.length === 0) return
+          data && data.content &&  data.content.forEach(element => {
+            if (element.group_id === groupId) {
+              console.log("nbr_notif_chat_group: ", element.count_join_request);
+              setNbrNotifChatGroup(element.count_join_request)
+            }
+          });
+          break
+        case "notif_private_message":
+          setNotifMessagesPrivate(data);
+          break;
+        case "notif_follow_request":
+          setNotifFollow(data);
+          break;
         case "notif_join_group_request":
           setNotifJoinGroupRequest(data);
           break;
-        case "nbr_notif_chat_group":
-          if (data?.content?.length === 0) return
-          data.content.forEach(element => {
-            if (element.group_id===groupId) {
-                 console.log("nbr_notif_chat_group: ",element.count_join_request);   
-                 setNbrNotifChatGroup(element.count_join_request)             
-               }
-          });
-          break
+        case "notif_chat_group":
+          setNotifMessagesGroup(data);
+          break;
+        case "notif_group_invitation_request":
+          setNotifGroupInvitation(data);
+          break;
       }
     };
   }, [socket]);
