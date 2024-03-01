@@ -84,3 +84,63 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 		}
 	}
 }
+
+func ListResponseEvents(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			_, err := utils.CheckAuthorization(db, w, r)
+			if err != nil {
+				helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+				return
+			}
+
+			eventID := r.URL.Query().Get("event_id")
+			if eventID == "" {
+				helper.SendResponseError(w, "error", "event_id is required", http.StatusBadRequest)
+				return
+			}
+
+			listgoing, err := controller.GetParticipantsByOption(db, eventID, 1)
+			if err != nil {
+				log.Println("error getting participants")
+				helper.SendResponseError(w, "error", "error getting participants", http.StatusInternalServerError)
+				return
+			}
+			listnotgoing, err := controller.GetParticipantsByOption(db, eventID, 0)
+			if err != nil {
+				log.Println("error getting participants")
+				helper.SendResponseError(w, "error", "error getting participants", http.StatusInternalServerError)
+				return
+			}
+			var participants models.ListParticipantsResponse
+			participants.Going = FitEventParticipants(db, listgoing)
+			participants.NotGoing = FitEventParticipants(db, listnotgoing)
+
+			helper.SendResponse(w, participants, http.StatusOK)
+		default:
+			log.Println("Error: Method not allowed")
+			helper.SendResponseError(w, "error", "method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+	}
+}
+
+func FitEventParticipants(db *sql.DB, participans []models.EventParticipants) []models.EventParticipants {
+
+	for i, part := range participans {
+		userID, _ := utils.TextToUUID(part.UserID)
+		user, _ := controller.GetUserByID(db, userID)
+
+		participans[i].UserName = user.FirstName
+		if user.AvatarPath != "" {
+			img, err := helper.EncodeImageToBase64("./pkg/static/avatarImage/" + user.AvatarPath)
+			if err != nil {
+				// participans[i].AvatarPath = "default.png"
+				log.Println("enable to encode avatar image", err)
+			}
+			participans[i].AvatarPath = img
+		}
+	}
+	return participans
+}
