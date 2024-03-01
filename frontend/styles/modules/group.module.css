@@ -302,7 +302,10 @@
   border-radius: 10px;
   object-fit: cover;
 }
-
+.elementGroup .topElement a .imgNew{
+   width: 30px;
+   height: 30px;
+}
 .elementGroup .topElement span {
   text-transform: capitalize;
 }
