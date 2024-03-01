@@ -12,6 +12,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"backend/pkg/utils"
+	websocket "backend/pkg/webSocket"
 )
 
 type GroupEnventRequest struct {
@@ -95,6 +96,8 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
+			websocket.NotificationGroupEvent(db,sess.UserID.String(),event.GroupID)
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 			log.Println("group event created successfully")
 
