@@ -4,7 +4,7 @@ import { AboutGroup } from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
 import { convertAge } from "../../utils/convert_dates";
 import { AddEvent } from "../../handler/create_event";
-import { ListAllEvents, eventPartipants } from "../../handler/getAllEvents";
+import { ListAllEvents, eventPartipants, list_response_events } from "../../handler/getAllEvents";
 import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function EventLists({ group_id }) {
@@ -16,13 +16,12 @@ export default function EventLists({ group_id }) {
     ListAllEvents(group_id, setAllEvents);
   }, [])
 
-  
+  // console.log(listUserGoing,"list_events");
 
-  console.log("allevents",  allevents);
+  // console.log("allevents",  allevents);
 
 
-  const toggleListUsers = (state) => setListUserGoing(state);
-
+  // const toggleListUsers = (state) => setListUserGoing(state);
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
@@ -41,7 +40,7 @@ export default function EventLists({ group_id }) {
         ))}
       </div>
       <AboutGroup />
-      {listUserGoing && <ListUserAcceptedEvent toggleListUsers={toggleListUsers} setListUserGoing={setListUserGoing} />}
+      {listUserGoing && <ListUserAcceptedEvent  />}
     </div>
   );
 }
@@ -58,6 +57,8 @@ export function EventBloc({
   toggleListUsers
 }) {
 
+  const [EventLists,setEventLists] = useState()
+
   // const [goingOption, setgoingOp]=  useState()
   // useEffect(() =>{
     // eventPartipants(isGoing,choseOption,setgoingOp)
@@ -67,24 +68,24 @@ export function EventBloc({
   // getUserBySession()
   useEffect(() =>{
     getUserBySession(setuserdata)
+    // list_response_events(eventID,setEventLists)
   },[])
 
-  console.log(userdata?.id,"userid");
+  // console.log(EventLists,"asss");
+
+  // console.log(userdata?.id,"userid");
  
  const handlerEventParticipant =(chosen_option,user)=> {
 
-  // const data = {
-  //   even_id: eventID,
-  //   user_id :userdata?.id,
-  //   option: chosen_option
-     
-  
-  // }
-  // console.log(data, "data");
-  // console.log(chosen_option);
   eventPartipants(eventID,chosen_option)
  }
-  // console.log("Using state",goingOption &&goingOption);
+
+ const handleClicklist =()=> {
+
+ useEffect(()=>{
+  list_response_events(eventID, setEventLists)})
+ }
+ 
   return (
     <div className={styles.eventDetails}>
       <h2>{nameGroup}</h2>
@@ -114,7 +115,7 @@ export function EventBloc({
           </button>
           
         
-        <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
+        <button onClick={() => handleClicklist()} className={styles.btnNotGoing}>
           <i className="fa-solid fa-list-check"></i>Guest List
         </button>
       </div>
@@ -206,24 +207,7 @@ export function FromCreateEvent({ setSection, groupId }) {
 }
 
 export function ListUserAcceptedEvent({ toggleListUsers }) {
-  const data = [
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-  ];
+ 
   return (
     <div className={styles.contentListPeopleGoing}>
       <div className={styles.listHeader}>
@@ -236,11 +220,11 @@ export function ListUserAcceptedEvent({ toggleListUsers }) {
       <div className={styles.listFriend}>
         <div className={styles.goingLists}>
           <h2>Going</h2>
-          {data.map((item, index) => (
+          {toggleListUsers.going.map((item, index) => (
             <div key={index} className={styles.userBloc}>
               <div>
                 <img src={item.image} alt="" />
-                <span>{item.user}</span>
+                <span>{item.user_name}</span>
                 <i className="fa-regular fa-circle-check"></i>
               </div>
             </div>
@@ -249,11 +233,11 @@ export function ListUserAcceptedEvent({ toggleListUsers }) {
 
         <div className={styles.notGoingLists}>
           <h2>Not Going</h2>
-          {data.map((item, index) => (
+          {toggleListUsers.not_going.map((item, index) => (
             <div key={index} className={styles.userBloc}>
               <div>
                 <img src={item.image} alt="" />
-                <span>{item.user}</span>
+                <span>{item.user_name}</span>
                 <i className="fa-regular fa-circle-xmark"></i>
               </div>
             </div>

@@ -44,5 +44,6 @@ export const api = {
   Decline_join_request:`${domain}/reject_join_group_request`,
   Leave_in_group: `${domain}/leave_in_group`,
   Create_participants_event:`${domain}/create_participants`,
+  list_response_events:`${domain}/list_response_events`,
 
 };

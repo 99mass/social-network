@@ -87,3 +87,33 @@ export const eventPartipants = async (event_id, choosen_option, setDatas) => {
         // Gérez ici les erreurs réseau ou autres exceptions
     }
 };
+
+
+// lists participants events
+
+export const list_response_events = async (event_id, setDatas) => {
+    try {
+        const sessionId = getSessionCookie();
+        const response = await fetch(`${api.list_response_events}?event_id=${event_id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: sessionId,
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("list",data);
+            setDatas(data); // Utilisez setDatas pour mettre à jour l'état
+        } else {
+            const errorData = await response.json();
+            console.error('Errorsss', errorData.message);
+            // Gérez ici les codes de statut HTTP spécifiques si nécessaire
+        }
+    } catch (error) {
+        console.error("Error fetching lists data:", error.message);
+        // Gérez ici les erreurs réseau ou autres exceptions
+    }
+};
+
