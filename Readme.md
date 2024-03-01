@@ -121,4 +121,14 @@ The project allows the use of:
  * bcrypt
  * UUID.
 
+## Author
+* Samba DIOP (ssambadi)
+* Mouhamet Alioune DIOUF (mouhametadiouf)
+* Oumar SAMB (osamb)
+* Alassane DIOP (dalassane)
+* Elhadji Malick LO (alo)
+* Alain Gildas OGOU (alogou)  
+## License
+This project is licensed under the Zone01 License.
+
 Feel free to explore, modify, and enhance the project as you see fit. Happy coding !!!
