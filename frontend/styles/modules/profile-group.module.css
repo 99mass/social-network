@@ -103,6 +103,8 @@
 }
 
 .photoCovert .navBlocLeft button {
+  display: flex;
+  align-items: center;
   height: fit-content;
   padding: 8px 20px;
   font-size: 18px;
@@ -110,6 +112,12 @@
   border: none;
   background: var(--secondary-bg);
   cursor: pointer;
+}
+
+.photoCovert .navBlocLeft button img {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
 }
 
 .photoCovert .navBlocLeft .activeBtn {
@@ -149,6 +157,7 @@
 .membre {
   cursor: pointer;
 }
+
 
 @media screen and (max-width:1024px) {
 
@@ -766,7 +775,8 @@
   text-transform: capitalize;
   text-align: center;
 }
-.joinContainer{
+
+.joinContainer {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -782,7 +792,6 @@
   cursor: pointer;
 }
 
-.joinContainer span:first-of-type  {
+.joinContainer span:first-of-type {
   background: var(--second-blue);
 }
-

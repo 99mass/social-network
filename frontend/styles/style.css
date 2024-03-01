@@ -453,3 +453,30 @@
 body header .content-form-post {
   overflow-y: scroll;
 }
+
+/* notif */
+@keyframes bounce {
+  from,
+  20%,
+  53%,
+  80%,
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+
+  40%,
+  43% {
+    transform: translate3d(0, -5px, 0);
+  }
+
+  70% {
+    transform: translate3d(0, -2px, 0);
+  }
+
+  90% {
+    transform: translate3d(0, 0px, 0);
+  }
+}
+.imgNew  {
+  animation: bounce 1.5s infinite;
+}
