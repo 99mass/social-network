@@ -322,7 +322,7 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
           break;
         case "nbr_notif_chat_group":
           if (data?.content?.length === 0) return
-          data && data.content &&  data.content.forEach(element => {
+          data && data.content && data.content.forEach(element => {
             if (element.group_id === groupId) {
               console.log("nbr_notif_chat_group: ", element.count_join_request);
               setNbrNotifChatGroup(element.count_join_request)
@@ -413,6 +413,42 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
           sender={notifJoinGroupRequest.content.sender}
           group={notifJoinGroupRequest.content.group}
           setCloseState={setNotifJoinGroupRequest}
+        />
+      )}
+      {notifGroupInvitation && (
+        <ToastNotification
+          type={notifGroupInvitation.type.replaceAll("_", " ") + " !"}
+          text={"invites you to join the group"}
+          sender={notifGroupInvitation.content.sender}
+          group={notifGroupInvitation.content.group}
+          setCloseState={setNotifGroupInvitation}
+        />
+      )}
+      {notifFollow && (
+        <ToastNotification
+          type={notifFollow.type.replaceAll("_", " ") + " !"}
+          text={"has just sent you a friend request"}
+          sender={notifFollow.content.sender}
+          group={""}
+          setCloseState={setNotifFollow}
+        />
+      )}
+      {notifMessagesPrivate && (
+        <ToastNotification
+          type={notifMessagesPrivate.type.replaceAll("_", " ") + "!"}
+          text={"has just sent you a new private message"}
+          sender={notifMessagesPrivate.content.sender}
+          group={""}
+          setCloseState={setNotifMessagesPrivate}
+        />
+      )}
+      {notifMessagesGroup && (
+        <ToastNotification
+          type={notifMessagesGroup.type.replaceAll("_", " ") + " !"}
+          text={"has just sent a message in the group"}
+          sender={notifMessagesGroup.content.sender}
+          group={notifMessagesGroup.content.group}
+          setCloseState={setNotifMessagesGroup}
         />
       )}
     </>
