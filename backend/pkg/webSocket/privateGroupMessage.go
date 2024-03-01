@@ -50,7 +50,7 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			helper.SendResponseError(w, "error", "invalid id group", http.StatusBadRequest)
 			return
 		}
-		controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), idGroup, "join_group")
+		controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), idGroup, "chat_group")
 		BroadcastUserList(db)
 
 		upgrader := websocket.Upgrader{
@@ -106,8 +106,7 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			good.User = user
 			ToSend = append(ToSend, good)
 		}
-		controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), idGroup, "join_group")
-		BroadcastUserList(db)
+
 		SendGenResponse("chat_group", conn, ToSend)
 
 		go HandleGroupMessage(db, conn, sess.UserID.String())
