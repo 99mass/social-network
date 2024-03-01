@@ -17,8 +17,6 @@ export function FeedBloc() {
     getAllGroupPosts(setAllPostGroup);
   }, []);
 
-  console.log(postGroups, "mes posts du group")
-
   return (
     <div className={`${styles.menuMiddle} _middle`}>
       <div className={`${styles.contenPosts} _contenPosts`}>

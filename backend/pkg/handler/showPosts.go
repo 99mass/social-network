@@ -98,7 +98,7 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 					log.Println("error counting comments for the post:", err.Error())
 					return
 				}
-				log.Println("group_id:", post.GroupID)
+
 				groupName, avatarPath, err := controller.GetGroupNameByIdPost(db, post.GroupID)
 				if err != nil {
 					log.Println("error getting group name", err.Error())
@@ -182,6 +182,25 @@ func ShowPosts(db *sql.DB) http.HandlerFunc {
 						return
 					}
 					postToShow.IsLiked = isLiked
+
+					groupName, avatarPath, err := controller.GetGroupNameByIdPost(db, post.GroupID)
+					if err != nil {
+						log.Println("error getting group name", err.Error())
+						helper.SendResponseError(w, "error", "error getting group name", http.StatusInternalServerError)
+						return
+					}
+
+					if strings.TrimSpace(avatarPath) != "" {
+						postToShow.GroupAvatarPath, err = helper.EncodeImageToBase64("./pkg/static/avatarImage/" + avatarPath)
+						if err != nil {
+							user.AvatarPath = "default.png"
+							// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
+							log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
+							// return
+						}
+					}
+					postToShow.GroupID = post.GroupID
+					postToShow.GroupName = groupName
 
 					nbrLikes, _ := controller.CountPostLikes(db, post.ID)
 					nbrComments, _ := controller.CountCommentsByPostID(db, post.ID)

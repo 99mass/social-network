@@ -248,6 +248,7 @@ export function ContentCovertPhotoGroup({
           section={section}
           handleSection={handleSection}
           isCreator={isCreator}
+          groupId={groupId}
         />
       )}
 
@@ -283,9 +284,11 @@ export function ContentCovertPhotoGroup({
   );
 }
 
-export function NavMenuGroup({ section, handleSection, isCreator }) {
+export function NavMenuGroup({ section, handleSection, isCreator,groupId }) {
   const [socket, setSocket] = useState(null);
   const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
+  const [nbrNotifChatGroup, setNbrNotifChatGroup] = useState(0);
+
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
 
   useEffect(() => {
@@ -307,7 +310,7 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-
+      // console.log(data);
       switch (data.type) {
         case "nbr_notif_join_group_request":
           setNbrNotifJoinGroupRequest(
@@ -316,11 +319,16 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
           break;
         case "notif_join_group_request":
           setNotifJoinGroupRequest(data);
-          console.log(data.content);
           break;
-
-        default:
-          break;
+        case "nbr_notif_chat_group":
+          if (data?.content?.length === 0) return
+          data.content.forEach(element => {
+            if (element.group_id===groupId) {
+                 console.log("nbr_notif_chat_group: ",element.count_join_request);   
+                 setNbrNotifChatGroup(element.count_join_request)             
+               }
+          });
+          break
       }
     };
   }, [socket]);
@@ -370,6 +378,7 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
           className={section.section4 ? styles.activeBtn : ""}
         >
           <i className="fa-solid fa-comment"></i>chat
+          {nbrNotifChatGroup > 0 && <img className="imgNew" src="../images/new.png" alt="" />}
         </button>
 
         {isCreator && (
@@ -377,8 +386,8 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
             onClick={() => handleClick("section6")}
             className={section.section6 ? styles.activeBtn : ""}
           >
-            <i className="fa-solid fa-right-to-bracket"></i>Join Request{" "}
-            {nbrNotifJoinGroupRequest}
+            <i className="fa-solid fa-right-to-bracket"></i>Join Request
+            {nbrNotifJoinGroupRequest > 0 && <img className="imgNew" src="../images/new.png" alt="" />}
           </button>
         )}
       </div>

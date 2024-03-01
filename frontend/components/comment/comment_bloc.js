@@ -25,9 +25,10 @@ export default function Comment() {
       getCommentPost(setComment, postid);
     }
   }, [postid]);
+   
 
-  return (
-    <div className={`${styles.middleBloc} middle`}>
+  return (  
+    <div className={`${styles.middleBloc} middle`}> 
       {posData && (
         <>
           <PostHeader
@@ -37,6 +38,10 @@ export default function Comment() {
             time={`${getElapsedTime(posData.post.created_at).value} ${
               getElapsedTime(posData.post.created_at).unit
             }`}
+            groupid={posData.group_id}
+            groupName={posData.group_name}  
+            groupId={posData.group_id}
+            groupAvatarPath={posData.group_avatar_path}
           />
           <PostMiddle
             content={posData.post.content}
@@ -48,7 +53,7 @@ export default function Comment() {
             is_liked={posData.is_liked}
             numberLike={posData.nbr_likes}
             numberComment={posData.nbr_comments}
-            setPostData={setPostData}
+            setPostData={setPostData} 
           />
           <FormComment
             postid={posData.post.id}

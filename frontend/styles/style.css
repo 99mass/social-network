@@ -88,6 +88,7 @@
   img:first-of-type {
   border-radius: 20%;
   border: 1px solid;
+  object-fit: cover;
 }
 .post
   .profileuser
@@ -98,6 +99,7 @@
   width: 40px;
   height: 40px;
   border-radius: 100%;
+ 
 }
 
 .Follow,
@@ -450,4 +452,31 @@
 
 body header .content-form-post {
   overflow-y: scroll;
+}
+
+/* notif */
+@keyframes bounce {
+  from,
+  20%,
+  53%,
+  80%,
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+
+  40%,
+  43% {
+    transform: translate3d(0, -5px, 0);
+  }
+
+  70% {
+    transform: translate3d(0, -2px, 0);
+  }
+
+  90% {
+    transform: translate3d(0, 0px, 0);
+  }
+}
+.imgNew  {
+  animation: bounce 1.5s infinite;
 }
