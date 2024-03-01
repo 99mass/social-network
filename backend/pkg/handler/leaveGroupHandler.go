@@ -4,6 +4,7 @@ import (
 	"backend/pkg/controller"
 	"backend/pkg/helper"
 	"backend/pkg/utils"
+	websocket "backend/pkg/webSocket"
 	"database/sql"
 	"log"
 	"net/http"
@@ -36,7 +37,8 @@ func LeaveInGroupHandler(db *sql.DB) http.HandlerFunc {
 				helper.SendResponseError(w, "error", "something goes wrong", http.StatusBadRequest)
 				return
 			}
-
+			controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), groupeID, "chat_group")
+			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "methode not allowed", http.StatusMethodNotAllowed)
