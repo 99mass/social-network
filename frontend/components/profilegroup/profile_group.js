@@ -370,6 +370,7 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
           className={section.section4 ? styles.activeBtn : ""}
         >
           <i className="fa-solid fa-comment"></i>chat
+          {/* {nbrNotifJoinGroupRequest > 0 && <img className="imgNew" src="../images/new.png" alt="" />} */}
         </button>
 
         {isCreator && (
@@ -377,8 +378,8 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
             onClick={() => handleClick("section6")}
             className={section.section6 ? styles.activeBtn : ""}
           >
-            <i className="fa-solid fa-right-to-bracket"></i>Join Request{" "}
-            {nbrNotifJoinGroupRequest}
+            <i className="fa-solid fa-right-to-bracket"></i>Join Request
+            {nbrNotifJoinGroupRequest > 0 && <img className="imgNew" src="../images/new.png" alt="" />}
           </button>
         )}
       </div>
