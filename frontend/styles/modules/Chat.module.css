@@ -84,9 +84,34 @@
 
 .user a div p:first-of-type span {
   background: red;
-  padding: 5px 10px;
+  padding: 5px 6px;
   border-radius: 100%;
+  animation: bounce2 1.5s infinite;
 }
+@keyframes bounce2 {
+
+  from,
+  20%,
+  53%,
+  80%,
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+
+  40%,
+  43% {
+    transform: translate3d(0, -5px, 0);
+  }
+
+  70% {
+    transform: translate3d(0, -2px, 0);
+  }
+
+  90% {
+    transform: translate3d(0, 0px, 0);
+  }
+}
+
 
 .user a div p:last-of-type {
   white-space: nowrap;
@@ -97,7 +122,6 @@
 }
 
 @media screen and (min-width: 768px) {
-
 
   .sectionChat {
     width: 100%;

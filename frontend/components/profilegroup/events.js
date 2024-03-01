@@ -37,7 +37,7 @@ export default function EventLists({ group_id }) {
               participation_status={item.participation_status}
               toggleListUsers={toggleListUsers}
             />
-            {listUserGoing && <ListUserAcceptedEvent  eventID={item.event.id} toggleListUsers={toggleListUsers} />}
+            {listUserGoing && <ListUserAcceptedEvent eventID={item.event.id} toggleListUsers={toggleListUsers} />}
           </div>
         ))}
       </div>
