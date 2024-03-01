@@ -19,7 +19,6 @@ export default function EventLists({ group_id }) {
     ListAllEvents(group_id, setAllEvents);
   }, []);
 
-
   const toggleListUsers = (state) => setListUserGoing(state);
   return (
     <div className={styles.contentPostAbout}>
@@ -61,17 +60,16 @@ export function EventBloc({
   participation_status,
   toggleListUsers,
 }) {
-
   const [userdata, setuserdata] = useState();
- 
+  const [buttonStatus, setButtonStatus] = useState("going");
+
   useEffect(() => {
     getUserBySession(setuserdata);
   }, []);
 
-
-
   const handlerEventParticipant = (chosen_option, user) => {
     eventPartipants(eventID, chosen_option);
+    // setButtonStatus(chosen_option === "1" ? 'notGoing' : 'going');
   };
 
   return (
@@ -92,16 +90,19 @@ export function EventBloc({
       </p>
       <pre>{content}</pre>
       <div>
+        {/* {buttonStatus === 'going' && ( */}
         <button onClick={() => handlerEventParticipant("1")}>
           <i className="fa-solid fa-circle-check"></i>Going
         </button>
-        :
+        {/* )} */}
+        {/* {buttonStatus === 'notGoing' && ( */}.
         <button
           className={styles.btnNotGoing}
           onClick={() => handlerEventParticipant("0")}
         >
           <i className="fa-solid fa-circle-check"></i>Not going
         </button>
+        {/* )} */}
         <button
           onClick={() => toggleListUsers(true)}
           className={styles.btnNotGoing}
