@@ -301,6 +301,7 @@ func GetPostsGroup(db *sql.DB, groupId string) ([]models.Post, error) {
         SELECT *
         FROM posts
         WHERE group_id = ?
+		ORDER BY created_at DESC
     `
 	rows, err := db.Query(query, groupId)
 	if err != nil {
