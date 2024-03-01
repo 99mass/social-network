@@ -52,7 +52,7 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 		}
 		controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), idGroup, "join_group")
 		BroadcastUserList(db)
-		
+
 		upgrader := websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool { return true },
 		}
@@ -106,7 +106,8 @@ func PrivateGroupChat(db *sql.DB) http.HandlerFunc {
 			good.User = user
 			ToSend = append(ToSend, good)
 		}
-
+		controller.DeleteNotificationJoinGroup(db, sess.UserID.String(), idGroup, "join_group")
+		BroadcastUserList(db)
 		SendGenResponse("chat_group", conn, ToSend)
 
 		go HandleGroupMessage(db, conn, sess.UserID.String())
@@ -136,7 +137,6 @@ func HandleGroupMessage(db *sql.DB, conn *websocket.Conn, userID string) {
 		}
 		NotificationGroupChat(db, userID, message.GroupID)
 		BroadcastUserList(db)
-		
 
 	}
 }
