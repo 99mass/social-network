@@ -1,19 +1,23 @@
 /* error */
-.pemission-bloc{
-    width: 100%;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .pemission-bloc img {
-     width: 150px;
-     height: 150px
-  }
+.pemission-bloc {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-  .pemission-bloc p{
-    width: 50%;
-    text-align: center;
-  }
+.pemission-bloc img {
+  width: 150px;
+  height: 150px
+}
+
+.pemission-bloc p {
+  width: 50%;
+  text-align: center;
+}
+
+.pemission-bloc h3 {
+  text-align: center;
+}

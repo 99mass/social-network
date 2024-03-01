@@ -68,61 +68,65 @@ export default function PostGroup({
   };
 
   return (
-    <div className={`${styles.contentFormPost} content-form-post`}>
-      <div className={styles.postHeader}>
-        <h1>Create post</h1>
-        <i
-          className="fa-regular fa-circle-xmark close-form-btn"
-          onClick={PostForm}
-          title="Close form"
-        ></i>
-      </div>
-      <hr />
-      <form
-        method="post"
-        onSubmit={handlerGroupFromPost}
-        encType="multipart/form-data"
-      >
-        <div className={styles.postContent}>
-          <textarea
-            value={selectedEmoji}
-            name="content"
-            onChange={(e) => setSelectedEmoji(e.target.value)}
-            placeholder="What's on your mind ?"
-            id=""
-          />
-          <div className={styles.contentAssets}>
-          <span>{imgeName}</span>
-            <i
-              className="fa-regular fa-file-image"
-              title="Choose image"
-              onClick={handleFileIconClick}
-            >
-              <input
-                onChange={toggleImageName}
-                type="file"
-                className={styles.filesPost}
-                ref={fileInputRef}
-              />
-            </i>
-            <span
-              onClick={toggleEmojicon}
-              className="emoji"
-              title="Choose emoji"
-            >
-              😄
-            </span>
-
-            {emoji && (
-              <EmojiForm
-                toggleEmojicon={toggleEmojicon}
-                setSelectedEmoji={setSelectedEmoji}
-              />
-            )}
-          </div>
+    <>
+      <div className={`${styles.contentFormPost} content-form-post`}>
+        <div className={styles.postHeader}>
+          <h1>Create post</h1>
+          <i
+            className="fa-regular fa-circle-xmark close-form-btn"
+            onClick={PostForm}
+            title="Close form"
+          ></i>
         </div>
-        <button className={styles.btnPost}>Post</button>
-      </form>
-    </div>
+        <hr />
+        <form
+          method="post"
+          onSubmit={handlerGroupFromPost}
+          encType="multipart/form-data"
+        >
+          <div className={styles.postContent}>
+            <textarea
+              value={selectedEmoji}
+              name="content"
+              onChange={(e) => setSelectedEmoji(e.target.value)}
+              placeholder="What's on your mind ?"
+              id=""
+            />
+            <div className={styles.contentAssets}>
+              <span>{imgeName}</span>
+              <i
+                className="fa-regular fa-file-image"
+                title="Choose image"
+                onClick={handleFileIconClick}
+              >
+                <input
+                  onChange={toggleImageName}
+                  type="file"
+                  className={styles.filesPost}
+                  ref={fileInputRef}
+                />
+              </i>
+              <span
+                onClick={toggleEmojicon}
+                className="emoji"
+                title="Choose emoji"
+              >
+                😄
+              </span>
+
+
+            </div>
+          </div>
+          <button className={styles.btnPost}>Post</button>
+        </form>
+
+      </div>
+      {emoji && (
+        <EmojiForm
+          toggleEmojicon={toggleEmojicon}
+          setSelectedEmoji={setSelectedEmoji}
+        />
+      )}
+    </>
   );
 }

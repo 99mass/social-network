@@ -1,21 +1,18 @@
 import Link from "next/link";
 import styles from "../../styles/modules/Chat.module.css";
 import { useEffect, useState } from "react";
-import { getUserBySession } from "../../handler/getUserBySession";
 import {
   globalSocket,
   recentDiscussionsSocket,
 } from "../websocket/globalSocket";
 
 export default function ListUser() {
-  const [datasUser, setDatasUser] = useState(null);
   const [socket, setSocket] = useState(null);
   const [socketRecentDiscussion, setSocketRecentDiscussion] = useState(null);
   const [messagesLists, setMessagesLists] = useState(null);
 
   const [FriendsOnLine, setFriendsOnLine] = useState([]);
   useEffect(() => {
-    getUserBySession(setDatasUser);
     globalSocket(setSocket);
     recentDiscussionsSocket(setSocketRecentDiscussion);
   }, []);
@@ -106,7 +103,9 @@ export function LastChatWitheAutherUser({ data }) {
                 alt=""
               />
               <div>
-                <p>{item.other_user_nickname}</p>
+                <p>{item.other_user_nickname} {item.count_message_unread > 0 &&
+                  <span>{item.count_message_unread}+</span>
+                }</p>
                 <p>{item.last_message_content}</p>
               </div>
             </Link>

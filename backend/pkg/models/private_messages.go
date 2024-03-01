@@ -15,4 +15,5 @@ type RecentDiscussion struct {
 	LastMessageTime    string `json:"last_message_time"`
 	LastMessageContent string `json:"last_message_content"`
 	ImagePath          string `json:"other_user_avatarpath"`
+	CountMessageUnRead int		`json:"count_message_unread"`
 }

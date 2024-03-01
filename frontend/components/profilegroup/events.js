@@ -4,48 +4,51 @@ import { AboutGroup } from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
 import { convertAge } from "../../utils/convert_dates";
 import { AddEvent } from "../../handler/create_event";
-import { ListAllEvents, eventPartipants } from "../../handler/getAllEvents";
+import {
+  ListAllEvents,
+  eventPartipants,
+  list_response_events,
+} from "../../handler/getAllEvents";
 import { getUserBySession } from "../../handler/getUserBySession";
 
 export default function EventLists({ group_id }) {
   const [allevents, setAllEvents] = useState(null);
   const [listUserGoing, setListUserGoing] = useState(false);
 
-
   useEffect(() => {
     ListAllEvents(group_id, setAllEvents);
-  }, [])
-
-  
-
-  console.log("allevents",  allevents);
-
+  }, []);
 
   const toggleListUsers = (state) => setListUserGoing(state);
-
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
-        {allevents && allevents.map((item, index) => (
-          <EventBloc
-            key={index}
-            nameGroup={item.event.title}
-            numberPerson={item.going_count}
-            userBy={item.user.nickname}
-            time={item.event.day_time}
-            content={item.event.description}
-            eventID={item.event.id}
-            participation_status={item.participation_status}
-            toggleListUsers={toggleListUsers}
-          />
-        ))}
+        {allevents &&
+          allevents.map((item, index) => (
+            <div key={`${item.event.id}${index}`}>
+              <EventBloc
+                nameGroup={item.event.title}
+                numberPerson={item.going_count}
+                userBy={item.user.nickname}
+                time={item.event.day_time}
+                content={item.event.description}
+                eventID={item.event.id}
+                participation_status={item.participation_status}
+                toggleListUsers={toggleListUsers}
+              />
+              {listUserGoing && (
+                <ListUserAcceptedEvent
+                  eventID={item.event.id}
+                  toggleListUsers={toggleListUsers}
+                />
+              )}
+            </div>
+          ))}
       </div>
       <AboutGroup />
-      {listUserGoing && <ListUserAcceptedEvent toggleListUsers={toggleListUsers} setListUserGoing={setListUserGoing} />}
     </div>
   );
 }
-
 
 export function EventBloc({
   nameGroup,
@@ -55,40 +58,24 @@ export function EventBloc({
   content,
   eventID,
   participation_status,
-  toggleListUsers
+  toggleListUsers,
 }) {
+  const [userdata, setuserdata] = useState();
+  const [buttonStatus, setButtonStatus] = useState("going");
 
-  // const [goingOption, setgoingOp]=  useState()
-  // useEffect(() =>{
-    // eventPartipants(isGoing,choseOption,setgoingOp)
-  // },[])
-  const [userdata,setuserdata] = useState();
-  // console.log(userdata,"user");
-  // getUserBySession()
-  useEffect(() =>{
-    getUserBySession(setuserdata)
-  },[])
+  useEffect(() => {
+    getUserBySession(setuserdata);
+  }, []);
 
-  console.log(userdata?.id,"userid");
- 
- const handlerEventParticipant =(chosen_option,user)=> {
+  const handlerEventParticipant = (chosen_option, user) => {
+    eventPartipants(eventID, chosen_option);
+    // setButtonStatus(chosen_option === "1" ? 'notGoing' : 'going');
+  };
 
-  // const data = {
-  //   even_id: eventID,
-  //   user_id :userdata?.id,
-  //   option: chosen_option
-     
-  
-  // }
-  // console.log(data, "data");
-  // console.log(chosen_option);
-  eventPartipants(eventID,chosen_option)
- }
-  // console.log("Using state",goingOption &&goingOption);
   return (
     <div className={styles.eventDetails}>
       <h2>{nameGroup}</h2>
-      <p >
+      <p>
         <i className="fa-solid fa-user-group"></i>
         {numberPerson} person responded Going
       </p>
@@ -103,18 +90,23 @@ export function EventBloc({
       </p>
       <pre>{content}</pre>
       <div>
-        
-          <button onClick={()=>handlerEventParticipant("1")}>
-            <i className="fa-solid fa-circle-check"></i>Going
-            
-          </button>
-          :
-          <button className={styles.btnNotGoing} onClick={()=>handlerEventParticipant("0")} >
-            <i className="fa-solid fa-circle-check"></i>Not going
-          </button>
-          
-        
-        <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
+        {/* {buttonStatus === 'going' && ( */}
+        <button onClick={() => handlerEventParticipant("1")}>
+          <i className="fa-solid fa-circle-check"></i>Going
+        </button>
+        {/* )} */}
+        {/* {buttonStatus === 'notGoing' && ( */}.
+        <button
+          className={styles.btnNotGoing}
+          onClick={() => handlerEventParticipant("0")}
+        >
+          <i className="fa-solid fa-circle-check"></i>Not going
+        </button>
+        {/* )} */}
+        <button
+          onClick={() => toggleListUsers(true)}
+          className={styles.btnNotGoing}
+        >
           <i className="fa-solid fa-list-check"></i>Guest List
         </button>
       </div>
@@ -122,8 +114,6 @@ export function EventBloc({
   );
 }
 export function FromCreateEvent({ setSection, groupId }) {
-
-
   const toggleForm = () =>
     setSection({
       section1: true,
@@ -137,28 +127,27 @@ export function FromCreateEvent({ setSection, groupId }) {
     e.preventDefault();
     const dataFrom = new FormData(e.target);
     const title = dataFrom.get("title");
-    const description = dataFrom.get('description')
-    let date = dataFrom.get('date');
-    let hours = dataFrom.get('hours')
+    const description = dataFrom.get("description");
+    let date = dataFrom.get("date");
+    let hours = dataFrom.get("hours");
     if (title.trim() == "" || description.trim() == "" || !date || !hours) {
-      errorNotification("all fields must be completed")
-      return
+      errorNotification("all fields must be completed");
+      return;
     }
-    date = new Date(date)
-    date = convertAge(date)
-    hours = hours.toString()
-    const dayTime = `${date} ${hours}`
+    date = new Date(date);
+    date = convertAge(date);
+    hours = hours.toString();
+    const dayTime = `${date} ${hours}`;
 
     const data = {
       group_id: groupId,
       title: title,
       description: description,
-      day_time: dayTime
-    }
+      day_time: dayTime,
+    };
     console.log(data);
-    AddEvent(data)
-
-  }
+    AddEvent(data);
+  };
 
   return (
     <div className={styles.contentFormEvent}>
@@ -171,7 +160,7 @@ export function FromCreateEvent({ setSection, groupId }) {
         ></i>
       </div>
       <hr />
-      <form method="post" onSubmit={handlerEvent} >
+      <form method="post" onSubmit={handlerEvent}>
         <div className={styles.eventContent}>
           <input
             type="text"
@@ -199,65 +188,78 @@ export function FromCreateEvent({ setSection, groupId }) {
             </div>
           </div>
         </div>
-        <button type="submit" className={styles.btnEvent}>Create event</button>
+        <button type="submit" className={styles.btnEvent}>
+          Create event
+        </button>
       </form>
     </div>
   );
 }
 
-export function ListUserAcceptedEvent({ toggleListUsers }) {
-  const data = [
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-    {
-      image: "../images/default-image.svg",
-      user: "userName",
-    },
-  ];
+export function ListUserAcceptedEvent({ eventID, toggleListUsers }) {
+  const [EventLists, setEventLists] = useState(null);
+  useEffect(() => {
+    list_response_events(eventID, setEventLists);
+  }, []);
+
+  console.log("data", EventLists);
+
   return (
     <div className={styles.contentListPeopleGoing}>
       <div className={styles.listHeader}>
         <h1>
           <span>Listes Users</span>
-          <i onClick={() => toggleListUsers(false)} className={`fa-regular fa-circle-xmark ${styles.closeBtn}`} title="Close lists"></i>
+          <i
+            onClick={() => toggleListUsers(false)}
+            className={`fa-regular fa-circle-xmark ${styles.closeBtn}`}
+            title="Close lists"
+          ></i>
         </h1>
       </div>
       <hr />
       <div className={styles.listFriend}>
         <div className={styles.goingLists}>
           <h2>Going</h2>
-          {data.map((item, index) => (
-            <div key={index} className={styles.userBloc}>
-              <div>
-                <img src={item.image} alt="" />
-                <span>{item.user}</span>
-                <i className="fa-regular fa-circle-check"></i>
+          {EventLists &&
+            EventLists.going &&
+            EventLists.going.map((item, index) => (
+              <div key={index} className={styles.userBloc}>
+                <div>
+                  <img
+                    src={
+                      item.avatar_path
+                        ? `data:image/png;base64,${item.avatar_path}`
+                        : `../images/user-circle.png`
+                    }
+                    alt=""
+                  />
+                  <span>{item.user_name}</span>
+                  <i className="fa-regular fa-circle-check"></i>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className={styles.notGoingLists}>
           <h2>Not Going</h2>
-          {data.map((item, index) => (
-            <div key={index} className={styles.userBloc}>
-              <div>
-                <img src={item.image} alt="" />
-                <span>{item.user}</span>
-                <i className="fa-regular fa-circle-xmark"></i>
+          {EventLists &&
+            EventLists.not_going &&
+            EventLists.not_going.map((item, index) => (
+              <div key={index} className={styles.userBloc}>
+                <div>
+                  <img
+                    src={
+                      item.avatar_path
+                        ? `data:image/png;base64,${item.avatar_path}`
+                        : `../images/user-circle.png`
+                    }
+                    alt=""
+                  />
+                  <span>{item.user_name}</span>
+                  <i className="fa-regular fa-circle-xmark"></i>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

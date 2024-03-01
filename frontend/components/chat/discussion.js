@@ -11,9 +11,12 @@ import EmojiForm from "../emoji/emoji";
 import { errorNotification } from "../../utils/sweeAlert";
 import { getElapsedTime } from "../../utils/convert_dates";
 import { getDatasAutherUserInfos } from "../../handler/getAutherUserInfos";
-import { ToastNotification } from "../header";
+import { DisplayPopup } from "../header";
+import { Loader } from "../../utils/spinner";
 
 export default function DiscussionPage() {
+
+  const [isLoading, setIsLoading] = useState(true)
   const [datasUser, setDatasUser] = useState(null);
   const [datasUser2, setDatasUser2] = useState(null);
 
@@ -35,7 +38,11 @@ export default function DiscussionPage() {
   useEffect(() => {
     const fetchUserData = async () => {
       await getUserBySession(setDatasUser);
-      await getDatasAutherUserInfos(userid, setDatasUser2);
+      await getDatasAutherUserInfos(userid, setDatasUser2).then(() => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+      });
     };
     fetchUserData();
 
@@ -132,7 +139,7 @@ export default function DiscussionPage() {
 
   return (
     <>
-      {error || !datasUser || !datasUser2 ? (
+      {isLoading ? <Loader /> : error || !datasUser || !datasUser2 ? (
         <Error />
       ) : (
         <div className={styles.middleBloc}>
@@ -188,43 +195,16 @@ export default function DiscussionPage() {
           setSelectedEmoji={setSelectedEmoji}
         />
       )}
-
-      {notifJoinGroupRequest && (
-        <ToastNotification
-          type={notifJoinGroupRequest.type.replaceAll("_", " ") + " !"}
-          text={"requests permission to be a member of your group"}
-          sender={notifJoinGroupRequest.content.sender}
-          group={notifJoinGroupRequest.content.group}
-          setCloseState={setNotifJoinGroupRequest}
-        />
-      )}
-      {notifGroupInvitation && (
-        <ToastNotification
-          type={notifGroupInvitation.type.replaceAll("_", " ") + " !"}
-          text={"invites you to join the group"}
-          sender={notifGroupInvitation.content.sender}
-          group={notifGroupInvitation.content.group}
-          setCloseState={setNotifGroupInvitation}
-        />
-      )}
-      {notifFollow && (
-        <ToastNotification
-          type={notifFollow.type.replaceAll("_", " ") + " !"}
-          text={"has just sent you a friend request"}
-          sender={notifFollow.content.sender}
-          group={""}
-          setCloseState={setNotifFollow}
-        />
-      )}
-      {notifMessagesGroup && (
-        <ToastNotification
-          type={notifMessagesGroup.type.replaceAll("_", " ") + " !"}
-          text={"has just sent a message in the group"}
-          sender={notifMessagesGroup.content.sender}
-          group={notifMessagesGroup.content.group}
-          setCloseState={setNotifMessagesGroup}
-        />
-      )}
+      <DisplayPopup
+        notifFollow={notifFollow}
+        notifGroupInvitation={notifGroupInvitation}
+        notifJoinGroupRequest={notifJoinGroupRequest}
+        notifMessagesGroup={notifMessagesGroup}
+        setNotifFollow={setNotifFollow}
+        setNotifGroupInvitation={setNotifGroupInvitation}
+        setNotifJoinGroupRequest={setNotifJoinGroupRequest}
+        setNotifMessagesGroup={setNotifMessagesGroup}
+      />
     </>
   );
 }

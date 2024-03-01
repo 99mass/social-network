@@ -19,9 +19,11 @@ import { JoingGroupRequestHandler } from "../../handler/jointGroup";
 import JoinRequestGroup from "./joinGroupRequest";
 import { ErrorProfile } from "../errors/error_profiles";
 import { globalSocket } from "../websocket/globalSocket";
-import { ToastNotification } from "../header";
+import { DisplayPopup } from "../header";
+import { Loader } from "../../utils/spinner";
 
 export default function Profile_group() {
+  const [isLoading, setIsLoading] = useState(true)
   const [postForm, setPostForm] = useState(false);
   const [datas, setDatasProfileGroup] = useState(null);
   const [postGroup, setPostsGroup] = useState(null);
@@ -30,7 +32,11 @@ export default function Profile_group() {
 
   useEffect(() => {
     if (!datas) {
-      getDatasProfilGroup(setDatasProfileGroup, query.id);
+      getDatasProfilGroup(setDatasProfileGroup, query.id).then(() => {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      });
     }
   }, [query, datas]);
 
@@ -70,7 +76,7 @@ export default function Profile_group() {
 
   return (
     <>
-      {datas ? (
+      {isLoading ? <Loader /> : datas ? (
         <ContentCovertPhotoGroup
           section={section}
           handleSection={handleSection}
@@ -92,7 +98,7 @@ export default function Profile_group() {
         <ErrorProfile />
       )}
 
-      {section.section1 && (
+      {!isLoading && datas && section.section1 && (
         <Discussion
           postGroup={postGroup}
           setPostsGroup={setPostsGroup}
@@ -248,6 +254,7 @@ export function ContentCovertPhotoGroup({
           section={section}
           handleSection={handleSection}
           isCreator={isCreator}
+          groupId={groupId}
         />
       )}
 
@@ -283,9 +290,14 @@ export function ContentCovertPhotoGroup({
   );
 }
 
-export function NavMenuGroup({ section, handleSection, isCreator }) {
+export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
   const [socket, setSocket] = useState(null);
   const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
+  const [nbrNotifChatGroup, setNbrNotifChatGroup] = useState(0);
+  const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
+  const [notifMessagesGroup, setNotifMessagesGroup] = useState("");
+  const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
+  const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
 
   useEffect(() => {
@@ -310,16 +322,35 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
 
       switch (data.type) {
         case "nbr_notif_join_group_request":
-          setNbrNotifJoinGroupRequest(
-            data.content && data.content[0]?.count_join_request
-          );
+          if (data?.content?.length === 0) return
+          data && data.content && data.content.forEach(element => {
+            if (element.group_id === groupId) {
+              setNbrNotifJoinGroupRequest(element.count_join_request)
+            }
+          });
+          break;
+        case "nbr_notif_chat_group":
+          if (data?.content?.length === 0) return
+          data && data.content && data.content.forEach(element => {
+            if (element.group_id === groupId) {
+              setNbrNotifChatGroup(element.count_join_request)
+            }
+          });
+          break
+        case "notif_private_message":
+          setNotifMessagesPrivate(data);
+          break;
+        case "notif_follow_request":
+          setNotifFollow(data);
           break;
         case "notif_join_group_request":
           setNotifJoinGroupRequest(data);
-          console.log(data.content);
           break;
-
-        default:
+        case "notif_chat_group":
+          setNotifMessagesGroup(data);
+          break;
+        case "notif_group_invitation_request":
+          setNotifGroupInvitation(data);
           break;
       }
     };
@@ -370,6 +401,7 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
           className={section.section4 ? styles.activeBtn : ""}
         >
           <i className="fa-solid fa-comment"></i>chat
+          {nbrNotifChatGroup > 0 && <img className="imgNew" src="../images/new.png" alt="" />}
         </button>
 
         {isCreator && (
@@ -377,20 +409,25 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
             onClick={() => handleClick("section6")}
             className={section.section6 ? styles.activeBtn : ""}
           >
-            <i className="fa-solid fa-right-to-bracket"></i>Join Request{" "}
-            {nbrNotifJoinGroupRequest}
+            <i className="fa-solid fa-right-to-bracket"></i>Join Request
+            {nbrNotifJoinGroupRequest > 0 && <img className="imgNew" src="../images/new.png" alt="" />}
           </button>
         )}
       </div>
-      {notifJoinGroupRequest && (
-        <ToastNotification
-          type={notifJoinGroupRequest.type.replaceAll("_", " ") + " !"}
-          text={"requests permission to be a member of your group"}
-          sender={notifJoinGroupRequest.content.sender}
-          group={notifJoinGroupRequest.content.group}
-          setCloseState={setNotifJoinGroupRequest}
-        />
-      )}
+
+      <DisplayPopup
+        notifMessagesPrivate={notifMessagesPrivate}
+        notifFollow={notifFollow}
+        notifJoinGroupRequest={notifJoinGroupRequest}
+        notifGroupInvitation={notifGroupInvitation}
+        notifMessagesGroup={notifMessagesGroup}
+        setNotifMessagesPrivate={setNotifMessagesPrivate}
+        setNotifJoinGroupRequest={setNotifJoinGroupRequest}
+        setNotifGroupInvitation={setNotifGroupInvitation}
+        setNotifFollow={setNotifFollow}
+        setNotifMessagesGroup={setNotifMessagesGroup}
+      />
+
     </>
   );
 }

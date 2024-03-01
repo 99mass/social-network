@@ -40,7 +40,18 @@ func RecentDiscussionsHandler(db *sql.DB) http.HandlerFunc {
 			log.Println("Error fetching recent discussions:", err)
 			return
 		}
-
+		
+		detailMessage, _ := controller.GetNotificationMessageCountByTypeAndSenderID(db, sess.UserID.String(), "private_message")
+		for i,discuss := range discussions{
+			for _,det:= range detailMessage{
+				if discuss.OtherUserID == det.SenderID{
+					discussions[i].CountMessageUnRead = det.CountMessage
+				}
+			}
+			
+		}
+		
+		
 		// Envoyer les discussions récentes via le WebSocket
 		err = conn.WriteJSON(discussions)
 		if err != nil {
