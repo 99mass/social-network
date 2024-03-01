@@ -370,7 +370,7 @@ export function NavMenuGroup({ section, handleSection, isCreator }) {
           className={section.section4 ? styles.activeBtn : ""}
         >
           <i className="fa-solid fa-comment"></i>chat
-          {nbrNotifJoinGroupRequest > 0 && <img className="imgNew" src="../images/new.png" alt="" />}
+          {/* {nbrNotifJoinGroupRequest > 0 && <img className="imgNew" src="../images/new.png" alt="" />} */}
         </button>
 
         {isCreator && (
