@@ -1,10 +1,8 @@
 .middleBloc {
   width: 40%;
-  /* height: 100vh; */
   overflow-y: scroll;
   padding: 0px 10px;
   padding-bottom: 20px;
-  /* padding-bottom: 10rem; */
   z-index: 1;
 }
 
@@ -57,11 +55,10 @@
 .contentMessage div pre {
   width: 80%;
   padding: 10px;
-  /* border-radius: 10px; */
   text-wrap: wrap;
   word-wrap: break-word;
-  /* background: var(--primary-bg); */
-
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .contentMessage p {
@@ -92,6 +89,7 @@
   height: 50%;
   border-radius: 10px;
   margin-left: 60px;
+  object-fit: cover;
 }
 
 /* comment form */

@@ -108,6 +108,7 @@ func GetPostsByUserID(db *sql.DB, userID string) ([]models.Post, error) {
 		SELECT *
 		FROM posts
 		WHERE user_id = ?
+		ORDER BY created_at DESC
 	`
 
 	rows, err := db.Query(query, userID)
@@ -155,74 +156,75 @@ func IsPostLikedByUser(db *sql.DB, userID, postID string) (bool, error) {
 }
 
 func GetGroupPosts(db *sql.DB, userID, groupID string) ([]models.Post, error) {
-    // SQL query to get all posts for a specific group if the user is a member
-    query := `
+	// SQL query to get all posts for a specific group if the user is a member
+	query := `
         SELECT p.*
         FROM posts p
         INNER JOIN group_members gm ON p.group_id = gm.group_id
         WHERE p.group_id = ? AND gm.user_id = ?
     `
 
-    // Prepare the statement
-    stmt, err := db.Prepare(query)
-    if err != nil {
-        return nil, err
-    }
-    defer stmt.Close()
+	// Prepare the statement
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
 
-    // Execute the query
-    rows, err := stmt.Query(groupID, userID)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+	// Execute the query
+	rows, err := stmt.Query(groupID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-    // Scan the results into a slice of Posts
-    var posts []models.Post
-    for rows.Next() {
-        var post models.Post
-        err := rows.Scan(&post.ID, &post.UserID, &post.GroupID, &post.Content, &post.ImagePath, &post.Privacy, &post.CreatedAt)
-        if err != nil {
-            return nil, err
-        }
-        posts = append(posts, post)
-    }
+	// Scan the results into a slice of Posts
+	var posts []models.Post
+	for rows.Next() {
+		var post models.Post
+		err := rows.Scan(&post.ID, &post.UserID, &post.GroupID, &post.Content, &post.ImagePath, &post.Privacy, &post.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
 
-    // Check for errors from iterating over rows.
-    if err := rows.Err(); err != nil {
-        return nil, err
-    }
+	// Check for errors from iterating over rows.
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 
-    return posts, nil
+	return posts, nil
 }
 
 //Give all posts of groups where the user is a member
 func MyAllGroupPosts(db *sql.DB, userID string) ([]models.Post, error) {
-    query := `
+	query := `
         SELECT p.*
         FROM posts p
         INNER JOIN group_members gm ON p.group_id = gm.group_id
         WHERE gm.user_id = ?
+		ORDER BY p.created_at DESC
     `
-    rows, err := db.Query(query, userID)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+	rows, err := db.Query(query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-    var posts []models.Post
-    for rows.Next() {
-        var post models.Post
-        err := rows.Scan(&post.ID, &post.UserID, &post.GroupID, &post.Content, &post.ImagePath, &post.Privacy, &post.CreatedAt)
-        if err != nil {
-            return nil, err
-        }
-        posts = append(posts, post)
-    }
+	var posts []models.Post
+	for rows.Next() {
+		var post models.Post
+		err := rows.Scan(&post.ID, &post.UserID, &post.GroupID, &post.Content, &post.ImagePath, &post.Privacy, &post.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
 
-    if err := rows.Err(); err != nil {
-        return nil, err
-    }
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 
-    return posts, nil
+	return posts, nil
 }
