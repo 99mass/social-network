@@ -125,6 +125,7 @@
   height: 35px;
   border: 1px solid gray;
   border-radius: 10px;
+  object-fit: cover;
 }
 .listGroupManaged .group a .notifJoinGroup {
   background: transparent;
@@ -220,6 +221,7 @@
   width: 100%;
   height: 150px;
   border-radius: 10px 10px 0px 0px;
+  object-fit: cover;
 }
 
 .postSugess div {
@@ -298,6 +300,7 @@
   width: 100px;
   height: 100px;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .elementGroup .topElement span {
