@@ -65,27 +65,25 @@ export const ListAllEvents = async (groupId, setAllEvents) => {
 export const eventPartipants = async (event_id, choosen_option, setDatas) => {
     try {
         const sessionId = getSessionCookie();
-        // console.log("Sending data:", data); // Log the data being sent
-        const response = await fetch(`${api.Create_participants_event}?even_id=${event_id}&chosen_option${choosen_option}`, {
+        const response = await fetch(`${api.Create_participants_event}?event_id=${event_id}&choosen_option=${choosen_option}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: sessionId,
             },
-            // body: JSON.stringify(data)
         });
 
         if (response.ok) {
             const data = await response.json();
             console.log(data, "OptionGo");
-            // setDatas(data);
+            // setDatas(data); // Utilisez setDatas pour mettre à jour l'état
         } else {
             const errorData = await response.json();
             console.error('Errorsss', errorData.message);
-            // Consider handling specific HTTP status codes here
+            // Gérez ici les codes de statut HTTP spécifiques si nécessaire
         }
     } catch (error) {
         console.error("Error fetching profile data:", error.message);
-        // Consider handling network errors or other exceptions here
+        // Gérez ici les erreurs réseau ou autres exceptions
     }
 };

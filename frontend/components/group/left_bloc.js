@@ -6,7 +6,7 @@ import { getMygroups } from "../../handler/getGroup";
 import { defaultImage } from "./group_page";
 import { useRouter } from "next/router";
 import { globalSocket } from "../websocket/globalSocket";
-import { ToastNotification } from "../header";
+import { DisplayPopup } from "../header";
 
 export default function LeftBlocGroupPage({ state, handleState }) {
   const handleClick = (clickedState) => {
@@ -69,7 +69,7 @@ export default function LeftBlocGroupPage({ state, handleState }) {
           if (_message.content && _message.content.length > 0) {
             // Vérifier si on un message chat group non lue
             const hasHighRequest = _message.content.some(
-              (row) => row.count_join_request > 1
+              (row) => row.count_join_request >= 1
             );
             setHasHighbrNotifChatGroup(hasHighRequest);
           }
@@ -152,51 +152,18 @@ export default function LeftBlocGroupPage({ state, handleState }) {
           />
         )}
       </div>
-      {notifMessagesPrivate && (
-        <ToastNotification
-          type={notifMessagesPrivate.type.replaceAll("_", " ") + "!"}
-          text={"has just sent you a new private message"}
-          sender={notifMessagesPrivate.content.sender}
-          group={""}
-          setCloseState={setNotifMessagesPrivate}
-        />
-      )}
-      {notifJoinGroupRequest && (
-        <ToastNotification
-          type={notifJoinGroupRequest.type.replaceAll("_", " ") + " !"}
-          text={"requests permission to be a member of your group"}
-          sender={notifJoinGroupRequest.content.sender}
-          group={notifJoinGroupRequest.content.group}
-          setCloseState={setNotifJoinGroupRequest}
-        />
-      )}
-      {notifGroupInvitation && (
-        <ToastNotification
-          type={notifGroupInvitation.type.replaceAll("_", " ") + " !"}
-          text={"invites you to join the group"}
-          sender={notifGroupInvitation.content.sender}
-          group={notifGroupInvitation.content.group}
-          setCloseState={setNotifGroupInvitation}
-        />
-      )}
-      {notifFollow && (
-        <ToastNotification
-          type={notifFollow.type.replaceAll("_", " ") + " !"}
-          text={"has just sent you a friend request"}
-          sender={notifFollow.content.sender}
-          group={""}
-          setCloseState={setNotifFollow}
-        />
-      )}
-      {notifMessagesGroup && (
-        <ToastNotification
-          type={notifMessagesGroup.type.replaceAll("_", " ") + " !"}
-          text={"has just sent a message in the group"}
-          sender={notifMessagesGroup.content.sender}
-          group={notifMessagesGroup.content.group}
-          setCloseState={setNotifMessagesGroup}
-        />
-      )}
+      <DisplayPopup
+        notifMessagesPrivate={notifMessagesPrivate}
+        notifFollow={notifFollow}
+        notifJoinGroupRequest={notifJoinGroupRequest}
+        notifGroupInvitation={notifGroupInvitation}
+        notifMessagesGroup={notifMessagesGroup}
+        setNotifMessagesPrivate={setNotifMessagesPrivate}
+        setNotifJoinGroupRequest={setNotifJoinGroupRequest}
+        setNotifGroupInvitation={setNotifGroupInvitation}
+        setNotifFollow={setNotifFollow}
+        setNotifMessagesGroup={setNotifMessagesGroup}
+      />
     </>
   );
 }
