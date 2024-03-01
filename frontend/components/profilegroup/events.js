@@ -19,9 +19,6 @@ export default function EventLists({ group_id }) {
     ListAllEvents(group_id, setAllEvents);
   }, []);
 
-  // console.log(listUserGoing,"list_events");
-
-  // console.log("allevents",  allevents);
 
   const toggleListUsers = (state) => setListUserGoing(state);
   return (
@@ -64,10 +61,7 @@ export function EventBloc({
   participation_status,
   toggleListUsers,
 }) {
-  // const [goingOption, setgoingOp]=  useState()
-  // useEffect(() =>{
-  // eventPartipants(isGoing,choseOption,setgoingOp)
-  // },[])
+
   const [userdata, setuserdata] = useState();
  
   useEffect(() => {
