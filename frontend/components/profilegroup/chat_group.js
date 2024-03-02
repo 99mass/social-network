@@ -21,12 +21,12 @@ export function ChatContainer({ setSection, groupName, group_id }) {
   const [dataUserConected, setDataUserConnected] = useState(null)
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState(null);
-
+  const [selectedEmoji, setSelectedEmoji] = useState("");
 
   useEffect(() => {
     getUserBySession(setDataUserConnected);
     const timer = setTimeout(() => {
-      allDiscussionGroupPrivateSocket(setSocket,group_id);
+      allDiscussionGroupPrivateSocket(setSocket, group_id);
     }, 200);
 
     return () => clearTimeout(timer);
@@ -67,7 +67,11 @@ export function ChatContainer({ setSection, groupName, group_id }) {
     }
 
     socket.send(JSON.stringify(data));
-    allDiscussionGroupPrivateSocket(setSocket,group_id); //actualiser les anciennes messages
+    allDiscussionGroupPrivateSocket(setSocket, group_id); //actualiser les anciennes messages
+
+    // Clear the textarea by resetting the selectedEmoji state
+    setSelectedEmoji("");
+
   };
 
   return (
@@ -75,7 +79,7 @@ export function ChatContainer({ setSection, groupName, group_id }) {
       <ChatHeader setSection={setSection} groupName={groupName} />
       <hr />
       <ChatBody messages={messages} userId={dataUserConected?.id} group_id={group_id} />
-      <ChatFooter group_id={group_id} handlerSendMessage={handlerSendMessage} />
+      <ChatFooter group_id={group_id} handlerSendMessage={handlerSendMessage} selectedEmoji={selectedEmoji} setSelectedEmoji={setSelectedEmoji} />
     </div>
   );
 }
@@ -131,10 +135,10 @@ export function ChatBody({ messages, userId, group_id }) {
   );
 }
 
-export function ChatFooter({ handlerSendMessage }) {
+export function ChatFooter({ handlerSendMessage, selectedEmoji, setSelectedEmoji }) {
 
   const [emoji, setEmoji] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState("");
+
   const toggleEmojicon = () => setEmoji(!emoji);
 
   return (

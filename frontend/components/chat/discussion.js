@@ -137,6 +137,8 @@ export default function DiscussionPage() {
 
     socket.send(JSON.stringify(data));
     allDiscussionPrivateSocket(setSocketDiscussion); //actualiser les anciennes messages
+    // Clear the textarea by resetting the selectedEmoji state
+    setSelectedEmoji("");
   };
 
   const toggleEmojicon = () => setEmoji(!emoji);
