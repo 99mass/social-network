@@ -12,8 +12,8 @@ export default function LeftBlocGroupPage({ state, handleState }) {
 
   const [groups, setGroups] = useState();
   const [groupForm, setGroupForm] = useState(false);
-  const [hasHighNbrNotifChatGroup, setHasHighbrNotifChatGroup] =
-    useState(false);
+  const [hasHighNbrNotifChatGroup, setHasHighbrNotifChatGroup] = useState(false);
+  const [hasHighbrNotifEventGroup, setHasHighbrNotifEventGroup] = useState(false);
   const [nbrNotifInvitationGroup, setNbrNotifInvitationGroup] = useState(0);
   const [nbrNotifJoinGroupRequest, setNbrJoinGroupRequest] = useState([]);
   const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
@@ -21,6 +21,7 @@ export default function LeftBlocGroupPage({ state, handleState }) {
   const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
   const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
+  const [NotifGroupEvent, setNotifGroupEvent] = useState('')
 
   const [socket, setSocket] = useState(null);
 
@@ -40,13 +41,9 @@ export default function LeftBlocGroupPage({ state, handleState }) {
   }, []);
 
   useEffect(() => {
-    // const timer = setTimeout(() => {
-      if (!socket || socket.readyState !== WebSocket.OPEN) {
-        globalSocket(setSocket);
-      }
-    // }, 10);
-
-    // return () => clearTimeout(timer);
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      globalSocket(setSocket);
+    }
   }, []);
 
   useEffect(() => {
@@ -63,6 +60,15 @@ export default function LeftBlocGroupPage({ state, handleState }) {
         case "nbr_notif_join_group_request":
           if (_message.content && _message.content.length > 0)
             setNbrJoinGroupRequest(_message.content);
+          break;
+        case "nbr_notif_group_event":
+          if (_message.content && _message.content.length > 0) {
+            // Vérifier si on de nouveau event non lue
+            const hasEvents = _message.content.some(
+              (row) => row.count_join_request >= 1
+            );
+            setHasHighbrNotifEventGroup(hasEvents);
+          }
           break;
         case "nbr_notif_chat_group":
           if (_message.content && _message.content.length > 0) {
@@ -92,6 +98,9 @@ export default function LeftBlocGroupPage({ state, handleState }) {
         case "notif_join_group_request":
           setNotifJoinGroupRequest(_message);
           break;
+        case "notif_group_event":
+          setNotifGroupEvent(_message);
+          break
       }
     };
   }, [socket]);
@@ -122,7 +131,7 @@ export default function LeftBlocGroupPage({ state, handleState }) {
             <span>
               <i className="fa-solid fa-people-group"></i>your groups
             </span>
-            {hasHighNbrNotifChatGroup && <img src="../images/new.png" alt="" />}
+            {(hasHighNbrNotifChatGroup || hasHighbrNotifEventGroup) && <img src="../images/new.png" alt="" />}
           </h4>
           <h4
             onClick={() => handleClick("state4")}
@@ -157,11 +166,13 @@ export default function LeftBlocGroupPage({ state, handleState }) {
         notifJoinGroupRequest={notifJoinGroupRequest}
         notifGroupInvitation={notifGroupInvitation}
         notifMessagesGroup={notifMessagesGroup}
+        NotifGroupEvent={NotifGroupEvent}
         setNotifMessagesPrivate={setNotifMessagesPrivate}
         setNotifJoinGroupRequest={setNotifJoinGroupRequest}
         setNotifGroupInvitation={setNotifGroupInvitation}
         setNotifFollow={setNotifFollow}
         setNotifMessagesGroup={setNotifMessagesGroup}
+        setNotifGroupEvent={setNotifGroupEvent}
       />
     </>
   );

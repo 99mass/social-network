@@ -112,6 +112,30 @@ func NotificationGroupChat(db *sql.DB, senderID, sourceID string) {
 
 }
 
+func NotificationGroupEvent(db *sql.DB,senderID,sourceID string){
+	sender, _ := controller.GetUserNameByID(db, senderID)
+	group, _ := controller.GetGroupTitle(db, sourceID)
+
+	var notif notif_group_invitation
+	notif.Sender = sender
+	notif.Group = group
+
+	members, _ := controller.GetGroupMembers(db, sourceID)
+	for _, member := range members {
+
+		if user, ok := ConnectedUsersList[member.ID]; ok {
+			if member.ID != senderID {
+				CreateGeneralNotif(db, member.ID, senderID, sourceID, "group_event")
+				err := SendGenResponse("notif_group_event", user.Conn, notif)
+				if err != nil {
+					log.Println("enable to send a notification to the user that you sent the message")
+				}
+			}
+
+		}
+	}
+}
+
 func CreateGeneralNotif(db *sql.DB, userID, senderID, sourceID, typeNotif string) error {
 	var notif models.Notification
 	notif.UserID = userID

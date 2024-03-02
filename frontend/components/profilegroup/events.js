@@ -4,48 +4,50 @@ import { AboutGroup } from "./discussions";
 import { errorNotification } from "../../utils/sweeAlert";
 import { convertAge } from "../../utils/convert_dates";
 import { AddEvent } from "../../handler/create_event";
-import { ListAllEvents, eventPartipants, list_response_events } from "../../handler/getAllEvents";
-import { getUserBySession } from "../../handler/getUserBySession";
+import {
+  ListAllEvents,
+  eventPartipants,
+  list_response_events,
+} from "../../handler/getAllEvents";
 
-export default function EventLists({ group_id }) {
+export default function EventLists({ group_id, description }) {
   const [allevents, setAllEvents] = useState(null);
-  const [listUserGoing, setListUserGoing] = useState(false);
-
+  const [openEventId, setOpenEventId] = useState(null);
 
   useEffect(() => {
     ListAllEvents(group_id, setAllEvents);
-  }, [])
+  }, []);
 
-  // console.log(listUserGoing,"list_events");
+  const toggleListUsers = (eventId) => {
+    setOpenEventId(openEventId === eventId ? null : eventId);
+  };
 
-  // console.log("allevents",  allevents);
-
-
-  const toggleListUsers = (state) => setListUserGoing(state);
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
-        {allevents && allevents.map((item, index) => (
-          <div key={`${item.event.id}${index}`} >
-            <EventBloc
-              nameGroup={item.event.title}
-              numberPerson={item.going_count}
-              userBy={item.user.nickname}
-              time={item.event.day_time}
-              content={item.event.description}
-              eventID={item.event.id}
-              participation_status={item.participation_status}
-              toggleListUsers={toggleListUsers}
-            />
-            {listUserGoing && <ListUserAcceptedEvent eventID={item.event.id} toggleListUsers={toggleListUsers} />}
-          </div>
-        ))}
+        {allevents &&
+          allevents.map((item, index) => (
+            <div key={`${item.event.id}${index}`}>
+              <EventBloc
+                nameGroup={item.event.title}
+                numberPerson={item.going_count}
+                userBy={item.user.nickname}
+                time={item.event.day_time}
+                content={item.event.description}
+                eventID={item.event.id}
+                participation_status={item.participation_status}
+                toggleListUsers={toggleListUsers}
+                group_id={group_id}
+                setAllEvents={setAllEvents}
+                isListOpen={openEventId === item.event.id}
+              />
+            </div>
+          ))}
       </div>
-      <AboutGroup />
+      {description && <AboutGroup description={description} />}
     </div>
   );
 }
-
 
 export function EventBloc({
   nameGroup,
@@ -55,72 +57,69 @@ export function EventBloc({
   content,
   eventID,
   participation_status,
-  toggleListUsers
+  toggleListUsers,
+  group_id,
+  setAllEvents,
+  isListOpen,
 }) {
-
-
-
-  // const [goingOption, setgoingOp]=  useState()
-  // useEffect(() =>{
-  // eventPartipants(isGoing,choseOption,setgoingOp)
-  // },[])
-  const [userdata, setuserdata] = useState();
-  // console.log(userdata,"user");
-  // getUserBySession()
-  useEffect(() => {
-    getUserBySession(setuserdata)
-    // list_response_events(eventID,setEventLists)
-  }, [])
-
-  // console.log(EventLists,"asss");
-
-  // console.log(userdata?.id,"userid");
-
-  const handlerEventParticipant = (chosen_option, user) => {
-
-    eventPartipants(eventID, chosen_option)
-  }
-
+  const handlerEventParticipant = (chosen_option) => {
+    eventPartipants(eventID, chosen_option, group_id, setAllEvents);
+  };
 
   return (
-    <div className={styles.eventDetails}>
-      <h2>{nameGroup}</h2>
-      <p >
-        <i className="fa-solid fa-user-group"></i>
-        {numberPerson} person responded Going
-      </p>
-      <p>
-        <i className="fa-solid fa-user-group"></i>
-        <span>Event by</span>
-        {userBy}
-      </p>
-      <p className={styles.duration}>
-        <i className="fa-solid fa-stopwatch"></i>
-        {time}
-      </p>
-      <pre>{content}</pre>
-      <div>
+    <>
+      <div className={styles.eventDetails}>
+        <h2>{nameGroup}</h2>
+        <p>
+          <i className="fa-solid fa-user-group"></i>
+          {numberPerson} person responded Going
+        </p>
+        <p>
+          <i className="fa-solid fa-user-group"></i>
+          <span>Event by</span>
+          {userBy}
+        </p>
+        <p className={styles.duration}>
+          <i className="fa-solid fa-stopwatch"></i>
+          {time}
+        </p>
+        <pre>{content}</pre>
+        <div>
+          <button
+            className={participation_status === "Going" ? styles.activeBtn : ""}
+            onClick={() => handlerEventParticipant("1")}
+          >
+            <i className="fa-solid fa-circle-check"></i>Going
+          </button>
+          <button
+            className={
+              participation_status === "Not Going" ? styles.activeBtn : ""
+            }
+            onClick={() => handlerEventParticipant("0")}
+          >
+            <i className="fa-solid fa-circle-check"></i>Not going
+          </button>
+          <button
+            onClick={() => toggleListUsers(eventID)}
+            className={styles.defaultBtn}
+          >
+            <i className="fa-solid fa-list-check"></i>Guest List
+          </button>
+        </div>
 
-        <button onClick={() => handlerEventParticipant("1")}>
-          <i className="fa-solid fa-circle-check"></i>Going
-
-        </button>
-        :
-        <button className={styles.btnNotGoing} onClick={() => handlerEventParticipant("0")} >
-          <i className="fa-solid fa-circle-check"></i>Not going
-        </button>
-
-
-        <button onClick={() => toggleListUsers(true)} className={styles.btnNotGoing}>
-          <i className="fa-solid fa-list-check"></i>Guest List
-        </button>
       </div>
-    </div>
+      {isListOpen && (
+        <ListUserAcceptedEvent
+          eventID={eventID}
+          toggleListUsers={toggleListUsers}
+        />
+      )}
+    </>
   );
 }
+
+
 export function FromCreateEvent({ setSection, groupId }) {
-
-
   const toggleForm = () =>
     setSection({
       section1: true,
@@ -134,28 +133,27 @@ export function FromCreateEvent({ setSection, groupId }) {
     e.preventDefault();
     const dataFrom = new FormData(e.target);
     const title = dataFrom.get("title");
-    const description = dataFrom.get('description')
-    let date = dataFrom.get('date');
-    let hours = dataFrom.get('hours')
+    const description = dataFrom.get("description");
+    let date = dataFrom.get("date");
+    let hours = dataFrom.get("hours");
     if (title.trim() == "" || description.trim() == "" || !date || !hours) {
-      errorNotification("all fields must be completed")
-      return
+      errorNotification("all fields must be completed");
+      return;
     }
-    date = new Date(date)
-    date = convertAge(date)
-    hours = hours.toString()
-    const dayTime = `${date} ${hours}`
+    date = new Date(date);
+    date = convertAge(date);
+    hours = hours.toString();
+    const dayTime = `${date} ${hours}`;
 
     const data = {
       group_id: groupId,
       title: title,
       description: description,
-      day_time: dayTime
-    }
+      day_time: dayTime,
+    };
     console.log(data);
-    AddEvent(data)
-
-  }
+    AddEvent(data);
+  };
 
   return (
     <div className={styles.contentFormEvent}>
@@ -168,7 +166,7 @@ export function FromCreateEvent({ setSection, groupId }) {
         ></i>
       </div>
       <hr />
-      <form method="post" onSubmit={handlerEvent} >
+      <form method="post" onSubmit={handlerEvent}>
         <div className={styles.eventContent}>
           <input
             type="text"
@@ -196,54 +194,80 @@ export function FromCreateEvent({ setSection, groupId }) {
             </div>
           </div>
         </div>
-        <button type="submit" className={styles.btnEvent}>Create event</button>
+        <button type="submit" className={styles.btnEvent}>
+          Create event
+        </button>
       </form>
     </div>
   );
 }
 
 export function ListUserAcceptedEvent({ eventID, toggleListUsers }) {
-  const [EventLists, setEventLists] = useState(null)
+  const [EventLists, setEventLists] = useState(null);
   useEffect(() => {
-    list_response_events(eventID, setEventLists)
-  }, [])
-
-  console.log('data', EventLists);
+    list_response_events(eventID, setEventLists);
+  }, []);
 
   return (
     <div className={styles.contentListPeopleGoing}>
       <div className={styles.listHeader}>
         <h1>
           <span>Listes Users</span>
-          <i onClick={() => toggleListUsers(false)} className={`fa-regular fa-circle-xmark ${styles.closeBtn}`} title="Close lists"></i>
+          <i
+            onClick={() => toggleListUsers(false)}
+            className={`fa-regular fa-circle-xmark ${styles.closeBtn}`}
+            title="Close lists"
+          ></i>
         </h1>
       </div>
       <hr />
       <div className={styles.listFriend}>
         <div className={styles.goingLists}>
           <h2>Going</h2>
-          {EventLists && EventLists.going.map((item, index) => (
-            <div key={index} className={styles.userBloc}>
-              <div>
-                <img src={item.avatar_path ? `data:image/png;base64,${item.avatar_path}` : `../images/user-circle.png`} alt="" />
-                <span>{item.user_name}</span>
-                <i className="fa-regular fa-circle-check"></i>
+          {EventLists &&
+            EventLists.going &&
+            EventLists.going.map((item, index) => (
+              <div key={`${item.user_id}${index}`} className={styles.userBloc}>
+                <div>
+                  <span>
+                    <img
+                      src={
+                        item.avatar_path
+                          ? `data:image/png;base64,${item.avatar_path}`
+                          : `../images/user-circle.png`
+                      }
+                      alt=""
+                    />
+                    <span>{item.user_name}</span>
+                  </span>
+                  <i className="fa-regular fa-circle-check"></i>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className={styles.notGoingLists}>
           <h2>Not Going</h2>
-           {EventLists && EventLists.not_going.map((item, index) => (
-            <div key={index} className={styles.userBloc}>
-              <div>
-                <img src={item.avatar_path ? `data:image/png;base64,${item.avatar_path}` :`../images/user-circle.png`} alt="" />
-                <span>{item.user_name}</span>
-                <i className="fa-regular fa-circle-xmark"></i>
+          {EventLists &&
+            EventLists.not_going &&
+            EventLists.not_going.map((item, index) => (
+              <div key={`${item.user_id}${index}`} className={styles.userBloc}>
+                <div>
+                  <span>
+                    <img
+                      src={
+                        item.avatar_path
+                          ? `data:image/png;base64,${item.avatar_path}`
+                          : `../images/user-circle.png`
+                      }
+                      alt=""
+                    />
+                    <span>{item.user_name}</span>
+                  </span>
+                  <i className="fa-regular fa-circle-xmark"></i>
+                </div>
               </div>
-            </div>
-          ))} 
+            ))}
         </div>
       </div>
     </div>

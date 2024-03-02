@@ -149,7 +149,8 @@
 .menuMiddle {
   border: none;
   width: 70%;
-  padding: 0px 15%;
+  padding: 0px 5%;
+  padding-right: 0px;
 }
 
 .discover,
@@ -272,13 +273,14 @@
   height: fit-content;
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 25px;
   padding-top: 20px;
   margin-bottom: 10rem;
 }
 
 .elementGroup {
-  width: 48%;
+  width: 45%;
+  min-width: fit-content;
   height: 200px;
   display: flex;
   flex-direction: column;
@@ -306,8 +308,12 @@
    width: 30px;
    height: 30px;
 }
-.elementGroup .topElement span {
+.elementGroup .topElement a span {
   text-transform: capitalize;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  text-wrap: wrap;
 }
 
 .elementGroup .view {

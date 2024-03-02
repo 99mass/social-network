@@ -16,7 +16,7 @@ export default function Discussion({
       getPostsGroup(groupId, setPostsGroup);
     }
   }, [isMember]);
-  
+
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
@@ -28,9 +28,8 @@ export default function Discussion({
                 user={item.user.firstname}
                 image={item.post.image_path}
                 isfollowed={item.is_followed}
-                time={`${getElapsedTime(item.post.created_at).value} ${
-                  getElapsedTime(item.post.created_at).unit
-                }`}
+                time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit
+                  }`}
                 groupid={groupId}
                 setPostsGroup={setPostsGroup}
               />
@@ -50,7 +49,7 @@ export default function Discussion({
             </div>
           ))}
       </div>
-      <AboutGroup description={description} />
+      {description && <AboutGroup description={description} />}
     </div>
   );
 }

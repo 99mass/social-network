@@ -29,6 +29,7 @@ export default function DiscussionPage() {
   const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
   const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
+  const [NotifGroupEvent, setNotifGroupEvent] = useState('')
   const [error, setError] = useState(false);
 
   const router = useRouter();
@@ -83,6 +84,9 @@ export default function DiscussionPage() {
         case "notif_join_group_request":
           setNotifJoinGroupRequest(_message);
           break;
+        case "notif_group_event":
+          setNotifGroupEvent(_message);
+          break
       }
     };
   }, [socket]);
@@ -200,10 +204,12 @@ export default function DiscussionPage() {
         notifGroupInvitation={notifGroupInvitation}
         notifJoinGroupRequest={notifJoinGroupRequest}
         notifMessagesGroup={notifMessagesGroup}
+        NotifGroupEvent={NotifGroupEvent}
         setNotifFollow={setNotifFollow}
         setNotifGroupInvitation={setNotifGroupInvitation}
         setNotifJoinGroupRequest={setNotifJoinGroupRequest}
         setNotifMessagesGroup={setNotifMessagesGroup}
+        setNotifGroupEvent={setNotifGroupEvent}
       />
     </>
   );

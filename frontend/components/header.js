@@ -22,6 +22,7 @@ export default function Header() {
   const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
   const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
+  const [NotifGroupEvent, setNotifGroupEvent] = useState('')
   const router = useRouter();
 
   const handlerLogOut = async () => {
@@ -51,6 +52,7 @@ export default function Header() {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
+      // console.log(_message);
 
       switch (_message.type) {
         // old notifications
@@ -82,6 +84,9 @@ export default function Header() {
         case "notif_join_group_request":
           setNotifJoinGroupRequest(_message);
           break;
+        case "notif_group_event":
+          setNotifGroupEvent(_message);
+          break
       }
     };
   }, [socket]);
@@ -130,11 +135,13 @@ export default function Header() {
         notifJoinGroupRequest={notifJoinGroupRequest}
         notifGroupInvitation={notifGroupInvitation}
         notifMessagesGroup={notifMessagesGroup}
+        NotifGroupEvent={NotifGroupEvent}
         setNotifMessagesPrivate={setNotifMessagesPrivate}
         setNotifJoinGroupRequest={setNotifJoinGroupRequest}
         setNotifGroupInvitation={setNotifGroupInvitation}
         setNotifFollow={setNotifFollow}
         setNotifMessagesGroup={setNotifMessagesGroup}
+        setNotifGroupEvent={setNotifGroupEvent}
       />
     </>
   );
@@ -254,11 +261,13 @@ export function DisplayPopup({
   notifJoinGroupRequest,
   notifGroupInvitation,
   notifMessagesGroup,
+  NotifGroupEvent,
   setNotifMessagesPrivate,
   setNotifJoinGroupRequest,
   setNotifGroupInvitation,
   setNotifFollow,
-  setNotifMessagesGroup
+  setNotifMessagesGroup,
+  setNotifGroupEvent
 }) {
   return (
     <>
@@ -306,6 +315,15 @@ export function DisplayPopup({
           sender={notifMessagesGroup.content.sender}
           group={notifMessagesGroup.content.group}
           setCloseState={setNotifMessagesGroup}
+        />
+      )}
+      {NotifGroupEvent && (
+        <ToastNotification
+          type={NotifGroupEvent.type.replaceAll("_", " ") + " !"}
+          text={"has just published an event in the group"}
+          sender={NotifGroupEvent.content.sender}
+          group={NotifGroupEvent.content.group}
+          setCloseState={setNotifGroupEvent}
         />
       )}
     </>

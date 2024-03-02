@@ -116,7 +116,7 @@ export default function Profile_group() {
         />
       )}
       {section.section3 && datas && datas.isMember && (
-        <EventLists group_id={datas && datas.GroupInfos.id} />
+        <EventLists group_id={datas && datas.GroupInfos.id} description={datas && datas.GroupInfos.description} />
       )}
       {section.section4 && datas && datas.isMember && (
         <ChatGroup
@@ -294,11 +294,13 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
   const [socket, setSocket] = useState(null);
   const [nbrNotifJoinGroupRequest, setNbrNotifJoinGroupRequest] = useState(0);
   const [nbrNotifChatGroup, setNbrNotifChatGroup] = useState(0);
+  const [nbrNotifGroupEvent, setNbrNotifGroupEvent] = useState(0)
   const [notifMessagesPrivate, setNotifMessagesPrivate] = useState("");
   const [notifMessagesGroup, setNotifMessagesGroup] = useState("");
   const [notifGroupInvitation, setNotifGroupInvitation] = useState("");
   const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
+  const [NotifGroupEvent, setNotifGroupEvent] = useState('')
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -319,6 +321,8 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      if (!data) return;
+      console.log(data);
 
       switch (data.type) {
         case "nbr_notif_join_group_request":
@@ -326,6 +330,14 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
           data && data.content && data.content.forEach(element => {
             if (element.group_id === groupId) {
               setNbrNotifJoinGroupRequest(element.count_join_request)
+            }
+          });
+          break;
+        case "nbr_notif_group_event":
+          if (data?.content?.length === 0) return
+          data && data.content && data.content.forEach(element => {
+            if (element.group_id === groupId) {
+              setNbrNotifGroupEvent(element.count_join_request)
             }
           });
           break;
@@ -352,6 +364,9 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
         case "notif_group_invitation_request":
           setNotifGroupInvitation(data);
           break;
+        case "notif_group_event":
+          setNotifGroupEvent(data);
+          break
       }
     };
   }, [socket]);
@@ -389,6 +404,7 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
           className={section.section3 ? styles.activeBtn : ""}
         >
           <i className="fa-brands fa-elementor"></i>Events
+          {nbrNotifGroupEvent > 0 && <img className="imgNew" src="../images/new.png" alt="" />}
         </button>
         <button
           onClick={() => handleClick("section5")}
@@ -421,11 +437,13 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
         notifJoinGroupRequest={notifJoinGroupRequest}
         notifGroupInvitation={notifGroupInvitation}
         notifMessagesGroup={notifMessagesGroup}
+        NotifGroupEvent={NotifGroupEvent}
         setNotifMessagesPrivate={setNotifMessagesPrivate}
         setNotifJoinGroupRequest={setNotifJoinGroupRequest}
         setNotifGroupInvitation={setNotifGroupInvitation}
         setNotifFollow={setNotifFollow}
         setNotifMessagesGroup={setNotifMessagesGroup}
+        setNotifGroupEvent={setNotifGroupEvent}
       />
 
     </>

@@ -281,7 +281,7 @@
   padding: 8px;
   margin: 10px;
   font-size: 17px;
-  background: var(--second-blue);
+  background: var(--primary-bg);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -291,14 +291,9 @@
   margin-right: 5px;
 }
 
-.eventDetails .btnNotGoing {
-  background: var(--primary-bg);
+.eventDetails .activeBtn {
+  background: var(--second-blue);
 }
-
-
-
-
-
 
 
 
@@ -678,7 +673,7 @@
   height: fit-content;
   padding: 5px;
   display: flex;
-  gap: 5px;
+  gap: 20px;
 }
 
 .listFriend .goingLists,
@@ -697,15 +692,21 @@
 
 .listFriend div .userBloc {
   display: flex;
+  margin-bottom: 10px;
 }
 
 .listFriend .userBloc div {
+  width: 100%;
   display: flex;
   align-items: center;
-
+  justify-content: space-between;
+  /* gap: 10px;  */
+}
+.listFriend .userBloc div span {
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
-
 .listFriend .userBloc div img {
   width: 40px;
   height: 40px;
