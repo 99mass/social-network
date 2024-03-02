@@ -9,6 +9,7 @@ import (
 	"backend/pkg/helper"
 	"backend/pkg/models"
 	"backend/pkg/utils"
+	websocket "backend/pkg/webSocket"
 )
 
 func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
@@ -75,6 +76,8 @@ func GetEventsByGroupHandler(db *sql.DB) http.HandlerFunc {
 
 				eventRequests = append(eventRequests, eventRequest)
 			}
+			controller.DeleteNotificationJoinGroup(db,sess.UserID.String(),groupID,"group_event")
+			websocket.BroadcastUserList(db)
 
 			helper.SendResponse(w, eventRequests, http.StatusOK)
 
