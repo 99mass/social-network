@@ -42,7 +42,6 @@ export default function YourGroup() {
           break;
         case "nbr_notif_group_event":
           setNbrNotifEventGroup(_message.content)
-          console.log(_message);
           break
         // now notifications
         case "notif_private_message":
