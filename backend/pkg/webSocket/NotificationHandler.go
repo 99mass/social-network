@@ -98,9 +98,9 @@ func NotificationGroupChat(db *sql.DB, senderID, sourceID string) {
 	members, _ := controller.GetGroupMembers(db, sourceID)
 	for _, member := range members {
 
-		if user, ok := ConnectedUsersList[member.ID]; ok {
-			if member.ID != senderID {
-				CreateGeneralNotif(db, member.ID, senderID, sourceID, "chat_group")
+		if member.ID != senderID {
+			CreateGeneralNotif(db, member.ID, senderID, sourceID, "chat_group")
+			if user, ok := ConnectedUsersList[member.ID]; ok {
 				err := SendGenResponse("notif_chat_group", user.Conn, notif)
 				if err != nil {
 					log.Println("enable to send a notification to the user that you sent the message")
@@ -112,7 +112,7 @@ func NotificationGroupChat(db *sql.DB, senderID, sourceID string) {
 
 }
 
-func NotificationGroupEvent(db *sql.DB,senderID,sourceID string){
+func NotificationGroupEvent(db *sql.DB, senderID, sourceID string) {
 	sender, _ := controller.GetUserNameByID(db, senderID)
 	group, _ := controller.GetGroupTitle(db, sourceID)
 
@@ -123,9 +123,9 @@ func NotificationGroupEvent(db *sql.DB,senderID,sourceID string){
 	members, _ := controller.GetGroupMembers(db, sourceID)
 	for _, member := range members {
 
-		if user, ok := ConnectedUsersList[member.ID]; ok {
-			if member.ID != senderID {
-				CreateGeneralNotif(db, member.ID, senderID, sourceID, "group_event")
+		if member.ID != senderID {
+			CreateGeneralNotif(db, member.ID, senderID, sourceID, "group_event")
+			if user, ok := ConnectedUsersList[member.ID]; ok {
 				err := SendGenResponse("notif_group_event", user.Conn, notif)
 				if err != nil {
 					log.Println("enable to send a notification to the user that you sent the message")
