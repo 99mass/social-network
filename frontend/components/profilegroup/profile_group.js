@@ -322,7 +322,6 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (!data) return;
-      console.log(data);
 
       switch (data.type) {
         case "nbr_notif_join_group_request":
@@ -382,6 +381,17 @@ export function NavMenuGroup({ section, handleSection, isCreator, groupId }) {
       [clickedSection]: true,
     };
     handleSection(newSection);
+
+    switch (clickedSection) {
+      case "section3":
+        setNbrNotifGroupEvent(0)
+        break
+      case 'section4':
+        setNbrNotifChatGroup(0);
+        break;
+      case "section6":
+        setNbrNotifJoinGroupRequest(0)
+    }
   };
 
   return (
