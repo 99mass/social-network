@@ -19,15 +19,19 @@
   border-radius: 10px;
   background: var(--secondary-bg);
 }
+
 .menuLeft .blocNav h4 {
   font-size: small;
 }
+
 .imgNew {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 @keyframes bounce {
+
   from,
   20%,
   53%,
@@ -49,6 +53,7 @@
     transform: translate3d(0, 0px, 0);
   }
 }
+
 .notifJoinGroup,
 .imgNew img {
   width: 35px;
@@ -127,6 +132,7 @@
   border-radius: 10px;
   object-fit: cover;
 }
+
 .listGroupManaged .group a .notifJoinGroup {
   background: transparent;
   border: none;
@@ -157,6 +163,7 @@
 .yourGroups {
   padding: 0px 5%;
 }
+
 .yourGroups {
   width: 100%;
   background-color: aqua;
@@ -211,7 +218,7 @@
   max-height: fit-content;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   padding-bottom: 30px;
   background: var(--secondary-bg);
   border-radius: 10px;
@@ -251,10 +258,12 @@
   font-weight: normal;
   color: gray;
 }
+
 .postSugess div .btns {
   display: flex;
   gap: 5px;
 }
+
 .postSugess div .btns button {
   padding: 8px 0px;
   font-size: 18px;
@@ -264,6 +273,7 @@
   border: none;
   cursor: pointer;
 }
+
 .postSugess div .btns button:first-of-type {
   background: var(--hsl-color-1);
 }
@@ -304,10 +314,12 @@
   border-radius: 10px;
   object-fit: cover;
 }
-.elementGroup .topElement a .imgNew{
-   width: 30px;
-   height: 30px;
+
+.elementGroup .topElement a .imgNew {
+  width: 30px;
+  height: 30px;
 }
+
 .elementGroup .topElement a span {
   text-transform: capitalize;
   word-wrap: break-word;
@@ -334,14 +346,27 @@
   align-items: center;
   padding-top: 20%;
 }
+
 .noResults img {
   width: 100px;
   height: 100px;
 }
+
 .noResults p {
   width: 80%;
   text-align: center;
 }
+
+@media screen and (min-width: 769px) {
+  .contenPosts {
+    margin-left: 10%;
+    margin-right: 20%;
+  }
+  .postSugess{
+    width: 48%;
+  }
+}
+
 @media screen and (min-width: 768px) and (max-width: 979px) {
   .menuMiddle {
     border: none;
@@ -355,6 +380,7 @@
     display: flex;
     flex-direction: column;
   }
+
   .menuMiddle {
     width: 100%;
     height: fit-content;
@@ -441,18 +467,22 @@
   }
 
   .postSugess {
+    
     height: fit-content;
     display: flex;
     gap: 10px;
     padding-bottom: 10px;
   }
+
   .postSugess a img {
     border-radius: 10px;
   }
+
   .postSugess div {
     width: 100%;
     height: fit-content;
   }
+
   .postSugess div .nameGroupMembres a {
     justify-content: start;
     height: fit-content;
@@ -471,10 +501,12 @@
     padding: 0px;
   }
 }
+
 @media screen and (max-width: 450px) {
   .postSugess {
     width: 100%;
   }
+
   .elementGroup {
     width: 90%;
   }
