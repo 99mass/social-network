@@ -151,7 +151,6 @@ export function FromCreateEvent({ setSection, groupId }) {
       description: description,
       day_time: dayTime,
     };
-    console.log(data);
     AddEvent(data);
   };
 
