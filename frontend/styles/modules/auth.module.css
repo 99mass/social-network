@@ -198,7 +198,14 @@
    resize: none;
  }
 
-
+.showPassword{
+  margin-top: 10px;
+  background-color: #1a1a1a;
+  border: 1px solid beige;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 15px;
+}
 
  .container .submit {
    border: none;

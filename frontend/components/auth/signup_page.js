@@ -12,6 +12,18 @@ export default function Sign_up() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [imgeName, setImageName] = useState("Click to upload image");
   const fileInputRef = useRef(null);
+  const [showPassword, setShowPassword] = useState()
+  const [showConfirmePassword, setShowConfirmePassword] = useState()
+
+  const toggleShowPassword =()=>{
+
+    setShowPassword(!showPassword)
+  }
+
+  const toggleShowConfirmePassword =()=>{
+
+    setShowConfirmePassword(!showConfirmePassword)
+  }
 
   const handleFileIconClick = () => {
     fileInputRef.current.click();
@@ -136,9 +148,12 @@ export default function Sign_up() {
           <input
             name="Password"
             className={styles.input}
-            type="password"
+            type={showPassword? "text":"password" }
             required=""
           />
+          <button className ={styles.showPassword}type="button" onClick={toggleShowPassword}>
+          {showPassword ? "Hide Password" :"Show Password"}
+          </button>
         </label>
         <label>
           <i className="fa-solid fa-star-of-life"></i>
@@ -146,9 +161,12 @@ export default function Sign_up() {
           <input
             name="ConfirmPassword"
             className={styles.input}
-            type="password"
+            type={showConfirmePassword? "text":"password" }
             required=""
           />
+           <button className ={styles.showPassword}type="button" onClick={toggleShowConfirmePassword}>
+          {showConfirmePassword ? "Hide Password" :"Show Password"}
+          </button>
         </label>
 
         <div className={styles.picture}>
