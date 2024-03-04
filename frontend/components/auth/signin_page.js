@@ -8,14 +8,11 @@ import { sendData } from "../../handler/auth";
 import EyeShowIcon from "../../public/images/eye-show-svgrepo-com.svg";
 import EyeOffIcon from "../../public/images/eye-off-svgrepo-com.svg";
 
-
-
 export default function Sign_in() {
   const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false); // Nouvel état pour gérer l'affichage du mot de passe
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -24,14 +21,13 @@ export default function Sign_in() {
     formData.forEach((value, key) => {
       jsonData[key] = value;
     });
-   
+
     sendData(api.Login, jsonData, router, "home", setErrorMessage, true);
   };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
-
- };
+  };
   return (
     <div className={styles.container}>
       <div className={styles.contentBigTitle}>
@@ -67,13 +63,22 @@ export default function Sign_in() {
             name="Password"
             className={styles.input}
             type={showPassword ? "text" : "password"} // Basculer entre "text" et "password"
-
             required=""
           />
-           <button className ={styles.showPassword}type="button" onClick={toggleShowPassword}>
-            {showPassword ? "Hide Password" : "Show Password" }
-          </button>
-          
+
+          {!showPassword ? (
+            <i
+              onClick={toggleShowPassword}
+              className={`fa-solid fa-eye ${styles.tooglePassword}`}
+              title="Show Password"
+            ></i>
+          ) : (
+            <i
+              onClick={toggleShowPassword}
+              className={`fa-solid fa-eye-slash ${styles.tooglePassword}`}
+              title="Hide Password"
+            ></i>
+          )}
         </label>
         <button type="submit" className={styles.submit}>
           Submit
