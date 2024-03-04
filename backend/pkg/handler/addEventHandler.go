@@ -16,12 +16,12 @@ import (
 )
 
 type GroupEnventRequest struct {
-	GroupID     string `json:"group_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	DayTime     string `json:"day_time"`
-	CreatedBy   string `json:"created_by"`
-	Choose_option string	`json:"choose_option"`
+	GroupID       string `json:"group_id"`
+	Title         string `json:"title"`
+	Description   string `json:"description"`
+	DayTime       string `json:"day_time"`
+	CreatedBy     string `json:"created_by"`
+	Choose_option string `json:"choose_option"`
 }
 
 func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
@@ -44,14 +44,21 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
-
 			eventReq.Title = strings.TrimSpace(eventReq.Title)
+			if len(eventReq.Title) > 50 {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "title can't exceed 50 character",
+				}, http.StatusBadRequest)
+				return
+			}
+
 			// Truncate the comment content to   150 characters
 			truncatedDescription, err := utils.TruncateCommentContent(eventReq.Description)
 			if err != nil {
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
-					Message: err.Error(),
+					Message: "description can't exceed 150 character",
 				}, http.StatusBadRequest)
 				return
 			}
@@ -83,7 +90,7 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 				Title:       eventReq.Title,
 				Description: eventReq.Description,
 				DayTime:     eventReq.DayTime,
-				CreatedBy: sess.UserID.String(),
+				CreatedBy:   sess.UserID.String(),
 			}
 
 			// Create the group event
@@ -115,7 +122,7 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			websocket.NotificationGroupEvent(db,sess.UserID.String(),event.GroupID)
+			websocket.NotificationGroupEvent(db, sess.UserID.String(), event.GroupID)
 			websocket.BroadcastUserList(db)
 			helper.SendResponse(w, nil, http.StatusOK)
 			log.Println("group event created successfully")
