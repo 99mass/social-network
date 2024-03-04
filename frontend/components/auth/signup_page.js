@@ -12,18 +12,16 @@ export default function Sign_up() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [imgeName, setImageName] = useState("Click to upload image");
   const fileInputRef = useRef(null);
-  const [showPassword, setShowPassword] = useState()
-  const [showConfirmePassword, setShowConfirmePassword] = useState()
+  const [showPassword, setShowPassword] = useState();
+  const [showConfirmePassword, setShowConfirmePassword] = useState();
 
-  const toggleShowPassword =()=>{
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
-    setShowPassword(!showPassword)
-  }
-
-  const toggleShowConfirmePassword =()=>{
-
-    setShowConfirmePassword(!showConfirmePassword)
-  }
+  const toggleShowConfirmePassword = () => {
+    setShowConfirmePassword(!showConfirmePassword);
+  };
 
   const handleFileIconClick = () => {
     fileInputRef.current.click();
@@ -148,12 +146,23 @@ export default function Sign_up() {
           <input
             name="Password"
             className={styles.input}
-            type={showPassword? "text":"password" }
+            type={showPassword ? "text" : "password"}
             required=""
           />
-          <button className ={styles.showPassword}type="button" onClick={toggleShowPassword}>
-          {showPassword ? "Hide Password" :"Show Password"}
-          </button>
+
+          {!showPassword ? (
+            <i
+              onClick={toggleShowPassword}
+              className={`fa-solid fa-eye ${styles.tooglePassword}`}
+              title="Show Password"
+            ></i>
+          ) : (
+            <i
+              onClick={toggleShowPassword}
+              className={`fa-solid fa-eye-slash ${styles.tooglePassword}`}
+              title="Hide Password"
+            ></i>
+          )}
         </label>
         <label>
           <i className="fa-solid fa-star-of-life"></i>
@@ -161,12 +170,23 @@ export default function Sign_up() {
           <input
             name="ConfirmPassword"
             className={styles.input}
-            type={showConfirmePassword? "text":"password" }
+            type={showConfirmePassword ? "text" : "password"}
             required=""
           />
-           <button className ={styles.showPassword}type="button" onClick={toggleShowConfirmePassword}>
-          {showConfirmePassword ? "Hide Password" :"Show Password"}
-          </button>
+
+          {!showConfirmePassword ? (
+            <i
+              onClick={toggleShowConfirmePassword}
+              className={`fa-solid fa-eye ${styles.tooglePassword}`}
+              title="Show Password"
+            ></i>
+          ) : (
+            <i
+              onClick={toggleShowConfirmePassword}
+              className={`fa-solid fa-eye-slash ${styles.tooglePassword}`}
+              title="Hide Password"
+            ></i>
+          )}
         </label>
 
         <div className={styles.picture}>

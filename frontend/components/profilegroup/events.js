@@ -106,7 +106,6 @@ export function EventBloc({
             <i className="fa-solid fa-list-check"></i>Guest List
           </button>
         </div>
-
       </div>
       {isListOpen && (
         <ListUserAcceptedEvent
@@ -118,8 +117,8 @@ export function EventBloc({
   );
 }
 
-
 export function FromCreateEvent({ setSection, groupId }) {
+
   const toggleForm = () =>
     setSection({
       section1: true,
@@ -136,9 +135,14 @@ export function FromCreateEvent({ setSection, groupId }) {
     const description = dataFrom.get("description");
     let date = dataFrom.get("date");
     let hours = dataFrom.get("hours");
+    const chooseOption = dataFrom.get("chooseOption"); 
     if (title.trim() == "" || description.trim() == "" || !date || !hours) {
-      errorNotification("all fields must be completed");
+      errorNotification("all fields must be completed.");
       return;
+    }
+    if (chooseOption!=="0" && chooseOption!=="1") {
+      errorNotification("choose a valid opton.");
+      return
     }
     date = new Date(date);
     date = convertAge(date);
@@ -150,6 +154,7 @@ export function FromCreateEvent({ setSection, groupId }) {
       title: title,
       description: description,
       day_time: dayTime,
+      choose_option:chooseOption
     };
     AddEvent(data);
   };
@@ -193,6 +198,11 @@ export function FromCreateEvent({ setSection, groupId }) {
             </div>
           </div>
         </div>
+        <select name="chooseOption" className={styles.selectOption}>
+          <option>Select Option</option>
+          <option value={1}>Going</option>
+          <option value={0}>Not Going</option>
+        </select>
         <button type="submit" className={styles.btnEvent}>
           Create event
         </button>

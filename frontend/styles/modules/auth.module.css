@@ -141,6 +141,14 @@
    top: -10px;
  }
 
+ .container .form label .tooglePassword{
+  font-size: 22px;
+  position: relative;
+  top: -30px;
+  left:90%;
+  color: gray;
+  cursor: pointer;
+ }
 
  .picture {
    margin: 10px 0px;
