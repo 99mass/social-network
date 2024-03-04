@@ -149,20 +149,13 @@ export default function Sign_up() {
             type={showPassword ? "text" : "password"}
             required=""
           />
-
-          {!showPassword ? (
-            <i
-              onClick={toggleShowPassword}
-              className={`fa-solid fa-eye ${styles.tooglePassword}`}
-              title="Show Password"
-            ></i>
-          ) : (
-            <i
-              onClick={toggleShowPassword}
-              className={`fa-solid fa-eye-slash ${styles.tooglePassword}`}
-              title="Hide Password"
-            ></i>
-          )}
+          <i
+            onClick={toggleShowPassword}
+            className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"} ${
+              styles.tooglePassword
+            }`}
+            title={!showPassword ? "Show Password" : "Hide Password"}
+          ></i>
         </label>
         <label>
           <i className="fa-solid fa-star-of-life"></i>
@@ -173,20 +166,13 @@ export default function Sign_up() {
             type={showConfirmePassword ? "text" : "password"}
             required=""
           />
-
-          {!showConfirmePassword ? (
-            <i
-              onClick={toggleShowConfirmePassword}
-              className={`fa-solid fa-eye ${styles.tooglePassword}`}
-              title="Show Password"
-            ></i>
-          ) : (
-            <i
-              onClick={toggleShowConfirmePassword}
-              className={`fa-solid fa-eye-slash ${styles.tooglePassword}`}
-              title="Hide Password"
-            ></i>
-          )}
+          <i
+            onClick={toggleShowConfirmePassword}
+            className={`fa-solid ${
+              showConfirmePassword ? "fa-eye-slash" : "fa-eye"
+            } ${styles.tooglePassword}`}
+            title={!showConfirmePassword ? "Show Password" : "Hide Password"}
+          ></i>
         </label>
 
         <div className={styles.picture}>

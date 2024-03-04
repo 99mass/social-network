@@ -62,23 +62,16 @@ export default function Sign_in() {
           <input
             name="Password"
             className={styles.input}
-            type={showPassword ? "text" : "password"} // Basculer entre "text" et "password"
+            type={showPassword ? "text" : "password"} 
             required=""
           />
-
-          {!showPassword ? (
-            <i
-              onClick={toggleShowPassword}
-              className={`fa-solid fa-eye ${styles.tooglePassword}`}
-              title="Show Password"
-            ></i>
-          ) : (
-            <i
-              onClick={toggleShowPassword}
-              className={`fa-solid fa-eye-slash ${styles.tooglePassword}`}
-              title="Hide Password"
-            ></i>
-          )}
+          <i
+            onClick={toggleShowPassword}
+            className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"} ${
+              styles.tooglePassword
+            }`}
+            title={!showPassword ? "Show Password" : "Hide Password"}
+          ></i>
         </label>
         <button type="submit" className={styles.submit}>
           Submit
