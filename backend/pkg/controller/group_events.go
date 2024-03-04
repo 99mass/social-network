@@ -98,6 +98,7 @@ func GetEventsByGroupWithCreatorInfo(db *sql.DB, groupID string) ([]models.Event
         FROM group_events
         JOIN users ON group_events.created_by = users.id
         WHERE group_events.group_id = ?
+		ORDER BY day_time ASC
     `
 	rows, err := db.Query(query, groupID)
 	if err != nil {
