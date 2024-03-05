@@ -16,12 +16,11 @@ import (
 )
 
 type GroupEnventRequest struct {
-	GroupID       string `json:"group_id"`
-	Title         string `json:"title"`
-	Description   string `json:"description"`
-	DayTime       string `json:"day_time"`
-	CreatedBy     string `json:"created_by"`
-	Choose_option string `json:"choose_option"`
+	GroupID     string `json:"group_id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	DayTime     string `json:"day_time"`
+	CreatedBy   string `json:"created_by"`
 }
 
 func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
@@ -94,31 +93,13 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 			}
 
 			// Create the group event
-			eventID, err := controller.CreateGroupEvent(db, event)
+			_, err = controller.CreateGroupEvent(db, event)
 			if err != nil {
 				log.Println("Unable to create the group event: ", err)
 				helper.SendResponse(w, models.ErrorResponse{
 					Status:  "error",
 					Message: "Unable to create the group event",
 				}, http.StatusInternalServerError)
-				return
-			}
-			var status int
-			if eventReq.Choose_option == "1" {
-				status = 1
-			} else {
-				status = 0
-			}
-
-			participant := models.EventParticipants{
-				EventID: eventID.String(),
-				UserID:  sess.UserID.String(),
-				Option:  status,
-			}
-			err = controller.CreateParticipantStatus(db, participant)
-			if err != nil {
-				log.Printf("Error creating participation: %v\n", err)
-				helper.SendResponseError(w, "error", "Failed to create participation", http.StatusInternalServerError)
 				return
 			}
 
