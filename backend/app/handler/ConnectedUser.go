@@ -31,7 +31,6 @@ func ConnectedUser(db *sql.DB) http.HandlerFunc {
 				user.AvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + strings.TrimSpace(user.AvatarPath))
 				if err != nil {
 					log.Println("enable to encode image avatar "+err.Error())
-					
 				}
 			}
 

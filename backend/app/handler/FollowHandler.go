@@ -130,7 +130,6 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 					followers[i].UserAvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + follower.UserAvatarPath)
 					if err != nil {
 						log.Println("enable to encode image avatar", err.Error())
-
 					}
 				}
 			}
@@ -166,7 +165,6 @@ func OldestPendingRequestFollow(db *sql.DB) http.HandlerFunc {
 				follower.UserAvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + follower.UserAvatarPath)
 				if err != nil {
 					log.Println("enable to encode image avatar", err.Error())
-
 				}
 			}
 			helper.SendResponse(w, follower, http.StatusOK)
@@ -240,7 +238,6 @@ func GetFollowingInfos(db *sql.DB) http.HandlerFunc {
 					img, err := helper.EncodeImageToBase64("./app/static/avatarImage/" + follower.UserAvatarPath)
 					if err != nil {
 						log.Println("enable to encode image", err.Error())
-
 					}
 					followers[i].UserAvatarPath = img
 				}

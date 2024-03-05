@@ -1,7 +1,7 @@
 .PHONY: run update_package install build dev start
 
 run:
-	cd backend && go run server.go
+	cd backend && go run server/server.go
 
 update_package:
 	cd backend && go mod tidy

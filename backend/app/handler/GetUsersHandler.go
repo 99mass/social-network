@@ -40,7 +40,6 @@ func GetUsersHandler(db *sql.DB) http.HandlerFunc {
 					users[i].AvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + user.AvatarPath)
 					if err != nil {
 						log.Println("enable to encode image avatar", err.Error())
-
 					}
 				}
 

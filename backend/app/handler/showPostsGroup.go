@@ -117,9 +117,7 @@ func FitPostRequest(db *sql.DB, w http.ResponseWriter, post models.Post, Connect
 	if post.ImagePath != "" {
 		img, err := helper.EncodeImageToBase64("./app/static/postImage/" + post.ImagePath)
 		if err != nil {
-			helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
 			log.Println("enable to encode post image")
-			return models.Post_Request{}, err
 		}
 		post.ImagePath = img
 	}
@@ -139,10 +137,7 @@ func FitPostRequest(db *sql.DB, w http.ResponseWriter, post models.Post, Connect
 	if strings.TrimSpace(user.AvatarPath) != "" {
 		user.AvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + user.AvatarPath)
 		if err != nil {
-			user.AvatarPath = "default.png"
-			// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
 			log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
-			// return
 		}
 	}
 	PostReq.User = user
@@ -188,10 +183,7 @@ func FitPostRequest(db *sql.DB, w http.ResponseWriter, post models.Post, Connect
 	if strings.TrimSpace(avatarPath) != "" {
 		PostReq.GroupAvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + avatarPath)
 		if err != nil {
-			user.AvatarPath = "default.png"
-			// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
 			log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
-			// return
 		}
 	}
 	PostReq.NbrLikes = nbrLikes

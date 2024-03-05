@@ -34,7 +34,6 @@ func PrivateChatHandler(db *sql.DB) http.HandlerFunc {
 				user.AvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + user.AvatarPath)
 				if err != nil {
 					log.Println("enable to encode image avatar", err.Error())
-
 				}
 			}
 			helper.SendResponse(w, user, http.StatusOK)

@@ -11,7 +11,7 @@ import (
 )
 
 func Open() *sql.DB {
-	db, err := sql.Open("sqlite3", "pkg/db/database.db")
+	db, err := sql.Open("sqlite3", "db/database.db")
 
 	if err != nil {
 		log.Printf("Error Opening DB: %v \n", err)
@@ -37,7 +37,7 @@ func MigrateUp() {
 		log.Printf("instance error: %v \n", err)
 	}
 
-	fileSource, err := (&file.File{}).Open("file://pkg/db/migrations/sqlite")
+	fileSource, err := (&file.File{}).Open("file://db/migrations/sqlite")
 	if err != nil {
 		log.Printf("opening file error: %v \n", err)
 	}
@@ -66,7 +66,7 @@ func MigrateDown() {
 		log.Printf("instance error: %v \n", err)
 	}
 
-	fileSource, err := (&file.File{}).Open("file://pkg/db/migrations/sqlite")
+	fileSource, err := (&file.File{}).Open("file://db/migrations/sqlite")
 	if err != nil {
 		log.Printf("opening file error: %v \n", err)
 	}

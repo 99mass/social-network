@@ -139,7 +139,6 @@ func FitEventParticipants(db *sql.DB, participans []models.EventParticipants) []
 		if user.AvatarPath != "" {
 			img, err := helper.EncodeImageToBase64("./app/static/avatarImage/" + user.AvatarPath)
 			if err != nil {
-				// participans[i].AvatarPath = "default.png"
 				log.Println("enable to encode avatar image", err)
 			}
 			participans[i].AvatarPath = img

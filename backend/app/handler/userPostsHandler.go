@@ -40,8 +40,7 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 				if post.ImagePath != "" {
 					img, err := helper.EncodeImageToBase64("./app/static/postImage/" + post.ImagePath)
 					if err != nil {
-						helper.SendResponseError(w, "error", "enable to encode image post", http.StatusInternalServerError)
-						return
+						log.Println("enable to encode image avatar", err.Error())
 					}
 					post.ImagePath = img
 				}
@@ -61,8 +60,6 @@ func UserPosts(db *sql.DB) http.HandlerFunc {
 					user.AvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + user.AvatarPath)
 					if err != nil {
 						log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
-						// helper.SendResponseError(w, "error", "enable to encode image user", http.StatusInternalServerError)
-						// return
 					}
 				}
 				Post.User = user

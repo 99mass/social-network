@@ -41,8 +41,7 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 				if comment.ImagePath != "" {
 					img, err := helper.EncodeImageToBase64("./app/static/commentImage/" + comment.ImagePath)
 					if err != nil {
-						helper.SendResponseError(w, "error", "enable to encode image comment", http.StatusInternalServerError)
-						return
+						log.Println("enable to encode avatar image", err.Error())
 					}
 					comment.ImagePath = img
 				}
@@ -57,7 +56,6 @@ func ShowCommentsByPost(db *sql.DB) http.HandlerFunc {
 					user.AvatarPath, err = helper.EncodeImageToBase64("./app/static/avatarImage/" + user.AvatarPath)
 					if err != nil {
 						log.Println("enable to encode avatar image", err.Error(), "\n avatarPath", user.FirstName)
-						
 					}
 				}
 				Comment.User = user
