@@ -40,7 +40,6 @@ export default function ListUser() {
 
     socketRecentDiscussion.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
-      console.log("old", _message);
       if (_message) {
         setMessagesLists(_message);
       }
@@ -103,9 +102,12 @@ export function LastChatWitheAutherUser({ data }) {
                 alt=""
               />
               <div>
-                <p>{item.other_user_nickname} {item.count_message_unread > 0 &&
-                  <span>{item.count_message_unread}+</span>
-                }</p>
+                <p>
+                  {item.other_user_nickname}{" "}
+                  {item.count_message_unread > 0 && (
+                    <span>{item.count_message_unread}+</span>
+                  )}
+                </p>
                 <p>{item.last_message_content}</p>
               </div>
             </Link>

@@ -58,7 +58,7 @@ export default function Post({ togglePostForm, setPostForm, setPosts }) {
         Privacy: radioSelected,
         Authorize_User: checkedValues,
       };
-      console.log(data);
+      
       AddPostUser(data, setPostForm, setPosts);
       return;
     }
@@ -229,8 +229,6 @@ export function ListFriend() {
   if (FriendsList === null && userId !== null) {
     getFriendsLists(userId, setFriendsList);
   }
-
-  // console.log(FriendsList && FriendsList)
 
   return (
     <div className={styles.listFriend}>

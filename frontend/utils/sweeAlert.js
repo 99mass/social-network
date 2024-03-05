@@ -40,3 +40,21 @@ export function errorNotification(text) {
     });
 }
 
+export function unFollowNotification() {
+    const Toast = Swal.mixin({
+        toast: true,
+        color: "green",
+        position: "center",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+    Toast.fire({
+        icon: "success",
+        title: "requete done"
+    });
+}

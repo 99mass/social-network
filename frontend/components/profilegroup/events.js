@@ -118,7 +118,6 @@ export function EventBloc({
 }
 
 export function FromCreateEvent({ setSection, groupId }) {
-
   const toggleForm = () =>
     setSection({
       section1: true,
@@ -135,15 +134,19 @@ export function FromCreateEvent({ setSection, groupId }) {
     const description = dataFrom.get("description");
     let date = dataFrom.get("date");
     let hours = dataFrom.get("hours");
-    const chooseOption = dataFrom.get("chooseOption"); 
+    const checkedValues = Array.from(
+      document.querySelectorAll('input[type="checkbox"]:checked')
+    ).map((checkbox) => checkbox.value);
+
     if (title.trim() == "" || description.trim() == "" || !date || !hours) {
       errorNotification("all fields must be completed.");
       return;
     }
-    if (chooseOption!=="0" && chooseOption!=="1") {
-      errorNotification("choose a valid opton.");
-      return
+    if (checkedValues.length < 2) {
+      errorNotification("you must choose both options.");
+      return;
     }
+
     date = new Date(date);
     date = convertAge(date);
     hours = hours.toString();
@@ -154,7 +157,6 @@ export function FromCreateEvent({ setSection, groupId }) {
       title: title,
       description: description,
       day_time: dayTime,
-      choose_option:chooseOption
     };
     AddEvent(data);
   };
@@ -198,11 +200,19 @@ export function FromCreateEvent({ setSection, groupId }) {
             </div>
           </div>
         </div>
-        <select name="chooseOption" className={styles.selectOption}>
-          <option>Select Option</option>
-          <option value={1}>Going</option>
-          <option value={0}>Not Going</option>
-        </select>
+        <div className={`${styles.cntr} ${styles.selectOption}`}>
+          <p>Options</p>
+          <div>
+            <div className={styles.contentCheckBox}>
+              <input type="checkbox" id="cbx" className={styles.hiddenXsUp} />
+              <span>Going</span>
+            </div>
+            <div className={styles.contentCheckBox}>
+              <input type="checkbox" id="cbx" className={styles.hiddenXsUp} />
+              <span>Not Going</span>
+            </div>
+          </div>
+        </div>
         <button type="submit" className={styles.btnEvent}>
           Create event
         </button>

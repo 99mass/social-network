@@ -20,7 +20,7 @@ export const ListAllEvents = async (groupId, setAllEvents) => {
             }
             else {
                 const data = await response.json();
-                console.log('error', data.message);
+                console.error('error', data.message);
             }
         } catch (error) {
             console.error("Error fetching profile data:", error.message);

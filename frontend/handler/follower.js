@@ -3,6 +3,7 @@ import { getSessionCookie } from "../utils/cookies";
 import { getPostsUser } from "./getPostsUser";
 import { getPostsGroup } from "./getPostsGroup";
 import { getDatasProfilUser } from "./user_profile";
+import { unFollowNotification } from "../utils/sweeAlert";
 
 export const getAskForFriendLists = async (setDatas) => {
   try {
@@ -142,7 +143,13 @@ export const getFollowingUsers = async (setFollowingUsersList) => {
 };
 
 // fonctions cote user qui demades amie
-export const askForFriends = async (userid, setPosts, setDatasProfile,groupeid,setPostsGroup) => {
+export const askForFriends = async (
+  userid,
+  setPosts,
+  setDatasProfile,
+  groupeid,
+  setPostsGroup
+) => {
   if (userid) {
     try {
       const sessionId = getSessionCookie();
@@ -159,7 +166,7 @@ export const askForFriends = async (userid, setPosts, setDatasProfile,groupeid,s
       if (response.ok) {
         if (setPosts) getPostsUser(setPosts);
         if (setDatasProfile) getDatasProfilUser(setDatasProfile, userid);
-        if (setPostsGroup && groupeid) getPostsGroup(groupeid, setPostsGroup)
+        if (setPostsGroup && groupeid) getPostsGroup(groupeid, setPostsGroup);
       }
     } catch (error) {
       console.error("Error fetching profile data:", error.message);
@@ -189,10 +196,11 @@ export const UnfollowUser = async (
 
       // Vérifier le statut de la réponse
       if (response.ok) {
+        unFollowNotification();
         if (setPosts) getPostsUser(setPosts);
         if (setFollowingUsersList) getFollowingUsers(setFollowingUsersList);
         if (setDatasProfile) getDatasProfilUser(setDatasProfile, userid);
-        if (setPostsGroup) getPostsGroup(groupeid, setPostsGroup)
+        if (setPostsGroup) getPostsGroup(groupeid, setPostsGroup);
       }
     } catch (error) {
       console.error("Error fetching profile data:", error.message);

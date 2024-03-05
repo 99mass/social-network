@@ -299,13 +299,45 @@
   margin-top: 20px;
   padding: 10px 0px;
   font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   background: transparent;
   cursor: pointer;
   outline: none;
 }
-.selectOption > option{
-  color: #2d2d2d;
+.selectOption p{
+  font-size: 20px;
+}
+
+.selectOption div{
+  display: flex;
+  gap: 5px;
+}
+
+.contentCheckBox{
+  display: flex;
+  align-items: center;
+}
+ 
+.contentCheckBox input[type="checkbox"] {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  margin: 6px;
+  padding: 0;
+  border: 2px solid var(--radio-border-color);
+  appearance: none;
+  background-color: transparent;
+  outline: none;
   cursor: pointer;
+}
+
+.contentCheckBox input[type="checkbox"]:not(:disabled):checked {
+  border-color: var(--radio-checked-color);
+  background-color: var(--radio-checked-color);
+  background-clip: content-box;
+  padding: 2px;
 }
 
 
