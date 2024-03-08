@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS group_invitations (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (group_id) REFERENCES groups(id),
     FOREIGN KEY (sender_id) REFERENCES users(id)
-	);
+);

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS comments (
-    id VARCHAR PRIMARY KEY ,
+    id VARCHAR PRIMARY KEY,
     post_id VARCHAR,
     user_id VARCHAR,
     content TEXT NOT NULL,

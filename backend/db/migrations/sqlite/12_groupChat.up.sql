@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS group_chat_messages (
-    id VARCHAR PRIMARY KEY ,
+    id VARCHAR PRIMARY KEY,
     group_id VARCHAR,
     user_id VARCHAR,
     content TEXT NOT NULL,

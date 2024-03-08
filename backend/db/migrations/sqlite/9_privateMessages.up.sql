@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS private_messages (
-    id VARCHAR PRIMARY KEY ,
+    id VARCHAR PRIMARY KEY,
     sender_id VARCHAR,
     recipient_id VARCHAR,
     content TEXT NOT NULL,
