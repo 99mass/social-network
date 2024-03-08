@@ -7,7 +7,7 @@ import { AddGroup } from "../../handler/sendGroup";
 import EmojiForm from "../emoji/emoji";
 import { EncodeImage } from "../../utils/encodeImage";
 
-export default function Group({ toggleGroupForm, setGroups }) {
+export default function Group({ toggleGroupForm, setGroups,setGroupForm }) {
   const [emoji, setEmoji] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [imgeName, setImageName] = useState("");
@@ -53,7 +53,7 @@ export default function Group({ toggleGroupForm, setGroups }) {
         description: description,
         addedUsersToGroup: checkedValues,
       };
-      AddGroup(data, setGroups);
+      AddGroup(data, setGroups,setGroupForm);
       return;
     }
 
@@ -67,7 +67,7 @@ export default function Group({ toggleGroupForm, setGroups }) {
           description: description,
           addedUsersToGroup: checkedValues,
         };
-        AddGroup(data, setGroups);
+        AddGroup(data, setGroups,setGroupForm);
       } catch (error) {
         errorNotification(error);
       }

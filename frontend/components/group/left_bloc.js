@@ -151,7 +151,7 @@ export default function LeftBlocGroupPage({ state, handleState }) {
         <hr />
         <h4 className={styles.h4ListGroupManaged}>Groups you manage</h4>
         {groupForm && (
-          <Group toggleGroupForm={toggleGroupForm} setGroups={setGroups} />
+          <Group toggleGroupForm={toggleGroupForm} setGroups={setGroups} setGroupForm={setGroupForm} />
         )}
         {groups && (
           <ListGroupManaged

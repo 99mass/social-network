@@ -2,8 +2,8 @@ import { api } from "../utils/api";
 import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 
-export const AddEvent = async (data) => {
- 
+export const AddEvent = async (data, setSection) => {
+
   try {
     const sessionId = getSessionCookie();
     const response = await fetch(api.Create_events, {
@@ -19,7 +19,16 @@ export const AddEvent = async (data) => {
       successNotification(
         "Event added successful."
       );
-      
+      if (setSection) {
+        setSection({
+          section1: false,
+          section2: false,
+          section3: true,
+          section4: false,
+          section5: false,
+        });
+      }
+
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);

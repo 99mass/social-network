@@ -97,9 +97,12 @@ export const AddPostGroup = async (data, setPostsGroup, groupId, section) => {
 
     if (response.ok) {
       successNotification("Post Group added successful.");
-      if (groupId && setPostsGroup) getPostsGroup(groupId, setPostsGroup);
-      section.section1 = true;
-      section.section2 = true;
+      if (groupId && setPostsGroup) {
+        getPostsGroup(groupId, setPostsGroup);
+        section.section1 = true;
+        section.section2 = false;
+      }
+
     } else {
       const errorData = await response.json();
       errorNotification(errorData.message);
@@ -164,8 +167,8 @@ export const DeclineInvitation = async (group_id, userid, setDatasProfileGroup) 
     if (!response.ok) {
       console.error("Failed to send  data");
     } else {
-      getDatasProfilGroup( setDatasProfileGroup, group_id);
-      
+      getDatasProfilGroup(setDatasProfileGroup, group_id);
+
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);
@@ -193,8 +196,8 @@ export const leaveInGroup = async (group_id, setDatasProfileGroup) => {
     if (!response.ok) {
       console.error("Failed to send  data");
     } else {
-      getDatasProfilGroup( setDatasProfileGroup, group_id);
-      
+      getDatasProfilGroup(setDatasProfileGroup, group_id);
+
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);
@@ -223,14 +226,14 @@ export const AcceptJoinGroupRequest = async (userId, group_id, setJoinRequestLis
     if (!response.ok) {
       console.error("Failed to send  data");
     } else {
-      getJoinGroupRequest( setJoinRequestLists, group_id)
+      getJoinGroupRequest(setJoinRequestLists, group_id)
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);
   }
 };
 
-export const DeclineJoinGroupRequest = async ( group_id, setJoinRequestLists, callback, userId, creatorid) => {
+export const DeclineJoinGroupRequest = async (group_id, setJoinRequestLists, callback, userId, creatorid) => {
   try {
     const sessionId = getSessionCookie();
 
@@ -249,7 +252,7 @@ export const DeclineJoinGroupRequest = async ( group_id, setJoinRequestLists, ca
     if (!response.ok) {
       console.error("Failed to send  data");
     } else {
-         callback(setJoinRequestLists, group_id)
+      callback(setJoinRequestLists, group_id)
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);
@@ -275,7 +278,7 @@ export const AcceptGroupInvitProfil = async (group_id, setDatasProfileGroup) => 
     if (!response.ok) {
       console.error("Failed to send  data");
     } else {
-      getDatasProfilGroup( setDatasProfileGroup, group_id);
+      getDatasProfilGroup(setDatasProfileGroup, group_id);
     }
   } catch (error) {
     console.error("Error fetching profile data:", error.message);

@@ -3,7 +3,7 @@ import { getSessionCookie } from "../utils/cookies";
 import { errorNotification, successNotification } from "../utils/sweeAlert";
 import { getMygroups } from "./getGroup";
 
-export const AddGroup = async (data, setGroups) => {
+export const AddGroup = async (data, setGroups, setGroupForm) => {
 
   try {
     const sessionId = getSessionCookie();
@@ -21,6 +21,7 @@ export const AddGroup = async (data, setGroups) => {
         "Group added successful you can see it in the group page."
       );
       if (setGroups) getMygroups(setGroups);
+      if (setGroupForm) setGroupForm(false)
 
     } else {
       const errorData = await response.json();

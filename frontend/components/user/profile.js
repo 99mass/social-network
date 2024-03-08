@@ -86,7 +86,7 @@ export default function Profile_user() {
           handleButtonClick={handleButtonClick}
           datas={datas}
           userid={userid}
-          setDatasProfile={setDatasProfile}
+          setDatas={setDatasProfile}
         />
       )}
       {editButton.button3 && condition && (

@@ -125,9 +125,9 @@ export default function Header() {
         </div>
       </nav>
       {postForm && (
-        <Post togglePostForm={togglePostForm} setPostForm={setPostFrom} />
+        <Post togglePostForm={togglePostForm} setPostForm={setPostFrom} setPosts={null} />
       )}
-      {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
+      {groupForm && <Group toggleGroupForm={toggleGroupForm} setGroupForm={setGroupFrom} />}
       <DisplayPopup
         notifMessagesPrivate={notifMessagesPrivate}
         notifFollow={notifFollow}

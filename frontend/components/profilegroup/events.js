@@ -117,7 +117,7 @@ export function EventBloc({
   );
 }
 
-export function FromCreateEvent({ setSection, groupId }) {
+export function FromCreateEvent({section, setSection, groupId }) {
   const toggleForm = () =>
     setSection({
       section1: true,
@@ -158,7 +158,7 @@ export function FromCreateEvent({ setSection, groupId }) {
       description: description,
       day_time: dayTime,
     };
-    AddEvent(data);
+    AddEvent(data,setSection);
   };
 
   return (

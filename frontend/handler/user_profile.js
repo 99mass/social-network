@@ -17,7 +17,7 @@ export const getDatasProfilUser = async (setDatas, userid) => {
 
       if (response.ok) {
         const data = await response.json();
-        setDatas(data);
+      if(setDatas)  setDatas(data);
       }
     } catch (error) {
       console.error("Error fetching profile data:", error.message);

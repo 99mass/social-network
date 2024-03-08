@@ -56,7 +56,7 @@ export default function LeftBloc({setPosts}) {
         </div>
       </div>
       {postForm && <Post togglePostForm={togglePostForm} setPostForm={setPostForm} setPosts={setPosts} />}
-      {groupForm && <Group toggleGroupForm={toggleGroupForm} />}
+      {groupForm && <Group toggleGroupForm={toggleGroupForm} setGroupForm={setGroupForm} />}
     </>
   );
 }
