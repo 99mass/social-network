@@ -23,6 +23,7 @@ export default function Header() {
   const [notifFollow, setNotifFollow] = useState("");
   const [notifJoinGroupRequest, setNotifJoinGroupRequest] = useState("");
   const [NotifGroupEvent, setNotifGroupEvent] = useState('')
+  // const [getRouter,setGerouter]=useState("")
   const router = useRouter();
 
   const handlerLogOut = async () => {
@@ -114,6 +115,7 @@ export default function Header() {
                 firstname={datasUser?.firstname}
                 lastname={datasUser?.lastname}
                 userId={datasUser?.id}
+                router={router.route}
               />
             </div>
             <MidlleNAvFormSmallScreen
@@ -214,12 +216,17 @@ export function ToggleButton({
   firstname,
   lastname,
   userId,
+  router
 }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const handleToggleClick = () => {
     setMenuOpen(!isMenuOpen);
   };
+  const  redirectPgaege=(userId)=>{
+    if (router === "/profileuser" )
+     window.location.href=`./profileuser?userid=${userId}`
+  }
 
   return (
     <>
@@ -230,7 +237,8 @@ export function ToggleButton({
         <div className={styles.dropdownMenu}>
           <ul>
             <li>
-              <Link href={`./profileuser?userid=${userId}`}>
+              
+              <Link href={router !== "/profileuser" ? `/profileuser?userid=${userId}` : ""}  onClick={ ()=>redirectPgaege(userId)}>
                 <i className="fa-regular fa-user"></i>
                 {`${firstname} ${lastname}`}
               </Link>

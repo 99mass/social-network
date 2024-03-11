@@ -1,5 +1,5 @@
-const domain = "http://localhost:8080";
-export const domainSocket = "ws://localhost:8080";
+const domain = "http://11.11.80.36:8080";
+export const domainSocket = "ws://11.11.80.36:8080";
 
 export const api = {
   Registre: `${domain}/register`,
