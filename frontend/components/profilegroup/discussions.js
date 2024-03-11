@@ -26,7 +26,7 @@ export default function Discussion({
               <PostHeader
                 iduser={item.user.id}
                 user={item.user.firstname}
-                image={item.post.image_path}
+                image={item.user.avatarpath}
                 isfollowed={item.is_followed}
                 time={`${getElapsedTime(item.post.created_at).value} ${getElapsedTime(item.post.created_at).unit
                   }`}

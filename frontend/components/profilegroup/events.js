@@ -22,6 +22,8 @@ export default function EventLists({ group_id, description }) {
     setOpenEventId(openEventId === eventId ? null : eventId);
   };
 
+  console.log(allevents && allevents);
+
   return (
     <div className={styles.contentPostAbout}>
       <div className={styles.blocLeft}>
@@ -31,7 +33,7 @@ export default function EventLists({ group_id, description }) {
               <EventBloc
                 nameGroup={item.event.title}
                 numberPerson={item.going_count}
-                userBy={item.user.nickname}
+                userBy={item.user.firstname}
                 time={item.event.day_time}
                 content={item.event.description}
                 eventID={item.event.id}
@@ -83,7 +85,7 @@ export function EventBloc({
           <i className="fa-solid fa-stopwatch"></i>
           {time}
         </p>
-        <pre>{content}</pre>
+        <pre id={styles.textEvent}>{content}</pre>
         <div>
           <button
             className={participation_status === "Going" ? styles.activeBtn : ""}

@@ -129,6 +129,8 @@
   width: 100%;
   overflow: hidden;
   word-wrap: break-word;
+  text-wrap: wrap;
+  word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: pre-wrap;
   cursor: pointer;

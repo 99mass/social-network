@@ -48,6 +48,7 @@ body .sectionChatPage {
   box-sizing: border-box;
   text-wrap: wrap;
   word-wrap: break-word;
+  overflow-wrap: break-word;
   white-space: pre-wrap;
 
   background: var(--primary-bg);
@@ -66,6 +67,8 @@ body .sectionChatPage {
 .contentMesSender pre {
   word-wrap: break-word;
   text-wrap: wrap;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
   background: var(--second-blue);
 }
 

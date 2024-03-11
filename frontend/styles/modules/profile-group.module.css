@@ -87,8 +87,10 @@
 }
 
 .contentPostAbout .aboutBloc pre {
-  text-wrap: wrap;
   word-wrap: break-word;
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .photoCovert .navBlocLeft {
@@ -252,12 +254,21 @@
 }
 
 .eventDetails p,
-.eventDetails pre {
-  width: 100%;
+.contentPostAbout .blocLeft .eventDetails pre {
+  max-width: 100%;
   padding-left: 10px;
   font-size: 17px;
+  word-wrap: break-word;
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+#textEvent {
   text-wrap: wrap;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .eventDetails p i {
@@ -294,7 +305,8 @@
 .eventDetails .activeBtn {
   background: var(--second-blue);
 }
-.selectOption{
+
+.selectOption {
   width: 100%;
   margin-top: 20px;
   padding: 10px 0px;
@@ -306,20 +318,21 @@
   cursor: pointer;
   outline: none;
 }
-.selectOption p{
+
+.selectOption p {
   font-size: 20px;
 }
 
-.selectOption div{
+.selectOption div {
   display: flex;
   gap: 5px;
 }
 
-.contentCheckBox{
+.contentCheckBox {
   display: flex;
   align-items: center;
 }
- 
+
 .contentCheckBox input[type="checkbox"] {
   box-sizing: border-box;
   width: 20px;
@@ -746,11 +759,13 @@
   justify-content: space-between;
   /* gap: 10px;  */
 }
+
 .listFriend .userBloc div span {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .listFriend .userBloc div img {
   width: 40px;
   height: 40px;
