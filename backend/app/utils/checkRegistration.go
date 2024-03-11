@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"regexp"
+	"strings"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -13,6 +14,14 @@ import (
 func CheckRegisterFormat(firstName, lastName, username, email, password, confirmPassword, dateofbirth string, db *sql.DB) (bool, error) {
 	var errs string
 	ok := true
+
+	firstName = strings.TrimSpace(firstName)
+	lastName = strings.TrimSpace(lastName)
+	username = strings.TrimSpace(username)
+	email = strings.TrimSpace(email)
+	password = strings.TrimSpace(password)
+	confirmPassword = strings.TrimSpace(confirmPassword)
+	dateofbirth = strings.TrimSpace(dateofbirth)
 
 	if !ConfirmPasswordsMatch(password, confirmPassword) {
 		errs = "passwords does not match"
@@ -52,7 +61,7 @@ func CheckRegisterFormat(firstName, lastName, username, email, password, confirm
 	if !okfirstName {
 		return false, err
 	}
-	oklastName, err := CheckFLName(firstName)
+	oklastName, err := CheckFLName(lastName)
 	if !oklastName {
 		return false, err
 	}
