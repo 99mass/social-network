@@ -103,12 +103,7 @@ func AddGroupEventHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusInternalServerError)
 				return
 			}
-			var status int
-			if eventReq.Choose_option == "1" {
-				status = 1
-			} else {
-				status = 0
-			}
+			var status = 1
 
 			participant := models.EventParticipants{
 				EventID: eventID.String(),
