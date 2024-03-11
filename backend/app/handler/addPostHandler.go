@@ -77,6 +77,13 @@ func AddPostHandler(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+			if len(postReq.Content) >1000{
+				helper.SendResponse(w,models.ErrorResponse{
+					Status: "error",
+					Message: "lenght of post can't be over than 1000 words",
+				},http.StatusBadRequest)
+				return
+			}
 
 			post := models.Post{
 				UserID:    sess.UserID.String(),

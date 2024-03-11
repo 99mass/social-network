@@ -42,7 +42,12 @@ export function ChatContainer({ setSection, groupName, group_id }) {
     socket.onmessage = (event) => {
       const _message = event.data && JSON.parse(event.data);
       if (!_message) return;
-      setMessages(_message)
+      if (_message && _message.type === "error") {
+        errorNotification(_message.content);
+      }
+      if (_message && _message.type !== "error") {
+        setMessages(_message)
+      }
     }
   }, [socket]);
 
