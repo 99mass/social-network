@@ -40,7 +40,7 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			}
 			websocket.NotificationFollowRequest(db, sess.UserID.String(), "", userid.String())
 			websocket.BroadcastUserList(db)
-		
+
 			helper.SendResponse(w, nil, http.StatusOK)
 		case http.MethodPut:
 			// Appelez la fonction de contrôleur pour suivre l'utilisateur
@@ -52,7 +52,7 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			}
 			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
 			websocket.BroadcastUserList(db)
-			
+
 			helper.SendResponse(w, nil, http.StatusOK)
 		case http.MethodDelete:
 			// Appelez la fonction de contrôleur pour supprimer le follow
@@ -64,7 +64,7 @@ func FollowUser(db *sql.DB) http.HandlerFunc {
 			}
 			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
 			websocket.BroadcastUserList(db)
-			
+
 			helper.SendResponse(w, nil, http.StatusOK)
 
 		default:
@@ -101,7 +101,7 @@ func UnfollowUser(db *sql.DB) http.HandlerFunc {
 
 			controller.DeleteNotificationBySenderAndUser(db, sess.UserID.String(), userid.String(), "follow_request")
 			websocket.BroadcastUserList(db)
-		
+
 			helper.SendResponse(w, nil, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
@@ -135,7 +135,7 @@ func RequestFollowsHandler(db *sql.DB) http.HandlerFunc {
 			}
 			controller.DeleteNotificationByUserID(db, sess.UserID.String(), "follow_request")
 			websocket.BroadcastUserList(db)
-			
+
 			helper.SendResponse(w, followers, http.StatusOK)
 		default:
 			helper.SendResponseError(w, "error", "Method not allowed", http.StatusMethodNotAllowed)
@@ -178,7 +178,12 @@ func OldestPendingRequestFollow(db *sql.DB) http.HandlerFunc {
 func GetFollowerInfos(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Assurez-vous que l'utilisateur est authentifié et récupérez son ID
-		sess, err := utils.CheckAuthorization(db, w, r)
+		_, err := utils.CheckAuthorization(db, w, r)
+		if err != nil {
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+			return
+		}
+		userid, err := utils.TextToUUID(r.URL.Query().Get("userid"))
 		if err != nil {
 			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 			return
@@ -186,7 +191,7 @@ func GetFollowerInfos(db *sql.DB) http.HandlerFunc {
 
 		switch r.Method {
 		case http.MethodGet:
-			followers, err := controller.GetFollowerInfos(db, sess.UserID.String())
+			followers, err := controller.GetFollowerInfos(db, userid.String())
 			if err != nil {
 				if err != sql.ErrNoRows {
 					log.Println("error getting follower: ", err)
@@ -215,7 +220,12 @@ func GetFollowerInfos(db *sql.DB) http.HandlerFunc {
 func GetFollowingInfos(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Assurez-vous que l'utilisateur est authentifié et récupérez son ID
-		sess, err := utils.CheckAuthorization(db, w, r)
+		_, err := utils.CheckAuthorization(db, w, r)
+		if err != nil {
+			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
+			return
+		}
+		userid, err := utils.TextToUUID(r.URL.Query().Get("userid"))
 		if err != nil {
 			helper.SendResponseError(w, "error", "you're not authorized", http.StatusBadRequest)
 			return
@@ -223,7 +233,7 @@ func GetFollowingInfos(db *sql.DB) http.HandlerFunc {
 
 		switch r.Method {
 		case http.MethodGet:
-			followers, err := controller.GetFollowingInfos(db, sess.UserID.String())
+			followers, err := controller.GetFollowingInfos(db, userid.String())
 			if err != nil {
 				if err != sql.ErrNoRows {
 					log.Println("error getting following users: ", err)
