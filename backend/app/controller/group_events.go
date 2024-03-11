@@ -94,7 +94,7 @@ func GetEventByID(db *sql.DB, eventID string) (*models.GroupEvent, error) {
 // GetEventsByGroupWithCreatorInfo récupère les événements d'un groupe avec les informations de l'utilisateur qui les a créés.
 func GetEventsByGroupWithCreatorInfo(db *sql.DB, groupID string) ([]models.EventRequest, error) {
 	query := `
-        SELECT group_events.*, users.nickname
+        SELECT group_events.*, users.firstname
         FROM group_events
         JOIN users ON group_events.created_by = users.id
         WHERE group_events.group_id = ?
@@ -109,7 +109,7 @@ func GetEventsByGroupWithCreatorInfo(db *sql.DB, groupID string) ([]models.Event
 	var events []models.EventRequest
 	for rows.Next() {
 		var event models.EventRequest
-		err := rows.Scan(&event.Event.ID, &event.Event.GroupID, &event.Event.Title, &event.Event.Description, &event.Event.DayTime, &event.Event.CreatedBy, &event.User.Nickname)
+		err := rows.Scan(&event.Event.ID, &event.Event.GroupID, &event.Event.Title, &event.Event.Description, &event.Event.DayTime, &event.Event.CreatedBy, &event.User.FirstName)
 		if err != nil {
 			return nil, err
 		}
