@@ -32,17 +32,17 @@ export default function Friends({ idUser, isowner }) {
             <i className="fa-solid fa-person-arrow-up-from-line"></i>Following
           </span>
         </div>
-        {toggleList && <FollowerFriends isowner={isowner} />}
-        {!toggleList && <FollowingFriends isowner={isowner} />}
+        {toggleList && <FollowerFriends isowner={isowner} iduser={idUser} />}
+        {!toggleList && <FollowingFriends isowner={isowner} iduser={idUser} />}
       </div>
     </div>
   );
 }
 
-export function FollowerFriends({ isowner }) {
+export function FollowerFriends({ isowner ,iduser}) {
   const [FollowersList, setFollowerList] = useState(null);
   useEffect(() => {
-    getFollowers(setFollowerList);
+    getFollowers(setFollowerList, iduser);
   }, []);
 
   const handlerFollower = (iduser) => {
@@ -85,10 +85,10 @@ export function FollowerFriends({ isowner }) {
     </div>
   );
 }
-export function FollowingFriends({ isowner }) {
+export function FollowingFriends({ isowner ,iduser}) {
   const [FolloweingUsersList, setFollowingUsersList] = useState(null);
   useEffect(() => {
-    getFollowingUsers(setFollowingUsersList);
+    getFollowingUsers(setFollowingUsersList, iduser);
   }, []);
 
   const handlerFollower = (iduser) => {

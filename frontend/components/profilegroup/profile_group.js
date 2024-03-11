@@ -486,7 +486,7 @@ export function ListMembreGroup({ toggleMembres, listMembers }) {
                   src={
                     item.avatarpath
                       ? `data:image/png;base64,${item.avatarpath}`
-                      : defaultImage
+                      : "../images/default-image.svg"
                   }
                   alt=""
                 />

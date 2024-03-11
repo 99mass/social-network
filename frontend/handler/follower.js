@@ -77,11 +77,12 @@ export const getFriendsLists = async (userid, setDatas) => {
     }
   }
 };
-export const getFollowers = async (setFollowerList) => {
+export const getFollowers = async (setFollowerList,idUser) => {
+  if (!idUser) return
   try {
     const sessionId = getSessionCookie();
 
-    const response = await fetch(api.GetFollowers, {
+    const response = await fetch(`${api.GetFollowers}?userid=${idUser}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -120,11 +121,12 @@ export async function CountFollower(userid, setDatas) {
     }
   }
 }
-export const getFollowingUsers = async (setFollowingUsersList) => {
+export const getFollowingUsers = async (setFollowingUsersList,idUser) => {
+  if(!idUser) return
   try {
     const sessionId = getSessionCookie();
 
-    const response = await fetch(api.GetFolliwgUsers, {
+    const response = await fetch(`${api.GetFolliwgUsers}?userid=${idUser}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
