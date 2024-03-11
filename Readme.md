@@ -46,7 +46,7 @@ Make sure you have the following installed on your system:
 
    2. Set up the backend:
 
-    cd backend
+    cd backend/server
     go run server.go
 
 
@@ -57,6 +57,7 @@ Make sure you have the following installed on your system:
     # Install dependencies and start the development server
     npm install
     npm run dev
+    make dev
 
     Open your browser and navigate to http://localhost:3000 to see the application.
 

@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["go","run","server.go"]
+CMD ["go","run","server/server.go"]
