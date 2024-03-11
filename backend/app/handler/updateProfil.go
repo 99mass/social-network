@@ -71,6 +71,13 @@ func UpdateProfil(db *sql.DB) http.HandlerFunc {
 				}, http.StatusBadRequest)
 				return
 			}
+			if len(userReq.AboutMe) > 200 {
+				helper.SendResponse(w, models.ErrorResponse{
+					Status:  "error",
+					Message: "length about me can't be over than 200 character",
+				}, http.StatusBadRequest)
+				return
+			}
 
 			newPass, err := utils.CheckUpdatePassword(userReq.Password, userReq.NewPassword, sess.UserID, db)
 			if err != nil {
