@@ -22,7 +22,6 @@ export default function EventLists({ group_id, description }) {
     setOpenEventId(openEventId === eventId ? null : eventId);
   };
 
-  console.log(allevents && allevents);
 
   return (
     <div className={styles.contentPostAbout}>
