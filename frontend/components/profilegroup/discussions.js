@@ -55,5 +55,5 @@ export default function Discussion({
 }
 
 export function AboutGroup({ description }) {
-  return <div className={styles.aboutBloc}>{description}</div>;
+  return <pre className={styles.aboutBloc}>{description}</pre>;
 }

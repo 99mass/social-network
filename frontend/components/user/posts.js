@@ -33,7 +33,7 @@ export default function Posts_user({ postsCreated, setPostsCreated, about }) {
             </div>
           ))}
       </div>
-      {about && <div className={styles.bio}> {about} </div>}
+      {about && <pre className={styles.bio}> {about} </pre>}
       {about && <div className={styles.notBio}> </div>}
     </div>
   );

@@ -125,6 +125,10 @@
   padding: 15px;
   border-radius: 10px;
   background: var(--secondary-bg);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  text-wrap: wrap;
 }
 
 
